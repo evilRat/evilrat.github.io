@@ -13,7 +13,7 @@ timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://kongzheng1993.github.io/
+url: https://kongzheng1993.github.io/blog
 root: /kongzheng1993.github.io/
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -52,6 +52,12 @@ index_generator:
   path: ''
   per_page: 5
   order_by: -date
+
+# Automatically Excerpt. Not recommand.
+# Please use <!-- more --> in the post to control excerpt accurately.
+auto_excerpt:
+  enable: true
+  length: 150
   
 # Category & Tag
 default_category: uncategorized
@@ -80,4 +86,4 @@ theme: landscape
 deploy:
   type: git
   repo: https://github.com/kongzheng1993/kongzheng1993.github.io.git
-  branch: public
+  branch: master
