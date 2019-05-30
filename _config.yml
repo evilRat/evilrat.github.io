@@ -57,7 +57,7 @@ index_generator:
 # Please use <!-- more --> in the post to control excerpt accurately.
 auto_excerpt:
   enable: true
-  length: 150
+  length: 100
   
 # Category & Tag
 default_category: uncategorized
