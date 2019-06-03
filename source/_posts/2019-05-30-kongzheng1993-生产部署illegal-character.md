@@ -12,7 +12,7 @@ comments: true
 
 刚接到今晚发布留守同事等电话：“你的代码报错了，给你发截图了，qq！！！”。我心里一惊，mmp，不可能吧。。。
 赶紧登陆qq，看了一下他发来等截图
-![编译报错](2019-05-31-kongzheng1993-生产部署illegal-character/WechatIMG1.jpg)
+![编译报错](WechatIMG1.jpeg)
 mmp? 第一行，第一个字符就报错？
 定睛一看，是非法字符。
 仔细回想……
