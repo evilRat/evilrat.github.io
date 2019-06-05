@@ -62,6 +62,63 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-kongzheng1993-linux命令行下的ss" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/02/kongzheng1993-linux命令行下的ss/" class="article-date">
+  <time datetime="2018-05-01T16:00:00.000Z" itemprop="datePublished">2018-05-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>►<a class="article-category-link" href="/categories/linux/ss/">ss</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/02/kongzheng1993-linux命令行下的ss/">linux命令行下的ss</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="为什么不用shadowsocks-qt5"><a href="#为什么不用shadowsocks-qt5" class="headerlink" title="为什么不用shadowsocks-qt5"></a>为什么不用shadowsocks-qt5</h2><p>我的pop! os基于ubuntu，因为装了图形界面，所以在用shadowsocks-qt5，而且很好用，只需要打开软件，就会自动连接朋友的ss-server。但是我的chromebook的fq问题一直存在，一度让我产生了卖掉它的想法。昨天开始我准备好好搞一下在shell运行ss客户端，然后了解到了有sslocal和ssserver这样的东西，简直是欣喜若狂，看到了随身携带我的cb的希望。</p>
+<h2 id="开始搞"><a href="#开始搞" class="headerlink" title="开始搞"></a>开始搞</h2><p>sslocal和ssserver都依赖python，所以要先安装python。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install python python-pip</span><br></pre></td></tr></table></figure>
+
+<p>之后开始安装shadowsocks</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install shadowsocks</span><br></pre></td></tr></table></figure>
+
+<p>运行ss<br>sslocal -s server_ip -p server_port -k “password” -l local_port -t 600 -m aes-256-cfb</p>
+<p>可以通过新建一个配置文件来省去这些参数<br>比如我们在/etc下新建一个shadowsock.json</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="string">"server"</span>:<span class="string">"server_ip"</span>,</span><br><span class="line"><span class="string">"server_port"</span>:server_port,</span><br><span class="line"><span class="string">"local_ip"</span>:<span class="string">"127.0.0.1"</span></span><br><span class="line"><span class="string">"local_port"</span>:1080,</span><br><span class="line"><span class="string">"password"</span>:<span class="string">"password"</span>,</span><br><span class="line"><span class="string">"timeout"</span>:600,</span><br><span class="line"><span class="string">"method"</span>:<span class="string">"aes-256-cfb"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后就可以直接sslocal -c /etc/shadowsock.json来启动sslocal</p>
+<p>因为我的设备是chromebook，所以要配置一下chrom代理，我使用的是SwitchyOmega，可以去google商店下载，但是如果环境允许，可以从github下载，然后托到chrome插件里。然后配置一下SwitchyOmega，新建个情景模式，选择代理服务器，用socks5，地址和端口就是sslocal的配置中的local_ip和local_port，然后设置一下自动切换，在按照规则列表匹配请求后面选择刚才新建的SS，默认情景模式选择直接连接。点击应用选项保存。再往下规则列表设置选择AutoProxy 然后将“<a href="https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt”填进去，点击下面的立即更新情景模式，会有提示更新成功！这样就配置完了。" target="_blank" rel="noopener">https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt”填进去，点击下面的立即更新情景模式，会有提示更新成功！这样就配置完了。</a></p>
+<p>在启动sslocal之后，点击chrome右上角的SwitchyOmega图表，选择自动切换，工具会根据gfwlist.txt的配置自动切换是否将请求转发到你的local_ip的local_port。可以节省ss服务器的流量。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总体来说还是比较顺利的，以后遇到什么问题要学会思考，不要盲目的尝试。要了解原理，像这次我遇到了很多报错，我都<code>more sslocal</code>看了脚本代码了，而且前面尝试了一个自动安装配置ss的脚本，wget一个脚本shadowsocks.sh，然后<code>./shadowsocks.sh install</code>就可以，但是我遇到了很多问题，也是进去好好研究了一下人家的代码。虽然最后这个方法没有研究透，不过能看一下大神们写的脚本也很好啊！！！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2018/05/02/kongzheng1993-linux命令行下的ss/" data-id="cjwghh67z001admxnw0cxrv32" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/console/">console</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ss/">ss</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-kongzheng1993-hexo搭建githubPages" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/02/01/kongzheng1993-hexo搭建githubPages/" class="article-date">
@@ -322,90 +379,6 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
 
 
   
-    <article id="post-kongzheng1993-method_of_request&amp;response" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/07/28/kongzheng1993-method_of_request&response/" class="article-date">
-  <time datetime="2016-07-27T16:00:00.000Z" itemprop="datePublished">2016-07-28</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/07/28/kongzheng1993-method_of_request&response/">request&amp;response</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="request的方法："><a href="#request的方法：" class="headerlink" title="request的方法："></a>request的方法：</h4><p>客户端的请求信息被封装在request对象中，通过它才能了解到客户的需求，然后做出响应。它是HttpServletRequest类的实例。</p>
-<p>序号/方法/说明 </p>
-<ul>
-<li>object getAttribute(String name) 返回指定属性的属性值 </li>
-<li>Enumeration getAttributeNames() 返回所有可用属性名的枚举 </li>
-<li>String getCharacterEncoding() 返回字符编码方式 </li>
-<li>int getContentLength() 返回请求体的长度（以字节数） </li>
-<li>String getContentType() 得到请求体的MIME类型 </li>
-<li>ServletInputStream getInputStream() 得到请求体中一行的二进制流 </li>
-<li>String getParameter(String name) 返回name指定参数的参数值 </li>
-<li>Enumeration getParameterNames() 返回可用参数名的枚举 </li>
-<li>String[] getParameterValues(String name) 返回包含参数name的所有值的数组 </li>
-<li>String getProtocol() 返回请求用的协议类型及版本号 </li>
-<li>String getScheme() 返回请求用的计划名,如:http.https及ftp等 </li>
-<li>String getServerName() 返回接受请求的服务器主机名 </li>
-<li>int getServerPort() 返回服务器接受此请求所用的端口号 </li>
-<li>BufferedReader getReader() 返回解码过了的请求体 </li>
-<li>String getRemoteAddr() 返回发送此请求的客户端IP地址 </li>
-<li>String getRemoteHost() 返回发送此请求的客户端主机名 </li>
-<li>void setAttribute(String key,Object obj) 设置属性的属性值 </li>
-<li>String getRealPath(String path) 返回一虚拟路径的真实路径</li>
-</ul>
-<h4 id="response的方法："><a href="#response的方法：" class="headerlink" title="response的方法："></a>response的方法：</h4><p>序号/方法/说明</p>
-<p>response对象包含了响应客户请求的有关信息，但在JSP中很少直接用到它。它是HttpServletResponse类的实例。<br>序号 方 法 说 明 </p>
-<ul>
-<li>String getCharacterEncoding() 返回响应用的是何种字符编码 </li>
-<li>ServletOutputStream getOutputStream() 返回响应的一个二进制输出流 </li>
-<li>PrintWriter getWriter() 返回可以向客户端输出字符的一个对象 </li>
-<li>void setContentLength(int len) 设置响应头长度 </li>
-<li>void setContentType(String type) 设置响应的MIME类型 </li>
-<li>sendRedirect(java.lang.String location) 重新定向客户端的请求</li>
-</ul>
-<html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-properties/" data-title="properties" data-url="http://kongzheng1993.github.io/kongzheng1993-properties/"></div>
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"kongzheng1993"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-</html>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/28/kongzheng1993-method_of_request&response/" data-id="cjwghh66h0008dmxn0m3c3t4g" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 
   <nav id="page-nav">
@@ -463,6 +436,10 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       <ul>
         
           <li>
+            <a href="/2019/06/04/kongzheng1993-MQ/">kongzheng1993-MQ</a>
+          </li>
+        
+          <li>
             <a href="/2019/06/03/kongzheng1993-resume/">Resume</a>
           </li>
         
@@ -476,10 +453,6 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
         
           <li>
             <a href="/2018/06/08/kongzheng1993-java多线程总结/">java多线程总结</a>
-          </li>
-        
-          <li>
-            <a href="/2018/05/02/kongzheng1993-linux命令行下的ss/">linux命令行下的ss</a>
           </li>
         
       </ul>
