@@ -62,6 +62,152 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-kongzheng1993-about_comparator_and_comparable" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/26/kongzheng1993-about_comparator_and_comparable/" class="article-date">
+  <time datetime="2016-07-25T16:00:00.000Z" itemprop="datePublished">2016-07-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/26/kongzheng1993-about_comparator_and_comparable/">关于comparator和comparable</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="关于comparator和comparable"><a href="#关于comparator和comparable" class="headerlink" title="关于comparator和comparable"></a>关于comparator和comparable</h2><h3 id="comparator"><a href="#comparator" class="headerlink" title="comparator"></a>comparator</h3><p>Comparator强行对某个对象collection进行整体排序的比较函数，可以将Comparator传递给Collections.sort或Arrays.sort。<br>也就是说Comeparator是需要用sort方法调用的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">import java.util.*;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by evilrat on 3/9/17.</span><br><span class="line"> */</span><br><span class="line">public class CollectionTest &#123;</span><br><span class="line"></span><br><span class="line">    static List&lt;Demo&gt; d = new ArrayList&lt;Demo&gt;();</span><br><span class="line">    static Random random = new Random();</span><br><span class="line">    static CompareterTool ct= new CompareterTool();</span><br><span class="line">    public static void main(String [] args)&#123;</span><br><span class="line">        for (int i = 0; i &lt; 10;i ++)&#123;</span><br><span class="line">            d.add(new Demo(random.nextInt(10)));</span><br><span class="line">        &#125;</span><br><span class="line">        //排序前输出</span><br><span class="line">        for (Iterator&lt;Demo&gt; it = d.iterator(); it.hasNext();)&#123;</span><br><span class="line">            System.out.print(it.next().getAge()+&quot;\t&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.print(&quot;\n&quot;);</span><br><span class="line">        //排序</span><br><span class="line">        Collections.sort(d,ct);</span><br><span class="line">        //排序后输出</span><br><span class="line">        for (Iterator&lt;Demo&gt; it = d.iterator(); it.hasNext();)&#123;</span><br><span class="line">            System.out.print(it.next().getAge()+&quot;\t&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里是使用Collections.sort方法调用了我们预先写好的比较器。以下是比较器的定义：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">import java.util.Comparator;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by evilrat on 3/9/17.</span><br><span class="line"> */</span><br><span class="line">public class CompareterTool implements Comparator&lt;Demo&gt; &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public int compare(Demo o1, Demo o2) &#123;</span><br><span class="line">            if (o1.age &gt; o2.age)&#123;</span><br><span class="line">                return 1;</span><br><span class="line">            &#125;else</span><br><span class="line">                return -1;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在编写比较器的时候我无意中这样写了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import java.util.Comparator;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by evilrat on 3/9/17.</span><br><span class="line"> */</span><br><span class="line">public class CompareterTool &#123;</span><br><span class="line"></span><br><span class="line">    public Comparator&lt;Demo&gt; comparator = new Comparator&lt;Demo&gt;() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public int compare(Demo o1, Demo o2) &#123;</span><br><span class="line">            if (o1.age &gt; o2.age)&#123;</span><br><span class="line">                return 1;</span><br><span class="line">            &#125;else</span><br><span class="line">                return -1;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>请注意这种写法，直接声明一个Comparator<demo>对象，然后紧跟这一段大括号重写了他的compare（）方法，然后在大括号外写了分号。<br>反正我是没这么写过，可能是我还没见过的原因吧，记录以下，感觉这样很炫酷。但是随之main方法中的排序代码要改为:</demo></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Collections.sort(d,ct.comparator);</span><br></pre></td></tr></table></figure>
+
+<p>ct是ComparatorTool类的对象，但是从编码来看，compare方法是在Comparator的对象comparator中啊，疑惑？为什么这里是调用ct.comparator，这是一个对象啊，难道说是comparator对象声明时直接写了一个方法？Comparator有这么一种特殊的写法。</p>
+<h3 id="Comparable"><a href="#Comparable" class="headerlink" title="Comparable"></a>Comparable</h3><p>对于Comparable来说，需要在编写想要进行排序的类的时候实现Comparable接口，然后在需要排序的时候调用Arrays或者Collections的sort方法就可以直接调用到这个比较器了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by evilrat on 3/9/17.</span><br><span class="line"> */</span><br><span class="line">public class Demo implements Comparable&lt;Demo&gt;&#123;</span><br><span class="line"></span><br><span class="line">    String name;</span><br><span class="line">    int age;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public int compareTo(Demo o) &#123;</span><br><span class="line">        return this.getAge()-o.getAge();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Demo(int age)&#123;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setName(String name) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public int getAge() &#123;</span><br><span class="line">        return age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setAge(int age) &#123;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调用方法,这里会自动对应到实现Comparable接口而产生的比较器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Collections.sort(d);</span><br></pre></td></tr></table></figure>
+
+<html>
+<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-about_comparator_and_comparable/" data-title="about_comparator_and_comparable" data-url="http://kongzheng1993.github.io/kongzheng1993-about_comparator_and_comparable/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"kongzheng1993"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+</html>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-about_comparator_and_comparable/" data-id="cjwrkc2mf000u10c8zoxfc2la" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/re/">re</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-kongzheng1993-centos7_mysql" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/26/kongzheng1993-centos7_mysql/" class="article-date">
+  <time datetime="2016-07-25T16:00:00.000Z" itemprop="datePublished">2016-07-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/26/kongzheng1993-centos7_mysql/">centos 7 安装mysql遇到的问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="cent-os-7安装mysql遇到的问题"><a href="#cent-os-7安装mysql遇到的问题" class="headerlink" title="cent os 7安装mysql遇到的问题"></a>cent os 7安装mysql遇到的问题</h2><p>1.在centos 7上装mysql，但是运行的话会报错，服务未启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[evilrat@evilRat_desktop ~]$ mysql status</span><br><span class="line">ERROR 2002 (HY000): Can&apos;t connect to local MySQL server through socket &apos;/var/lib/mysql/mysql.sock&apos; (2)</span><br></pre></td></tr></table></figure>
+
+<p>2.尝试启动服务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[evilrat@evilRat_desktop ~]$ systemctl enable mysql.service</span><br><span class="line">Failed to execute operation: Access denied</span><br></pre></td></tr></table></figure>
+
+<p>这样也不行……</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[evilrat@evilRat_desktop ~]$ service mysql start</span><br><span class="line">Redirecting to /bin/systemctl start  mysql.service</span><br></pre></td></tr></table></figure>
+
+<p>3.通过百度找到这个<br>mariaDB</p>
+<p>MariaDB数据库管理系统是MySQL的一个分支，主要由开源社区在维护，采用GPL授权许可 MariaDB的目的是完全兼容MySQL，包括API和命令行，使之能轻松成为MySQL的代替品。在存储引擎方面，使用XtraDB（英语：XtraDB）来代替MySQL的InnoDB。 MariaDB由MySQL的创始人Michael Widenius（英语：Michael Widenius）主导开发，他早前曾以10亿美元的价格，将自己创建的公司MySQL AB卖给了SUN，此后，随着SUN被甲骨文收购，MySQL的所有权也落入Oracle的手中。MariaDB名称来自Michael Widenius的女儿Maria的名字。<br>MariaDB基于事务的Maria存储引擎，替换了MySQL的MyISAM存储引擎，它使用了Percona的 XtraDB，InnoDB的变体，分支的开发者希望提供访问即将到来的MySQL 5.4 InnoDB性能。这个版本还包括了 PrimeBase XT (PBXT) 和 FederatedX存储引擎。</p>
+<p>4.于是我尝试安装了一下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[root@evilRat_desktop evilrat]# yum install mariadb-server -y</span><br><span class="line">Loaded plugins: fastestmirror, langpacks</span><br><span class="line">Repository epel is listed more than once in the configuration</span><br><span class="line">Repository epel-debuginfo is listed more than once in the configuration</span><br><span class="line">Repository epel-source is listed more than once in the configuration</span><br><span class="line">Repodata is over 2 weeks old. Install yum-cron? Or run: yum makecache fast</span><br><span class="line">adobe-linux-x86_64                                       |  951 B     00:00     </span><br><span class="line">base                                                     | 3.6 kB     00:00     </span><br><span class="line">epel                                                     | 4.3 kB     00:00     </span><br><span class="line">extras                                                   | 3.4 kB     00:00     </span><br><span class="line">nux-dextop                                               | 2.9 kB     00:00     </span><br><span class="line">updates                                                  | 3.4 kB     00:00     </span><br><span class="line">(1/5): extras/7/x86_64/primary_db                          | 139 kB   00:00     </span><br><span class="line">(2/5): epel/x86_64/updateinfo                              | 765 kB   00:01     </span><br><span class="line">(3/5): epel/x86_64/primary_db                              | 4.6 MB   00:10     </span><br><span class="line">(4/5): updates/7/x86_64/primary_db                         | 3.8 MB   00:11     </span><br><span class="line">(5/5): nux-dextop/x86_64/primary_db                        | 1.7 MB   00:29     </span><br><span class="line">adobe-linux-x86_64/primary                                 | 1.3 kB   00:00     </span><br><span class="line">Loading mirror speeds from cached hostfile</span><br><span class="line"> * base: mirrors.aliyun.com</span><br><span class="line"> * epel: mirrors.aliyun.com</span><br><span class="line"> * extras: mirrors.aliyun.com</span><br><span class="line"> * nux-dextop: li.nux.ro</span><br><span class="line"> * updates: mirrors.aliyun.com</span><br><span class="line">adobe-linux-x86_64                                                          3/3</span><br><span class="line">Resolving Dependencies</span><br><span class="line">--&gt; Running transaction check</span><br><span class="line">---&gt; Package mariadb-server.x86_64 1:5.5.52-1.el7 will be installed</span><br><span class="line">--&gt; Processing Dependency: perl-DBI for package: 1:mariadb-server-5.5.52-1.el7.x86_64</span><br><span class="line">--&gt; Processing Dependency: perl-DBD-MySQL for package: 1:mariadb-server-5.5.52-1.el7.x86_64</span><br><span class="line">--&gt; Processing Dependency: perl(DBI) for package: 1:mariadb-server-5.5.52-1.el7.x86_64</span><br><span class="line">--&gt; Running transaction check</span><br><span class="line">---&gt; Package perl-DBD-MySQL.x86_64 0:4.023-5.el7 will be installed</span><br><span class="line">---&gt; Package perl-DBI.x86_64 0:1.627-4.el7 will be installed</span><br><span class="line">--&gt; Processing Dependency: perl(RPC::PlServer) &gt;= 0.2001 for package: perl-DBI-1.627-4.el7.x86_64</span><br><span class="line">--&gt; Processing Dependency: perl(RPC::PlClient) &gt;= 0.2000 for package: perl-DBI-1.627-4.el7.x86_64</span><br><span class="line">--&gt; Running transaction check</span><br><span class="line">---&gt; Package perl-PlRPC.noarch 0:0.2020-14.el7 will be installed</span><br><span class="line">--&gt; Processing Dependency: perl(Net::Daemon) &gt;= 0.13 for package: perl-PlRPC-0.2020-14.el7.noarch</span><br><span class="line">--&gt; Processing Dependency: perl(Net::Daemon::Test) for package: perl-PlRPC-0.2020-14.el7.noarch</span><br><span class="line">--&gt; Processing Dependency: perl(Net::Daemon::Log) for package: perl-PlRPC-0.2020-14.el7.noarch</span><br><span class="line">--&gt; Processing Dependency: perl(Compress::Zlib) for package: perl-PlRPC-0.2020-14.el7.noarch</span><br><span class="line">--&gt; Running transaction check</span><br><span class="line">---&gt; Package perl-IO-Compress.noarch 0:2.061-2.el7 will be installed</span><br><span class="line">--&gt; Processing Dependency: perl(Compress::Raw::Zlib) &gt;= 2.061 for package: perl-IO-Compress-2.061-2.el7.noarch</span><br><span class="line">--&gt; Processing Dependency: perl(Compress::Raw::Bzip2) &gt;= 2.061 for package: perl-IO-Compress-2.061-2.el7.noarch</span><br><span class="line">---&gt; Package perl-Net-Daemon.noarch 0:0.48-5.el7 will be installed</span><br><span class="line">--&gt; Running transaction check</span><br><span class="line">---&gt; Package perl-Compress-Raw-Bzip2.x86_64 0:2.061-3.el7 will be installed</span><br><span class="line">---&gt; Package perl-Compress-Raw-Zlib.x86_64 1:2.061-4.el7 will be installed</span><br><span class="line">--&gt; Finished Dependency Resolution</span><br><span class="line"></span><br><span class="line">Dependencies Resolved</span><br><span class="line"></span><br><span class="line">================================================================================</span><br><span class="line"> Package                      Arch        Version               Repository</span><br><span class="line">                                                                           Size</span><br><span class="line">================================================================================</span><br><span class="line">Installing:</span><br><span class="line"> mariadb-server               x86_64      1:5.5.52-1.el7        base       11 M</span><br><span class="line">Installing for dependencies:</span><br><span class="line"> perl-Compress-Raw-Bzip2      x86_64      2.061-3.el7           base       32 k</span><br><span class="line"> perl-Compress-Raw-Zlib       x86_64      1:2.061-4.el7         base       57 k</span><br><span class="line"> perl-DBD-MySQL               x86_64      4.023-5.el7           base      140 k</span><br><span class="line"> perl-DBI                     x86_64      1.627-4.el7           base      802 k</span><br><span class="line"> perl-IO-Compress             noarch      2.061-2.el7           base      260 k</span><br><span class="line"> perl-Net-Daemon              noarch      0.48-5.el7            base       51 k</span><br><span class="line"> perl-PlRPC                   noarch      0.2020-14.el7         base       36 k</span><br><span class="line"></span><br><span class="line">Transaction Summary</span><br><span class="line">================================================================================</span><br><span class="line">Install  1 Package (+7 Dependent packages)</span><br><span class="line"></span><br><span class="line">Total download size: 12 M</span><br><span class="line">Installed size: 59 M</span><br><span class="line">Downloading packages:</span><br><span class="line">(1/8): perl-Compress-Raw-Bzip2-2.061-3.el7.x86_64.rpm      |  32 kB   00:00     </span><br><span class="line">(2/8): perl-Compress-Raw-Zlib-2.061-4.el7.x86_64.rpm       |  57 kB   00:00     </span><br><span class="line">(3/8): perl-DBD-MySQL-4.023-5.el7.x86_64.rpm               | 140 kB   00:00     </span><br><span class="line">(4/8): perl-DBI-1.627-4.el7.x86_64.rpm                     | 802 kB   00:00     </span><br><span class="line">(5/8): perl-IO-Compress-2.061-2.el7.noarch.rpm             | 260 kB   00:00     </span><br><span class="line">(6/8): perl-Net-Daemon-0.48-5.el7.noarch.rpm               |  51 kB   00:00     </span><br><span class="line">(7/8): perl-PlRPC-0.2020-14.el7.noarch.rpm                 |  36 kB   00:00     </span><br><span class="line">(8/8): mariadb-server-5.5.52-1.el7.x86_64.rpm              |  11 MB   00:12     </span><br><span class="line">--------------------------------------------------------------------------------</span><br><span class="line">Total                                              1.0 MB/s |  12 MB  00:12     </span><br><span class="line">Running transaction check</span><br><span class="line">Running transaction test</span><br><span class="line">Transaction test succeeded</span><br><span class="line">Running transaction</span><br><span class="line">  Installing : perl-Compress-Raw-Bzip2-2.061-3.el7.x86_64                   1/8 </span><br><span class="line">  Installing : 1:perl-Compress-Raw-Zlib-2.061-4.el7.x86_64                  2/8 </span><br><span class="line">  Installing : perl-IO-Compress-2.061-2.el7.noarch                          3/8 </span><br><span class="line">  Installing : perl-Net-Daemon-0.48-5.el7.noarch                            4/8 </span><br><span class="line">  Installing : perl-PlRPC-0.2020-14.el7.noarch                              5/8 </span><br><span class="line">  Installing : perl-DBI-1.627-4.el7.x86_64                                  6/8 </span><br><span class="line">  Installing : perl-DBD-MySQL-4.023-5.el7.x86_64                            7/8 </span><br><span class="line">  Installing : 1:mariadb-server-5.5.52-1.el7.x86_64                         8/8 </span><br><span class="line">  Verifying  : perl-Net-Daemon-0.48-5.el7.noarch                            1/8 </span><br><span class="line">  Verifying  : 1:mariadb-server-5.5.52-1.el7.x86_64                         2/8 </span><br><span class="line">  Verifying  : perl-IO-Compress-2.061-2.el7.noarch                          3/8 </span><br><span class="line">  Verifying  : 1:perl-Compress-Raw-Zlib-2.061-4.el7.x86_64                  4/8 </span><br><span class="line">  Verifying  : perl-PlRPC-0.2020-14.el7.noarch                              5/8 </span><br><span class="line">  Verifying  : perl-DBI-1.627-4.el7.x86_64                                  6/8 </span><br><span class="line">  Verifying  : perl-Compress-Raw-Bzip2-2.061-3.el7.x86_64                   7/8 </span><br><span class="line">  Verifying  : perl-DBD-MySQL-4.023-5.el7.x86_64                            8/8 </span><br><span class="line"></span><br><span class="line">Installed:</span><br><span class="line">  mariadb-server.x86_64 1:5.5.52-1.el7                                          </span><br><span class="line"></span><br><span class="line">Dependency Installed:</span><br><span class="line">  perl-Compress-Raw-Bzip2.x86_64 0:2.061-3.el7                                  </span><br><span class="line">  perl-Compress-Raw-Zlib.x86_64 1:2.061-4.el7                                   </span><br><span class="line">  perl-DBD-MySQL.x86_64 0:4.023-5.el7                                           </span><br><span class="line">  perl-DBI.x86_64 0:1.627-4.el7                                                 </span><br><span class="line">  perl-IO-Compress.noarch 0:2.061-2.el7                                         </span><br><span class="line">  perl-Net-Daemon.noarch 0:0.48-5.el7                                           </span><br><span class="line">  perl-PlRPC.noarch 0:0.2020-14.el7                                             </span><br><span class="line"></span><br><span class="line">Complete!</span><br></pre></td></tr></table></figure>
+
+<p>5.然后我启动服务，尝试启动mysql</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[root@evilRat_desktop evilrat]# systemctl start mariadb.service</span><br><span class="line">[root@evilRat_desktop evilrat]# systemctl enable mariadb.service</span><br><span class="line">Created symlink from /etc/systemd/system/multi-user.target.wants/mariadb.service to /usr/lib/systemd/system/mariadb.service.</span><br><span class="line">[root@evilRat_desktop evilrat]# mysql</span><br><span class="line">Welcome to the MariaDB monitor.  Commands end with ; or \g.</span><br><span class="line">Your MariaDB connection id is 2</span><br><span class="line">Server version: 5.5.52-MariaDB MariaDB Server</span><br><span class="line"></span><br><span class="line">Copyright (c) 2000, 2016, Oracle, MariaDB Corporation Ab and others.</span><br><span class="line"></span><br><span class="line">Type &apos;help;&apos; or &apos;\h&apos; for help. Type &apos;\c&apos; to clear the current input statement.</span><br><span class="line"></span><br><span class="line">MariaDB [(none)]&gt; show databases</span><br><span class="line">    -&gt; ;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| test               |</span><br><span class="line">+--------------------+</span><br><span class="line">4 rows in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">MariaDB [(none)]&gt; exit</span><br><span class="line">Bye</span><br></pre></td></tr></table></figure>
+
+<html>
+<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-centos7_mysql/" data-title="centos7_mysql" data-url="http://kongzheng1993.github.io/kongzheng1993-centos7_mysql/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"kongzheng1993"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+</html>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-centos7_mysql/" data-id="cjwrkc2mg000w10c8a67zscra" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/re/">re</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-kongzheng1993-有关字符串的笔记" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/07/22/kongzheng1993-有关字符串的笔记/" class="article-date">
@@ -129,7 +275,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/22/kongzheng1993-有关字符串的笔记/" data-id="cjwghh67o0010dmxnnjql3itg" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/22/kongzheng1993-有关字符串的笔记/" data-id="cjwrkc2mi001110c8dt7d5oap" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
@@ -198,7 +344,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/20/kongzheng1993-OracleAfterChangetheNameofComputer/" data-id="cjwghh67h000vdmxn8e2q1dxq" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/20/kongzheng1993-OracleAfterChangetheNameofComputer/" data-id="cjwrkc2mc000r10c8psk8u7j3" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oracle/">oracle</a></li></ul>
@@ -270,135 +416,10 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/19/kongzheng1993-MysqlToOracle/" data-id="cjwghh67f000sdmxndkaqb0te" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/19/kongzheng1993-MysqlToOracle/" data-id="cjwrkc2m8000m10c8za41ed2f" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-String_Original" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/07/11/kongzheng1993-String_Original/" class="article-date">
-  <time datetime="2016-07-10T16:00:00.000Z" itemprop="datePublished">2016-07-11</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/07/11/kongzheng1993-String_Original/">String str</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>String str=new String(“abc”); 跟着这段代码之后，我们会想到一个问题，就是这行代码究竟创建了几个String对象呢？<br>答案是2个。<br>String str只是定义了一个名为str的String类型的变量，因此它并没有创建对象；=是对变量str进行初始化，将某个对象的引用（或者叫句柄）赋值给它，显然也没有创建对象；现在只剩下了new String(“abc”)了。那么，new String(“abc”)什么又能被看作成“abc”和<br>new String()呢？<br>这就要了解一下String的构造器：<br>public String (String original){<br>    //other code…<br>}
-平常我们创建一个类的实例的方法有两种：<br>1.使用new创建对象；<br>2.调用Class类里面的newInstance方法，利用反射机制创建对象。</p>
-<p>我们正是使用new调用了String类的上面那个构造器方法创建了一个对象，并将它的引用赋值给了str变量。同时我们注意到，被调用的构造器方法接受的参数也是一个String对象，这个对象正是”abc”。由此我们又要引入另外一种创建String对象的方式的讨论——引号内包含文本。</p>
-<p>这种方式是String特有的，并且它与new的方式存在很大区别。  </p>
-<p>String str=”abc”;  </p>
-<p>毫无疑问，这行代码创建了一个String对象。  </p>
-<p>String a=”abc”;  String b=”abc”;   那这里呢？</p>
-<p>答案还是一个。  </p>
-<p>String a=”ab”+”cd”;   再看看这里呢？</p>
-<p>答案是三个。<br>说到这里，我们就需要引入对字符串池相关知识的回顾了。  </p>
-<p>在JAVA虚拟机（JVM）中存在着一个字符串池，其中保存着很多String对象，并且可以被共享使用，因此它提高了效率。由于String类是final的，它的值一经创建就不可改变，因此我们不用担心String对象共享而带来程序的混乱。字符串池由String类维护，我们可以调用intern()方法来访问字符串池。  </p>
-<p>我们再回头看看String a=”abc”;，这行代码被执行的时候，JAVA虚拟机首先在字符串池中查找是否已经存在了值为”abc”的这么一个对象，它的判断依据是String类equals(Object obj)方法的返回值。如果有，则不再创建新的对象，直接返回已存在对象的引用；如果没有，则先创建这个对象，然后把它加入到字符串池中，再将它的引用返回。因此，我们不难理解前面三个例子中头两个例子为什么是这个答案了。</p>
-<p>只有使用引号包含文本的方式创建的String对象之间使用“+”连接产生的新对象才会被加入字符串池中。对于所有包含new方式新建对象（包括null）的“+”连接表达式，它所产生的新对象都不会被加入字符串池中，对此我们不再赘述。因此我们提倡大家用引号包含文本的方式来创建String对象以提高效率，实际上这也是我们在编程中常采用的。</p>
-<p>栈（stack）：主要保存基本类型（或者叫内置类型）（char、byte、short、int、long、float、double、boolean）和对象的引用，数据可以共享，速度仅次于寄存器（register），快于堆。<br>堆（heap）：用于存储对象</p>
-<html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-String_Original/" data-title="String_Original" data-url="http://kongzheng1993.github.io/kongzheng1993-String_Original/"></div>
-<!-- 多说评论框 end -->
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"kongzheng1993"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-</html>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/11/kongzheng1993-String_Original/" data-id="cjwghh676000idmxndeo1xm5w" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/String/">String</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/new/">new</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-ablout_try_catch" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/07/11/kongzheng1993-ablout_try_catch/" class="article-date">
-  <time datetime="2016-07-10T16:00:00.000Z" itemprop="datePublished">2016-07-11</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/07/11/kongzheng1993-ablout_try_catch/">关于try-catch</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import java.io.IOException;  </span><br><span class="line">public class ExceptionTryCatchTest &#123;  </span><br><span class="line">    public void doSomething() throws IOException&#123;  </span><br><span class="line">        System.out.println(&quot;do somthing&quot;);  </span><br><span class="line">    &#125;  </span><br><span class="line">    public static void main(String[] args)&#123;  </span><br><span class="line">        ExceptionTryCatchTest etct = new ExceptionTryCatchTest();  </span><br><span class="line">        try &#123;  </span><br><span class="line">            etct.doSomething();  </span><br><span class="line">        &#125; catch (Exception e) &#123;                </span><br><span class="line">        &#125; catch (IOException e) &#123;                </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>以上并不能通过编译。<br>因为编译的时候会报错:已捕捉到异常 java.io.IOException。  catch(IOException e)这句有错误。<br>分析：对于try..catch捕获异常的形式来说，对于异常的捕获，可以有多个catch。对于try里面发生的异常，他会根据发生的异常和catch里面的进行匹配(怎么匹配，按照catch块从上往下匹配)，当它匹配某一个catch块的时候，他就直接进入到这个catch块里面去了，后面在再有catch块的话，它不做任何处理，直接跳过去，全部忽略掉。如果有finally的话进入到finally里面继续执行。换句话说，如果有匹配的catch，它就会忽略掉这个catch后面所有的catch。对我们这个方法来说，抛出的是IOException，当执行etct.doSomething();时，可能会抛出IOException，一但抛出IOException，它首先进入到catch (Exception e) {}里面，先和Exception匹配，由于IOException extends Exception,根据多态的原则，IOException是匹配Exception的，所以程序就会进入到catch (Exception e) {}里面，进入到第一个catch后，后面的catch都不会执行了，所以catch (IOException e) {}永远都执行不到，就给我们报出了前面的错误:已捕捉到异常 java.io.IOException。 </p>
-<h4 id="【总结】"><a href="#【总结】" class="headerlink" title="【总结】"></a>【总结】</h4><p>在写异常处理的时候，一定要把异常范围小的放在前面，范围大的放在后面，Exception这个异常的根类一定要放在最后一个catch里面，如果放在前面或者中间，任何异常都会和Exception匹配的，就会报已捕获到…异常的错误。 </p>
-<html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-abouttrycatch/" data-title="About trycatch" data-url="http://kongzheng1993.github.io/kongzheng1993"></div>
-<!-- 多说评论框 end -->
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"kongzheng1993"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-</html>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/11/kongzheng1993-ablout_try_catch/" data-id="cjwghh67b000ndmxn7rcmc9qr" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/catch，try/">catch，try</a></li></ul>
 
     </footer>
   </div>
@@ -411,7 +432,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -422,7 +443,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/">github</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/git/">git</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/linux/ss/">ss</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/resume/">resume</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/suse/">suse</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/">server</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/FTP/">FTP</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/编码/">编码</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/">github</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/git/">git</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/linux/ss/">ss</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/">quartz</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/锁/">锁</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/锁/分布式/">分布式</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/resume/">resume</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/suse/">suse</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/">server</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/FTP/">FTP</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/编码/">编码</a></li></ul>
     </div>
   </div>
 
@@ -432,7 +453,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Class/">Class</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FTP/">FTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/String/">String</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/catch，try/">catch，try</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/">console</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/distinct/">distinct</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/float/">float</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/group-by/">group by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/images/">images</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/new/">new</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/order-by/">order by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/re/">re</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/resume，简历/">resume，简历</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sample-post/">sample post</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/select/">select</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/">server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlplus/">sqlplus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ss/">ss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/suse/">suse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sys/">sys</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/test/">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/备份/">备份</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安全/">安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/对象，Class对象/">对象，Class对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编码/">编码</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Class/">Class</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FTP/">FTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/String/">String</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/catch，try/">catch，try</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/">console</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/distinct/">distinct</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/float/">float</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/group-by/">group by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/images/">images</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/new/">new</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/order-by/">order by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/">quartz</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/re/">re</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/resume，简历/">resume，简历</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sample-post/">sample post</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/select/">select</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/">server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlplus/">sqlplus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ss/">ss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/suse/">suse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sys/">sys</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/test/">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/备份/">备份</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安全/">安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/对象，Class对象/">对象，Class对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编码/">编码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/锁/">锁</a></li></ul>
     </div>
   </div>
 
@@ -442,7 +463,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Class/" style="font-size: 10px;">Class</a> <a href="/tags/FTP/" style="font-size: 10px;">FTP</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/catch，try/" style="font-size: 10px;">catch，try</a> <a href="/tags/console/" style="font-size: 10px;">console</a> <a href="/tags/distinct/" style="font-size: 10px;">distinct</a> <a href="/tags/float/" style="font-size: 10px;">float</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/group-by/" style="font-size: 10px;">group by</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/images/" style="font-size: 16.67px;">images</a> <a href="/tags/java/" style="font-size: 13.33px;">java</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/oop/" style="font-size: 20px;">oop</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/order-by/" style="font-size: 10px;">order by</a> <a href="/tags/re/" style="font-size: 16.67px;">re</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/resume，简历/" style="font-size: 10px;">resume，简历</a> <a href="/tags/sample-post/" style="font-size: 16.67px;">sample post</a> <a href="/tags/select/" style="font-size: 10px;">select</a> <a href="/tags/server/" style="font-size: 10px;">server</a> <a href="/tags/sql/" style="font-size: 13.33px;">sql</a> <a href="/tags/sqlplus/" style="font-size: 10px;">sqlplus</a> <a href="/tags/ss/" style="font-size: 10px;">ss</a> <a href="/tags/suse/" style="font-size: 10px;">suse</a> <a href="/tags/sys/" style="font-size: 10px;">sys</a> <a href="/tags/test/" style="font-size: 16.67px;">test</a> <a href="/tags/备份/" style="font-size: 10px;">备份</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/对象，Class对象/" style="font-size: 10px;">对象，Class对象</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a>
+      <a href="/tags/Class/" style="font-size: 10px;">Class</a> <a href="/tags/FTP/" style="font-size: 10px;">FTP</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/catch，try/" style="font-size: 10px;">catch，try</a> <a href="/tags/console/" style="font-size: 10px;">console</a> <a href="/tags/distinct/" style="font-size: 10px;">distinct</a> <a href="/tags/float/" style="font-size: 10px;">float</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/group-by/" style="font-size: 10px;">group by</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/images/" style="font-size: 16.67px;">images</a> <a href="/tags/java/" style="font-size: 13.33px;">java</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/oop/" style="font-size: 20px;">oop</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/order-by/" style="font-size: 10px;">order by</a> <a href="/tags/quartz/" style="font-size: 10px;">quartz</a> <a href="/tags/re/" style="font-size: 16.67px;">re</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/resume，简历/" style="font-size: 10px;">resume，简历</a> <a href="/tags/sample-post/" style="font-size: 16.67px;">sample post</a> <a href="/tags/select/" style="font-size: 10px;">select</a> <a href="/tags/server/" style="font-size: 10px;">server</a> <a href="/tags/sql/" style="font-size: 13.33px;">sql</a> <a href="/tags/sqlplus/" style="font-size: 10px;">sqlplus</a> <a href="/tags/ss/" style="font-size: 10px;">ss</a> <a href="/tags/suse/" style="font-size: 10px;">suse</a> <a href="/tags/sys/" style="font-size: 10px;">sys</a> <a href="/tags/test/" style="font-size: 16.67px;">test</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/备份/" style="font-size: 10px;">备份</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/对象，Class对象/" style="font-size: 10px;">对象，Class对象</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/锁/" style="font-size: 10px;">锁</a>
     </div>
   </div>
 
@@ -464,6 +485,14 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       <ul>
         
           <li>
+            <a href="/2019/06/11/kongzheng1993-关于分布式锁/">kongzheng1993-关于分布式锁.md</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/04/kongzheng1993-MQ/">kongzheng1993-MQ</a>
+          </li>
+        
+          <li>
             <a href="/2019/06/03/kongzheng1993-resume/">Resume</a>
           </li>
         
@@ -473,14 +502,6 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
         
           <li>
             <a href="/2018/08/05/kongzheng1993-mysql数据库导出导入/">mysql数据库导出导入</a>
-          </li>
-        
-          <li>
-            <a href="/2018/06/08/kongzheng1993-java多线程总结/">java多线程总结</a>
-          </li>
-        
-          <li>
-            <a href="/2018/05/02/kongzheng1993-linux命令行下的ss/">linux命令行下的ss</a>
           </li>
         
       </ul>

@@ -62,6 +62,131 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-kongzheng1993-String_Original" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/11/kongzheng1993-String_Original/" class="article-date">
+  <time datetime="2016-07-10T16:00:00.000Z" itemprop="datePublished">2016-07-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/11/kongzheng1993-String_Original/">String str</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>String str=new String(“abc”); 跟着这段代码之后，我们会想到一个问题，就是这行代码究竟创建了几个String对象呢？<br>答案是2个。<br>String str只是定义了一个名为str的String类型的变量，因此它并没有创建对象；=是对变量str进行初始化，将某个对象的引用（或者叫句柄）赋值给它，显然也没有创建对象；现在只剩下了new String(“abc”)了。那么，new String(“abc”)什么又能被看作成“abc”和<br>new String()呢？<br>这就要了解一下String的构造器：<br>public String (String original){<br>    //other code…<br>}
+平常我们创建一个类的实例的方法有两种：<br>1.使用new创建对象；<br>2.调用Class类里面的newInstance方法，利用反射机制创建对象。</p>
+<p>我们正是使用new调用了String类的上面那个构造器方法创建了一个对象，并将它的引用赋值给了str变量。同时我们注意到，被调用的构造器方法接受的参数也是一个String对象，这个对象正是”abc”。由此我们又要引入另外一种创建String对象的方式的讨论——引号内包含文本。</p>
+<p>这种方式是String特有的，并且它与new的方式存在很大区别。  </p>
+<p>String str=”abc”;  </p>
+<p>毫无疑问，这行代码创建了一个String对象。  </p>
+<p>String a=”abc”;  String b=”abc”;   那这里呢？</p>
+<p>答案还是一个。  </p>
+<p>String a=”ab”+”cd”;   再看看这里呢？</p>
+<p>答案是三个。<br>说到这里，我们就需要引入对字符串池相关知识的回顾了。  </p>
+<p>在JAVA虚拟机（JVM）中存在着一个字符串池，其中保存着很多String对象，并且可以被共享使用，因此它提高了效率。由于String类是final的，它的值一经创建就不可改变，因此我们不用担心String对象共享而带来程序的混乱。字符串池由String类维护，我们可以调用intern()方法来访问字符串池。  </p>
+<p>我们再回头看看String a=”abc”;，这行代码被执行的时候，JAVA虚拟机首先在字符串池中查找是否已经存在了值为”abc”的这么一个对象，它的判断依据是String类equals(Object obj)方法的返回值。如果有，则不再创建新的对象，直接返回已存在对象的引用；如果没有，则先创建这个对象，然后把它加入到字符串池中，再将它的引用返回。因此，我们不难理解前面三个例子中头两个例子为什么是这个答案了。</p>
+<p>只有使用引号包含文本的方式创建的String对象之间使用“+”连接产生的新对象才会被加入字符串池中。对于所有包含new方式新建对象（包括null）的“+”连接表达式，它所产生的新对象都不会被加入字符串池中，对此我们不再赘述。因此我们提倡大家用引号包含文本的方式来创建String对象以提高效率，实际上这也是我们在编程中常采用的。</p>
+<p>栈（stack）：主要保存基本类型（或者叫内置类型）（char、byte、short、int、long、float、double、boolean）和对象的引用，数据可以共享，速度仅次于寄存器（register），快于堆。<br>堆（heap）：用于存储对象</p>
+<html>
+<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-String_Original/" data-title="String_Original" data-url="http://kongzheng1993.github.io/kongzheng1993-String_Original/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"kongzheng1993"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+</html>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2016/07/11/kongzheng1993-String_Original/" data-id="cjwrkc2li000910c86n15j224" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/String/">String</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/new/">new</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-kongzheng1993-ablout_try_catch" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/11/kongzheng1993-ablout_try_catch/" class="article-date">
+  <time datetime="2016-07-10T16:00:00.000Z" itemprop="datePublished">2016-07-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/11/kongzheng1993-ablout_try_catch/">关于try-catch</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import java.io.IOException;  </span><br><span class="line">public class ExceptionTryCatchTest &#123;  </span><br><span class="line">    public void doSomething() throws IOException&#123;  </span><br><span class="line">        System.out.println(&quot;do somthing&quot;);  </span><br><span class="line">    &#125;  </span><br><span class="line">    public static void main(String[] args)&#123;  </span><br><span class="line">        ExceptionTryCatchTest etct = new ExceptionTryCatchTest();  </span><br><span class="line">        try &#123;  </span><br><span class="line">            etct.doSomething();  </span><br><span class="line">        &#125; catch (Exception e) &#123;                </span><br><span class="line">        &#125; catch (IOException e) &#123;                </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上并不能通过编译。<br>因为编译的时候会报错:已捕捉到异常 java.io.IOException。  catch(IOException e)这句有错误。<br>分析：对于try..catch捕获异常的形式来说，对于异常的捕获，可以有多个catch。对于try里面发生的异常，他会根据发生的异常和catch里面的进行匹配(怎么匹配，按照catch块从上往下匹配)，当它匹配某一个catch块的时候，他就直接进入到这个catch块里面去了，后面在再有catch块的话，它不做任何处理，直接跳过去，全部忽略掉。如果有finally的话进入到finally里面继续执行。换句话说，如果有匹配的catch，它就会忽略掉这个catch后面所有的catch。对我们这个方法来说，抛出的是IOException，当执行etct.doSomething();时，可能会抛出IOException，一但抛出IOException，它首先进入到catch (Exception e) {}里面，先和Exception匹配，由于IOException extends Exception,根据多态的原则，IOException是匹配Exception的，所以程序就会进入到catch (Exception e) {}里面，进入到第一个catch后，后面的catch都不会执行了，所以catch (IOException e) {}永远都执行不到，就给我们报出了前面的错误:已捕捉到异常 java.io.IOException。 </p>
+<h4 id="【总结】"><a href="#【总结】" class="headerlink" title="【总结】"></a>【总结】</h4><p>在写异常处理的时候，一定要把异常范围小的放在前面，范围大的放在后面，Exception这个异常的根类一定要放在最后一个catch里面，如果放在前面或者中间，任何异常都会和Exception匹配的，就会报已捕获到…异常的错误。 </p>
+<html>
+<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-abouttrycatch/" data-title="About trycatch" data-url="http://kongzheng1993.github.io/kongzheng1993"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"kongzheng1993"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+</html>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2016/07/11/kongzheng1993-ablout_try_catch/" data-id="cjwrkc2m7000j10c8cvey7g4b" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/catch，try/">catch，try</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-kongzheng1993-DB_Exchange" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/07/07/kongzheng1993-DB_Exchange/" class="article-date">
@@ -120,7 +245,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/07/kongzheng1993-DB_Exchange/" data-id="cjwghh65i0000dmxn58378roy" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/07/kongzheng1993-DB_Exchange/" data-id="cjwrkc2ko000010c8i7xtttq9" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
@@ -183,7 +308,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/05/kongzheng1993-PreparedStatement&Statement/" data-id="cjwghh67e000qdmxnpk0jt3qo" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/05/kongzheng1993-PreparedStatement&Statement/" data-id="cjwrkc2m5000h10c8aq8wqbqf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
@@ -280,209 +405,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/06/13/kongzheng1993-aboutFinal/" data-id="cjwghh69g003wdmxnwfiza51k" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/images/">images</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sample-post/">sample post</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/test/">test</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-oracle" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/06/10/kongzheng1993-oracle/" class="article-date">
-  <time datetime="2016-06-09T16:00:00.000Z" itemprop="datePublished">2016-06-10</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/10/kongzheng1993-oracle/">sql学习笔记</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="sql学习笔记"><a href="#sql学习笔记" class="headerlink" title="sql学习笔记"></a>sql学习笔记</h2><h3 id="关于DISTINCT"><a href="#关于DISTINCT" class="headerlink" title="关于DISTINCT"></a>关于DISTINCT</h3><p>DISTINCT可以去除重复的内容，但是，如果查询的数据是多个列，那么只有在这多个列的数据都相同的时候才可以消除。如果一个列重复，另一个列不重复，那么这一行也不会被消除。</p>
-<h3 id="四则运算可以作为SELECT参数"><a href="#四则运算可以作为SELECT参数" class="headerlink" title="四则运算可以作为SELECT参数"></a>四则运算可以作为SELECT参数</h3><h3 id="给计算结果设计别名"><a href="#给计算结果设计别名" class="headerlink" title="给计算结果设计别名"></a>给计算结果设计别名</h3><p>SELECT empno，ename，sal*12 income FROM emp;</p>
-<p>这里打印出来的结果中sal*12那一列的列名就是income。</p>
-<h3 id="常量如果是字符串要使用单引号而不是双引号，如果是数字不用加引号，如果是日期，就要按照日期格式编写。"><a href="#常量如果是字符串要使用单引号而不是双引号，如果是数字不用加引号，如果是日期，就要按照日期格式编写。" class="headerlink" title="常量如果是字符串要使用单引号而不是双引号，如果是数字不用加引号，如果是日期，就要按照日期格式编写。"></a>常量如果是字符串要使用单引号而不是双引号，如果是数字不用加引号，如果是日期，就要按照日期格式编写。</h3><h3 id="两列内容的连接使用"><a href="#两列内容的连接使用" class="headerlink" title="两列内容的连接使用||"></a>两列内容的连接使用||</h3><p>select empno||ename from emp;</p>
-<p>这里的使用方法很像java里面的“+”：</p>
-<p><font face="黑体">例如：</font></p>
-<pre><code>select &apos;雇员编号：&apos;|| empno ||&apos;,姓名：&apos;|| ename ||&apos;,收入：&apos;|| income from student;</code></pre><h3 id="BETWEEN-最小值-AND-最大值"><a href="#BETWEEN-最小值-AND-最大值" class="headerlink" title="BETWEEN 最小值 AND 最大值;"></a>BETWEEN 最小值 AND 最大值;</h3><p><font color="red">这里一定要注意是闭区间！！！</font></p>
-<h3 id="空判断-IS-NULL和IS-NOT-NULL"><a href="#空判断-IS-NULL和IS-NOT-NULL" class="headerlink" title="空判断 IS NULL和IS NOT NULL"></a>空判断 IS NULL和IS NOT NULL</h3><h3 id="IN和NOT-IN"><a href="#IN和NOT-IN" class="headerlink" title="IN和NOT IN"></a>IN和NOT IN</h3><p>BETWEEN AND 给了一个大的可选范围，IN也用来规定一个范围，不过用起来更灵活。</p>
-<p><font face="黑体">例如：</font></p>
-<p>SELECT * FROM emp WHERE empno=1 OR empno=2 OR empno=3;<br>这句代码使用IN来做就是：<br>SELECT * FROM emp WHERE empno IN (1,2,3);</p>
-<p>指定值查找使用IN会比较方便</p>
-<h3 id="关于NOT-IN和NULL的问题"><a href="#关于NOT-IN和NULL的问题" class="headerlink" title="关于NOT IN和NULL的问题"></a>关于NOT IN和NULL的问题</h3><p>使用NOT IN进行范围判断的时候，如果范围里面包括NULL，那么就不会有任何结果。</p>
-<p><font face="黑体">例如：</font><br>SELECT * FROM emp WHERE empno NOT IN(1,2,3,NULL);</p>
-<p>之所以使用WHERE，就是要抓取有用信息，没有限制，显示所有行，对于大型数据库根本没有意义。</p>
-<p>使用NOT IN的目的是为了查询部分数据行，但是如果有了NULL（某些数据永远不可能为NULL）,就成了查询全部了。</p>
-<p>为什么sql里面NOT IN后面的子查询如果有记录为NULL的，主查询就查不到记录？？？原因很简单：<br>SELECT *
-FROM dbo.TableA AS a<br>WHERE a.id NOT IN ( 2, NULL )</p>
-<p>等同于：<br>SELECT *
-FROM Table_A AS a<br>WHERE a.id &lt;&gt; 2<br>AND a.ID &lt;&gt; NULL</p>
-<p><font color="red">于NULL值不能参与比较运算符，导致条件不成立，查询不出来数据。</font></p>
-<h3 id="LIKE"><a href="#LIKE" class="headerlink" title="LIKE"></a>LIKE</h3><p>“_”:匹配任意以为字符；<br>“%”:匹配任意的零位，多位字符。</p>
-<p><font face="黑体">注意：</font><br>LIKE 可以应用在各种数据类型上，不一定是字符串；<br>LIKE 如果不设置关键字，那么表示查询全部信息，就像LIKE ‘%%’。虽然这样可以查询全部数据，但是与不使用WHERE子句相比，不使用WHERE子句的效率更高。</p>
-<h3 id="ORDER-BY"><a href="#ORDER-BY" class="headerlink" title="ORDER BY"></a>ORDER BY</h3><p>排序方式有两种ASC(默认)和DESC。</p>
-<h3 id="COUNT-MAX-MIN-SUM-AVG"><a href="#COUNT-MAX-MIN-SUM-AVG" class="headerlink" title="COUNT(),MAX(),MIN(),SUM(),AVG()"></a>COUNT(),MAX(),MIN(),SUM(),AVG()</h3><p>count是统计个数，里面可以跟上<font color="red">distinct</font>字段。<br>max和min也可以用于<font color="red">日期</font>类型的数据。</p>
-<p><font face="黑体">注意：</font></p>
-<p>COUNT(*),COUNT(字段),COUNT(DISTINCT 字段)的区别？</p>
-<ul>
-<li>COUNT(*):明确的返回表中的数据个数，是最准确的；</li>
-<li>COUNT(字段):不统计为null的数据个数，如果某一列的数据不可能为null，那么结果与COUNT(*)相同；</li>
-<li>COUNT(DISTINCT 字段):统计消除掉重复数据后的数据个数。</li>
-</ul>
-<h3 id="GROUP-BY"><a href="#GROUP-BY" class="headerlink" title="GROUP BY"></a>GROUP BY</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">SELECT job,COUNT(empno),AVG(sal)</span><br><span class="line">FROM emp</span><br><span class="line">GROUP BY job;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">SELECT DEPTNO,COUNT(empno),MAX(SAL),MIN(SAL)</span><br><span class="line">FROM EMP</span><br><span class="line">GROUP BY DEPTNO;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>没有编写group by子句的时候（全表作为一组），那么select子句之中只允许出现统计函数，不允许出现其他字段。<br>例如：<br>select count(empno),ename from emp;<br>这里查询结果里面第一列已经显示了empno的数目了，这肯定只有一行，所以第二列不可能列出很多行ename的数据了，因为这不符合数据库的表达形式。</li>
-</ul>
-<ul>
-<li>在使用group by子句分组的时候，select子句之中只允许出现分组字段与统计函数，其他字段不允许出现。</li>
-</ul>
-<p>正确代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select job,count(empno) from emp group by job;</span><br></pre></td></tr></table></figure>
-
-<p>错误代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select job,count(empno),ename from group by job;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>统计函数允许嵌套查询，但是嵌套后的统计查询中，select子句中不允许再出现任何的字段，包括分组字段，只能够使用嵌套的统计函数。</li>
-</ul>
-<p>正确代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">SELECT deptno,AVG(sal)</span><br><span class="line">FROM emp </span><br><span class="line">GROUP BY deptno;</span><br></pre></td></tr></table></figure>
-
-<p>错误代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT deptno,MAX(AVG(sal))</span><br><span class="line">FROM emp</span><br><span class="line">GROUP BY deptno;</span><br></pre></td></tr></table></figure>
-
-<p>这里已经有了嵌套的统计函数，就不能再有deptno了。</p>
-<p>修改：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT MAX(AVG(sal))</span><br><span class="line">FROM emp</span><br><span class="line">GROUP BY deptno;</span><br></pre></td></tr></table></figure>
-
-<h3 id="多表查询"><a href="#多表查询" class="headerlink" title="多表查询"></a>多表查询</h3><p><font face="黑体">示例：</font></p>
-<p>查询出每个部门的名称、人数、平均工资：</p>
-<p>分析：<br>1.确定要使用的表：<br>（1）dept:部门名称<br>（2）emp:统计出人数，平均工资<br>2.确定已知的关联字段：<br>雇员与部门：emp.deptno=dept.deptno</p>
-<h4 id="第一步：查询每个雇员的编号，部门名称，工资"><a href="#第一步：查询每个雇员的编号，部门名称，工资" class="headerlink" title="第一步：查询每个雇员的编号，部门名称，工资"></a>第一步：查询每个雇员的编号，部门名称，工资</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">SELECT e.empno,d.dnama,e.sal</span><br><span class="line">FROM emp e,dept d</span><br><span class="line">WHERE e.deptno=d.deptno;</span><br></pre></td></tr></table></figure>
-
-<h4 id="第二步：通过以上的查询可以发现dname字段上出现了重复查询，有重复数据才可以分组。另外我们的查询明确要求是根据部门名称分组，现在对查询结果分组。（上面查询出来的结果可以看作是一张临时数据表）"><a href="#第二步：通过以上的查询可以发现dname字段上出现了重复查询，有重复数据才可以分组。另外我们的查询明确要求是根据部门名称分组，现在对查询结果分组。（上面查询出来的结果可以看作是一张临时数据表）" class="headerlink" title="第二步：通过以上的查询可以发现dname字段上出现了重复查询，有重复数据才可以分组。另外我们的查询明确要求是根据部门名称分组，现在对查询结果分组。（上面查询出来的结果可以看作是一张临时数据表）"></a>第二步：通过以上的查询可以发现dname字段上出现了重复查询，有重复数据才可以分组。另外我们的查询明确要求是根据部门名称分组，现在对查询结果分组。（上面查询出来的结果可以看作是一张临时数据表）</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">SELECT e.empno,d.dnama,e.sal</span><br><span class="line">FROM emp e,dept d</span><br><span class="line">WHERE e.deptno=d.deptno</span><br><span class="line">GROUP BY d.name;</span><br></pre></td></tr></table></figure>
-
-<h4 id="第三步：部门一共有三个，但是我们现在只出现了三个，加入外连接控制"><a href="#第三步：部门一共有三个，但是我们现在只出现了三个，加入外连接控制" class="headerlink" title="第三步：部门一共有三个，但是我们现在只出现了三个，加入外连接控制"></a>第三步：部门一共有三个，但是我们现在只出现了三个，加入外连接控制</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">SELECT e.empno,d.dnama,e.sal</span><br><span class="line">FROM emp e,dept d</span><br><span class="line">WHERE e.deptno(+)=d.deptno</span><br><span class="line">GROUP BY d.name;</span><br></pre></td></tr></table></figure>
-
-<h4 id="查询成功。"><a href="#查询成功。" class="headerlink" title="查询成功。"></a>查询成功。</h4><html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-sql/" data-title="lover" data-url="http://kongzheng1993.github.io/kongzheng1993-sql/"></div>
-<!-- 多说评论框 end -->
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"kongzheng1993"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-</html>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/06/10/kongzheng1993-oracle/" data-id="cjwghh679000ldmxnmxrf4ssn" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/distinct/">distinct</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/group-by/">group by</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/order-by/">order by</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/select/">select</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sql/">sql</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-thewayofsort" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/06/10/kongzheng1993-thewayofsort/" class="article-date">
-  <time datetime="2016-06-09T16:00:00.000Z" itemprop="datePublished">2016-06-10</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/10/kongzheng1993-thewayofsort/">几种常见的内部排序</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="概论"><a href="#概论" class="headerlink" title="概论"></a>概论</h2><p>排序有内部排序和外部排序，内部排序是数据记录在内存中进行排序，而外部排序是因排序的数据很大，一次不能容纳全部的排序记录，在排序过程中需要访问外存。</p>
-<p>我整理的排序就是内部排序。</p>
-<p>当数据较多时应该采用时间复杂度为o(nlog2n)的排序方法：快速排序、堆排序、归并排序</p>
-<p>快速排序是这几种内部排序中最好的方法，想待排序的关键字是随机分布时，快速排序的平均时间最短。</p>
-<h2 id="直接插入排序"><a href="#直接插入排序" class="headerlink" title="直接插入排序"></a>直接插入排序</h2><h3 id="思想"><a href="#思想" class="headerlink" title="思想"></a>思想</h3><p>将一个记录插入到已排序好的有序表中，从而得到一个新，记录数增1的有序表。即：先将序列的第1个记录看成是一个有序的子序列，然后从第2个记录逐个进行插入，直至整个序列有序为止。</p>
-<h3 id="要点"><a href="#要点" class="headerlink" title="要点"></a>要点</h3><p>设立哨兵，作为临时存储和判断数组边界之用。</p>
-<p>如果碰见一个和插入元素相等的，那么插入元素把想插入的元素放在相等元素的后面。所以，相等元素的前后顺序没有改变，从原无序序列出去的顺序就是排好序后的顺序，所以插入排序是稳定的。</p>
-<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public void insertSort(int[] a)&#123;</span><br><span class="line">    int i, j, k;</span><br><span class="line">for (i = 1; i &lt; a.length; i++) &#123;</span><br><span class="line">             //为a[i]在前面的a[0...i-1]有序区间中找一个合适的位置</span><br><span class="line">            for (j = i - 1; j &gt;= 0; j--)//这里判断是j&gt;=0也可以防止数组越界，很巧妙</span><br><span class="line">                 if (a[j] &lt; a[i])</span><br><span class="line">                     break;</span><br><span class="line">             //如找到了一个合适的位置</span><br><span class="line">             if (j != i - 1) &#123;</span><br><span class="line">                 //将比a[i]大的数据向后移</span><br><span class="line">                 int temp = a[i];</span><br><span class="line">                 for (k = i - 1; k &gt; j; k--)</span><br><span class="line">                     a[k + 1] = a[k];</span><br><span class="line">                 //将a[i]放到正确位置上</span><br><span class="line">                 a[k + 1] = temp;</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="效率"><a href="#效率" class="headerlink" title="效率"></a>效率</h3><p>时间复杂度：O（n^2）.</p>
-<p>其他的插入排序有二分插入排序，2-路插入排序。</p>
-<h2 id="简单选择排序"><a href="#简单选择排序" class="headerlink" title="简单选择排序"></a>简单选择排序</h2><h3 id="基本思想"><a href="#基本思想" class="headerlink" title="基本思想"></a>基本思想</h3><p>在要排序的一组数中，选出最小（或者最大）的一个数与第1个位置的数交换；然后在剩下的数当中再找最小（或者最大）的与第2个位置的数交换，依次类推，直到第n-1个元素（倒数第二个数）和第n个元素（最后一个数）比较为止。</p>
-<h3 id="操作方法"><a href="#操作方法" class="headerlink" title="操作方法"></a>操作方法</h3><p>第一趟，从n 个记录中找出关键码最小的记录与第一个记录交换；</p>
-<p>第二趟，从第二个记录开始的n-1 个记录中再选出关键码最小的记录与第二个记录交换；</p>
-<p>以此类推…..</p>
-<p>第i 趟，则从第i 个记录开始的n-i+1 个记录中选出关键码最小的记录与第i 个记录交换，</p>
-<p>直到整个序列按关键码有序。</p>
-<h3 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">public void selectSort(int a[])&#123;</span><br><span class="line">    int index,temp;</span><br><span class="line">    //index保存目前最小的数据的下标</span><br><span class="line">    //找出最小的数据的位置</span><br><span class="line">    for (int i=0;i&lt;a.length ;i++) &#123;</span><br><span class="line">        index=i;//因为每次排完序前面的都是有序的了，前面的肯定比第i个小，所以让index=i，减少不必要的麻烦</span><br><span class="line">        for (int j=i;j&lt;a.length ;j++ ) &#123;</span><br><span class="line">            if (a[j]&lt;a[index]) &#123;</span><br><span class="line">            index=j;</span><br><span class="line">            &#125;        </span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(&quot;第&quot;+i+&quot;次找到的最小值的下标是：&quot;+index);</span><br><span class="line">        if(index!=i)</span><br><span class="line">            &#123;</span><br><span class="line">                temp=a[index];//找到无序数列里面的最小值并于当前位置(i)交换</span><br><span class="line">                a[index]=a[i];</span><br><span class="line">                a[i]=temp;</span><br><span class="line">            &#125;</span><br><span class="line">        for (int m=0; m&lt;a.length;m++ ) &#123;</span><br><span class="line">            System.out.print(a[m]+&quot; &quot;);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="简单选择排序的改进-–二元选择排序"><a href="#简单选择排序的改进-–二元选择排序" class="headerlink" title="简单选择排序的改进 –二元选择排序"></a>简单选择排序的改进 –二元选择排序</h2><p>简单选择排序，每趟只能确定一个元素排序后的定位，我们可以考虑改进为每趟确定两个元素，也就是最大值和最小值的位置，从而减少循环次数，改进后对n个数据进行排序，最多只需进行[n/2]趟循环。</p>
-<h3 id="代码-2"><a href="#代码-2" class="headerlink" title="代码"></a>代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">//这个算法因为比较的是大小，将min和max都记录下来，交换到当前坐标，但是如果数组中有相同的值，他们也会不论你这是交换还是不交换，都不会改变结果，所以这个方法不适用于有相同数据的数组</span><br><span class="line">void selectSort_double(int a[])&#123;</span><br><span class="line">    int min,max,temp;</span><br><span class="line">    for (int i=0;i&lt;=a.length/2;i++ ) &#123;</span><br><span class="line">        min=i;max=i;</span><br><span class="line">        for (int j=i;j&lt;a.length-i;j++) &#123;</span><br><span class="line">            if(a[j]&lt;a[min])&#123;</span><br><span class="line">                min=j;</span><br><span class="line">                System.out.println(&quot;min=&quot;+min);</span><br><span class="line">                continue;//如果当前左边的数据小于当前最小值，那么它必定小于最大值，直接进入下一次循环</span><br><span class="line">            &#125;</span><br><span class="line">            if (a[j]&gt;a[max]) &#123;</span><br><span class="line">                max=j;</span><br><span class="line">                System.out.println(&quot;max=&quot;+max);</span><br><span class="line">            &#125;   </span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(&quot;第&quot;+i+&quot;次找到的最小值的下标是：&quot;+min+&quot;;第&quot;+i+&quot;次找到的最大值的下标是：&quot;+max);</span><br><span class="line">        temp=a[i];a[i]=a[min];a[min]=temp;</span><br><span class="line">        temp=a[a.length-i-1];a[a.length-i-1]=a[max];a[max]=temp;</span><br><span class="line">        for (int w=0;w&lt;a.length ;w++ ) &#123;</span><br><span class="line">            System.out.print(a[w]+&quot; &quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        temp=a[a.length-i-1];a[a.length-i-1]=a[max];a[max]=temp;</span><br><span class="line">        System.out.println();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h2><h3 id="基本思想-1"><a href="#基本思想-1" class="headerlink" title="基本思想"></a>基本思想</h3><p>冒泡排序是相继比较交换两个相邻位置的值，每次排序都确定一个值的位置，就像冒泡一样</p>
-<h3 id="代码-3"><a href="#代码-3" class="headerlink" title="代码"></a>代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">public class BubbleSort1&#123;</span><br><span class="line"></span><br><span class="line">    public void bubble(int a[])&#123;</span><br><span class="line"></span><br><span class="line">        for (int i=0;i&lt;a.length;i++ ) &#123;</span><br><span class="line">            for (int j=0;j&lt;a.length-i-1 ;j++ ) &#123;</span><br><span class="line">                </span><br><span class="line">                if (a[j]&gt;a[j+1]) &#123;</span><br><span class="line">                    int temp=a[j];</span><br><span class="line">                    a[j]=a[j+1];</span><br><span class="line">                    a[j+1]=temp;</span><br><span class="line">                &#125;</span><br><span class="line">                // out(a);</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">            out(a);</span><br><span class="line">&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    public void out(int a[])&#123;</span><br><span class="line">        for (int i=0;i&lt;a.length ;i++ ) &#123;</span><br><span class="line">            System.out.print(a[i]+&quot; &quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println();</span><br><span class="line">    &#125;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        BubbleSort1 bu=new BubbleSort1();</span><br><span class="line">        int arr[]=&#123;2,5,1,3,6,9,7&#125;;</span><br><span class="line">        // bu.out(arr);</span><br><span class="line">        bu.bubble(arr);</span><br><span class="line">        // bu.out(arr);</span><br><span class="line">        System.out.println(&quot;hello world&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-thewayofsort/" data-title="thewayofsort" data-url="http://kongzheng1993.github.io/kongzheng1993"></div>
-<!-- 多说评论框 end -->
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"kongzheng1993"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-</html>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/06/10/kongzheng1993-thewayofsort/" data-id="cjwghh671000fdmxn8m95qp4z" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/06/13/kongzheng1993-aboutFinal/" data-id="cjwrkc2lk000a10c8olxd6btr" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/images/">images</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sample-post/">sample post</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/test/">test</a></li></ul>
@@ -498,7 +421,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -509,7 +432,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/">github</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/git/">git</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/linux/ss/">ss</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/resume/">resume</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/suse/">suse</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/">server</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/FTP/">FTP</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/编码/">编码</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/">github</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/git/">git</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/linux/ss/">ss</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/">quartz</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/锁/">锁</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/锁/分布式/">分布式</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/resume/">resume</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/suse/">suse</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/">server</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/FTP/">FTP</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/编码/">编码</a></li></ul>
     </div>
   </div>
 
@@ -519,7 +442,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Class/">Class</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FTP/">FTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/String/">String</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/catch，try/">catch，try</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/">console</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/distinct/">distinct</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/float/">float</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/group-by/">group by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/images/">images</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/new/">new</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/order-by/">order by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/re/">re</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/resume，简历/">resume，简历</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sample-post/">sample post</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/select/">select</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/">server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlplus/">sqlplus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ss/">ss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/suse/">suse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sys/">sys</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/test/">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/备份/">备份</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安全/">安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/对象，Class对象/">对象，Class对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编码/">编码</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Class/">Class</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FTP/">FTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/String/">String</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/catch，try/">catch，try</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/">console</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/distinct/">distinct</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/float/">float</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/group-by/">group by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/images/">images</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/new/">new</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/order-by/">order by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/">quartz</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/re/">re</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/resume，简历/">resume，简历</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sample-post/">sample post</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/select/">select</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/">server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlplus/">sqlplus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ss/">ss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/suse/">suse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sys/">sys</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/test/">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/备份/">备份</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安全/">安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/对象，Class对象/">对象，Class对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编码/">编码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/锁/">锁</a></li></ul>
     </div>
   </div>
 
@@ -529,7 +452,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Class/" style="font-size: 10px;">Class</a> <a href="/tags/FTP/" style="font-size: 10px;">FTP</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/catch，try/" style="font-size: 10px;">catch，try</a> <a href="/tags/console/" style="font-size: 10px;">console</a> <a href="/tags/distinct/" style="font-size: 10px;">distinct</a> <a href="/tags/float/" style="font-size: 10px;">float</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/group-by/" style="font-size: 10px;">group by</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/images/" style="font-size: 16.67px;">images</a> <a href="/tags/java/" style="font-size: 13.33px;">java</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/oop/" style="font-size: 20px;">oop</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/order-by/" style="font-size: 10px;">order by</a> <a href="/tags/re/" style="font-size: 16.67px;">re</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/resume，简历/" style="font-size: 10px;">resume，简历</a> <a href="/tags/sample-post/" style="font-size: 16.67px;">sample post</a> <a href="/tags/select/" style="font-size: 10px;">select</a> <a href="/tags/server/" style="font-size: 10px;">server</a> <a href="/tags/sql/" style="font-size: 13.33px;">sql</a> <a href="/tags/sqlplus/" style="font-size: 10px;">sqlplus</a> <a href="/tags/ss/" style="font-size: 10px;">ss</a> <a href="/tags/suse/" style="font-size: 10px;">suse</a> <a href="/tags/sys/" style="font-size: 10px;">sys</a> <a href="/tags/test/" style="font-size: 16.67px;">test</a> <a href="/tags/备份/" style="font-size: 10px;">备份</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/对象，Class对象/" style="font-size: 10px;">对象，Class对象</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a>
+      <a href="/tags/Class/" style="font-size: 10px;">Class</a> <a href="/tags/FTP/" style="font-size: 10px;">FTP</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/catch，try/" style="font-size: 10px;">catch，try</a> <a href="/tags/console/" style="font-size: 10px;">console</a> <a href="/tags/distinct/" style="font-size: 10px;">distinct</a> <a href="/tags/float/" style="font-size: 10px;">float</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/group-by/" style="font-size: 10px;">group by</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/images/" style="font-size: 16.67px;">images</a> <a href="/tags/java/" style="font-size: 13.33px;">java</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/oop/" style="font-size: 20px;">oop</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/order-by/" style="font-size: 10px;">order by</a> <a href="/tags/quartz/" style="font-size: 10px;">quartz</a> <a href="/tags/re/" style="font-size: 16.67px;">re</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/resume，简历/" style="font-size: 10px;">resume，简历</a> <a href="/tags/sample-post/" style="font-size: 16.67px;">sample post</a> <a href="/tags/select/" style="font-size: 10px;">select</a> <a href="/tags/server/" style="font-size: 10px;">server</a> <a href="/tags/sql/" style="font-size: 13.33px;">sql</a> <a href="/tags/sqlplus/" style="font-size: 10px;">sqlplus</a> <a href="/tags/ss/" style="font-size: 10px;">ss</a> <a href="/tags/suse/" style="font-size: 10px;">suse</a> <a href="/tags/sys/" style="font-size: 10px;">sys</a> <a href="/tags/test/" style="font-size: 16.67px;">test</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/备份/" style="font-size: 10px;">备份</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/对象，Class对象/" style="font-size: 10px;">对象，Class对象</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/锁/" style="font-size: 10px;">锁</a>
     </div>
   </div>
 
@@ -551,6 +474,14 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       <ul>
         
           <li>
+            <a href="/2019/06/11/kongzheng1993-关于分布式锁/">kongzheng1993-关于分布式锁.md</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/04/kongzheng1993-MQ/">kongzheng1993-MQ</a>
+          </li>
+        
+          <li>
             <a href="/2019/06/03/kongzheng1993-resume/">Resume</a>
           </li>
         
@@ -560,14 +491,6 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
         
           <li>
             <a href="/2018/08/05/kongzheng1993-mysql数据库导出导入/">mysql数据库导出导入</a>
-          </li>
-        
-          <li>
-            <a href="/2018/06/08/kongzheng1993-java多线程总结/">java多线程总结</a>
-          </li>
-        
-          <li>
-            <a href="/2018/05/02/kongzheng1993-linux命令行下的ss/">linux命令行下的ss</a>
           </li>
         
       </ul>
