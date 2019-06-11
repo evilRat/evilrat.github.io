@@ -5,19 +5,19 @@
   
 
   
-  <title>kongzheng1993-关于分布式锁.md | Evil</title>
+  <title>关于分布式锁.md | Evil</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="前段时间上线了一个需求：用户在页面填写计划任务，在用户的计划时间给用户下发短信提醒。 我当时一想这不简单，给页面提供一个接口，数据入库，后台做一个定时任务，每分钟去取当前时间需要下发短信的数据，调用短信接口。 为此还特地学习了一下quartz。需求很快完成了，接着就上线了。 第二天验证，每条数据竟然收到了八条短信！！！ 找日志看了一下，每个tomcat都跑了task，都取到了所有的数据，都下发了短">
 <meta name="keywords" content="quartz,锁,分布式">
 <meta property="og:type" content="article">
-<meta property="og:title" content="kongzheng1993-关于分布式锁.md">
+<meta property="og:title" content="关于分布式锁.md">
 <meta property="og:url" content="https://kongzheng1993.github.io/2019/06/11/kongzheng1993-关于分布式锁/index.html">
 <meta property="og:site_name" content="Evil">
 <meta property="og:description" content="前段时间上线了一个需求：用户在页面填写计划任务，在用户的计划时间给用户下发短信提醒。 我当时一想这不简单，给页面提供一个接口，数据入库，后台做一个定时任务，每分钟去取当前时间需要下发短信的数据，调用短信接口。 为此还特地学习了一下quartz。需求很快完成了，接着就上线了。 第二天验证，每条数据竟然收到了八条短信！！！ 找日志看了一下，每个tomcat都跑了task，都取到了所有的数据，都下发了短">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-06-11T09:01:23.759Z">
+<meta property="og:updated_time" content="2019-06-11T09:27:51.696Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="kongzheng1993-关于分布式锁.md">
+<meta name="twitter:title" content="关于分布式锁.md">
 <meta name="twitter:description" content="前段时间上线了一个需求：用户在页面填写计划任务，在用户的计划时间给用户下发短信提醒。 我当时一想这不简单，给页面提供一个接口，数据入库，后台做一个定时任务，每分钟去取当前时间需要下发短信的数据，调用短信接口。 为此还特地学习了一下quartz。需求很快完成了，接着就上线了。 第二天验证，每条数据竟然收到了八条短信！！！ 找日志看了一下，每个tomcat都跑了task，都取到了所有的数据，都下发了短">
   
     <link rel="alternate" href="/atom.xml" title="Evil" type="application/atom+xml">
@@ -83,7 +83,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      kongzheng1993-关于分布式锁.md
+      关于分布式锁.md
     </h1>
   
 
@@ -168,7 +168,7 @@
   
     <a href="/2019/06/05/kongzheng1993-关于学习业务的思考/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">kongzheng1993-关于学习业务的思考</div>
+      <div class="article-nav-title">关于学习业务的思考</div>
     </a>
   
 </nav>
@@ -226,19 +226,19 @@
       <ul>
         
           <li>
-            <a href="/2019/06/11/kongzheng1993-关于分布式锁/">kongzheng1993-关于分布式锁.md</a>
+            <a href="/2019/06/11/kongzheng1993-关于分布式锁/">关于分布式锁.md</a>
           </li>
         
           <li>
-            <a href="/2019/06/05/kongzheng1993-关于学习业务的思考/">kongzheng1993-关于学习业务的思考</a>
+            <a href="/2019/06/05/kongzheng1993-关于学习业务的思考/">关于学习业务的思考</a>
           </li>
         
           <li>
-            <a href="/2019/06/05/kongzheng1993-nohup和&/">kongzheng1993-nohup和&amp;</a>
+            <a href="/2019/06/05/kongzheng1993-nohup和&/">nohup和&amp;</a>
           </li>
         
           <li>
-            <a href="/2019/06/04/kongzheng1993-MQ/">kongzheng1993-MQ</a>
+            <a href="/2019/06/04/kongzheng1993-MQ/">MQ</a>
           </li>
         
           <li>
