@@ -14,10 +14,10 @@ comments: true
 ```java
 
 Caused by: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: User ngcrmpf_bj already has more than 'max_user_connections' active connections
-	at sun.reflect.GeneratedConstructorAccessor266.newInstance(Unknown Source)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:404)
+    at sun.reflect.GeneratedConstructorAccessor266.newInstance(Unknown Source)
+    at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+    at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+    at com.mysql.jdbc.Util.handleNewInstance(Util.java:404)
 
 ```
 
