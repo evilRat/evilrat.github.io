@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>String str | Evil</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="String str=new String(“abc”); 跟着这段代码之后，我们会想到一个问题，就是这行代码究竟创建了几个String对象呢？答案是2个。String str只是定义了一个名为str的String类型的变量，因此它并没有创建对象；=是对变量str进行初始化，将某个对象的引用（或者叫句柄）赋值给它，显然也没有创建对象；现在只剩下了new String(“abc”)了。那么，new">
+<meta name="keywords" content="String,new">
+<meta property="og:type" content="article">
+<meta property="og:title" content="String str">
+<meta property="og:url" content="https://kongzheng1993.github.io/2016/07/11/kongzheng1993-String_Original/index.html">
+<meta property="og:site_name" content="Evil">
+<meta property="og:description" content="String str=new String(“abc”); 跟着这段代码之后，我们会想到一个问题，就是这行代码究竟创建了几个String对象呢？答案是2个。String str只是定义了一个名为str的String类型的变量，因此它并没有创建对象；=是对变量str进行初始化，将某个对象的引用（或者叫句柄）赋值给它，显然也没有创建对象；现在只剩下了new String(“abc”)了。那么，new">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-06-04T02:50:04.011Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="String str">
+<meta name="twitter:description" content="String str=new String(“abc”); 跟着这段代码之后，我们会想到一个问题，就是这行代码究竟创建了几个String对象呢？答案是2个。String str只是定义了一个名为str的String类型的变量，因此它并没有创建对象；=是对变量str进行初始化，将某个对象的引用（或者叫句柄）赋值给它，显然也没有创建对象；现在只剩下了new String(“abc”)了。那么，new">
+  
+    <link rel="alternate" href="/atom.xml" title="Evil" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Evil</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kongzheng1993.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-kongzheng1993-String_Original" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/11/kongzheng1993-String_Original/" class="article-date">
+  <time datetime="2016-07-10T16:00:00.000Z" itemprop="datePublished">2016-07-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      String str
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>String str=new String(“abc”); 跟着这段代码之后，我们会想到一个问题，就是这行代码究竟创建了几个String对象呢？<br>答案是2个。<br>String str只是定义了一个名为str的String类型的变量，因此它并没有创建对象；=是对变量str进行初始化，将某个对象的引用（或者叫句柄）赋值给它，显然也没有创建对象；现在只剩下了new String(“abc”)了。那么，new String(“abc”)什么又能被看作成“abc”和<br>new String()呢？<br>这就要了解一下String的构造器：<br>public String (String original){<br>    //other code…<br>}
+平常我们创建一个类的实例的方法有两种：<br>1.使用new创建对象；<br>2.调用Class类里面的newInstance方法，利用反射机制创建对象。</p>
+<p>我们正是使用new调用了String类的上面那个构造器方法创建了一个对象，并将它的引用赋值给了str变量。同时我们注意到，被调用的构造器方法接受的参数也是一个String对象，这个对象正是”abc”。由此我们又要引入另外一种创建String对象的方式的讨论——引号内包含文本。</p>
+<p>这种方式是String特有的，并且它与new的方式存在很大区别。  </p>
+<p>String str=”abc”;  </p>
+<p>毫无疑问，这行代码创建了一个String对象。  </p>
+<p>String a=”abc”;  String b=”abc”;   那这里呢？</p>
+<p>答案还是一个。  </p>
+<p>String a=”ab”+”cd”;   再看看这里呢？</p>
+<p>答案是三个。<br>说到这里，我们就需要引入对字符串池相关知识的回顾了。  </p>
+<p>在JAVA虚拟机（JVM）中存在着一个字符串池，其中保存着很多String对象，并且可以被共享使用，因此它提高了效率。由于String类是final的，它的值一经创建就不可改变，因此我们不用担心String对象共享而带来程序的混乱。字符串池由String类维护，我们可以调用intern()方法来访问字符串池。  </p>
+<p>我们再回头看看String a=”abc”;，这行代码被执行的时候，JAVA虚拟机首先在字符串池中查找是否已经存在了值为”abc”的这么一个对象，它的判断依据是String类equals(Object obj)方法的返回值。如果有，则不再创建新的对象，直接返回已存在对象的引用；如果没有，则先创建这个对象，然后把它加入到字符串池中，再将它的引用返回。因此，我们不难理解前面三个例子中头两个例子为什么是这个答案了。</p>
+<p>只有使用引号包含文本的方式创建的String对象之间使用“+”连接产生的新对象才会被加入字符串池中。对于所有包含new方式新建对象（包括null）的“+”连接表达式，它所产生的新对象都不会被加入字符串池中，对此我们不再赘述。因此我们提倡大家用引号包含文本的方式来创建String对象以提高效率，实际上这也是我们在编程中常采用的。</p>
+<p>栈（stack）：主要保存基本类型（或者叫内置类型）（char、byte、short、int、long、float、double、boolean）和对象的引用，数据可以共享，速度仅次于寄存器（register），快于堆。<br>堆（heap）：用于存储对象</p>
+<html>
+<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-String_Original/" data-title="String_Original" data-url="http://kongzheng1993.github.io/kongzheng1993-String_Original/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"kongzheng1993"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+</html>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2016/07/11/kongzheng1993-String_Original/" data-id="cjww5cwwl00081rc8xomao8ag" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/String/">String</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/new/">new</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/07/19/kongzheng1993-MysqlToOracle/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Mysql to Oracle
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/07/11/kongzheng1993-ablout_try_catch/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">关于try-catch</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/">RSA</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/">SHA</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/加密/">加密</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/加密/签名/">签名</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/">github</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/git/">git</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/linux/ss/">ss</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/java/">java</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/">quartz</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/锁/">锁</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/锁/分布式/">分布式</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/resume/">resume</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/suse/">suse</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/">server</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/FTP/">FTP</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/编码/">编码</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Class/">Class</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FTP/">FTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RSA/">RSA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SHA/">SHA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/String/">String</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/catch，try/">catch，try</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/">console</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/distinct/">distinct</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/float/">float</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/group-by/">group by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/images/">images</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/new/">new</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/order-by/">order by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/">quartz</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/re/">re</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/resume，简历/">resume，简历</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sample-post/">sample post</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/select/">select</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/">server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlplus/">sqlplus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ss/">ss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/suse/">suse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sys/">sys</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/test/">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/业务/">业务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/加密/">加密</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/备份/">备份</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/学习/">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安全/">安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/对象，Class对象/">对象，Class对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/签名/">签名</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编码/">编码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/职业/">职业</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/锁/">锁</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Class/" style="font-size: 10px;">Class</a> <a href="/tags/FTP/" style="font-size: 10px;">FTP</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/SHA/" style="font-size: 10px;">SHA</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/catch，try/" style="font-size: 10px;">catch，try</a> <a href="/tags/console/" style="font-size: 10px;">console</a> <a href="/tags/distinct/" style="font-size: 10px;">distinct</a> <a href="/tags/float/" style="font-size: 10px;">float</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/group-by/" style="font-size: 10px;">group by</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/images/" style="font-size: 16.67px;">images</a> <a href="/tags/java/" style="font-size: 16.67px;">java</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/mysql/" style="font-size: 13.33px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/oop/" style="font-size: 20px;">oop</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/order-by/" style="font-size: 10px;">order by</a> <a href="/tags/quartz/" style="font-size: 10px;">quartz</a> <a href="/tags/re/" style="font-size: 16.67px;">re</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/resume，简历/" style="font-size: 10px;">resume，简历</a> <a href="/tags/sample-post/" style="font-size: 16.67px;">sample post</a> <a href="/tags/select/" style="font-size: 10px;">select</a> <a href="/tags/server/" style="font-size: 10px;">server</a> <a href="/tags/sql/" style="font-size: 13.33px;">sql</a> <a href="/tags/sqlplus/" style="font-size: 10px;">sqlplus</a> <a href="/tags/ss/" style="font-size: 10px;">ss</a> <a href="/tags/suse/" style="font-size: 10px;">suse</a> <a href="/tags/sys/" style="font-size: 10px;">sys</a> <a href="/tags/test/" style="font-size: 16.67px;">test</a> <a href="/tags/业务/" style="font-size: 10px;">业务</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/加密/" style="font-size: 10px;">加密</a> <a href="/tags/备份/" style="font-size: 10px;">备份</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/学习/" style="font-size: 10px;">学习</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/对象，Class对象/" style="font-size: 10px;">对象，Class对象</a> <a href="/tags/签名/" style="font-size: 10px;">签名</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/职业/" style="font-size: 10px;">职业</a> <a href="/tags/锁/" style="font-size: 10px;">锁</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/06/14/kongzheng1993-mysql超过最大连接数-一次生产问题定位/">mysql超过最大连接数一次生产问题定位.md</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/14/kongzheng1993-compare-and-swap/">kongzheng1993-compare_and_swap.md</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/13/kongzheng1993-Connect-timed-out与Read-timed-out/">kongzheng1993-Connect_timed_out与Read_timed_out.md</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/13/kongzheng1993-RSA加密与SHA签名/">kongzheng1993-RSA加密与SHA签名.md</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/11/kongzheng1993-关于分布式锁/">关于分布式锁.md</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 evilRat<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

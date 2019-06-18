@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Evil</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Evil">
+<meta property="og:url" content="https://kongzheng1993.github.io/page/6/index.html">
+<meta property="og:site_name" content="Evil">
+<meta property="og:locale" content="default">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Evil">
+  
+    <link rel="alternate" href="/atom.xml" title="Evil" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Evil</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kongzheng1993.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-kongzheng1993-MysqlToOracle" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/19/kongzheng1993-MysqlToOracle/" class="article-date">
+  <time datetime="2016-07-18T16:00:00.000Z" itemprop="datePublished">2016-07-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/19/kongzheng1993-MysqlToOracle/">Mysql to Oracle</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>通过这次实验，我了解了连接oracle和mysql的区别，详情请访问我的<a href="https://github.com/kongzheng1993/MysqlToOracle" target="_blank" rel="noopener">github</a></p>
+<p>这里我只谈在编写中遇到的问题：</p>
+<h4 id="连接方法："><a href="#连接方法：" class="headerlink" title="连接方法："></a>连接方法：</h4><ul>
+<li>Mysql</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">package com.isoft.mto.util;</span><br><span class="line"></span><br><span class="line">import java.sql.Connection;</span><br><span class="line">import java.sql.DriverManager;</span><br><span class="line">import java.sql.PreparedStatement;</span><br><span class="line">import java.sql.ResultSet;</span><br><span class="line">import java.sql.SQLException;</span><br><span class="line">public class Mcon &#123;	</span><br><span class="line">	Connection con=null;	</span><br><span class="line">	public void getConnection()&#123;		</span><br><span class="line">		try &#123;</span><br><span class="line">			Class.forName(&quot;com.mysql.jdbc.Driver&quot;);</span><br><span class="line">			con=DriverManager.getConnection(&quot;jdbc:mysql://127.0.0.1:3306/sakila&quot;,&quot;root&quot;,&quot;root&quot;);						</span><br><span class="line">		&#125; catch (ClassNotFoundException | SQLException e) &#123;</span><br><span class="line">			// TODO Auto-generated catch block</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;		</span><br><span class="line">	&#125;</span><br><span class="line">	public Connection getCon()&#123;</span><br><span class="line">		return con;</span><br><span class="line">	&#125;</span><br><span class="line">	public void close(Connection con,PreparedStatement pre,ResultSet re)&#123;</span><br><span class="line">		if(re!=null)&#123;</span><br><span class="line">			try &#123;</span><br><span class="line">				re.close();</span><br><span class="line">			&#125; catch (SQLException e) &#123;</span><br><span class="line">				// TODO Auto-generated catch block</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;			</span><br><span class="line">		&#125;if(pre!=null)&#123;</span><br><span class="line">			try &#123;</span><br><span class="line">				pre.close();</span><br><span class="line">			&#125; catch (SQLException e) &#123;</span><br><span class="line">				// TODO Auto-generated catch block</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;if(con!=null)&#123;</span><br><span class="line">			try &#123;</span><br><span class="line">				con.close();</span><br><span class="line">			&#125; catch (SQLException e) &#123;</span><br><span class="line">				// TODO Auto-generated catch block</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;	</span><br><span class="line">	&#125;	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Oracle</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">package com.isoft.mto.util;</span><br><span class="line"></span><br><span class="line">import java.sql.Connection;</span><br><span class="line">import java.sql.DriverManager;</span><br><span class="line">import java.sql.PreparedStatement;</span><br><span class="line">import java.sql.ResultSet;</span><br><span class="line">import java.sql.SQLException;</span><br><span class="line">public class Ocon &#123;</span><br><span class="line">	private Connection con=null;		</span><br><span class="line">	public Connection getCon()&#123;</span><br><span class="line">		return con;</span><br><span class="line">	&#125;</span><br><span class="line">	public void close(Connection con,PreparedStatement pre,ResultSet re)&#123;</span><br><span class="line">		if(re!=null)&#123;</span><br><span class="line">			try &#123;</span><br><span class="line">				re.close();</span><br><span class="line">			&#125; catch (SQLException e) &#123;</span><br><span class="line">				// TODO Auto-generated catch block</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;			</span><br><span class="line">		&#125;if(pre!=null)&#123;</span><br><span class="line">			try &#123;</span><br><span class="line">				pre.close();</span><br><span class="line">			&#125; catch (SQLException e) &#123;</span><br><span class="line">				// TODO Auto-generated catch block</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;if(con!=null)&#123;</span><br><span class="line">			try &#123;</span><br><span class="line">				con.close();</span><br><span class="line">			&#125; catch (SQLException e) &#123;</span><br><span class="line">				// TODO Auto-generated catch block</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;		</span><br><span class="line">	&#125;	</span><br><span class="line">	public void getConnection()&#123;</span><br><span class="line">		try &#123;</span><br><span class="line">			Class.forName(&quot;oracle.jdbc.driver.OracleDriver&quot;);			</span><br><span class="line">			con=DriverManager.getConnection(&quot;jdbc:oracle:thin:@127.0.0.1:1521:XE&quot;,&quot;hr&quot;,&quot;root&quot;);												</span><br><span class="line">		&#125; catch (ClassNotFoundException e) &#123;</span><br><span class="line">			// TODO Auto-generated catch block</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125; catch (SQLException e) &#123;</span><br><span class="line">			// TODO Auto-generated catch block</span><br><span class="line">			System.out.println(&quot;数据库连接出错！！！&quot;);</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;				</span><br><span class="line">	&#125;	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Mysql和Oracle在jdbc中sql语句的区别"><a href="#Mysql和Oracle在jdbc中sql语句的区别" class="headerlink" title="Mysql和Oracle在jdbc中sql语句的区别"></a>Mysql和Oracle在jdbc中sql语句的区别</h4><ul>
+<li>mysql可以传入“；”（可有可无，不影响）；</li>
+<li>oracle不可以传入“；”（在sql字符串中加上“；”会导致sql语法错误）。</li>
+</ul>
+<h4 id="关于两种DriverManager-getConnection"><a href="#关于两种DriverManager-getConnection" class="headerlink" title="关于两种DriverManager.getConnection();"></a>关于两种DriverManager.getConnection();</h4><ul>
+<li>mysql:”jdbc:mysql://127.0.0.1:3306/sakila”,”root”,”root”</li>
+<li>oracle:”jdbc:oracle:thin:@127.0.0.1:1521:XE”,”hr”,”root”</li>
+</ul>
+<h4 id="不足"><a href="#不足" class="headerlink" title="不足"></a>不足</h4><p>这次试验数据库的信息都是已知的，并没有使用getTypeName(),getCollumName()等方法，所以有很多可以改进的地方。</p>
+<html>
+<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-mto/" data-title="mto" data-url="http://kongzheng1993.github.io/kongzheng1993-mto/"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"kongzheng1993"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+</html>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2016/07/19/kongzheng1993-MysqlToOracle/" data-id="cjww5cwx4000p1rc82e70d9zz" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-kongzheng1993-String_Original" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/11/kongzheng1993-String_Original/" class="article-date">
+  <time datetime="2016-07-10T16:00:00.000Z" itemprop="datePublished">2016-07-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/11/kongzheng1993-String_Original/">String str</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>String str=new String(“abc”); 跟着这段代码之后，我们会想到一个问题，就是这行代码究竟创建了几个String对象呢？<br>答案是2个。<br>String str只是定义了一个名为str的String类型的变量，因此它并没有创建对象；=是对变量str进行初始化，将某个对象的引用（或者叫句柄）赋值给它，显然也没有创建对象；现在只剩下了new String(“abc”)了。那么，new String(“abc”)什么又能被看作成“abc”和<br>new String()呢？<br>这就要了解一下String的构造器：<br>public String (String original){<br>    //other code…<br>}
+平常我们创建一个类的实例的方法有两种：<br>1.使用new创建对象；<br>2.调用Class类里面的newInstance方法，利用反射机制创建对象。</p>
+<p>我们正是使用new调用了String类的上面那个构造器方法创建了一个对象，并将它的引用赋值给了str变量。同时我们注意到，被调用的构造器方法接受的参数也是一个String对象，这个对象正是”abc”。由此我们又要引入另外一种创建String对象的方式的讨论——引号内包含文本。</p>
+<p>这种方式是String特有的，并且它与new的方式存在很大区别。  </p>
+<p>String str=”abc”;  </p>
+<p>毫无疑问，这行代码创建了一个String对象。  </p>
+<p>String a=”abc”;  String b=”abc”;   那这里呢？</p>
+<p>答案还是一个。  </p>
+<p>String a=”ab”+”cd”;   再看看这里呢？</p>
+<p>答案是三个。<br>说到这里，我们就需要引入对字符串池相关知识的回顾了。  </p>
+<p>在JAVA虚拟机（JVM）中存在着一个字符串池，其中保存着很多String对象，并且可以被共享使用，因此它提高了效率。由于String类是final的，它的值一经创建就不可改变，因此我们不用担心String对象共享而带来程序的混乱。字符串池由String类维护，我们可以调用intern()方法来访问字符串池。  </p>
+<p>我们再回头看看String a=”abc”;，这行代码被执行的时候，JAVA虚拟机首先在字符串池中查找是否已经存在了值为”abc”的这么一个对象，它的判断依据是String类equals(Object obj)方法的返回值。如果有，则不再创建新的对象，直接返回已存在对象的引用；如果没有，则先创建这个对象，然后把它加入到字符串池中，再将它的引用返回。因此，我们不难理解前面三个例子中头两个例子为什么是这个答案了。</p>
+<p>只有使用引号包含文本的方式创建的String对象之间使用“+”连接产生的新对象才会被加入字符串池中。对于所有包含new方式新建对象（包括null）的“+”连接表达式，它所产生的新对象都不会被加入字符串池中，对此我们不再赘述。因此我们提倡大家用引号包含文本的方式来创建String对象以提高效率，实际上这也是我们在编程中常采用的。</p>
+<p>栈（stack）：主要保存基本类型（或者叫内置类型）（char、byte、short、int、long、float、double、boolean）和对象的引用，数据可以共享，速度仅次于寄存器（register），快于堆。<br>堆（heap）：用于存储对象</p>
+<html>
+<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-String_Original/" data-title="String_Original" data-url="http://kongzheng1993.github.io/kongzheng1993-String_Original/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"kongzheng1993"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+</html>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2016/07/11/kongzheng1993-String_Original/" data-id="cjww5cwwl00081rc8xomao8ag" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/String/">String</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/new/">new</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-kongzheng1993-ablout_try_catch" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/11/kongzheng1993-ablout_try_catch/" class="article-date">
+  <time datetime="2016-07-10T16:00:00.000Z" itemprop="datePublished">2016-07-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/11/kongzheng1993-ablout_try_catch/">关于try-catch</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import java.io.IOException;  </span><br><span class="line">public class ExceptionTryCatchTest &#123;  </span><br><span class="line">    public void doSomething() throws IOException&#123;  </span><br><span class="line">        System.out.println(&quot;do somthing&quot;);  </span><br><span class="line">    &#125;  </span><br><span class="line">    public static void main(String[] args)&#123;  </span><br><span class="line">        ExceptionTryCatchTest etct = new ExceptionTryCatchTest();  </span><br><span class="line">        try &#123;  </span><br><span class="line">            etct.doSomething();  </span><br><span class="line">        &#125; catch (Exception e) &#123;                </span><br><span class="line">        &#125; catch (IOException e) &#123;                </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上并不能通过编译。<br>因为编译的时候会报错:已捕捉到异常 java.io.IOException。  catch(IOException e)这句有错误。<br>分析：对于try..catch捕获异常的形式来说，对于异常的捕获，可以有多个catch。对于try里面发生的异常，他会根据发生的异常和catch里面的进行匹配(怎么匹配，按照catch块从上往下匹配)，当它匹配某一个catch块的时候，他就直接进入到这个catch块里面去了，后面在再有catch块的话，它不做任何处理，直接跳过去，全部忽略掉。如果有finally的话进入到finally里面继续执行。换句话说，如果有匹配的catch，它就会忽略掉这个catch后面所有的catch。对我们这个方法来说，抛出的是IOException，当执行etct.doSomething();时，可能会抛出IOException，一但抛出IOException，它首先进入到catch (Exception e) {}里面，先和Exception匹配，由于IOException extends Exception,根据多态的原则，IOException是匹配Exception的，所以程序就会进入到catch (Exception e) {}里面，进入到第一个catch后，后面的catch都不会执行了，所以catch (IOException e) {}永远都执行不到，就给我们报出了前面的错误:已捕捉到异常 java.io.IOException。 </p>
+<h4 id="【总结】"><a href="#【总结】" class="headerlink" title="【总结】"></a>【总结】</h4><p>在写异常处理的时候，一定要把异常范围小的放在前面，范围大的放在后面，Exception这个异常的根类一定要放在最后一个catch里面，如果放在前面或者中间，任何异常都会和Exception匹配的，就会报已捕获到…异常的错误。 </p>
+<html>
+<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-abouttrycatch/" data-title="About trycatch" data-url="http://kongzheng1993.github.io/kongzheng1993"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"kongzheng1993"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+</html>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2016/07/11/kongzheng1993-ablout_try_catch/" data-id="cjww5cwx0000j1rc83s5ug37d" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/catch，try/">catch，try</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-kongzheng1993-DB_Exchange" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/07/kongzheng1993-DB_Exchange/" class="article-date">
+  <time datetime="2016-07-06T16:00:00.000Z" itemprop="datePublished">2016-07-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/07/kongzheng1993-DB_Exchange/">数据库和TXT文件内容的交换</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>今天做了一个简单的实验，通过这次试验来练习IO流，数据库连接，SQL等知识。下面是详细信息。</p>
+<h3 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h3><img src="/2016/07/07/kongzheng1993-DB_Exchange/assets/img/flant.png">
+
+
+
+
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><h4 id="bean-Content"><a href="#bean-Content" class="headerlink" title="bean.Content"></a>bean.Content</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">package bean;</span><br><span class="line">public class Content &#123;</span><br><span class="line">	private int id;</span><br><span class="line">	private String content;</span><br><span class="line">	public Content(int id,String content)&#123;</span><br><span class="line">		this.id=id;</span><br><span class="line">		this.content=content;</span><br><span class="line">	&#125;	</span><br><span class="line">	public void setId(int id)&#123;</span><br><span class="line">		this.id=id;</span><br><span class="line">	&#125;</span><br><span class="line">	public int getId()&#123;</span><br><span class="line">		return id;</span><br><span class="line">	&#125;</span><br><span class="line">	public void setContent(String content)&#123;</span><br><span class="line">		this.content=content;</span><br><span class="line">	&#125;</span><br><span class="line">	public String getContent()&#123;</span><br><span class="line">		return content;</span><br><span class="line">	&#125;</span><br><span class="line">	public String toString()&#123;	</span><br><span class="line">		return id+&quot;,&quot;+content;	</span><br><span class="line">	&#125;	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="bean-Student"><a href="#bean-Student" class="headerlink" title="bean.Student"></a>bean.Student</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">package bean;</span><br><span class="line"></span><br><span class="line">public class Student &#123;</span><br><span class="line">	private int id;</span><br><span class="line">	private String name;</span><br><span class="line">	private String sex;</span><br><span class="line">	private int age;</span><br><span class="line">	public Student(int id,String name,String sex,int age)&#123;</span><br><span class="line">		this.id=id;</span><br><span class="line">		this.name=name;</span><br><span class="line">		this.sex=sex;</span><br><span class="line">		this.age=age;</span><br><span class="line">	&#125;	</span><br><span class="line">	public void setId(int id) &#123;</span><br><span class="line">		this.id = id;</span><br><span class="line">	&#125;</span><br><span class="line">	public int getId() &#123;</span><br><span class="line">		return id;</span><br><span class="line">	&#125;</span><br><span class="line">	public void setName(String name) &#123;</span><br><span class="line">		this.name = name;</span><br><span class="line">	&#125;</span><br><span class="line">	public String getName() &#123;</span><br><span class="line">		return name;</span><br><span class="line">	&#125;</span><br><span class="line">	public void setSex(String sex) &#123;</span><br><span class="line">		this.sex = sex;</span><br><span class="line">	&#125;</span><br><span class="line">	public String getSex() &#123;</span><br><span class="line">		return sex;</span><br><span class="line">	&#125;</span><br><span class="line">	public void setAge(int age) &#123;</span><br><span class="line">		this.age = age;</span><br><span class="line">	&#125;</span><br><span class="line">	public int getAge() &#123;</span><br><span class="line">		return age;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="dao-ContentDao"><a href="#dao-ContentDao" class="headerlink" title="dao.ContentDao"></a>dao.ContentDao</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">package dao;</span><br><span class="line"></span><br><span class="line">import java.sql.PreparedStatement;</span><br><span class="line">import java.sql.ResultSet;</span><br><span class="line">import java.sql.SQLException;</span><br><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.List;</span><br><span class="line"></span><br><span class="line">import bean.Content;</span><br><span class="line">import utils.DBUtil;</span><br><span class="line">public class ContentDao &#123;	</span><br><span class="line">	DBUtil db=new DBUtil();</span><br><span class="line">	PreparedStatement pre=null;</span><br><span class="line">	ResultSet re=null;	</span><br><span class="line">	public List&lt;Content&gt; getInfoFromDB()&#123;</span><br><span class="line">		db.getConnection();</span><br><span class="line">		List&lt;Content&gt; list= new ArrayList&lt;Content&gt;();</span><br><span class="line">		String sql=&quot;select * from content;&quot;;</span><br><span class="line">		try &#123;</span><br><span class="line">			pre=db.getCon().prepareStatement(sql);</span><br><span class="line">		&#125; catch (SQLException e1) &#123;</span><br><span class="line">			// TODO Auto-generated catch block</span><br><span class="line">			e1.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		try &#123;</span><br><span class="line">			re=pre.executeQuery();</span><br><span class="line">		&#125; catch (SQLException e) &#123;</span><br><span class="line">			// TODO Auto-generated catch block</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		try &#123;</span><br><span class="line">			while(re.next())&#123;</span><br><span class="line">				list.add(new Content(re.getInt(1),re.getString(2)));</span><br><span class="line">			&#125;</span><br><span class="line">		&#125; catch (SQLException e) &#123;</span><br><span class="line">			// TODO Auto-generated catch block</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		return list;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="dao-Student"><a href="#dao-Student" class="headerlink" title="dao.Student"></a>dao.Student</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">package dao;</span><br><span class="line"></span><br><span class="line">import java.sql.SQLException;</span><br><span class="line">import java.util.List;</span><br><span class="line">import java.sql.PreparedStatement;</span><br><span class="line">import bean.Student;</span><br><span class="line">import utils.DBUtil;</span><br><span class="line">public class StudentDao &#123;	</span><br><span class="line">	DBUtil db=new DBUtil();</span><br><span class="line">	PreparedStatement pre=null;	</span><br><span class="line">	public void senttoDB(List&lt;Student&gt; list)&#123;</span><br><span class="line">		db.getConnection();</span><br><span class="line">		for(Student st:list)&#123;</span><br><span class="line">			String sql=&quot;insert into Student values(?,?,?,?)&quot;;</span><br><span class="line">			try &#123;				</span><br><span class="line">				pre=db.getCon().prepareStatement(sql);</span><br><span class="line">				pre.setInt(1, st.getId());</span><br><span class="line">				pre.setString(2, st.getName());</span><br><span class="line">				pre.setString(3, st.getSex());</span><br><span class="line">				pre.setInt(4, st.getAge());						</span><br><span class="line">				pre.executeUpdate();		</span><br><span class="line">			&#125; catch (SQLException e) &#123;</span><br><span class="line">				// TODO Auto-generated catch block</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;finally&#123;										</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		db.closeConnection(pre,null);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="test-Test"><a href="#test-Test" class="headerlink" title="test.Test"></a>test.Test</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">package test;</span><br><span class="line"></span><br><span class="line">import java.io.BufferedReader;</span><br><span class="line">import java.io.BufferedWriter;</span><br><span class="line">import java.io.File;</span><br><span class="line">import java.io.FileReader;</span><br><span class="line">import java.io.FileWriter;</span><br><span class="line">import java.io.IOException;</span><br><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.List;</span><br><span class="line"></span><br><span class="line">import bean.Content;</span><br><span class="line">import bean.Student;</span><br><span class="line">import dao.ContentDao;</span><br><span class="line">import dao.StudentDao;</span><br><span class="line"></span><br><span class="line">public class Test &#123;</span><br><span class="line">	public static void main(String[]args)&#123;</span><br><span class="line">		</span><br><span class="line">//		readFromFile();</span><br><span class="line">		writetoFile();				</span><br><span class="line">	&#125;</span><br><span class="line">	public static void readFromFile()&#123;</span><br><span class="line">		StudentDao stuDao=new StudentDao();</span><br><span class="line">		String line;</span><br><span class="line">		List&lt;Student&gt; list =new ArrayList&lt;Student&gt;();		</span><br><span class="line">		File file=new File(&quot;files/read.txt&quot;);		</span><br><span class="line">		try &#123;</span><br><span class="line">			FileReader in=new FileReader(file);</span><br><span class="line">			BufferedReader read=new BufferedReader(in);</span><br><span class="line">			while((line=read.readLine())!=null)&#123;</span><br><span class="line">				String l[] =line.split(&quot;,&quot;);</span><br><span class="line">				</span><br><span class="line">//				System.out.println(line);</span><br><span class="line">				list.add(new Student(Integer.parseInt(l[0]),l[1],l[2],Integer.parseInt(l[3])));</span><br><span class="line">				</span><br><span class="line">//				read.readLine();</span><br><span class="line">			&#125;</span><br><span class="line">			stuDao.senttoDB(list);</span><br><span class="line">			read.close();</span><br><span class="line">			in.close();			</span><br><span class="line">		&#125; catch (IOException e) &#123;</span><br><span class="line">			System.out.println(&quot;not found this file&quot;);</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;					</span><br><span class="line">	&#125;	</span><br><span class="line">	public static void writetoFile()&#123;		</span><br><span class="line">		ContentDao contDao=new ContentDao();</span><br><span class="line">		File file=new File(&quot;files/write.txt&quot;);</span><br><span class="line">		try &#123;</span><br><span class="line">			BufferedWriter out=new BufferedWriter(new FileWriter(file));</span><br><span class="line">//			List &lt;Content&gt; list=new ArrayList&lt;Content&gt;();</span><br><span class="line">//			list=contDao.getInfoFromDB();			</span><br><span class="line">			for(Content cont:contDao.getInfoFromDB())&#123;</span><br><span class="line">				System.out.print(cont.toString());</span><br><span class="line">				out.write(cont.toString());</span><br><span class="line">				out.newLine();</span><br><span class="line">				out.flush();</span><br><span class="line">			&#125;</span><br><span class="line">			out.close();											</span><br><span class="line">		&#125; catch (IOException e) &#123;</span><br><span class="line">			// TODO Auto-generated catch block</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;						</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="utils-DBUtil"><a href="#utils-DBUtil" class="headerlink" title="utils.DBUtil"></a>utils.DBUtil</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">package utils;</span><br><span class="line"></span><br><span class="line">import java.sql.Connection;</span><br><span class="line">import java.sql.DriverManager;</span><br><span class="line">import java.sql.PreparedStatement;</span><br><span class="line">import java.sql.ResultSet;</span><br><span class="line">import java.sql.SQLException;</span><br><span class="line"></span><br><span class="line">public class DBUtil &#123;	</span><br><span class="line">	private Connection con=null;	</span><br><span class="line">	public Connection getCon() &#123;</span><br><span class="line">		return con;</span><br><span class="line">	&#125;	</span><br><span class="line">	public void getConnection()&#123;						</span><br><span class="line">		try &#123;</span><br><span class="line">			Class.forName(&quot;com.mysql.jdbc.Driver&quot;);</span><br><span class="line">			con=DriverManager.getConnection(&quot;jdbc:mysql://localhost:3306/db_test&quot;,&quot;root&quot;,&quot;root&quot;);</span><br><span class="line">//			String sql=&quot;insert into &quot;;</span><br><span class="line">//			pre=con.prepareStatement(sql);									</span><br><span class="line">		&#125; catch (ClassNotFoundException | SQLException e) &#123;</span><br><span class="line">			// TODO Auto-generated catch block</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;					</span><br><span class="line">	&#125;</span><br><span class="line">	public void closeConnection(PreparedStatement pre,ResultSet re)&#123;		</span><br><span class="line">		if(re!=null)&#123;</span><br><span class="line">			try &#123;</span><br><span class="line">				re.close();</span><br><span class="line">			&#125; catch (SQLException e) &#123;</span><br><span class="line">				// TODO Auto-generated catch block</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		if(pre!=null)&#123;</span><br><span class="line">			try &#123;</span><br><span class="line">				pre.close();</span><br><span class="line">			&#125; catch (SQLException e) &#123;</span><br><span class="line">				// TODO Auto-generated catch block</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		if(con!=null)&#123;</span><br><span class="line">			try &#123;</span><br><span class="line">				con.close();</span><br><span class="line">			&#125; catch (SQLException e) &#123;</span><br><span class="line">				// TODO Auto-generated catch block</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>通过这次试验，让我熟练了IO和数据库的一些知识，但是并不扎实，课余时间还要多练</p>
+<html>
+<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-StuSystem/" data-title="StudentSystem" data-url="http://kongzheng1993.github.io/kongzheng1993-StuSystem/"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"kongzheng1993"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+</html>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2016/07/07/kongzheng1993-DB_Exchange/" data-id="cjww5cww100001rc8rk4b3062" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-kongzheng1993-PreparedStatement&amp;Statement" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/05/kongzheng1993-PreparedStatement&Statement/" class="article-date">
+  <time datetime="2016-07-04T16:00:00.000Z" itemprop="datePublished">2016-07-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/05/kongzheng1993-PreparedStatement&Statement/">PreparedStatement的优点</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="在JDBC应用中-如果你已经是稍有水平开发者-你就应该始终以PreparedStatement代替Statement-也就是说-在任何时候都不要使用Statement"><a href="#在JDBC应用中-如果你已经是稍有水平开发者-你就应该始终以PreparedStatement代替Statement-也就是说-在任何时候都不要使用Statement" class="headerlink" title="在JDBC应用中,如果你已经是稍有水平开发者,你就应该始终以PreparedStatement代替Statement.也就是说,在任何时候都不要使用Statement"></a>在JDBC应用中,如果你已经是稍有水平开发者,你就应该始终以PreparedStatement代替Statement.也就是说,在任何时候都不要使用Statement</h3><h4 id="一-代码的可读性和可维护性"><a href="#一-代码的可读性和可维护性" class="headerlink" title="一.代码的可读性和可维护性"></a>一.代码的可读性和可维护性</h4><p>虽然用PreparedStatement来代替Statement会使代码多出几行,但这样的代码无论从可读性还是可维护性上来说.都比直接用Statement的代码高很多档次:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">stmt.executeUpdate(&quot;insert into tb_name (col1,col2,col2,col4) values (&apos;&quot;+var1+&quot;&apos;,&apos;&quot;+var2+&quot;&apos;,&quot;+var3+&quot;,&apos;&quot;+var4+&quot;&apos;)&quot;);</span><br><span class="line"></span><br><span class="line">perstmt = con.prepareStatement(&quot;insert into tb_name (col1,col2,col2,col4) values (?,?,?,?)&quot;);</span><br><span class="line">perstmt.setString(1,var1);</span><br><span class="line">perstmt.setString(2,var2);</span><br><span class="line">perstmt.setString(3,var3);</span><br><span class="line">perstmt.setString(4,var4);</span><br><span class="line">perstmt.executeUpdate();</span><br></pre></td></tr></table></figure>
+
+<p>哪一种更好，一目了然。</p>
+<h4 id="二-PreparedStatement尽最大可能提高性能"><a href="#二-PreparedStatement尽最大可能提高性能" class="headerlink" title="二.PreparedStatement尽最大可能提高性能."></a>二.PreparedStatement尽最大可能提高性能.</h4><p>每一种数据库都会尽最大努力对预编译语句提供最大的性能优化.因为预编译语句有可能被重复调用.所以语句在被DB的编译器编译后的执行代码被缓存下来,那么下次调用时只要是相同的预编译语句就不需要编译,只要将参数直接传入编译过的语句执行代码中(相当于一个涵数)就会得到执行.这并不是说只有一个Connection中多次执行的预编译语句被缓存,而是对于整个DB中,只要预编译的语句语法和缓存中匹配.那么在任何时候就可以不需要再次编译而可以直接执行.而statement的语句中,即使是相同一操作,而由于每次操作的数据不同所以使整个语句相匹配的机会极小,几乎不太可能匹配.比如:<br>insert into tb_name (col1,col2) values (‘11’,’22’);<br>insert into tb_name (col1,col2) values (‘11’,’23’);<br>即使是相同操作但因为数据内容不一样,所以整个个语句本身不能匹配,没有缓存语句的意义.事实是没有数据库会对普通语句编译后的执行代码缓存.这样每执行一次都要对传入的语句编译一次.</p>
+<p>当然并不是所以预编译语句都一定会被缓存,数据库本身会用一种策略,比如使用频度等因素来决定什么时候不再缓存已有的预编译结果.以保存有更多的空间存储新的预编译语句.</p>
+<h4 id="三-最重要的一点是极大地提高了安全性"><a href="#三-最重要的一点是极大地提高了安全性" class="headerlink" title="三.最重要的一点是极大地提高了安全性."></a>三.最重要的一点是极大地提高了安全性.</h4><p>即使到目前为止,仍有一些人连基本的恶义SQL语法都不知道.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">String sql = &quot;select * from tb_name where name= &apos;&quot;+varname+&quot;&apos; and passwd=&apos;&quot;+varpasswd+&quot;&apos;&quot;;</span><br></pre></td></tr></table></figure>
+
+<p>如果我们把[‘ or ‘1’ = ‘1]作为varpasswd传入进来.用户名随意,看看会成为什么?</p>
+<p>select * from tb_name = ‘随意’ and passwd = ‘’ or ‘1’ = ‘1’;<br>因为’1’=’1’肯定成立,所以可以任何通过验证.更有甚者:<br>把[‘;drop table tb_name;]作为varpasswd传入进来,则:<br>select * from tb_name = ‘随意’ and passwd = ‘’;drop table tb_name;有些数据库是不会让你成功的,但也有很多数据库就可以使这些语句得到执行.</p>
+<p>而如果你使用预编译语句.你传入的任何内容就不会和原来的语句发生任何匹配的关系.(前提是数据库本身支持预编译,但上前可能没有什么服务端数据库不支持编译了,只有少数的桌面数据库,就是直接文件访问的那些)只要全使用预编译语句,你就用不着对传入的数据做任何过虑.而如果使用普通的statement,有可能要对drop,;等做费尽心机的判断和过虑.</p>
+<html>
+<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-PreparedStatement/" data-title="PreparedStatement" data-url="http://kongzheng1993.github.io/kongzheng1993-PreparedStatement/"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"kongzheng1993"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+</html>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2016/07/05/kongzheng1993-PreparedStatement&Statement/" data-id="cjww5cwwy000h1rc80pw8p1fj" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/page/5/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/7/">Next &raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/">RSA</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/">SHA</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/加密/">加密</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/加密/签名/">签名</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/">github</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/git/">git</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/linux/ss/">ss</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/java/">java</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/">quartz</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/锁/">锁</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/锁/分布式/">分布式</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/resume/">resume</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/suse/">suse</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/">server</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/FTP/">FTP</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/编码/">编码</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Class/">Class</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FTP/">FTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RSA/">RSA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SHA/">SHA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/String/">String</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/catch，try/">catch，try</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/">console</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/distinct/">distinct</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/float/">float</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/group-by/">group by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/images/">images</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/new/">new</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/order-by/">order by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/">quartz</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/re/">re</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/resume，简历/">resume，简历</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sample-post/">sample post</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/select/">select</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/">server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlplus/">sqlplus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ss/">ss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/suse/">suse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sys/">sys</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/test/">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/业务/">业务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/加密/">加密</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/备份/">备份</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/学习/">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安全/">安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/对象，Class对象/">对象，Class对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/签名/">签名</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编码/">编码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/职业/">职业</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/锁/">锁</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Class/" style="font-size: 10px;">Class</a> <a href="/tags/FTP/" style="font-size: 10px;">FTP</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/SHA/" style="font-size: 10px;">SHA</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/catch，try/" style="font-size: 10px;">catch，try</a> <a href="/tags/console/" style="font-size: 10px;">console</a> <a href="/tags/distinct/" style="font-size: 10px;">distinct</a> <a href="/tags/float/" style="font-size: 10px;">float</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/group-by/" style="font-size: 10px;">group by</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/images/" style="font-size: 16.67px;">images</a> <a href="/tags/java/" style="font-size: 16.67px;">java</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/mysql/" style="font-size: 13.33px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/oop/" style="font-size: 20px;">oop</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/order-by/" style="font-size: 10px;">order by</a> <a href="/tags/quartz/" style="font-size: 10px;">quartz</a> <a href="/tags/re/" style="font-size: 16.67px;">re</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/resume，简历/" style="font-size: 10px;">resume，简历</a> <a href="/tags/sample-post/" style="font-size: 16.67px;">sample post</a> <a href="/tags/select/" style="font-size: 10px;">select</a> <a href="/tags/server/" style="font-size: 10px;">server</a> <a href="/tags/sql/" style="font-size: 13.33px;">sql</a> <a href="/tags/sqlplus/" style="font-size: 10px;">sqlplus</a> <a href="/tags/ss/" style="font-size: 10px;">ss</a> <a href="/tags/suse/" style="font-size: 10px;">suse</a> <a href="/tags/sys/" style="font-size: 10px;">sys</a> <a href="/tags/test/" style="font-size: 16.67px;">test</a> <a href="/tags/业务/" style="font-size: 10px;">业务</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/加密/" style="font-size: 10px;">加密</a> <a href="/tags/备份/" style="font-size: 10px;">备份</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/学习/" style="font-size: 10px;">学习</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/对象，Class对象/" style="font-size: 10px;">对象，Class对象</a> <a href="/tags/签名/" style="font-size: 10px;">签名</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/职业/" style="font-size: 10px;">职业</a> <a href="/tags/锁/" style="font-size: 10px;">锁</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/06/14/kongzheng1993-mysql超过最大连接数-一次生产问题定位/">mysql超过最大连接数一次生产问题定位.md</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/14/kongzheng1993-compare-and-swap/">kongzheng1993-compare_and_swap.md</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/13/kongzheng1993-Connect-timed-out与Read-timed-out/">kongzheng1993-Connect_timed_out与Read_timed_out.md</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/13/kongzheng1993-RSA加密与SHA签名/">kongzheng1993-RSA加密与SHA签名.md</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/11/kongzheng1993-关于分布式锁/">关于分布式锁.md</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 evilRat<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

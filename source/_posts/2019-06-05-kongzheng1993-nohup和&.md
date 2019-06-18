@@ -1,5 +1,5 @@
 ---
-title: kongzheng1993-nohup和&
+title: nohup和&
 date: 2019-06-05 13:52:46
 tags: [Linux]
 categories: [Linux]
