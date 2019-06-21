@@ -108,7 +108,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2017/03/08/kongzheng1993-JavaReflect/" data-id="cjww5cwx8000w1rc8ogtauk2q" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2017/03/08/kongzheng1993-JavaReflect/" data-id="cjwiuozg1000y2nxnwna2hi7r" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Class/">Class</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/reflect/">reflect</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/对象，Class对象/">对象，Class对象</a></li></ul>
@@ -171,7 +171,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/28/kongzheng1993-Properties/" data-id="cjww5cww800011rc815tx27bk" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/28/kongzheng1993-Properties/" data-id="cjwiuozeq00012nxns8r05own" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
@@ -255,7 +255,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/28/kongzheng1993-method_of_request&response/" data-id="cjww5cwy1002c1rc83pk334vi" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/28/kongzheng1993-method_of_request&response/" data-id="cjwiuozf000042nxnr77btskt" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
@@ -321,7 +321,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/27/kongzheng1993-Session/" data-id="cjww5cwy0002a1rc80oc7su3f" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/27/kongzheng1993-Session/" data-id="cjwiuozew00032nxn88sjh9xy" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
@@ -333,9 +333,9 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
 
 
   
-    <article id="post-kongzheng1993-servlet" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-kongzheng1993-about_comparator_and_comparable" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/07/26/kongzheng1993-servlet/" class="article-date">
+    <a href="/2016/07/26/kongzheng1993-about_comparator_and_comparable/" class="article-date">
   <time datetime="2016-07-25T16:00:00.000Z" itemprop="datePublished">2016-07-26</time>
 </a>
     
@@ -347,7 +347,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/07/26/kongzheng1993-servlet/">Servlet笔记</a>
+      <a class="article-title" href="/2016/07/26/kongzheng1993-about_comparator_and_comparable/">关于comparator和comparable</a>
     </h1>
   
 
@@ -355,18 +355,29 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="servlet-笔记"><a href="#servlet-笔记" class="headerlink" title="servlet 笔记"></a>servlet 笔记</h2><ul>
-<li>注意如果是使用请求转发来切换页面，地址栏url不变，但是网页实际上已经变化，这时候要认清真正的地址，来确定本页面和其对应的servlet之间的相对位置，防止发生404错误。</li>
-<li>在jsp中使用click动作有限制。页面上显示的同步机制的数据，click是有效果的；如果是异步遍历的数据，那么触发的事件click是无法捕捉到的，需要on来获取整个标签页面的属性。而且on的作用范围比较大，同步和异步中都可以使用。</li>
-</ul>
-<p>click范例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">$(&quot;body&quot;).on(&quot;click&quot;,&quot;#firstPage&quot;,function()&#123;</span><br><span class="line">        //alert(&quot;首页:&quot;);</span><br><span class="line">        changePages(1);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+        <h2 id="关于comparator和comparable"><a href="#关于comparator和comparable" class="headerlink" title="关于comparator和comparable"></a>关于comparator和comparable</h2><h3 id="comparator"><a href="#comparator" class="headerlink" title="comparator"></a>comparator</h3><p>Comparator强行对某个对象collection进行整体排序的比较函数，可以将Comparator传递给Collections.sort或Arrays.sort。<br>也就是说Comeparator是需要用sort方法调用的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">import java.util.*;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by evilrat on 3/9/17.</span><br><span class="line"> */</span><br><span class="line">public class CollectionTest &#123;</span><br><span class="line"></span><br><span class="line">    static List&lt;Demo&gt; d = new ArrayList&lt;Demo&gt;();</span><br><span class="line">    static Random random = new Random();</span><br><span class="line">    static CompareterTool ct= new CompareterTool();</span><br><span class="line">    public static void main(String [] args)&#123;</span><br><span class="line">        for (int i = 0; i &lt; 10;i ++)&#123;</span><br><span class="line">            d.add(new Demo(random.nextInt(10)));</span><br><span class="line">        &#125;</span><br><span class="line">        //排序前输出</span><br><span class="line">        for (Iterator&lt;Demo&gt; it = d.iterator(); it.hasNext();)&#123;</span><br><span class="line">            System.out.print(it.next().getAge()+&quot;\t&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.print(&quot;\n&quot;);</span><br><span class="line">        //排序</span><br><span class="line">        Collections.sort(d,ct);</span><br><span class="line">        //排序后输出</span><br><span class="line">        for (Iterator&lt;Demo&gt; it = d.iterator(); it.hasNext();)&#123;</span><br><span class="line">            System.out.print(it.next().getAge()+&quot;\t&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>on范例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">$(&quot;body&quot;).on(&quot;click&quot;,&quot;#lastPage&quot;,function()&#123;</span><br><span class="line">        //alert(&quot;last页&quot;+totalPage);</span><br><span class="line">        changePages(totalPage);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>这里是使用Collections.sort方法调用了我们预先写好的比较器。以下是比较器的定义：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">import java.util.Comparator;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by evilrat on 3/9/17.</span><br><span class="line"> */</span><br><span class="line">public class CompareterTool implements Comparator&lt;Demo&gt; &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public int compare(Demo o1, Demo o2) &#123;</span><br><span class="line">            if (o1.age &gt; o2.age)&#123;</span><br><span class="line">                return 1;</span><br><span class="line">            &#125;else</span><br><span class="line">                return -1;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在编写比较器的时候我无意中这样写了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import java.util.Comparator;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by evilrat on 3/9/17.</span><br><span class="line"> */</span><br><span class="line">public class CompareterTool &#123;</span><br><span class="line"></span><br><span class="line">    public Comparator&lt;Demo&gt; comparator = new Comparator&lt;Demo&gt;() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public int compare(Demo o1, Demo o2) &#123;</span><br><span class="line">            if (o1.age &gt; o2.age)&#123;</span><br><span class="line">                return 1;</span><br><span class="line">            &#125;else</span><br><span class="line">                return -1;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>请注意这种写法，直接声明一个Comparator<demo>对象，然后紧跟这一段大括号重写了他的compare（）方法，然后在大括号外写了分号。<br>反正我是没这么写过，可能是我还没见过的原因吧，记录以下，感觉这样很炫酷。但是随之main方法中的排序代码要改为:</demo></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Collections.sort(d,ct.comparator);</span><br></pre></td></tr></table></figure>
+
+<p>ct是ComparatorTool类的对象，但是从编码来看，compare方法是在Comparator的对象comparator中啊，疑惑？为什么这里是调用ct.comparator，这是一个对象啊，难道说是comparator对象声明时直接写了一个方法？Comparator有这么一种特殊的写法。</p>
+<h3 id="Comparable"><a href="#Comparable" class="headerlink" title="Comparable"></a>Comparable</h3><p>对于Comparable来说，需要在编写想要进行排序的类的时候实现Comparable接口，然后在需要排序的时候调用Arrays或者Collections的sort方法就可以直接调用到这个比较器了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by evilrat on 3/9/17.</span><br><span class="line"> */</span><br><span class="line">public class Demo implements Comparable&lt;Demo&gt;&#123;</span><br><span class="line"></span><br><span class="line">    String name;</span><br><span class="line">    int age;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public int compareTo(Demo o) &#123;</span><br><span class="line">        return this.getAge()-o.getAge();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Demo(int age)&#123;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setName(String name) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public int getAge() &#123;</span><br><span class="line">        return age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setAge(int age) &#123;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调用方法,这里会自动对应到实现Comparable接口而产生的比较器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Collections.sort(d);</span><br></pre></td></tr></table></figure>
 
 <html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-servlet/" data-title="servlet" data-url="http://kongzheng1993.github.io/kongzheng1993-servlet/"></div>
+<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-about_comparator_and_comparable/" data-title="about_comparator_and_comparable" data-url="http://kongzheng1993.github.io/kongzheng1993-about_comparator_and_comparable/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
 var duoshuoQuery = {short_name:"kongzheng1993"};
     (function() {
@@ -380,13 +391,14 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
 </script>
 </html>
 
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-servlet/" data-id="cjww5cwwc00031rc8m6n17wq2" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-about_comparator_and_comparable/" data-id="cjwiuozg400112nxn0d307bgu" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/re/">re</a></li></ul>
 
     </footer>
   </div>
@@ -464,7 +476,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
           </li>
         
           <li>
-            <a href="/2019/06/13/kongzheng1993-RSA加密与SHA签名/">kongzheng1993-RSA加密与SHA签名.md</a>
+            <a href="/2019/06/13/kongzheng1993-RSA加密与SHA签名/">RSA加密与SHA签名</a>
           </li>
         
           <li>

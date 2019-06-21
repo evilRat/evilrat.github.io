@@ -43,10 +43,10 @@ comments: true
 # 专业技能
 1. 熟悉Java，了解Python、Shell、C/C++
 2. 熟练使用SSM等开源框架
-3. 熟练使用Dubbo分布式服务框架，熟悉zookeeper
-4. 熟练使用Kafka、ActiveMQ
+3. 熟练使用Dubbo分布式服务框架，了解zookeeper
+4. 熟练使用ActiveMQ
 5. 熟练使用Redis
-6. 熟悉微信小程序的开发，熟悉微信api调用
+6. 熟悉微信小程序的开发
 7. 熟练使用Mysql、Oracle数据库
 8. 熟悉Jsp、JavaScrip、Ajax、CSS等web技术
 9. 熟练使用Git、SVN、Maven
