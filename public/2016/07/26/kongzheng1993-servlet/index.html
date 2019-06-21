@@ -5,20 +5,22 @@
   
 
   
-  <title>Servlet笔记 | Evil</title>
+  <title>Servlet | Evil</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="servlet 笔记 注意如果是使用请求转发来切换页面，地址栏url不变，但是网页实际上已经变化，这时候要认清真正的地址，来确定本页面和其对应的servlet之间的相对位置，防止发生404错误。 在jsp中使用click动作有限制。页面上显示的同步机制的数据，click是有效果的；如果是异步遍历的数据，那么触发的事件click是无法捕捉到的，需要on来获取整个标签页面的属性。而且on的作用范围比较">
-<meta name="keywords" content="oop">
+  <meta name="description" content="WHAT当一个请求到了web服务器，接收请求和响应请求是web服务器完成的，可是处理请求呢？接收和响应都是固定的东西，但是处理请求是包含业务逻辑在里面的，需要我们自己处理，所以就抽取出来了Servlet让我们来完成请求的处理，当然请求处理咱么又拆分出三层架构：servlet+service+dao。每个servlet来处理对应映射的url来的请求，很多servlet需要统一管理，所以tomcat还">
+<meta name="keywords" content="servlet">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Servlet笔记">
+<meta property="og:title" content="Servlet">
 <meta property="og:url" content="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-servlet/index.html">
 <meta property="og:site_name" content="Evil">
-<meta property="og:description" content="servlet 笔记 注意如果是使用请求转发来切换页面，地址栏url不变，但是网页实际上已经变化，这时候要认清真正的地址，来确定本页面和其对应的servlet之间的相对位置，防止发生404错误。 在jsp中使用click动作有限制。页面上显示的同步机制的数据，click是有效果的；如果是异步遍历的数据，那么触发的事件click是无法捕捉到的，需要on来获取整个标签页面的属性。而且on的作用范围比较">
+<meta property="og:description" content="WHAT当一个请求到了web服务器，接收请求和响应请求是web服务器完成的，可是处理请求呢？接收和响应都是固定的东西，但是处理请求是包含业务逻辑在里面的，需要我们自己处理，所以就抽取出来了Servlet让我们来完成请求的处理，当然请求处理咱么又拆分出三层架构：servlet+service+dao。每个servlet来处理对应映射的url来的请求，很多servlet需要统一管理，所以tomcat还">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-06-04T02:50:03.942Z">
+<meta property="og:image" content="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-servlet/servlet%E6%8E%A5%E5%8F%A3.jpg">
+<meta property="og:updated_time" content="2019-06-21T02:44:08.420Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Servlet笔记">
-<meta name="twitter:description" content="servlet 笔记 注意如果是使用请求转发来切换页面，地址栏url不变，但是网页实际上已经变化，这时候要认清真正的地址，来确定本页面和其对应的servlet之间的相对位置，防止发生404错误。 在jsp中使用click动作有限制。页面上显示的同步机制的数据，click是有效果的；如果是异步遍历的数据，那么触发的事件click是无法捕捉到的，需要on来获取整个标签页面的属性。而且on的作用范围比较">
+<meta name="twitter:title" content="Servlet">
+<meta name="twitter:description" content="WHAT当一个请求到了web服务器，接收请求和响应请求是web服务器完成的，可是处理请求呢？接收和响应都是固定的东西，但是处理请求是包含业务逻辑在里面的，需要我们自己处理，所以就抽取出来了Servlet让我们来完成请求的处理，当然请求处理咱么又拆分出三层架构：servlet+service+dao。每个servlet来处理对应映射的url来的请求，很多servlet需要统一管理，所以tomcat还">
+<meta name="twitter:image" content="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-servlet/servlet%E6%8E%A5%E5%8F%A3.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Evil" type="application/atom+xml">
   
@@ -79,7 +81,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Servlet笔记
+      Servlet
     </h1>
   
 
@@ -87,30 +89,32 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="servlet-笔记"><a href="#servlet-笔记" class="headerlink" title="servlet 笔记"></a>servlet 笔记</h2><ul>
-<li>注意如果是使用请求转发来切换页面，地址栏url不变，但是网页实际上已经变化，这时候要认清真正的地址，来确定本页面和其对应的servlet之间的相对位置，防止发生404错误。</li>
-<li>在jsp中使用click动作有限制。页面上显示的同步机制的数据，click是有效果的；如果是异步遍历的数据，那么触发的事件click是无法捕捉到的，需要on来获取整个标签页面的属性。而且on的作用范围比较大，同步和异步中都可以使用。</li>
-</ul>
-<p>click范例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">$(&quot;body&quot;).on(&quot;click&quot;,&quot;#firstPage&quot;,function()&#123;</span><br><span class="line">        //alert(&quot;首页:&quot;);</span><br><span class="line">        changePages(1);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>on范例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">$(&quot;body&quot;).on(&quot;click&quot;,&quot;#lastPage&quot;,function()&#123;</span><br><span class="line">        //alert(&quot;last页&quot;+totalPage);</span><br><span class="line">        changePages(totalPage);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-servlet/" data-title="servlet" data-url="http://kongzheng1993.github.io/kongzheng1993-servlet/"></div>
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"kongzheng1993"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-</html>
+        <h2 id="WHAT"><a href="#WHAT" class="headerlink" title="WHAT"></a>WHAT</h2><p>当一个请求到了web服务器，接收请求和响应请求是web服务器完成的，可是处理请求呢？接收和响应都是固定的东西，但是处理请求是包含业务逻辑在里面的，需要我们自己处理，所以就抽取出来了Servlet让我们来完成请求的处理，当然请求处理咱么又拆分出三层架构：servlet+service+dao。每个servlet来处理对应映射的url来的请求，很多servlet需要统一管理，所以tomcat还是一个servlet容器。</p>
+<p>后来spring家族出现，servlet就退居幕后了。现在咱们用的springMVC其实核心组件DispatcherServlet本质上就是Servlet，只是在原来的HttpServlet基础上封装了一层。</p>
+<h2 id="Servlet是怎么工作的"><a href="#Servlet是怎么工作的" class="headerlink" title="Servlet是怎么工作的"></a>Servlet是怎么工作的</h2><p><img src="/2016/07/26/kongzheng1993-servlet/servlet%E6%8E%A5%E5%8F%A3.jpg" alt="Servlet接口"></p>
+<p>Servlet是一个接口，其中有init()，getServletConfig()，service()，getServiceInfo()，destroy()方法。Tomcat已经替我们完成了大部分工作，并且传入了三个对象ServletConfig、ServletRequest、ServletResponse。</p>
+<p>!(servlet实例化过程.jpg)</p>
+<ol>
+<li>ServletConfig是servlet配置，也就是我们在web.xml里的配置。</li>
+<li>Request/Response，也就是请求和响应。tomcat在收到http请求后，tomcat就解析了报文中的字段，然后封装进了Request对象。所以我们通过调用request对象的一些get方法就能获取请求的信息。response在tomcat传给servlet的时候还是空的。servlet逻辑处理后得到结果，最后通过response.write()写入response，tomcat或在servlet处理结束后拿到response组装成http响应发给客户端。</li>
+</ol>
+<p>Servlet接口五个方法，init、service、destroy是声明周期方法。init和destroy各自执行一次，即创建和销毁。而service是在每次有新请求的时候被调用，也就是我们写业务代码的地方。</p>
+<p>如果我们直接实现Servlet接口，会很麻烦，要自己处理请求类型，所以提供了抽象类GenericServlet：</p>
+<ol>
+<li>提升了init方法中原本形参的servletConfig对象的作用域，方便其他方法使用</li>
+<li>init方法中调用了一个init空参方法，如果我们希望servlet创建时做一些自定义的操作，可以继承GenericServlet后覆盖init空参方法。</li>
+<li>由于其他方法内也可以使用ServletConfig，于是写了一个getServletContext方法</li>
+<li>service是没有实现的。</li>
+</ol>
+<p>向下找，会找到HttpServlet抽象类，他继承了GenericServlet。虽然他是一个抽象类，但是他并没有抽象方法。HttpServlet类完成了请求方法判断。<br>一个类被声明为抽象类，一般有两个原因：</p>
+<ol>
+<li>有抽象方法。</li>
+<li>没有抽象方法，但是不希望别人直接实例化使用。</li>
+</ol>
+<p>所以这里仅仅是为了不让我们直接使用httpServlet。</p>
+<p>HttpServlet的doGet和doPost方法的默认实现是直接返回405，也就是请求不支持。所以我们要重写这两个方法。</p>
+<p>设计模式： Filter用到了责任链模式，Listener用到了观察者模式，Servlet使用的就是模板方法模式。</p>
+<p>所以到这里，我们写servlet需要重写的方法就是doGet和doPost。</p>
 
       
     </div>
@@ -118,7 +122,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       <a data-url="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-servlet/" data-id="cjww5cwwc00031rc8m6n17wq2" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/servlet/">servlet</a></li></ul>
 
     </footer>
   </div>
@@ -164,7 +168,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Class/">Class</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FTP/">FTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RSA/">RSA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SHA/">SHA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/String/">String</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/catch，try/">catch，try</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/">console</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/distinct/">distinct</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/float/">float</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/group-by/">group by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/images/">images</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/new/">new</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/order-by/">order by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/">quartz</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/re/">re</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/resume，简历/">resume，简历</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sample-post/">sample post</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/select/">select</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/">server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlplus/">sqlplus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ss/">ss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/suse/">suse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sys/">sys</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/test/">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/业务/">业务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/加密/">加密</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/备份/">备份</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/学习/">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安全/">安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/对象，Class对象/">对象，Class对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/签名/">签名</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编码/">编码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/职业/">职业</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/锁/">锁</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Class/">Class</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FTP/">FTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RSA/">RSA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SHA/">SHA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/String/">String</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/catch，try/">catch，try</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/">console</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/distinct/">distinct</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/float/">float</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/group-by/">group by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/images/">images</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/new/">new</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/order-by/">order by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/">quartz</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/re/">re</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/resume，简历/">resume，简历</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sample-post/">sample post</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/select/">select</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/">server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/servlet/">servlet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlplus/">sqlplus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ss/">ss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/suse/">suse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sys/">sys</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/test/">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/业务/">业务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/加密/">加密</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/备份/">备份</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/学习/">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安全/">安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/对象，Class对象/">对象，Class对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/签名/">签名</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编码/">编码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/职业/">职业</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/锁/">锁</a></li></ul>
     </div>
   </div>
 
@@ -174,7 +178,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Class/" style="font-size: 10px;">Class</a> <a href="/tags/FTP/" style="font-size: 10px;">FTP</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/SHA/" style="font-size: 10px;">SHA</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/catch，try/" style="font-size: 10px;">catch，try</a> <a href="/tags/console/" style="font-size: 10px;">console</a> <a href="/tags/distinct/" style="font-size: 10px;">distinct</a> <a href="/tags/float/" style="font-size: 10px;">float</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/group-by/" style="font-size: 10px;">group by</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/images/" style="font-size: 16.67px;">images</a> <a href="/tags/java/" style="font-size: 16.67px;">java</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/mysql/" style="font-size: 13.33px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/oop/" style="font-size: 20px;">oop</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/order-by/" style="font-size: 10px;">order by</a> <a href="/tags/quartz/" style="font-size: 10px;">quartz</a> <a href="/tags/re/" style="font-size: 16.67px;">re</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/resume，简历/" style="font-size: 10px;">resume，简历</a> <a href="/tags/sample-post/" style="font-size: 16.67px;">sample post</a> <a href="/tags/select/" style="font-size: 10px;">select</a> <a href="/tags/server/" style="font-size: 10px;">server</a> <a href="/tags/sql/" style="font-size: 13.33px;">sql</a> <a href="/tags/sqlplus/" style="font-size: 10px;">sqlplus</a> <a href="/tags/ss/" style="font-size: 10px;">ss</a> <a href="/tags/suse/" style="font-size: 10px;">suse</a> <a href="/tags/sys/" style="font-size: 10px;">sys</a> <a href="/tags/test/" style="font-size: 16.67px;">test</a> <a href="/tags/业务/" style="font-size: 10px;">业务</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/加密/" style="font-size: 10px;">加密</a> <a href="/tags/备份/" style="font-size: 10px;">备份</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/学习/" style="font-size: 10px;">学习</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/对象，Class对象/" style="font-size: 10px;">对象，Class对象</a> <a href="/tags/签名/" style="font-size: 10px;">签名</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/职业/" style="font-size: 10px;">职业</a> <a href="/tags/锁/" style="font-size: 10px;">锁</a>
+      <a href="/tags/Class/" style="font-size: 10px;">Class</a> <a href="/tags/FTP/" style="font-size: 10px;">FTP</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/SHA/" style="font-size: 10px;">SHA</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/catch，try/" style="font-size: 10px;">catch，try</a> <a href="/tags/console/" style="font-size: 10px;">console</a> <a href="/tags/distinct/" style="font-size: 10px;">distinct</a> <a href="/tags/float/" style="font-size: 10px;">float</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/group-by/" style="font-size: 10px;">group by</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/images/" style="font-size: 16.67px;">images</a> <a href="/tags/java/" style="font-size: 16.67px;">java</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/mysql/" style="font-size: 13.33px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/oop/" style="font-size: 20px;">oop</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/order-by/" style="font-size: 10px;">order by</a> <a href="/tags/quartz/" style="font-size: 10px;">quartz</a> <a href="/tags/re/" style="font-size: 16.67px;">re</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/resume，简历/" style="font-size: 10px;">resume，简历</a> <a href="/tags/sample-post/" style="font-size: 16.67px;">sample post</a> <a href="/tags/select/" style="font-size: 10px;">select</a> <a href="/tags/server/" style="font-size: 10px;">server</a> <a href="/tags/servlet/" style="font-size: 10px;">servlet</a> <a href="/tags/sql/" style="font-size: 13.33px;">sql</a> <a href="/tags/sqlplus/" style="font-size: 10px;">sqlplus</a> <a href="/tags/ss/" style="font-size: 10px;">ss</a> <a href="/tags/suse/" style="font-size: 10px;">suse</a> <a href="/tags/sys/" style="font-size: 10px;">sys</a> <a href="/tags/test/" style="font-size: 16.67px;">test</a> <a href="/tags/业务/" style="font-size: 10px;">业务</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/加密/" style="font-size: 10px;">加密</a> <a href="/tags/备份/" style="font-size: 10px;">备份</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/学习/" style="font-size: 10px;">学习</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/对象，Class对象/" style="font-size: 10px;">对象，Class对象</a> <a href="/tags/签名/" style="font-size: 10px;">签名</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/职业/" style="font-size: 10px;">职业</a> <a href="/tags/锁/" style="font-size: 10px;">锁</a>
     </div>
   </div>
 
@@ -208,7 +212,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
           </li>
         
           <li>
-            <a href="/2019/06/13/kongzheng1993-RSA加密与SHA签名/">kongzheng1993-RSA加密与SHA签名.md</a>
+            <a href="/2019/06/13/kongzheng1993-RSA加密与SHA签名/">RSA加密与SHA签名</a>
           </li>
         
           <li>
