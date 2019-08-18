@@ -122,7 +122,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-centos7_mysql/" data-id="cjx6ebz57005iq2xnfnshasmg" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-centos7_mysql/" data-id="cjzh3e0bf000x16c8aupw7vmq" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/re/">re</a></li></ul>
@@ -134,9 +134,9 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
 
 
   
-    <article id="post-kongzheng1993-servlet" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-kongzheng1993-about_comparator_and_comparable" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/07/26/kongzheng1993-servlet/" class="article-date">
+    <a href="/2016/07/26/kongzheng1993-about_comparator_and_comparable/" class="article-date">
   <time datetime="2016-07-25T16:00:00.000Z" itemprop="datePublished">2016-07-26</time>
 </a>
     
@@ -148,7 +148,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/07/26/kongzheng1993-servlet/">Servlet</a>
+      <a class="article-title" href="/2016/07/26/kongzheng1993-about_comparator_and_comparable/">关于comparator和comparable</a>
     </h1>
   
 
@@ -156,40 +156,50 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="WHAT"><a href="#WHAT" class="headerlink" title="WHAT"></a>WHAT</h2><p>当一个请求到了web服务器，接收请求和响应请求是web服务器完成的，可是处理请求呢？接收和响应都是固定的东西，但是处理请求是包含业务逻辑在里面的，需要我们自己处理，所以就抽取出来了Servlet让我们来完成请求的处理，当然请求处理咱么又拆分出三层架构：servlet+service+dao。每个servlet来处理对应映射的url来的请求，很多servlet需要统一管理，所以tomcat还是一个servlet容器。</p>
-<p>后来spring家族出现，servlet就退居幕后了。现在咱们用的springMVC其实核心组件DispatcherServlet本质上就是Servlet，只是在原来的HttpServlet基础上封装了一层。</p>
-<h2 id="Servlet是怎么工作的"><a href="#Servlet是怎么工作的" class="headerlink" title="Servlet是怎么工作的"></a>Servlet是怎么工作的</h2><p><img src="/2016/07/26/kongzheng1993-servlet/servlet%E6%8E%A5%E5%8F%A3.jpg" alt="Servlet接口"></p>
-<p>Servlet是一个接口，其中有init()，getServletConfig()，service()，getServiceInfo()，destroy()方法。Tomcat已经替我们完成了大部分工作，并且传入了三个对象ServletConfig、ServletRequest、ServletResponse。</p>
-<p>!(servlet实例化过程.jpg)</p>
-<ol>
-<li>ServletConfig是servlet配置，也就是我们在web.xml里的配置。</li>
-<li>Request/Response，也就是请求和响应。tomcat在收到http请求后，tomcat就解析了报文中的字段，然后封装进了Request对象。所以我们通过调用request对象的一些get方法就能获取请求的信息。response在tomcat传给servlet的时候还是空的。servlet逻辑处理后得到结果，最后通过response.write()写入response，tomcat或在servlet处理结束后拿到response组装成http响应发给客户端。</li>
-</ol>
-<p>Servlet接口五个方法，init、service、destroy是声明周期方法。init和destroy各自执行一次，即创建和销毁。而service是在每次有新请求的时候被调用，也就是我们写业务代码的地方。</p>
-<p>如果我们直接实现Servlet接口，会很麻烦，要自己处理请求类型，所以提供了抽象类GenericServlet：</p>
-<ol>
-<li>提升了init方法中原本形参的servletConfig对象的作用域，方便其他方法使用</li>
-<li>init方法中调用了一个init空参方法，如果我们希望servlet创建时做一些自定义的操作，可以继承GenericServlet后覆盖init空参方法。</li>
-<li>由于其他方法内也可以使用ServletConfig，于是写了一个getServletContext方法</li>
-<li>service是没有实现的。</li>
-</ol>
-<p>向下找，会找到HttpServlet抽象类，他继承了GenericServlet。虽然他是一个抽象类，但是他并没有抽象方法。HttpServlet类完成了请求方法判断。<br>一个类被声明为抽象类，一般有两个原因：</p>
-<ol>
-<li>有抽象方法。</li>
-<li>没有抽象方法，但是不希望别人直接实例化使用。</li>
-</ol>
-<p>所以这里仅仅是为了不让我们直接使用httpServlet。</p>
-<p>HttpServlet的doGet和doPost方法的默认实现是直接返回405，也就是请求不支持。所以我们要重写这两个方法。</p>
-<p>设计模式： Filter用到了责任链模式，Listener用到了观察者模式，Servlet使用的就是模板方法模式。</p>
-<p>所以到这里，我们写servlet需要重写的方法就是doGet和doPost。</p>
+        <h2 id="关于comparator和comparable"><a href="#关于comparator和comparable" class="headerlink" title="关于comparator和comparable"></a>关于comparator和comparable</h2><h3 id="comparator"><a href="#comparator" class="headerlink" title="comparator"></a>comparator</h3><p>Comparator强行对某个对象collection进行整体排序的比较函数，可以将Comparator传递给Collections.sort或Arrays.sort。<br>也就是说Comeparator是需要用sort方法调用的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">import java.util.*;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by evilrat on 3/9/17.</span><br><span class="line"> */</span><br><span class="line">public class CollectionTest &#123;</span><br><span class="line"></span><br><span class="line">    static List&lt;Demo&gt; d = new ArrayList&lt;Demo&gt;();</span><br><span class="line">    static Random random = new Random();</span><br><span class="line">    static CompareterTool ct= new CompareterTool();</span><br><span class="line">    public static void main(String [] args)&#123;</span><br><span class="line">        for (int i = 0; i &lt; 10;i ++)&#123;</span><br><span class="line">            d.add(new Demo(random.nextInt(10)));</span><br><span class="line">        &#125;</span><br><span class="line">        //排序前输出</span><br><span class="line">        for (Iterator&lt;Demo&gt; it = d.iterator(); it.hasNext();)&#123;</span><br><span class="line">            System.out.print(it.next().getAge()+&quot;\t&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.print(&quot;\n&quot;);</span><br><span class="line">        //排序</span><br><span class="line">        Collections.sort(d,ct);</span><br><span class="line">        //排序后输出</span><br><span class="line">        for (Iterator&lt;Demo&gt; it = d.iterator(); it.hasNext();)&#123;</span><br><span class="line">            System.out.print(it.next().getAge()+&quot;\t&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里是使用Collections.sort方法调用了我们预先写好的比较器。以下是比较器的定义：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">import java.util.Comparator;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by evilrat on 3/9/17.</span><br><span class="line"> */</span><br><span class="line">public class CompareterTool implements Comparator&lt;Demo&gt; &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public int compare(Demo o1, Demo o2) &#123;</span><br><span class="line">            if (o1.age &gt; o2.age)&#123;</span><br><span class="line">                return 1;</span><br><span class="line">            &#125;else</span><br><span class="line">                return -1;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在编写比较器的时候我无意中这样写了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import java.util.Comparator;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by evilrat on 3/9/17.</span><br><span class="line"> */</span><br><span class="line">public class CompareterTool &#123;</span><br><span class="line"></span><br><span class="line">    public Comparator&lt;Demo&gt; comparator = new Comparator&lt;Demo&gt;() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public int compare(Demo o1, Demo o2) &#123;</span><br><span class="line">            if (o1.age &gt; o2.age)&#123;</span><br><span class="line">                return 1;</span><br><span class="line">            &#125;else</span><br><span class="line">                return -1;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>请注意这种写法，直接声明一个Comparator<demo>对象，然后紧跟这一段大括号重写了他的compare（）方法，然后在大括号外写了分号。<br>反正我是没这么写过，可能是我还没见过的原因吧，记录以下，感觉这样很炫酷。但是随之main方法中的排序代码要改为:</demo></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Collections.sort(d,ct.comparator);</span><br></pre></td></tr></table></figure>
+
+<p>ct是ComparatorTool类的对象，但是从编码来看，compare方法是在Comparator的对象comparator中啊，疑惑？为什么这里是调用ct.comparator，这是一个对象啊，难道说是comparator对象声明时直接写了一个方法？Comparator有这么一种特殊的写法。</p>
+<h3 id="Comparable"><a href="#Comparable" class="headerlink" title="Comparable"></a>Comparable</h3><p>对于Comparable来说，需要在编写想要进行排序的类的时候实现Comparable接口，然后在需要排序的时候调用Arrays或者Collections的sort方法就可以直接调用到这个比较器了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by evilrat on 3/9/17.</span><br><span class="line"> */</span><br><span class="line">public class Demo implements Comparable&lt;Demo&gt;&#123;</span><br><span class="line"></span><br><span class="line">    String name;</span><br><span class="line">    int age;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public int compareTo(Demo o) &#123;</span><br><span class="line">        return this.getAge()-o.getAge();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Demo(int age)&#123;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setName(String name) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public int getAge() &#123;</span><br><span class="line">        return age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setAge(int age) &#123;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调用方法,这里会自动对应到实现Comparable接口而产生的比较器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Collections.sort(d);</span><br></pre></td></tr></table></figure>
+
+<html>
+<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-about_comparator_and_comparable/" data-title="about_comparator_and_comparable" data-url="http://kongzheng1993.github.io/kongzheng1993-about_comparator_and_comparable/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"kongzheng1993"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+</html>
+
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-servlet/" data-id="cjx6ebz180008q2xn7r8ctj7p" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-about_comparator_and_comparable/" data-id="cjzh3e0by001616c8jng9lnz9" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/servlet/">servlet</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/re/">re</a></li></ul>
 
     </footer>
   </div>
@@ -257,10 +267,74 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-请求转发与重定向/" data-id="cjx6ebz1b000aq2xnku7qulwi" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-请求转发与重定向/" data-id="cjzh3e0dd002616c8u9jf4yu7" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/re/">re</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-kongzheng1993-servlet" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/26/kongzheng1993-servlet/" class="article-date">
+  <time datetime="2016-07-25T16:00:00.000Z" itemprop="datePublished">2016-07-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/26/kongzheng1993-servlet/">Servlet</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="WHAT"><a href="#WHAT" class="headerlink" title="WHAT"></a>WHAT</h2><p>当一个请求到了web服务器，接收请求和响应请求是web服务器完成的，可是处理请求呢？接收和响应都是固定的东西，但是处理请求是包含业务逻辑在里面的，需要我们自己处理，所以就抽取出来了Servlet让我们来完成请求的处理，当然请求处理咱么又拆分出三层架构：servlet+service+dao。每个servlet来处理对应映射的url来的请求，很多servlet需要统一管理，所以tomcat还是一个servlet容器。</p>
+<p>后来spring家族出现，servlet就退居幕后了。现在咱们用的springMVC其实核心组件DispatcherServlet本质上就是Servlet，只是在原来的HttpServlet基础上封装了一层。</p>
+<h2 id="Servlet是怎么工作的"><a href="#Servlet是怎么工作的" class="headerlink" title="Servlet是怎么工作的"></a>Servlet是怎么工作的</h2><p><img src="/2016/07/26/kongzheng1993-servlet/servlet%E6%8E%A5%E5%8F%A3.jpg" alt="Servlet接口"></p>
+<p>Servlet是一个接口，其中有init()，getServletConfig()，service()，getServiceInfo()，destroy()方法。Tomcat已经替我们完成了大部分工作，并且传入了三个对象ServletConfig、ServletRequest、ServletResponse。</p>
+<p>!(servlet实例化过程.jpg)</p>
+<ol>
+<li>ServletConfig是servlet配置，也就是我们在web.xml里的配置。</li>
+<li>Request/Response，也就是请求和响应。tomcat在收到http请求后，tomcat就解析了报文中的字段，然后封装进了Request对象。所以我们通过调用request对象的一些get方法就能获取请求的信息。response在tomcat传给servlet的时候还是空的。servlet逻辑处理后得到结果，最后通过response.write()写入response，tomcat或在servlet处理结束后拿到response组装成http响应发给客户端。</li>
+</ol>
+<p>Servlet接口五个方法，init、service、destroy是声明周期方法。init和destroy各自执行一次，即创建和销毁。而service是在每次有新请求的时候被调用，也就是我们写业务代码的地方。</p>
+<p>如果我们直接实现Servlet接口，会很麻烦，要自己处理请求类型，所以提供了抽象类GenericServlet：</p>
+<ol>
+<li>提升了init方法中原本形参的servletConfig对象的作用域，方便其他方法使用</li>
+<li>init方法中调用了一个init空参方法，如果我们希望servlet创建时做一些自定义的操作，可以继承GenericServlet后覆盖init空参方法。</li>
+<li>由于其他方法内也可以使用ServletConfig，于是写了一个getServletContext方法</li>
+<li>service是没有实现的。</li>
+</ol>
+<p>向下找，会找到HttpServlet抽象类，他继承了GenericServlet。虽然他是一个抽象类，但是他并没有抽象方法。HttpServlet类完成了请求方法判断。<br>一个类被声明为抽象类，一般有两个原因：</p>
+<ol>
+<li>有抽象方法。</li>
+<li>没有抽象方法，但是不希望别人直接实例化使用。</li>
+</ol>
+<p>所以这里仅仅是为了不让我们直接使用httpServlet。</p>
+<p>HttpServlet的doGet和doPost方法的默认实现是直接返回405，也就是请求不支持。所以我们要重写这两个方法。</p>
+<p>设计模式： Filter用到了责任链模式，Listener用到了观察者模式，Servlet使用的就是模板方法模式。</p>
+<p>所以到这里，我们写servlet需要重写的方法就是doGet和doPost。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-servlet/" data-id="cjzh3e0dh002a16c8cpknlecr" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/servlet/">servlet</a></li></ul>
 
     </footer>
   </div>
@@ -336,79 +410,10 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/22/kongzheng1993-有关字符串的笔记/" data-id="cjx6ebz290010q2xn9l3ml0kh" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/22/kongzheng1993-有关字符串的笔记/" data-id="cjzh3e0be000w16c8hz7si9l9" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-OracleAfterChangetheNameofComputer" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/07/20/kongzheng1993-OracleAfterChangetheNameofComputer/" class="article-date">
-  <time datetime="2016-07-19T16:00:00.000Z" itemprop="datePublished">2016-07-20</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/07/20/kongzheng1993-OracleAfterChangetheNameofComputer/">修改主机名oracle无法正常启动</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在刚开始学习Oracle时，安装完Oracle后，我发现我的主机名不是很炫酷，就去计算机管理把电脑的名字改成了EvilRat，然后我的Oracle就连不上了，因为listener服务一直启动不了，显示类似下面的情况：（图是从网上找的，不好在弄回去截图了，大家知道是什么情况能解决问题就行）。</p>
-<center>
-<img src="/2016/07/20/kongzheng1993-OracleAfterChangetheNameofComputer/assets/img/oracle_listener.bmp">
-</center>
-然后我从网上查了资料，发现是因为listener的配置文件里面的主机名还没有改过来，于是我就是手动改过来了。
-<center>
-<img src="/2016/07/20/kongzheng1993-OracleAfterChangetheNameofComputer/assets/img/listener.bmp">
-</center>
-将箭头指的地方修改后，应该就没问题了，这是我真是遇到的问题，希望可以帮助到大家。
-
-
-
-
-
-
-
-
-<html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-oraclepcname/" data-title="oraclepcname" data-url="http://kongzheng1993.github.io/kongzheng1993-oraclepcname/"></div>
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"kongzheng1993"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-</html>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/20/kongzheng1993-OracleAfterChangetheNameofComputer/" data-id="cjx6ebz23000uq2xn3wy7md3i" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oracle/">oracle</a></li></ul>
 
     </footer>
   </div>
@@ -461,7 +466,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
     </div>
   </div>
 
@@ -472,6 +477,10 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/08/18/kongzheng1993-HashMap&ConcurrentHashMap/">HashMap&amp;ConcurrentHashMap</a>
+          </li>
         
           <li>
             <a href="/2019/06/14/kongzheng1993-mysql超过最大连接数-一次生产问题定位/">mysql超过最大连接数一次生产问题定位.md</a>
@@ -487,10 +496,6 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
         
           <li>
             <a href="/2019/06/13/kongzheng1993-RSA加密与SHA签名/">RSA加密与SHA签名</a>
-          </li>
-        
-          <li>
-            <a href="/2019/06/11/kongzheng1993-关于分布式锁/">关于分布式锁.md</a>
           </li>
         
       </ul>

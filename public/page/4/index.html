@@ -62,6 +62,61 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-kongzheng1993-suse_ftp服务配置" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/02/01/kongzheng1993-suse_ftp服务配置/" class="article-date">
+  <time datetime="2018-01-31T16:00:00.000Z" itemprop="datePublished">2018-02-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/suse/">suse</a>►<a class="article-category-link" href="/categories/suse/server/">server</a>►<a class="article-category-link" href="/categories/suse/server/FTP/">FTP</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/01/kongzheng1993-suse_ftp服务配置/">SUSE server FTP配置</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="SUSE-FTP配置"><a href="#SUSE-FTP配置" class="headerlink" title="SUSE FTP配置"></a>SUSE FTP配置</h2><p>建议使用vsftp，如果使用了pure-ftpd，需要屏蔽掉pure-ftpd服务。</p>
+<ol>
+<li>Root用户执行yast2—&gt;network services–&gt;network services （inetd）</li>
+</ol>
+<p>将/usr/sbin/pure-ftpd 和/usr/sbin/vsftpd</p>
+<p>分别将pure-ftp的状态置为off，vsftpd的状态置为on，然后单击按钮，修改完成。</p>
+<ol start="2">
+<li>vi /etc/vsftpd.conf 去掉下面几项的注视：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#write_enable=YES</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#local_enable=YES</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#ascii_upload_enable=YES</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#ascii_download_enable=YES</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#listen=YES</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#anonymous_enable=NO</span></span><br></pre></td></tr></table></figure>
+
+<p>(3)vi /etc/ftpuser 将root用户注释掉</p>
+<p>(4)service vsftpd restart  重启ftp服务</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2018/02/01/kongzheng1993-suse_ftp服务配置/" data-id="cjzh3e0bt001216c8n3a1gcia" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FTP/">FTP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/server/">server</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/suse/">suse</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-kongzheng1993-JavaReflect" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/03/08/kongzheng1993-JavaReflect/" class="article-date">
@@ -108,10 +163,73 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2017/03/08/kongzheng1993-JavaReflect/" data-id="cjx6ebz27000yq2xntiek3f68" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2017/03/08/kongzheng1993-JavaReflect/" data-id="cjzh3e0bc000u16c8um92j6wk" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Class/">Class</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/reflect/">reflect</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/对象，Class对象/">对象，Class对象</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-kongzheng1993-Properties" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/28/kongzheng1993-Properties/" class="article-date">
+  <time datetime="2016-07-27T16:00:00.000Z" itemprop="datePublished">2016-07-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/28/kongzheng1993-Properties/">properties文件的使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>java中的properties文件是一种配置文件，主要用于配置信息，文件类型为.properties，格式为文本文件，文件内容是“键=值”的格式，在properties文件中可以使用“#”来做注释，properties文件在Java编程中用到的地方很多，操作很方便。</p>
+<h2 id="Properties文件"><a href="#Properties文件" class="headerlink" title="Properties文件"></a>Properties文件</h2><p>config.properties</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">db_url=com.mysql.jdbc.Driver</span><br><span class="line">db_mysql=jdbc:mysql</span><br><span class="line">db_ip=127.0.0.1</span><br><span class="line">db_port=3306</span><br><span class="line">db_dbName=users</span><br><span class="line">db_usn=root</span><br><span class="line">db_pwd=root</span><br></pre></td></tr></table></figure>
+
+<h2 id="Properties类的方法"><a href="#Properties类的方法" class="headerlink" title="Properties类的方法"></a>Properties类的方法</h2><p>Properites类存在Java.util中，该类继承自Hashtable</p>
+<p>1 getProperty ( String  key) ，   用指定的键在此属性列表中搜索属性。也就是通过参数 key ，得到 key 所对应的 value。<br>2 load ( InputStream  inStream) ，从输入流中读取属性列表（键和元素对）。通过对指定的文件（比如说上面的 test.properties 文件）进行装载来获取该文</p>
+<p>件中的所有键 - 值对。以供 getProperty ( String  key) 来搜索。<br>3 setProperty ( String  key, String  value) ，调用 Hashtable 的方法 put 。他通过调用基类的put方法来设置 键 - 值对。<br>4 store ( OutputStream  out, String  comments) ，   以适合使用 load 方法加载到 Properties 表中的格式，将此 Properties 表中的属性列表（键和元素</p>
+<p>对）写入输出流。与 load 方法相反，该方法将键 - 值对写入到指定的文件中去。<br>5 clear () ，清除所有装载的 键 - 值对。该方法在基类中提供。</p>
+<h2 id="在JAVA文件中操作properties文件的方法"><a href="#在JAVA文件中操作properties文件的方法" class="headerlink" title="在JAVA文件中操作properties文件的方法"></a>在JAVA文件中操作properties文件的方法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">pr=new Properties();</span><br><span class="line">inStream=this.getClass().getResourceAsStream(&quot;config.properties&quot;);</span><br><span class="line">InputStream inStream=DBUtil.class.getResourceAsStream(&quot;config.properties&quot;);</span><br><span class="line">try &#123;</span><br><span class="line">    pr.load(inStream);</span><br><span class="line">    url=pr.getProperty(&quot;db_url&quot;);</span><br><span class="line">    mysql=pr.getProperty(&quot;db_mysql&quot;);</span><br><span class="line">    ip=pr.getProperty(&quot;db_ip&quot;);</span><br><span class="line">    port=pr.getProperty(&quot;db_port&quot;);</span><br><span class="line">    dbname=pr.getProperty(&quot;db_dbName&quot;);</span><br><span class="line">    dbusn=pr.getProperty(&quot;db_usn&quot;);</span><br><span class="line">    dbpwd=pr.getProperty(&quot;db_pwd&quot;);</span><br><span class="line">&#125; catch (IOException e) &#123;</span><br><span class="line">    // TODO Auto-generated catch block</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>java的properties文件需要放到classpath下面，这样程序才能读取到，有关classpath实际上就是java类或者库的存放路径，在java工程中，properties放到class文件一块。在web应用中，最简单的方法是放到web应用的WEB- INF\classes目录下即可，也可以放在其他文件夹下面，这时候需要在设置classpath环境变量的时候，将这个文件夹路径加到 classpath变量中，这样也也可以读取到。在此，你需要对classpath有个深刻理解，classpath绝非系统中刻意设定的那个系统环境变量，WEB-INF\classes其实也是，java工程的class文件目录也是。</p>
+<html>
+<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-properties/" data-title="properties" data-url="http://kongzheng1993.github.io/kongzheng1993-properties/"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"kongzheng1993"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+</html>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2016/07/28/kongzheng1993-Properties/" data-id="cjzh3e0d7002116c8z65r3zg7" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
 
     </footer>
   </div>
@@ -192,70 +310,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/28/kongzheng1993-method_of_request&response/" data-id="cjx6ebz130005q2xni8xutqsz" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-Properties" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/07/28/kongzheng1993-Properties/" class="article-date">
-  <time datetime="2016-07-27T16:00:00.000Z" itemprop="datePublished">2016-07-28</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/07/28/kongzheng1993-Properties/">properties文件的使用</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>java中的properties文件是一种配置文件，主要用于配置信息，文件类型为.properties，格式为文本文件，文件内容是“键=值”的格式，在properties文件中可以使用“#”来做注释，properties文件在Java编程中用到的地方很多，操作很方便。</p>
-<h2 id="Properties文件"><a href="#Properties文件" class="headerlink" title="Properties文件"></a>Properties文件</h2><p>config.properties</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">db_url=com.mysql.jdbc.Driver</span><br><span class="line">db_mysql=jdbc:mysql</span><br><span class="line">db_ip=127.0.0.1</span><br><span class="line">db_port=3306</span><br><span class="line">db_dbName=users</span><br><span class="line">db_usn=root</span><br><span class="line">db_pwd=root</span><br></pre></td></tr></table></figure>
-
-<h2 id="Properties类的方法"><a href="#Properties类的方法" class="headerlink" title="Properties类的方法"></a>Properties类的方法</h2><p>Properites类存在Java.util中，该类继承自Hashtable</p>
-<p>1 getProperty ( String  key) ，   用指定的键在此属性列表中搜索属性。也就是通过参数 key ，得到 key 所对应的 value。<br>2 load ( InputStream  inStream) ，从输入流中读取属性列表（键和元素对）。通过对指定的文件（比如说上面的 test.properties 文件）进行装载来获取该文</p>
-<p>件中的所有键 - 值对。以供 getProperty ( String  key) 来搜索。<br>3 setProperty ( String  key, String  value) ，调用 Hashtable 的方法 put 。他通过调用基类的put方法来设置 键 - 值对。<br>4 store ( OutputStream  out, String  comments) ，   以适合使用 load 方法加载到 Properties 表中的格式，将此 Properties 表中的属性列表（键和元素</p>
-<p>对）写入输出流。与 load 方法相反，该方法将键 - 值对写入到指定的文件中去。<br>5 clear () ，清除所有装载的 键 - 值对。该方法在基类中提供。</p>
-<h2 id="在JAVA文件中操作properties文件的方法"><a href="#在JAVA文件中操作properties文件的方法" class="headerlink" title="在JAVA文件中操作properties文件的方法"></a>在JAVA文件中操作properties文件的方法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">pr=new Properties();</span><br><span class="line">inStream=this.getClass().getResourceAsStream(&quot;config.properties&quot;);</span><br><span class="line">InputStream inStream=DBUtil.class.getResourceAsStream(&quot;config.properties&quot;);</span><br><span class="line">try &#123;</span><br><span class="line">    pr.load(inStream);</span><br><span class="line">    url=pr.getProperty(&quot;db_url&quot;);</span><br><span class="line">    mysql=pr.getProperty(&quot;db_mysql&quot;);</span><br><span class="line">    ip=pr.getProperty(&quot;db_ip&quot;);</span><br><span class="line">    port=pr.getProperty(&quot;db_port&quot;);</span><br><span class="line">    dbname=pr.getProperty(&quot;db_dbName&quot;);</span><br><span class="line">    dbusn=pr.getProperty(&quot;db_usn&quot;);</span><br><span class="line">    dbpwd=pr.getProperty(&quot;db_pwd&quot;);</span><br><span class="line">&#125; catch (IOException e) &#123;</span><br><span class="line">    // TODO Auto-generated catch block</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>java的properties文件需要放到classpath下面，这样程序才能读取到，有关classpath实际上就是java类或者库的存放路径，在java工程中，properties放到class文件一块。在web应用中，最简单的方法是放到web应用的WEB- INF\classes目录下即可，也可以放在其他文件夹下面，这时候需要在设置classpath环境变量的时候，将这个文件夹路径加到 classpath变量中，这样也也可以读取到。在此，你需要对classpath有个深刻理解，classpath绝非系统中刻意设定的那个系统环境变量，WEB-INF\classes其实也是，java工程的class文件目录也是。</p>
-<html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-properties/" data-title="properties" data-url="http://kongzheng1993.github.io/kongzheng1993-properties/"></div>
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"kongzheng1993"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-</html>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/28/kongzheng1993-Properties/" data-id="cjx6ebz0o0001q2xn3xxq7b81" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/28/kongzheng1993-method_of_request&response/" data-id="cjzh3e0da002416c8e6kzi0nb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
@@ -321,84 +376,10 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/27/kongzheng1993-Session/" data-id="cjx6ebz0d0000q2xnxhygc88q" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/27/kongzheng1993-Session/" data-id="cjzh3e0a1000316c8qndi6zs0" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-about_comparator_and_comparable" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/07/26/kongzheng1993-about_comparator_and_comparable/" class="article-date">
-  <time datetime="2016-07-25T16:00:00.000Z" itemprop="datePublished">2016-07-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/07/26/kongzheng1993-about_comparator_and_comparable/">关于comparator和comparable</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="关于comparator和comparable"><a href="#关于comparator和comparable" class="headerlink" title="关于comparator和comparable"></a>关于comparator和comparable</h2><h3 id="comparator"><a href="#comparator" class="headerlink" title="comparator"></a>comparator</h3><p>Comparator强行对某个对象collection进行整体排序的比较函数，可以将Comparator传递给Collections.sort或Arrays.sort。<br>也就是说Comeparator是需要用sort方法调用的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">import java.util.*;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by evilrat on 3/9/17.</span><br><span class="line"> */</span><br><span class="line">public class CollectionTest &#123;</span><br><span class="line"></span><br><span class="line">    static List&lt;Demo&gt; d = new ArrayList&lt;Demo&gt;();</span><br><span class="line">    static Random random = new Random();</span><br><span class="line">    static CompareterTool ct= new CompareterTool();</span><br><span class="line">    public static void main(String [] args)&#123;</span><br><span class="line">        for (int i = 0; i &lt; 10;i ++)&#123;</span><br><span class="line">            d.add(new Demo(random.nextInt(10)));</span><br><span class="line">        &#125;</span><br><span class="line">        //排序前输出</span><br><span class="line">        for (Iterator&lt;Demo&gt; it = d.iterator(); it.hasNext();)&#123;</span><br><span class="line">            System.out.print(it.next().getAge()+&quot;\t&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.print(&quot;\n&quot;);</span><br><span class="line">        //排序</span><br><span class="line">        Collections.sort(d,ct);</span><br><span class="line">        //排序后输出</span><br><span class="line">        for (Iterator&lt;Demo&gt; it = d.iterator(); it.hasNext();)&#123;</span><br><span class="line">            System.out.print(it.next().getAge()+&quot;\t&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这里是使用Collections.sort方法调用了我们预先写好的比较器。以下是比较器的定义：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">import java.util.Comparator;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by evilrat on 3/9/17.</span><br><span class="line"> */</span><br><span class="line">public class CompareterTool implements Comparator&lt;Demo&gt; &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public int compare(Demo o1, Demo o2) &#123;</span><br><span class="line">            if (o1.age &gt; o2.age)&#123;</span><br><span class="line">                return 1;</span><br><span class="line">            &#125;else</span><br><span class="line">                return -1;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在编写比较器的时候我无意中这样写了：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import java.util.Comparator;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by evilrat on 3/9/17.</span><br><span class="line"> */</span><br><span class="line">public class CompareterTool &#123;</span><br><span class="line"></span><br><span class="line">    public Comparator&lt;Demo&gt; comparator = new Comparator&lt;Demo&gt;() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public int compare(Demo o1, Demo o2) &#123;</span><br><span class="line">            if (o1.age &gt; o2.age)&#123;</span><br><span class="line">                return 1;</span><br><span class="line">            &#125;else</span><br><span class="line">                return -1;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>请注意这种写法，直接声明一个Comparator<demo>对象，然后紧跟这一段大括号重写了他的compare（）方法，然后在大括号外写了分号。<br>反正我是没这么写过，可能是我还没见过的原因吧，记录以下，感觉这样很炫酷。但是随之main方法中的排序代码要改为:</demo></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Collections.sort(d,ct.comparator);</span><br></pre></td></tr></table></figure>
-
-<p>ct是ComparatorTool类的对象，但是从编码来看，compare方法是在Comparator的对象comparator中啊，疑惑？为什么这里是调用ct.comparator，这是一个对象啊，难道说是comparator对象声明时直接写了一个方法？Comparator有这么一种特殊的写法。</p>
-<h3 id="Comparable"><a href="#Comparable" class="headerlink" title="Comparable"></a>Comparable</h3><p>对于Comparable来说，需要在编写想要进行排序的类的时候实现Comparable接口，然后在需要排序的时候调用Arrays或者Collections的sort方法就可以直接调用到这个比较器了。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by evilrat on 3/9/17.</span><br><span class="line"> */</span><br><span class="line">public class Demo implements Comparable&lt;Demo&gt;&#123;</span><br><span class="line"></span><br><span class="line">    String name;</span><br><span class="line">    int age;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public int compareTo(Demo o) &#123;</span><br><span class="line">        return this.getAge()-o.getAge();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Demo(int age)&#123;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setName(String name) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public int getAge() &#123;</span><br><span class="line">        return age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setAge(int age) &#123;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>调用方法,这里会自动对应到实现Comparable接口而产生的比较器：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Collections.sort(d);</span><br></pre></td></tr></table></figure>
-
-<html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-about_comparator_and_comparable/" data-title="about_comparator_and_comparable" data-url="http://kongzheng1993.github.io/kongzheng1993-about_comparator_and_comparable/"></div>
-<!-- 多说评论框 end -->
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"kongzheng1993"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-</html>
-
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-about_comparator_and_comparable/" data-id="cjx6ebz2a0011q2xnmabpa1dt" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/re/">re</a></li></ul>
 
     </footer>
   </div>
@@ -451,7 +432,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
     </div>
   </div>
 
@@ -462,6 +443,10 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/08/18/kongzheng1993-HashMap&ConcurrentHashMap/">HashMap&amp;ConcurrentHashMap</a>
+          </li>
         
           <li>
             <a href="/2019/06/14/kongzheng1993-mysql超过最大连接数-一次生产问题定位/">mysql超过最大连接数一次生产问题定位.md</a>
@@ -477,10 +462,6 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
         
           <li>
             <a href="/2019/06/13/kongzheng1993-RSA加密与SHA签名/">RSA加密与SHA签名</a>
-          </li>
-        
-          <li>
-            <a href="/2019/06/11/kongzheng1993-关于分布式锁/">关于分布式锁.md</a>
           </li>
         
       </ul>

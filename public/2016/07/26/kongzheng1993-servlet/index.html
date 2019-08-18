@@ -16,7 +16,7 @@
 <meta property="og:description" content="WHAT当一个请求到了web服务器，接收请求和响应请求是web服务器完成的，可是处理请求呢？接收和响应都是固定的东西，但是处理请求是包含业务逻辑在里面的，需要我们自己处理，所以就抽取出来了Servlet让我们来完成请求的处理，当然请求处理咱么又拆分出三层架构：servlet+service+dao。每个servlet来处理对应映射的url来的请求，很多servlet需要统一管理，所以tomcat还">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-servlet/servlet%E6%8E%A5%E5%8F%A3.jpg">
-<meta property="og:updated_time" content="2019-06-21T17:55:15.936Z">
+<meta property="og:updated_time" content="2019-06-21T02:44:08.420Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Servlet">
 <meta name="twitter:description" content="WHAT当一个请求到了web服务器，接收请求和响应请求是web服务器完成的，可是处理请求呢？接收和响应都是固定的东西，但是处理请求是包含业务逻辑在里面的，需要我们自己处理，所以就抽取出来了Servlet让我们来完成请求的处理，当然请求处理咱么又拆分出三层架构：servlet+service+dao。每个servlet来处理对应映射的url来的请求，很多servlet需要统一管理，所以tomcat还">
@@ -119,7 +119,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-servlet/" data-id="cjx6ebz180008q2xn7r8ctj7p" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-servlet/" data-id="cjzh3e0dh002a16c8cpknlecr" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/servlet/">servlet</a></li></ul>
@@ -130,19 +130,19 @@
     
 <nav id="article-nav">
   
-    <a href="/2016/07/26/kongzheng1993-centos7_mysql/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2016/07/26/kongzheng1993-请求转发与重定向/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          centos 7 安装mysql遇到的问题
+          请求转发和重定向
         
       </div>
     </a>
   
   
-    <a href="/2016/07/26/kongzheng1993-请求转发与重定向/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2016/07/22/kongzheng1993-有关字符串的笔记/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">请求转发和重定向</div>
+      <div class="article-nav-title">Java IO</div>
     </a>
   
 </nav>
@@ -187,7 +187,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
     </div>
   </div>
 
@@ -198,6 +198,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/08/18/kongzheng1993-HashMap&ConcurrentHashMap/">HashMap&amp;ConcurrentHashMap</a>
+          </li>
         
           <li>
             <a href="/2019/06/14/kongzheng1993-mysql超过最大连接数-一次生产问题定位/">mysql超过最大连接数一次生产问题定位.md</a>
@@ -213,10 +217,6 @@
         
           <li>
             <a href="/2019/06/13/kongzheng1993-RSA加密与SHA签名/">RSA加密与SHA签名</a>
-          </li>
-        
-          <li>
-            <a href="/2019/06/11/kongzheng1993-关于分布式锁/">关于分布式锁.md</a>
           </li>
         
       </ul>
