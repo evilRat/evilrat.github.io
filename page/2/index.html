@@ -62,100 +62,59 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-kongzheng1993-关于分布式锁" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-kongzheng1993-jhat" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/06/11/kongzheng1993-关于分布式锁/" class="article-date">
-  <time datetime="2019-06-11T07:48:10.000Z" itemprop="datePublished">2019-06-11</time>
+    <a href="/2020/03/08/kongzheng1993-jhat/" class="article-date">
+  <time datetime="2020-03-07T16:00:00.000Z" itemprop="datePublished">2020-03-08</time>
 </a>
     
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/quartz/">quartz</a>►<a class="article-category-link" href="/categories/quartz/锁/">锁</a>►<a class="article-category-link" href="/categories/quartz/锁/分布式/">分布式</a>
-  </div>
-
   </div>
   <div class="article-inner">
     
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/11/kongzheng1993-关于分布式锁/">关于分布式锁.md</a>
-    </h1>
-  
-
-      </header>
-    
     <div class="article-entry" itemprop="articleBody">
       
-        <p>前段时间上线了一个需求：用户在页面填写计划任务，在用户的计划时间给用户下发短信提醒。</p>
-<p>我当时一想这不简单，给页面提供一个接口，数据入库，后台做一个定时任务，每分钟去取当前时间需要下发短信的数据，调用短信接口。</p>
-<p>为此还特地学习了一下quartz。需求很快完成了，接着就上线了。</p>
-<p>第二天验证，每条数据竟然收到了八条短信！！！</p>
-<p>找日志看了一下，每个tomcat都跑了task，都取到了所有的数据，都下发了短信，正好8个tomcat，一个不多，一个不少。。。</p>
-<h2 id="想办法"><a href="#想办法" class="headerlink" title="想办法"></a>想办法</h2><p>查资料了解到quartz支持集群的，一开始我猜想的可能是通过集群中各节点互相通信来实现。后来知道是通过数据库锁来实现的。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span>  ... <span class="keyword">for</span> <span class="keyword">update</span>;</span><br></pre></td></tr></table></figure>
-
-<p>通过db的行级锁来实现只有一个实例可以继续执行。</p>
-<p>想到新建很多表，只为了解决这个问题，还是觉得大材小用，继续寻找其他方法。不过通过这些资料，我了解到分布式锁。</p>
-<h2 id="什么是分布式锁"><a href="#什么是分布式锁" class="headerlink" title="什么是分布式锁"></a>什么是分布式锁</h2><p>在分布式模型下，数据只有一份，可是集群中多个节点都会去操作这份数据。与单机模式下的锁相比，不仅要保证进程可见，还需要考虑进程与锁之间的网络问题。不过思路还是一样的，只要能保证标记能互斥就行。</p>
-<h2 id="我们需要怎样的分布式锁？"><a href="#我们需要怎样的分布式锁？" class="headerlink" title="我们需要怎样的分布式锁？"></a>我们需要怎样的分布式锁？</h2><ul>
-<li>可以保证在分布式部署的应用集群中，同一个方法在同一时间只能被一台机器-上的一个线程执行。</li>
-<li>这把锁要是一把可重入锁（避免死锁）</li>
-<li>这把锁最好是一把阻塞锁（根据业务需求考虑要不要这条）</li>
-<li>这把锁最好是一把公平锁（根据业务需求考虑要不要这条）</li>
-<li>有高可用的获取锁和释放锁功能</li>
-<li>获取锁和释放锁的性能要好</li>
-</ul>
-<h3 id="基于数据库做分布式锁"><a href="#基于数据库做分布式锁" class="headerlink" title="基于数据库做分布式锁"></a>基于数据库做分布式锁</h3><h4 id="基于表主键唯一做分布式锁"><a href="#基于表主键唯一做分布式锁" class="headerlink" title="基于表主键唯一做分布式锁"></a>基于表主键唯一做分布式锁</h4><p>利用主键唯一的特性，如果有多个请求同时提交到数据库的话，数据库会保证只有一个操作可以成功，那么我们就可以认为操作成功的那个线程获得了该方法的锁，当方法执行完毕之后，想要释放锁的话，删除这条数据库记录即可。</p>
-<h4 id="基于表字段版本号做分布式锁"><a href="#基于表字段版本号做分布式锁" class="headerlink" title="基于表字段版本号做分布式锁"></a>基于表字段版本号做分布式锁</h4><p>这个策略源于 mysql 的 mvcc 机制，使用这个策略其实本身没有什么问题，唯一的问题就是对数据表侵入较大，我们要为每个表设计一个版本号字段，然后写一条判断 sql 每次进行判断，增加了数据库操作的次数，在高并发的要求下，对数据库连接的开销也是无法忍受的。</p>
-<h4 id="基于数据库排他锁做分布式锁"><a href="#基于数据库排他锁做分布式锁" class="headerlink" title="基于数据库排他锁做分布式锁"></a>基于数据库排他锁做分布式锁</h4><p>在查询语句后面增加for update，数据库会在查询过程中给数据库表增加排他锁 (注意： InnoDB 引擎在加锁的时候，只有通过索引进行检索的时候才会使用行级锁，否则会使用表级锁。这里我们希望使用行级锁，就要给要执行的方法字段名添加索引，值得注意的是，这个索引一定要创建成唯一索引，否则会出现多个重载方法之间无法同时被访问的问题。重载方法的话建议把参数类型也加上。)。当某条记录被加上排他锁之后，其他线程无法再在该行记录上增加排他锁。我们可以认为获得排他锁的线程即可获得分布式锁，当获取到锁之后，可以执行方法的业务逻辑，执行完方法之后，通过connection.commit()操作来释放锁。</p>
-<h3 id="基于-Redis-做分布式锁"><a href="#基于-Redis-做分布式锁" class="headerlink" title="基于 Redis 做分布式锁"></a>基于 Redis 做分布式锁</h3><h4 id="基于-REDIS-的-SETNX-、EXPIRE-方法做分布式锁"><a href="#基于-REDIS-的-SETNX-、EXPIRE-方法做分布式锁" class="headerlink" title="基于 REDIS 的 SETNX()、EXPIRE() 方法做分布式锁"></a>基于 REDIS 的 SETNX()、EXPIRE() 方法做分布式锁</h4><p>setnx 的含义就是 SET if Not Exists，其主要有两个参数 setnx(key, value)。该方法是原子的，如果 key 不存在，则设置当前 key 成功，返回 1；如果当前 key 已经存在，则设置当前 key 失败，返回 0。</p>
-<p>expire 设置过期时间，要注意的是 setnx 命令不能设置 key 的超时时间，只能通过 expire() 来对 key 设置。</p>
-<p>使用步骤</p>
-<ol>
-<li><p>setnx(lockkey, 1) 如果返回 0，则说明占位失败；如果返回 1，则说明占位成功</p>
+        <h1 id="jhat"><a href="#jhat" class="headerlink" title="jhat"></a>jhat</h1><p>分析Java堆。此命令是实验性的，不受支持。</p>
+<h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p><code>jhat [ options ] heap-dump-file</code></p>
+<h2 id="选项"><a href="#选项" class="headerlink" title="选项"></a>选项</h2><p>命令行选项。</p>
+<ul>
+<li><p>-stack false | true<br>关闭跟踪对象分配调用堆栈。如果堆转储中没有分配站点信息，则必须将此标志设置为false。默认值为true。</p>
 </li>
-<li><p>expire() 命令对 lockkey 设置超时时间，为的是避免死锁问题。</p>
+<li><p>-refs false | true<br>关闭对对象引用的跟踪。默认值为true。默认情况下，将为堆中的所有对象计算后向指针，即指向指定对象的对象，例如引用程序或传入引用。</p>
 </li>
-<li><p>执行完业务代码后，可以通过 delete 命令删除 key。</p>
+<li><p>-port 端口号<br>设置jhatHTTP服务器的端口。默认值为7000。</p>
 </li>
-</ol>
-<h4 id="基于-REDLOCK-做分布式锁"><a href="#基于-REDLOCK-做分布式锁" class="headerlink" title="基于 REDLOCK 做分布式锁"></a>基于 REDLOCK 做分布式锁</h4><p>Redlock 是 Redis 的作者 antirez 给出的集群模式的 Redis 分布式锁，它基于 N 个完全独立的 Redis 节点（通常情况下 N 可以设置成 5）。</p>
-<p>算法的步骤如下：</p>
-<ol>
-<li>客户端获取当前时间，以毫秒为单位。</li>
-<li>客户端尝试获取 N 个节点的锁，（每个节点获取锁的方式和前面说的缓存锁一样），N 个节点以相同的 key 和 value 获取锁。客户端需要设置接口访问超时，接口超时时间需要远远小于锁超时时间，比如锁自动释放的时间是 10s，那么接口超时大概设置 5-50ms。这样可以在有 redis 节点宕机后，访问该节点时能尽快超时，而减小锁的正常使用。</li>
-<li>客户端计算在获得锁的时候花费了多少时间，方法是用当前时间减去在步骤一获取的时间，只有客户端获得了超过 3 个节点的锁，而且获取锁的时间小于锁的超时时间，客户端才获得了分布式锁。</li>
-<li>客户端获取的锁的时间为设置的锁超时时间减去步骤三计算出的获取锁花费时间。</li>
-<li>如果客户端获取锁失败了，客户端会依次删除所有的锁。<br>使用 Redlock 算法，可以保证在挂掉最多 2 个节点的时候，分布式锁服务仍然能工作，这相比之前的数据库锁和缓存锁大大提高了可用性，由于 redis 的高效性能，分布式缓存锁性能并不比数据库锁差。</li>
-</ol>
-<h3 id="基于-ZooKeeper-做分布式锁"><a href="#基于-ZooKeeper-做分布式锁" class="headerlink" title="基于 ZooKeeper 做分布式锁"></a>基于 ZooKeeper 做分布式锁</h3><h4 id="ZOOKEEPER-锁相关基础知识"><a href="#ZOOKEEPER-锁相关基础知识" class="headerlink" title="ZOOKEEPER 锁相关基础知识"></a>ZOOKEEPER 锁相关基础知识</h4><ul>
-<li>zk 一般由多个节点构成（单数），采用 zab 一致性协议。因此可以将 zk 看成一个单点结构，对其修改数据其内部自动将所有节点数据进行修改而后才提供查询服务。</li>
-<li>zk 的数据以目录树的形式，每个目录称为 znode， znode 中可存储数据（一般不超过 1M），还可以在其中增加子节点。</li>
-<li>子节点有三种类型。序列化节点，每在该节点下增加一个节点自动给该节点的名称上自增。临时节点，一旦创建这个 znode 的客户端与服务器失去联系，这个 znode 也将自动删除。最后就是普通节点。</li>
-<li>Watch 机制，client 可以监控每个节点的变化，当产生变化会给 client 产生一个事件。</li>
+<li><p>-exclude exclude-file<br>指定一个文件，该文件列出了应从可达对象查询中排除的数据成员。例如，如果文件列出java.lang.String.value，则无论何时o计算从特定对象可访问的对象列表，java.lang.String.value都不会考虑涉及字段的引用路径。</p>
+</li>
+<li><p>-baseline exclude-file<br>指定基线堆转储。两个堆转储中具有相同对象ID的对象都标记为不是新对象。其他对象被标记为新对象。这对于比较两个不同的堆转储很有用。</p>
+</li>
+<li><p>-debug int<br>设置此工具的调试级别。级别0表示没有调试输出。为更多详细模式设置较高的值。</p>
+</li>
+<li><p>-version<br>报告发布编号并退出</p>
+</li>
+<li><p>-h<br>显示帮助消息并退出。</p>
+</li>
+<li><p>-help<br>显示帮助消息并退出。</p>
+</li>
+<li><p>-Jflag<br>传递flag到在其jhat上运行命令的Java虚拟机。例如，-J-Xmx512m使用最大堆大小为512 MB。</p>
+</li>
 </ul>
-<h4 id="ZK-基本锁"><a href="#ZK-基本锁" class="headerlink" title="ZK 基本锁"></a>ZK 基本锁</h4><ul>
-<li>原理：利用临时节点与 watch 机制。每个锁占用一个普通节点 /lock，当需要获取锁时在 /lock 目录下创建一个临时节点，创建成功则表示获取锁成功，失败则 watch/lock 节点，有删除操作后再去争锁。临时节点好处在于当进程挂掉后能自动上锁的节点自动删除即取消锁。</li>
-<li>缺点：所有取锁失败的进程都监听父节点，很容易发生羊群效应，即当释放锁后所有等待进程一起来创建节点，并发量很大。</li>
+<h2 id="堆转储文件"><a href="#堆转储文件" class="headerlink" title="堆转储文件"></a>堆转储文件</h2><p>要浏览的Java二进制堆转储文件。对于包含多个堆转储的转储文件，您可以通过#<number>在文件名后附加名称来指定文件中的哪个转储myfile.hprof#3。</number></p>
+<h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>该jhat命令解析Java堆转储文件并启动Web服务器。该jhat命令使您可以使用自己喜欢的Web浏览器浏览堆转储。该jhat命令支持预先设计的查询，例如显示已知类的所有实例MyClass以及对象查询语言（OQL）。OQL与SQL相似，除了查询堆转储。可从jhat命令显示的OQL帮助页面获得OQL帮助。使用默认端口，可以从<a href="http://localhost:7000/oqlhelp" target="_blank" rel="noopener">http://localhost:7000/oqlhelp</a> /获得OQL帮助。</p>
+<p>有几种方法可以生成Java堆转储：</p>
+<ul>
+<li>使用该jmap -dump选项在运行时获取堆转储。参见jmap（1）。</li>
+<li>使用该jconsole选项HotSpotDiagnosticMXBean在运行时获取堆转储。请参阅jconsole（1）和HotSpotDiagnosticMXBean接口说明，网址为<br><a href="http://docs.oracle.com/javase/8/docs/jre/api/management/extension/com/sun/management/HotSpotDiagnosticMXBean.html" target="_blank" rel="noopener">http://docs.oracle.com/javase/8/docs/jre/api/management/extension/com/sun/management/HotSpotDiagnosticMXBean.html</a></li>
+<li>OutOfMemoryError通过指定-XX:+HeapDumpOnOutOfMemoryErrorJava虚拟机（JVM）选项引发时，将生成堆转储。</li>
+<li>使用hprof命令。请参阅HPROF：堆/ CPU分析工具，网址为：<br><a href="http://docs.oracle.com/javase/8/docs/technotes/samples/hprof.html" target="_blank" rel="noopener">http://docs.oracle.com/javase/8/docs/technotes/samples/hprof.html</a></li>
 </ul>
-<h4 id="ZK-锁优化"><a href="#ZK-锁优化" class="headerlink" title="ZK 锁优化"></a>ZK 锁优化</h4><p>原理：上锁改为创建临时有序节点，每个上锁的节点均能创建节点成功，只是其序号不同。只有序号最小的可以拥有锁，如果这个节点序号不是最小的则 watch 序号比本身小的前一个节点 (公平锁)。</p>
-<h4 id="步骤："><a href="#步骤：" class="headerlink" title="步骤："></a>步骤：</h4><ol>
-<li>在 /lock 节点下创建一个有序临时节点 (EPHEMERAL_SEQUENTIAL)。</li>
-<li>判断创建的节点序号是否最小，如果是最小则获取锁成功。不是则取锁失败，然后 watch 序号比本身小的前一个节点。</li>
-<li>当取锁失败，设置 watch 后则等待 watch 事件到来后，再次判断是否序号最小。</li>
-<li>取锁成功则执行代码，最后释放锁（删除该节点）。</li>
-</ol>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2019/06/11/kongzheng1993-关于分布式锁/" data-id="cjzh3e0cr001p16c8njzb0za1" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-jhat/" data-id="ck8d4ki4v002520c82uxv5rbr" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/quartz/">quartz</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式/">分布式</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/锁/">锁</a></li></ul>
-
     </footer>
   </div>
   
@@ -163,158 +122,57 @@
 
 
   
-    <article id="post-kongzheng1993-关于学习业务的思考" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-kongzheng1993-jmap" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/06/05/kongzheng1993-关于学习业务的思考/" class="article-date">
-  <time datetime="2019-06-05T06:02:45.000Z" itemprop="datePublished">2019-06-05</time>
+    <a href="/2020/03/08/kongzheng1993-jmap/" class="article-date">
+  <time datetime="2020-03-07T16:00:00.000Z" itemprop="datePublished">2020-03-08</time>
 </a>
     
   </div>
   <div class="article-inner">
     
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/05/kongzheng1993-关于学习业务的思考/">关于学习业务的思考</a>
-    </h1>
-  
-
-      </header>
-    
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="事情经过"><a href="#事情经过" class="headerlink" title="事情经过"></a>事情经过</h2><p>昨天申请休年假了，之前做好的一个需求，已经交给测试人员了。BA下午通知我要去和五楼的客户过一个需求，这个客户要求看一下我们的代码。我心想：这客户厉害了啊，都会看代码了。之后了解到这个人是从我们公司去到甲方的。</p>
-<p>带着电脑来到五楼，见到了她，一个四十多岁的大妈，穿的很接地气，和我们三楼的甲方小姐姐天壤之别，虽然我们三楼的甲方小姐姐都很难解释通需求问题。</p>
-<p>她让我找出来我写的代码，然后让我给他解释代码逻辑。我就开始讲啊：“这里是一个开关，存在数据库，有缓存，1为开，0为关，然后判断……”。我像之前给三楼小姐姐讲代码一样去讲。突然她让我等一下，然后抢过去我的电脑去看，说：“你这个方式是去调接口吧”，我说对，然后她继续说：“把你调这个方法的地方全都找出来”。我find useage一下。“你这不对啊，咱们要修改的地方有五个，你这方法调用怎么只有当前这个类啊”。我开始懵逼，转头看ba，ba小姐姐也是一脸懵。我翻出来需求文档，说我就是按需求文档来的。大妈开始对ba说了一大堆，关于业务的，我全程懵逼。后来我离了一下，客户要求的是修改不良信息相关的五个地方，包括加解黑、不良信息处理、一级客服不良信息、开关机和一个后台task。但是需求文档上写的是修改不良信息处理，我就以为是只修改不良信息处理一个地方。然后客户要求我找到这五个地方的代码给他看一下。我找不出。。。</p>
-<p>最后ba打圆场，我们先撤了。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>对于客服系统，我并不感冒，一直页没有认真对待，因为中国移动的业务太复杂了，我不想浪费事件在业务上面，我心里一直只有技术。</p>
-<p>所以看到ba写的需求文档，我想也不想，就按这文档去做，不会去考虑业务。</p>
-<p>通过这件事，我知道我错了，我要重新理清技术和业务的关系了。</p>
-<p>知乎上有人说：只会写代码的人叫码农，技术过硬又精通业务才能称得上工程师。之前我一直认为，确认需求是ba的事儿，跟我没有关系，我只需要写代码。如果你只会写代码，你不是不可替代的，你是可有可无的，因为这个世界上不缺会写代码的人，毕竟程序员一抓一大把。多了解业务会让我们的思想高一个层次，不是只停留在能用就行的层面，而是让我们找到更好的解决方案，作出更完美的产品。积累业务能力，也能让我们更加了解行业，对职业发展有助力。</p>
+        <h2 id="jmap"><a href="#jmap" class="headerlink" title="jmap"></a>jmap</h2><p>打印进程，核心文件或远程调试服务器的共享对象内存映射或堆内存详细信息。此命令是实验性的，不受支持。</p>
+<h3 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jmap [ 选项 ] pid</span><br><span class="line">jmap [ options ] 可执行 核心</span><br><span class="line">jmap [ 选项 ] [ pid ] 服务器ID @] remote-hostname-or-IP</span><br></pre></td></tr></table></figure>
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2019/06/05/kongzheng1993-关于学习业务的思考/" data-id="cjzh3e0cp001n16c8kkq8z1nq" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/业务/">业务</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/学习/">学习</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/职业/">职业</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-nohup和&amp;" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/06/05/kongzheng1993-nohup和&/" class="article-date">
-  <time datetime="2019-06-05T05:52:46.000Z" itemprop="datePublished">2019-06-05</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Linux/">Linux</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/05/kongzheng1993-nohup和&/">nohup和&amp;</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>昨天申请休年假，但是组长表示让我别休年假，给我两天调休，所以今天就开始休息了。。。<br>闲来无事，想起一个困扰多年的问题，RocketMQ启动时使用nohup和&amp;命令，&amp;我知道时后台运行，可以在后台进程中找到运行的程序，而且经常被程序的输出搞得无法执行下一条命令。。。今天就来总结一下。</p>
-<h3 id="使用-amp-后台运行程序"><a href="#使用-amp-后台运行程序" class="headerlink" title="使用&amp;后台运行程序"></a>使用&amp;后台运行程序</h3><ul>
-<li>结果会输出到终端</li>
-<li>使用Ctrl + C发送SIGINT信号，程序免疫</li>
-<li>关闭session发送SIGHUP信号，程序关闭</li>
-</ul>
-<h3 id="使用nohup运行程序"><a href="#使用nohup运行程序" class="headerlink" title="使用nohup运行程序"></a>使用nohup运行程序</h3><ul>
-<li>结果默认会输出到nohup.out</li>
-<li>使用Ctrl + C发送SIGINT信号，程序关闭</li>
-<li>关闭session发送SIGHUP信号，程序免疫</li>
-</ul>
-<h3 id="使用nohup和-amp-配合来启动程序"><a href="#使用nohup和-amp-配合来启动程序" class="headerlink" title="使用nohup和&amp;配合来启动程序"></a>使用nohup和&amp;配合来启动程序</h3><ul>
-<li>同时免疫SIGINT和SIGHUP信号</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2019/06/05/kongzheng1993-nohup和&/" data-id="cjzh3e0cm001k16c8nps0l0w2" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-MQ" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/06/04/kongzheng1993-MQ/" class="article-date">
-  <time datetime="2019-06-04T06:36:47.000Z" itemprop="datePublished">2019-06-04</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/04/kongzheng1993-MQ/">MQ</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近去面试了，想去一个技术氛围好的团队。。。一直都认为自己菜，环境占大部分问题，是因为队友菜，我才会菜，即使我努力也是菜。面试官很好，很和蔼，让我对自己有了更清晰的认识，我会最近应该不会再面试了，我要沉淀一下，总结一下。</p>
-<h2 id="MQ使用场景"><a href="#MQ使用场景" class="headerlink" title="MQ使用场景"></a>MQ使用场景</h2><p>调用方实时依赖执行结果的业务场景，要使用调用，而不是mq。</p>
-<ol>
-<li>task代替cron排班表，不再硬编码执行时间，而是通过在前一个任务执行完发布消息，下一个任务订阅这个消息来完成整个流程。</li>
-<li>上游不关心执行结果。用mq解耦。上游服务不用等待下游服务处理完再返回。即使下游服务宕机，用户也不会感知到，一旦下游服务恢复正常可以继续消费之前的消息。</li>
-<li>上游关心执行结果，但是执行时间长。这种情况经常使用回调网管+mq来完成。<br> 比如下面的过程：<ul>
-<li>调用方直接跨公网调用微信接口</li>
-<li>微信返回调用成功，此时并不代表返回成功</li>
-<li>微信执行完成后，回调统一网关</li>
-<li>网关将返回结果通知MQ</li>
-<li>请求方收到结果通知</li>
-</ul>
+<h4 id="选项"><a href="#选项" class="headerlink" title="选项"></a>选项</h4><p>命令行选项。</p>
+<ul>
+<li><p>&lt;无选择&gt;<br>不使用任何选项时，该jmap命令将打印共享对象映射。对于目标JVM中加载的每个共享对象，将打印共享对象文件的开始地址，映射的大小和完整路径。此行为类似于Oracle Solaris pmap实用程序。</p>
 </li>
-</ol>
-<h2 id="MQ的作用"><a href="#MQ的作用" class="headerlink" title="MQ的作用"></a>MQ的作用</h2><ol>
-<li>解耦：减小各系统间的耦合度，防止牵一发而动全身。</li>
-<li>异步：提高系统响应时间，本来同步接口需要等下游系统处理完成再返回，现在可以直接返回，下游系统通过消费消息来完成自己的业务。</li>
-<li>削峰/限流：在大量请求来临的时候，系统可能无法即使处理，严重的情况可能会导致系统崩溃。使用mq，可以将请求写到mq，下游系统根据自己的能力去消费消息。</li>
-</ol>
-
+<li><p>-dump：[live，]format=b，file=filename<br>将Java堆以hprof二进制格式转储到filename。的live子选项是可选的，但是当指定时，仅在堆活动对象被倾倒。要浏览堆转储，可以使用jhat（1）命令读取生成的文件。</p>
+</li>
+<li><p>-finalizerinfo<br>打印有关正在等待完成的对象的信息。</p>
+</li>
+<li><p>-heap<br>打印所用垃圾收集的堆摘要，头配置和逐代堆使用情况。此外，还会打印实习字符串的数量和大小。</p>
+</li>
+<li><p>-histo [：live]<br>打印堆的直方图。对于每个Java类，将打印对象数量，以字节为单位的内存大小以及完全限定的类名称。JVM内部类名称打印有星号（*）前缀。如果live指定了子选项，则仅计算活动对象。</p>
+</li>
+<li><p>-clstats<br>打印Java堆的类加载器明智的统计信息。对于每个类加载器，将打印其名称，活动程度，地址，父类加载器以及已加载的类的数量和大小。</p>
+</li>
+<li><p>-F<br>力。当pid不响应时，将此选项与jmap -dump或选项一起使用jmap -histo。该live子选项并不在此模式下支持。</p>
+</li>
+<li><p>-h<br>打印帮助信息。</p>
+</li>
+<li><p>-help<br>打印帮助信息。</p>
+</li>
+<li><p>-Jflag<br>传递flag到jmap运行命令的Java虚拟机。</p>
+</li>
+</ul>
+<h4 id="pid"><a href="#pid" class="headerlink" title="pid"></a>pid</h4><p>要为其打印内存映射的进程ID。该进程必须是Java进程。要获取机器上运行的Java进程的列表，请使用jps（1）命令。</p>
+<h4 id="可执行文件"><a href="#可执行文件" class="headerlink" title="可执行文件"></a>可执行文件</h4><p>生成核心转储的Java可执行文件。</p>
+<h4 id="核心"><a href="#核心" class="headerlink" title="核心"></a>核心</h4><p>要为其打印内存映射的核心文件。</p>
+<h4 id="远程主机名或IP"><a href="#远程主机名或IP" class="headerlink" title="远程主机名或IP"></a>远程主机名或IP</h4><p>远程调试服务器hostname或IP地址。参见jsadebugd（1）。</p>
+<h4 id="服务器ID"><a href="#服务器ID" class="headerlink" title="服务器ID"></a>服务器ID</h4><p>当多个调试服务器在同一远程主机上运行时使用的可选唯一ID。</p>
+<h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>该jmap命令显示指定进程，核心文件或远程调试服务器的共享对象内存映射或堆内存详细信息。如果指定的进程在64位Java虚拟机（JVM）上运行，则可能需要指定该-J-d64选项，例如：jmap -J-d64 -heap pid。</p>
+<pre><code>注意：此实用程序不受支持，在以后的JDK版本中可能不可用。在dbgeng.dll不存在该文件的Windows系统上，必须安装Windows调试工具才能使这些工具正常工作。在PATH环境变量中应包含的位置jvm.dll所使用的目标进程或从中故障转储文件被产生，例如位置的文件：set PATH=%JDK_HOME%\jre\bin\client;%PATH%。</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2019/06/04/kongzheng1993-MQ/" data-id="cjzh3e0cj001h16c84mpttuxz" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-jmap/" data-id="ck8d4ki50002c20c8kd6f3egp" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mq/">mq</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/消息队列/">消息队列</a></li></ul>
-
     </footer>
   </div>
   
@@ -322,99 +180,841 @@
 
 
   
-    <article id="post-kongzheng1993-resume" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-kongzheng1993-URLEncode" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/06/03/kongzheng1993-resume/" class="article-date">
-  <time datetime="2019-06-02T16:00:00.000Z" itemprop="datePublished">2019-06-03</time>
+    <a href="/2020/03/08/kongzheng1993-URLEncode/" class="article-date">
+  <time datetime="2020-03-07T16:00:00.000Z" itemprop="datePublished">2020-03-08</time>
 </a>
     
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/resume/">resume</a>
-  </div>
-
   </div>
   <div class="article-inner">
     
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/03/kongzheng1993-resume/">Resume</a>
-    </h1>
-  
-
-      </header>
-    
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="联系方式"><a href="#联系方式" class="headerlink" title="联系方式"></a>联系方式</h1><ul>
-<li>手机：15810692477</li>
-<li>Email：<a href="mailto:kongzheng1993@hotmail.com" target="_blank" rel="noopener">kongzheng1993@hotmail.com</a></li>
-<li>QQ/微信号：767141624/KXMISA</li>
-</ul>
-<hr>
-<h1 id="个人信息"><a href="#个人信息" class="headerlink" title="个人信息"></a>个人信息</h1><ul>
-<li>孔征/男/1992 </li>
-<li>本科/菏泽学院/计算机与信息工程系</li>
-<li>毕业时间：2016年7月</li>
-<li>技术博客：<a href="https://kongzheng1993.github.io">https://kongzheng1993.github.io</a></li>
-<li>Github: <a href="https://github.com/kongzheng1993" target="_blank" rel="noopener">https://github.com/kongzheng1993</a></li>
-<li>期望职位：Java开发工程师</li>
-</ul>
-<hr>
-<h1 id="工作经验"><a href="#工作经验" class="headerlink" title="工作经验"></a>工作经验</h1><h2 id="软通动力信息服务有限公司北京分公司-（2016年8月-2018年10月）"><a href="#软通动力信息服务有限公司北京分公司-（2016年8月-2018年10月）" class="headerlink" title="软通动力信息服务有限公司北京分公司 （2016年8月-2018年10月）"></a>软通动力信息服务有限公司北京分公司 （2016年8月-2018年10月）</h2><p>中国移动在线服务公司北京分公司10086&amp;12580呼叫中心开发运维工作。</p>
-<h2 id="亚信科技（中国）有限公司-（2018年10月至今）"><a href="#亚信科技（中国）有限公司-（2018年10月至今）" class="headerlink" title="亚信科技（中国）有限公司 （2018年10月至今）"></a>亚信科技（中国）有限公司 （2018年10月至今）</h2><p>中国移动crm项目、客服项目、中移在线北京分公司统一接口平台、一体机等项目开发。</p>
-<hr>
-<h1 id="专业技能"><a href="#专业技能" class="headerlink" title="专业技能"></a>专业技能</h1><ol>
-<li>熟悉Java，了解Python、Shell、C/C++</li>
-<li>熟练使用SSM等开源框架</li>
-<li>熟练使用Dubbo分布式服务框架，了解zookeeper</li>
-<li>熟练使用ActiveMQ</li>
-<li>熟练使用Redis</li>
-<li>熟悉微信小程序的开发</li>
-<li>熟练使用Mysql、Oracle数据库</li>
-<li>熟悉Jsp、JavaScrip、Ajax、CSS等web技术</li>
-<li>熟练使用Git、SVN、Maven</li>
-<li>熟练使用IDEA、Eclipse等开发工具</li>
-<li>了解Docker</li>
-</ol>
-<hr>
-<h1 id="项目经验"><a href="#项目经验" class="headerlink" title="项目经验"></a>项目经验</h1><h2 id="中移在线一体机项目-（2019年3月-2019年4月）"><a href="#中移在线一体机项目-（2019年3月-2019年4月）" class="headerlink" title="中移在线一体机项目 （2019年3月-2019年4月）"></a>中移在线一体机项目 （2019年3月-2019年4月）</h2><h3 id="项目介绍"><a href="#项目介绍" class="headerlink" title="项目介绍"></a>项目介绍</h3><p>中移在线一体机项目是供中国移动营业厅一体机和pad等移动设备使用的web应用，使用springboot+freemarker。调用中移在线统一接口平台完成客户业务。</p>
-<h3 id="责任描述"><a href="#责任描述" class="headerlink" title="责任描述"></a>责任描述</h3><p>从零搭建并开发，因为是给一体机和pad等终端提供页面，调用统一接口平台，所以使用了较为简单快速的springboot+freemarker，并在项目中负责开发了人证比对、实名制资料登记、补卡等基础流程，组内其他成员会在此基础上根据客户需求增加功能。</p>
-<h2 id="代理商供货信息-微信小程序-（2019年2月-2019年3月）"><a href="#代理商供货信息-微信小程序-（2019年2月-2019年3月）" class="headerlink" title="代理商供货信息 微信小程序 （2019年2月-2019年3月）"></a>代理商供货信息 微信小程序 （2019年2月-2019年3月）</h2><h3 id="项目介绍-1"><a href="#项目介绍-1" class="headerlink" title="项目介绍"></a>项目介绍</h3><p>代理商供货信息小程序包含供应商入驻、用户发布消息、供应商产商品管理、用户搜索、用户下单、用户评价等功能。小程序根据用户定位信息显示本区县内供应商和发布信息。用户可查看附近供应商信息，可点击发布tab进行信息发布，包含出租、出售、求购、招聘等信息。</p>
-<h3 id="责任描述-1"><a href="#责任描述-1" class="headerlink" title="责任描述"></a>责任描述</h3><p>负责主页、搜索页和定位页的小程序和后台系统开发。包含轮播图、搜索、定位、推荐产品、可自定义tab选项（附近、优惠等）、首页主体内容（供应商列表、发布信息列表）等。</p>
-<h2 id="iBet彩票微信小程序-（2018年10月-2018年12月）"><a href="#iBet彩票微信小程序-（2018年10月-2018年12月）" class="headerlink" title="iBet彩票微信小程序 （2018年10月-2018年12月）"></a>iBet彩票微信小程序 （2018年10月-2018年12月）</h2><h3 id="项目内容"><a href="#项目内容" class="headerlink" title="项目内容"></a>项目内容</h3><p>iBet彩票微信小程序。父母经营一个福利彩票投注站，因为国家规定网上禁止彩票销售，很多彩民不能及时前往投注站投注，这些彩民只能通过打电话或者微信联系投注，而且容易出现描述不清导致买错号码或者账务纠纷等问题，所以决定帮他们解决这个问题。采用微信小程序开发较快，而且彩民使用比较方便。彩民可以随时去投注站进行充值，在小程序提交充值申请，投注站在收款后审批申请，彩民即可在小程序“我”tab页中查看自己的余额。彩民可以在每日19时之前使用iBet彩票微信小程序选号、下单，后台进行数据入库。投注站可以在每日19时以后通过管理系统查看本投注站所有的订单，并打印彩票，当日上传照片。彩民可以在”已购买“tab页查看已购买彩票详情，点击可查看彩票照片。本项目使用ssm框架。考虑到投注站信息调用量大且不会轻易改变，使用redis保存各投注站信息。</p>
-<h3 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h3><p>前端使用微信小程序，开发较快，学习成本较低。后台使用ssm框架，redis作缓存，mysql数据库。另有一个供投注站使用对管理系统，使用ssm框架，投注站管理员登陆后可以配置本投注站数据（上架玩法等），并在此系统完成彩民管理、订单查看和充值提现等操作。redis主要用来保存投注站配置信息。</p>
-<h2 id="中移在线统一接口平台-（2018年10月至今）"><a href="#中移在线统一接口平台-（2018年10月至今）" class="headerlink" title="中移在线统一接口平台 （2018年10月至今）"></a>中移在线统一接口平台 （2018年10月至今）</h2><h3 id="项目介绍-2"><a href="#项目介绍-2" class="headerlink" title="项目介绍"></a>项目介绍</h3><p>此项目为中国移动在线公司北京分公司统一接口平台。此系统为中间层，中移在线北京分公司等10086IVR、营业厅一体机、app、网站等都通过调用此接口平台，由接口平台转接到能力提供方，再将能力响应信息返回给调用方。大部分接口要做一些数据格式的转换和数据内容的映射，以适应各个渠道的调用。此系统为分布式架构（nginx、tomcat、redis、mysql），使用ssm框架，涵盖jersey、dubbo、zookeeper等技术。通过一个web项目提供接口的配置功能，在页面可以进行接入接口、转接接口、接口映射、接入参数、转接参数、参数映射、接入渠道、渠道权限和能力等的配置。当收到调用，程序会通过调用url获取到通过redis/mysql获取到此接口的相关配置，并根据获取到的参数配置进行参数校验、参数处理、参数映射，调用转接接口获取响应后处理并返回给调用方。</p>
-<h3 id="工作内容"><a href="#工作内容" class="headerlink" title="工作内容"></a>工作内容</h3><p>根据需求完成各类接口的开发、测试、联调、发布。完成了营业厅一体机身份验证、登陆、选号、获取写卡信息、写卡结果反馈全流程接口。在工作中不断深入、了解项目架构和公司框架。</p>
-<h2 id="北京移动客服系统-（2018年12月至今）"><a href="#北京移动客服系统-（2018年12月至今）" class="headerlink" title="北京移动客服系统 （2018年12月至今）"></a>北京移动客服系统 （2018年12月至今）</h2><h3 id="项目介绍-3"><a href="#项目介绍-3" class="headerlink" title="项目介绍"></a>项目介绍</h3><p>此系统使用亚信AppFrame（封装了ssm、jquery、html等技术）框架，提供给北京移动客服人员使用，业务比较复杂。<br>主要功能：</p>
-<ol>
-<li>呼叫中心，客服可以通过此系·统呼叫移动客户，帮客户转接其他坐席。</li>
-<li>工单，新建工单、工单派发、认领等功能等</li>
-<li>服务，提供给其他系统等网络接口。</li>
-<li>客户关系管理，客户黑灰红白名单录入、设置等，客户信息查询、修改等</li>
-<li>后台进程，包括task、fp、tf等。<h3 id="工作内容-1"><a href="#工作内容-1" class="headerlink" title="工作内容"></a>工作内容</h3>在原有基础上新增、修改功能。完成黑灰名单自动填充失效时间、工单流转信息查询功能、向crm提供工单流转信息查询功能接口等需求。认真了解了公司框架，熟练完成前后端开发。</li>
-</ol>
-<h2 id="中移在线工单接口机-（2018年10月至今）"><a href="#中移在线工单接口机-（2018年10月至今）" class="headerlink" title="中移在线工单接口机 （2018年10月至今）"></a>中移在线工单接口机 （2018年10月至今）</h2><h3 id="项目介绍-4"><a href="#项目介绍-4" class="headerlink" title="项目介绍"></a>项目介绍</h3><p>此项目为ssm架构，比较简陋，基本不进行中间处理，只提供工单类接口服务。此系统作为中间层，接收调用方请求，进行参数校验、映射后调用服务提供方，获取响应后返回给调用方。</p>
-<h3 id="工作内容-2"><a href="#工作内容-2" class="headerlink" title="工作内容"></a>工作内容</h3><p>根据客户需求完成工单接口。<br>在受理预约（移动用户向客服人员预约办理业务）需求中，在项目中使用quartz框架，为系统增加了作业调度功能。此需求是客服人员在页面填写客户预约内容（客户手机号码、客服人员手机号码、受理内容简述、预约时间等），通过调用接口将数据传到接口机，数据入库，在预约到时间发送短信给客户和客服人员。整合spring和quartz，每整点到db取出本小时内所有预约数据，按分钟为key存入本分钟内所有的预约数据。每整分钟在redis取出本分钟预约数据，循环下发短信。<br>通过此需求，为系统增加了作业调度功能，为以后相似需求提供了模版，受到了领导和客户的好评。</p>
-<h2 id="会员摇奖系统-（2018年5月-2018年6月）"><a href="#会员摇奖系统-（2018年5月-2018年6月）" class="headerlink" title="会员摇奖系统 （2018年5月-2018年6月）"></a>会员摇奖系统 （2018年5月-2018年6月）</h2><h3 id="项目介绍-5"><a href="#项目介绍-5" class="headerlink" title="项目介绍"></a>项目介绍</h3><p>本系统是提供给微信、微博等运营平台的抽奖接口，后期会做成商城。</p>
-<h3 id="实现方式-1"><a href="#实现方式-1" class="headerlink" title="实现方式"></a>实现方式</h3><p>使用MySQL数据库，ssm框架。 用户在页面填写手机号码获取验证码，调用阿里短信接口，实现短信验证。用户点击抽奖，后台将用户信息入库，判断用户是否中过奖(一 个用户在一次活动中只能中将一次)，并判断用户是否今日已经参加过活动(一个用户每日只能摇奖一次)，而后判断用户是否为没十次摇 奖记录的第六次，如果是则为中奖，修改数据库，将此条数据状态更新为中奖。返回包含中奖信息的JSON，前台显示中奖信息。 用户中奖后可以点击立即兑奖兑换相应的奖品，用户选择出行日期，通过ajax调用后台controller获取此次出行的相关信息显示在页面上。用 户输入手机号码，js调用后台方法判断是否为中奖号码。用户在页面选择出行人数，计算用户在扣除中奖后公司垫付的金额后的实际付款数目。用户点击支付来调用微信支付接口付款。 如果用户没有中奖，可以点击立即购买跳转到上面的兑奖页面，然后通过自费参加活动。详情请查看我的<a href="https://github.com/kongzheng1993/TmShop" target="_blank" rel="noopener">github:TmShop</a></p>
-<h2 id="testIVR配置文件生成工具-（2017年10月-2017年10月）"><a href="#testIVR配置文件生成工具-（2017年10月-2017年10月）" class="headerlink" title="testIVR配置文件生成工具 （2017年10月-2017年10月）"></a>testIVR配置文件生成工具 （2017年10月-2017年10月）</h2><h3 id="项目介绍-6"><a href="#项目介绍-6" class="headerlink" title="项目介绍"></a>项目介绍</h3><p>来到项目后发现大家使用的调试接口的工具testIVR(模拟ivr流程调用socket和http接口工具) 总是需要手动配置，而且错误率特别高，经常因为一个小问题找半天。在熟悉了testIVR之后，我使用python-tkinter写了一个自动生成testIVR配置文件的工具，目前在项目组内广泛应用，并得到了领导和客户的好评。</p>
-<h3 id="实现方式-2"><a href="#实现方式-2" class="headerlink" title="实现方式"></a>实现方式</h3><p>使用python的tkinter库编写gui。通过获取用户在输入控件(Entry)中输入的ivr_id、dtproxy_ip、dtproxy_id和参数配置。编写 cleanparam()函数清洗找出入参，和出参个数。编写dogenerate()函数生成ivr和dtproxy的配置，并循环生成入参、出参配置。使用python的 pyinstaller工具生成exe可执行文件。详情请查看我的<a href="https://github.com/kongzheng1993/GuiGenerateTestIVRConfig" target="_blank" rel="noopener">github:GuiGenerateTestIVRConfig</a></p>
-<hr>
-<h1 id="自我评价"><a href="#自我评价" class="headerlink" title="自我评价"></a>自我评价</h1><p>有较好的职业素养，对工作积极负责，有创新意识和团队合作精神。热爱技术、热爱编码。热情帮助同事解决问题。热爱学习，喜欢阅读技术书刊、源码，学习能力较强，能快速将学习内容转化为生产力。</p>
-<hr>
-<h1 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h1><p>感谢您花时间阅读我的简历，期待能有机会和您共事。</p>
+        <h1 id="URLEncoder"><a href="#URLEncoder" class="headerlink" title="URLEncoder"></a>URLEncoder</h1><p>今天写代码要发起一个HTTP GET请求，WebService接口我们随处可见，作为一个“业务程序员”我们也每天都在写。。。所以指尖跳动，分分钟就出现了下面的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">           encode = URLEncoder.encode(JsonUtil.convertObject2Json(reqParamsMap), <span class="string">"UTF-8"</span>).replace(<span class="string">"\\+"</span>, <span class="string">"%20"</span>);</span><br><span class="line">       &#125; <span class="keyword">catch</span> (UnsupportedEncodingException e) &#123;</span><br><span class="line">           logger.error(<span class="string">"URLEncoder.encodec出错： "</span>, e);</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
+
+<p>撸完码我回头看了一眼，我习以为常的URL编码，到底是为什么呢？我想大概是怕传输数据中的特殊字符造成什么不可预知的问题吧。</p>
+<p>工作完成，测试没有问题。我今天打算打破砂锅问到底，让我们一探究竟，到底为什么要编码？</p>
+<p><font color="red">知道了How，我们还要知道Why！！！</font></p>
+<h2 id="找资料"><a href="#找资料" class="headerlink" title="找资料"></a>找资料</h2><p>打开bing，国际搜索（梯子断了很久了……）在<code>stackoverflow</code>上看到也有很多人提出了这个问题，很多的人回答都指向了一个RFC</p>
+<pre><code>RFC(Request For Comments)-意即“请求评议”，包含了关于Internet的几乎所有重要的文字资料。
+通常，当某家机构或团体开发出了一套标准或提出对某种标准的设想，
+想要征询外界的意见时，就会在Internet上发放一份RFC，
+对这一问题感兴趣的人可以阅读该RFC并提出自己的意见；
+
+绝大部分网络标准的指定都是以RFC的形式开始，经过大量的论证和修改过程，
+由主要的标准化组织所指定的，但在RFC中所收录的文件并不都是正在使用或为大家所公认的，
+也有很大一部分只在某个局部领域被使用或并没有被采用，
+一份RFC具体处于什么状态都在文件中作了明确的标识.</code></pre><p><a href="https://tools.ietf.org/html/rfc1738" target="_blank" rel="noopener">RFC1738</a></p>
+<p><img src="/2020/03/08/kongzheng1993-URLEncode/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200317175415033.png" alt="image-20200317175415033"></p>
+<p>可以看到这个RFC是小LEE提出来的，里面规定了很多东西，比如url的格式、编码、字符，还有很多scheme，我没看全，看到了FTP和HTTP。</p>
+<h2 id="总结一波"><a href="#总结一波" class="headerlink" title="总结一波"></a>总结一波</h2><p>URL（统一资源定位符）是万维网中资源的地址。URL具有明确定义的结构，该结构由<a href="https://en.wikipedia.org/wiki/Tim_Berners-Lee" target="_blank" rel="noopener">万维网</a>的发明者<a href="https://en.wikipedia.org/wiki/Tim_Berners-Lee" target="_blank" rel="noopener">Tim Berners-Lee</a>在<a href="https://tools.ietf.org/html/rfc1738" target="_blank" rel="noopener">RFC 1738</a>中提出。</p>
+<p>每个网址都采用<em>通用语法</em>，如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scheme:[//[user:password@]host[:port]]path[?query][<span class="comment">#fragment]</span></span><br></pre></td></tr></table></figure>
+
+<p><code>[user:password@]</code>由于安全原因，不建议使用URL语法的某些部分，因此很少使用。以下是您在互联网上经常看到的URL的示例-</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.google.com/search?q=hello+world<span class="comment">#brs</span></span><br></pre></td></tr></table></figure>
+
+<p>对定义统一资源定位符（URL）语法的初始RFC进行了许多改进。当前定义通用URI语法的<a href="https://tools.ietf.org/html/rfc3986" target="_blank" rel="noopener">RFC</a>是<a href="https://tools.ietf.org/html/rfc3986" target="_blank" rel="noopener">RFC 3986</a>。这篇文章包含最新RFC文档中的信息。</p>
+<p>URL由属于US-ASCII字符集的有限字符集组成。这些字符包括数字（0-9），字母（AZ，az），以及一些特殊字符（<code>&quot;-&quot;</code>，<code>&quot;.&quot;</code>，<code>&quot;_&quot;</code>，<code>&quot;~&quot;</code>）。</p>
+<p>ASCII控制字符（例如退格，垂直制表符，水平制表，换行等），不安全的字符像<code>space</code>，<code>\</code>，<code>&lt;</code>，<code>&gt;</code>，<code>{</code>，<code>}</code>等等，以及ASCII字符以外的任何字符被不允许直接的URL内放置。</p>
+<p>此外，URL中有些字符具有特殊含义。这些字符称为<strong>保留</strong>字符。的保留字符的一些例子是<code>?</code>，<code>/</code>，<code>#</code>，<code>:</code>等作为URL的一部分发送，无论是在查询字符串或路径段，必须不包含这些字符的任何数据。</p>
+<p>那么，当我们需要在URL中传输包含这些不允许的字符的任何数据时，我们该怎么办？好吧，<strong>我们对它们进行编码！</strong></p>
+<blockquote>
+<p>URL编码将URL中保留的，不安全的和非ASCII字符转换为所有Web浏览器和服务器普遍接受并理解的格式。它首先将字符转换为一个或多个字节。然后，每个字节由两个十六进制数字表示，后跟一个百分号（<code>%</code>）-（例如<code>%xy</code>）。百分号用作转义字符。</p>
+</blockquote>
+<p>URL编码也称为百分比编码，因为它使用百分号（<code>%</code>）作为转义字符。</p>
+<h4 id="URL编码示例"><a href="#URL编码示例" class="headerlink" title="URL编码示例"></a>URL编码示例</h4><p><strong>空格：</strong>您可能会遇到的最常见的URL编码字符是<code>space</code>。<code>space</code>十进制字符的ASCII码为<code>32</code>，转换为十六进制时为<code>20</code>。现在，我们在十六进制表示形式之前加一个百分号（<code>%</code>），这使我们获得了URL编码值- <code>%20</code>。</p>
+<p><strong>+:</strong> 看到我一开始代码里的replace，那是因为：</p>
+<p><img src="/2020/03/08/kongzheng1993-URLEncode/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200317181423078.png" alt="image-20200317181423078"></p>
+<p>w3c的规定是空格被替换为<code>+</code>，Java中的URLEncoder正式这种情况，会把空格转成<code>+</code></p>
+<p><img src="/2020/03/08/kongzheng1993-URLEncode/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200317182519016.png" alt="image-20200317182519016"></p>
+<p>这就会导致在一些遵循RFC的应用上无法解码或其他问题，所以我们取一个折中的方法，要在<code>URLEncoder.encode()</code>之后把<code>+</code>替换为<code>%20</code></p>
+<h2 id="ASCII字符编码参考"><a href="#ASCII字符编码参考" class="headerlink" title="ASCII字符编码参考"></a>ASCII字符编码参考</h2><p>下表是ASCII字符对其相应的URL编码形式的引用。</p>
+<blockquote>
+<p>请注意，不需要编码字母数字ASCII字符。例如，您不需要编码字符<code>&#39;0&#39;</code>以<code>%30</code>如图所示下表。可以原样发送。但是根据RFC编码仍然有效。表格中所有可以安全地在URL中传输的字符都显示为绿色。</p>
+</blockquote>
+<p><strong>下表使用RFC 3986中定义的URL编码规则。</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">Decimal</th>
+<th align="left">Character</th>
+<th align="left">URL Encoding (UTF-8)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">0</td>
+<td align="left">NUL(null character)</td>
+<td align="left">%00</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">SOH(start of header)</td>
+<td align="left">%01</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">STX(start of text)</td>
+<td align="left">%02</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">ETX(end of text)</td>
+<td align="left">%03</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">EOT(end of transmission)</td>
+<td align="left">%04</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">ENQ(enquiry)</td>
+<td align="left">%05</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left">ACK(acknowledge)</td>
+<td align="left">%06</td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left">BEL(bell (ring))</td>
+<td align="left">%07</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left">BS(backspace)</td>
+<td align="left">%08</td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left">HT(horizontal tab)</td>
+<td align="left">%09</td>
+</tr>
+<tr>
+<td align="left">10</td>
+<td align="left">LF(line feed)</td>
+<td align="left">%0A</td>
+</tr>
+<tr>
+<td align="left">11</td>
+<td align="left">VT(vertical tab)</td>
+<td align="left">%0B</td>
+</tr>
+<tr>
+<td align="left">12</td>
+<td align="left">FF(form feed)</td>
+<td align="left">%0C</td>
+</tr>
+<tr>
+<td align="left">13</td>
+<td align="left">CR(carriage return)</td>
+<td align="left">%0D</td>
+</tr>
+<tr>
+<td align="left">14</td>
+<td align="left">SO(shift out)</td>
+<td align="left">%0E</td>
+</tr>
+<tr>
+<td align="left">15</td>
+<td align="left">SI(shift in)</td>
+<td align="left">%0F</td>
+</tr>
+<tr>
+<td align="left">16</td>
+<td align="left">DLE(data link escape)</td>
+<td align="left">%10</td>
+</tr>
+<tr>
+<td align="left">17</td>
+<td align="left">DC1(device control 1)</td>
+<td align="left">%11</td>
+</tr>
+<tr>
+<td align="left">18</td>
+<td align="left">DC2(device control 2)</td>
+<td align="left">%12</td>
+</tr>
+<tr>
+<td align="left">19</td>
+<td align="left">DC3(device control 3)</td>
+<td align="left">%13</td>
+</tr>
+<tr>
+<td align="left">20</td>
+<td align="left">DC4(device control 4)</td>
+<td align="left">%14</td>
+</tr>
+<tr>
+<td align="left">21</td>
+<td align="left">NAK(negative acknowledge)</td>
+<td align="left">%15</td>
+</tr>
+<tr>
+<td align="left">22</td>
+<td align="left">SYN(synchronize)</td>
+<td align="left">%16</td>
+</tr>
+<tr>
+<td align="left">23</td>
+<td align="left">ETB(end transmission block)</td>
+<td align="left">%17</td>
+</tr>
+<tr>
+<td align="left">24</td>
+<td align="left">CAN(cancel)</td>
+<td align="left">%18</td>
+</tr>
+<tr>
+<td align="left">25</td>
+<td align="left">EM(end of medium)</td>
+<td align="left">%19</td>
+</tr>
+<tr>
+<td align="left">26</td>
+<td align="left">SUB(substitute)</td>
+<td align="left">%1A</td>
+</tr>
+<tr>
+<td align="left">27</td>
+<td align="left">ESC(escape)</td>
+<td align="left">%1B</td>
+</tr>
+<tr>
+<td align="left">28</td>
+<td align="left">FS(file separator)</td>
+<td align="left">%1C</td>
+</tr>
+<tr>
+<td align="left">29</td>
+<td align="left">GS(group separator)</td>
+<td align="left">%1D</td>
+</tr>
+<tr>
+<td align="left">30</td>
+<td align="left">RS(record separator)</td>
+<td align="left">%1E</td>
+</tr>
+<tr>
+<td align="left">31</td>
+<td align="left">US(unit separator)</td>
+<td align="left">%1F</td>
+</tr>
+<tr>
+<td align="left">32</td>
+<td align="left">space</td>
+<td align="left">%20</td>
+</tr>
+<tr>
+<td align="left">33</td>
+<td align="left">!</td>
+<td align="left">%21</td>
+</tr>
+<tr>
+<td align="left">34</td>
+<td align="left">“</td>
+<td align="left">%22</td>
+</tr>
+<tr>
+<td align="left">35</td>
+<td align="left">#</td>
+<td align="left">%23</td>
+</tr>
+<tr>
+<td align="left">36</td>
+<td align="left">$</td>
+<td align="left">%24</td>
+</tr>
+<tr>
+<td align="left">37</td>
+<td align="left">%</td>
+<td align="left">%25</td>
+</tr>
+<tr>
+<td align="left">38</td>
+<td align="left">&amp;</td>
+<td align="left">%26</td>
+</tr>
+<tr>
+<td align="left">39</td>
+<td align="left">‘</td>
+<td align="left">%27</td>
+</tr>
+<tr>
+<td align="left">40</td>
+<td align="left">(</td>
+<td align="left">%28</td>
+</tr>
+<tr>
+<td align="left">41</td>
+<td align="left">)</td>
+<td align="left">%29</td>
+</tr>
+<tr>
+<td align="left">42</td>
+<td align="left">*</td>
+<td align="left">%2A</td>
+</tr>
+<tr>
+<td align="left">43</td>
+<td align="left">+</td>
+<td align="left">%2B</td>
+</tr>
+<tr>
+<td align="left">44</td>
+<td align="left">,</td>
+<td align="left">%2C</td>
+</tr>
+<tr>
+<td align="left">45</td>
+<td align="left">-</td>
+<td align="left">%2D</td>
+</tr>
+<tr>
+<td align="left">46</td>
+<td align="left">.</td>
+<td align="left">%2E</td>
+</tr>
+<tr>
+<td align="left">47</td>
+<td align="left">/</td>
+<td align="left">%2F</td>
+</tr>
+<tr>
+<td align="left">48</td>
+<td align="left">0</td>
+<td align="left">%30</td>
+</tr>
+<tr>
+<td align="left">49</td>
+<td align="left">1</td>
+<td align="left">%31</td>
+</tr>
+<tr>
+<td align="left">50</td>
+<td align="left">2</td>
+<td align="left">%32</td>
+</tr>
+<tr>
+<td align="left">51</td>
+<td align="left">3</td>
+<td align="left">%33</td>
+</tr>
+<tr>
+<td align="left">52</td>
+<td align="left">4</td>
+<td align="left">%34</td>
+</tr>
+<tr>
+<td align="left">53</td>
+<td align="left">5</td>
+<td align="left">%35</td>
+</tr>
+<tr>
+<td align="left">54</td>
+<td align="left">6</td>
+<td align="left">%36</td>
+</tr>
+<tr>
+<td align="left">55</td>
+<td align="left">7</td>
+<td align="left">%37</td>
+</tr>
+<tr>
+<td align="left">56</td>
+<td align="left">8</td>
+<td align="left">%38</td>
+</tr>
+<tr>
+<td align="left">57</td>
+<td align="left">9</td>
+<td align="left">%39</td>
+</tr>
+<tr>
+<td align="left">58</td>
+<td align="left">:</td>
+<td align="left">%3A</td>
+</tr>
+<tr>
+<td align="left">59</td>
+<td align="left">;</td>
+<td align="left">%3B</td>
+</tr>
+<tr>
+<td align="left">60</td>
+<td align="left">&lt;</td>
+<td align="left">%3C</td>
+</tr>
+<tr>
+<td align="left">61</td>
+<td align="left">=</td>
+<td align="left">%3D</td>
+</tr>
+<tr>
+<td align="left">62</td>
+<td align="left">&gt;</td>
+<td align="left">%3E</td>
+</tr>
+<tr>
+<td align="left">63</td>
+<td align="left">?</td>
+<td align="left">%3F</td>
+</tr>
+<tr>
+<td align="left">64</td>
+<td align="left">@</td>
+<td align="left">%40</td>
+</tr>
+<tr>
+<td align="left">65</td>
+<td align="left">A</td>
+<td align="left">%41</td>
+</tr>
+<tr>
+<td align="left">66</td>
+<td align="left">B</td>
+<td align="left">%42</td>
+</tr>
+<tr>
+<td align="left">67</td>
+<td align="left">C</td>
+<td align="left">%43</td>
+</tr>
+<tr>
+<td align="left">68</td>
+<td align="left">D</td>
+<td align="left">%44</td>
+</tr>
+<tr>
+<td align="left">69</td>
+<td align="left">E</td>
+<td align="left">%45</td>
+</tr>
+<tr>
+<td align="left">70</td>
+<td align="left">F</td>
+<td align="left">%46</td>
+</tr>
+<tr>
+<td align="left">71</td>
+<td align="left">G</td>
+<td align="left">%47</td>
+</tr>
+<tr>
+<td align="left">72</td>
+<td align="left">H</td>
+<td align="left">%48</td>
+</tr>
+<tr>
+<td align="left">73</td>
+<td align="left">I</td>
+<td align="left">%49</td>
+</tr>
+<tr>
+<td align="left">74</td>
+<td align="left">J</td>
+<td align="left">%4A</td>
+</tr>
+<tr>
+<td align="left">75</td>
+<td align="left">K</td>
+<td align="left">%4B</td>
+</tr>
+<tr>
+<td align="left">76</td>
+<td align="left">L</td>
+<td align="left">%4C</td>
+</tr>
+<tr>
+<td align="left">77</td>
+<td align="left">M</td>
+<td align="left">%4D</td>
+</tr>
+<tr>
+<td align="left">78</td>
+<td align="left">N</td>
+<td align="left">%4E</td>
+</tr>
+<tr>
+<td align="left">79</td>
+<td align="left">O</td>
+<td align="left">%4F</td>
+</tr>
+<tr>
+<td align="left">80</td>
+<td align="left">P</td>
+<td align="left">%50</td>
+</tr>
+<tr>
+<td align="left">81</td>
+<td align="left">Q</td>
+<td align="left">%51</td>
+</tr>
+<tr>
+<td align="left">82</td>
+<td align="left">R</td>
+<td align="left">%52</td>
+</tr>
+<tr>
+<td align="left">83</td>
+<td align="left">S</td>
+<td align="left">%53</td>
+</tr>
+<tr>
+<td align="left">84</td>
+<td align="left">T</td>
+<td align="left">%54</td>
+</tr>
+<tr>
+<td align="left">85</td>
+<td align="left">U</td>
+<td align="left">%55</td>
+</tr>
+<tr>
+<td align="left">86</td>
+<td align="left">V</td>
+<td align="left">%56</td>
+</tr>
+<tr>
+<td align="left">87</td>
+<td align="left">W</td>
+<td align="left">%57</td>
+</tr>
+<tr>
+<td align="left">88</td>
+<td align="left">X</td>
+<td align="left">%58</td>
+</tr>
+<tr>
+<td align="left">89</td>
+<td align="left">Y</td>
+<td align="left">%59</td>
+</tr>
+<tr>
+<td align="left">90</td>
+<td align="left">Z</td>
+<td align="left">%5A</td>
+</tr>
+<tr>
+<td align="left">91</td>
+<td align="left">[</td>
+<td align="left">%5B</td>
+</tr>
+<tr>
+<td align="left">92</td>
+<td align="left">\</td>
+<td align="left">%5C</td>
+</tr>
+<tr>
+<td align="left">93</td>
+<td align="left">]</td>
+<td align="left">%5D</td>
+</tr>
+<tr>
+<td align="left">94</td>
+<td align="left">^</td>
+<td align="left">%5E</td>
+</tr>
+<tr>
+<td align="left">95</td>
+<td align="left">_</td>
+<td align="left">%5F</td>
+</tr>
+<tr>
+<td align="left">96</td>
+<td align="left">`</td>
+<td align="left">%60</td>
+</tr>
+<tr>
+<td align="left">97</td>
+<td align="left">a</td>
+<td align="left">%61</td>
+</tr>
+<tr>
+<td align="left">98</td>
+<td align="left">b</td>
+<td align="left">%62</td>
+</tr>
+<tr>
+<td align="left">99</td>
+<td align="left">c</td>
+<td align="left">%63</td>
+</tr>
+<tr>
+<td align="left">100</td>
+<td align="left">d</td>
+<td align="left">%64</td>
+</tr>
+<tr>
+<td align="left">101</td>
+<td align="left">e</td>
+<td align="left">%65</td>
+</tr>
+<tr>
+<td align="left">102</td>
+<td align="left">f</td>
+<td align="left">%66</td>
+</tr>
+<tr>
+<td align="left">103</td>
+<td align="left">g</td>
+<td align="left">%67</td>
+</tr>
+<tr>
+<td align="left">104</td>
+<td align="left">h</td>
+<td align="left">%68</td>
+</tr>
+<tr>
+<td align="left">105</td>
+<td align="left">i</td>
+<td align="left">%69</td>
+</tr>
+<tr>
+<td align="left">106</td>
+<td align="left">j</td>
+<td align="left">%6A</td>
+</tr>
+<tr>
+<td align="left">107</td>
+<td align="left">k</td>
+<td align="left">%6B</td>
+</tr>
+<tr>
+<td align="left">108</td>
+<td align="left">l</td>
+<td align="left">%6C</td>
+</tr>
+<tr>
+<td align="left">109</td>
+<td align="left">m</td>
+<td align="left">%6D</td>
+</tr>
+<tr>
+<td align="left">110</td>
+<td align="left">n</td>
+<td align="left">%6E</td>
+</tr>
+<tr>
+<td align="left">111</td>
+<td align="left">o</td>
+<td align="left">%6F</td>
+</tr>
+<tr>
+<td align="left">112</td>
+<td align="left">p</td>
+<td align="left">%70</td>
+</tr>
+<tr>
+<td align="left">113</td>
+<td align="left">q</td>
+<td align="left">%71</td>
+</tr>
+<tr>
+<td align="left">114</td>
+<td align="left">r</td>
+<td align="left">%72</td>
+</tr>
+<tr>
+<td align="left">115</td>
+<td align="left">s</td>
+<td align="left">%73</td>
+</tr>
+<tr>
+<td align="left">116</td>
+<td align="left">t</td>
+<td align="left">%74</td>
+</tr>
+<tr>
+<td align="left">117</td>
+<td align="left">u</td>
+<td align="left">%75</td>
+</tr>
+<tr>
+<td align="left">118</td>
+<td align="left">v</td>
+<td align="left">%76</td>
+</tr>
+<tr>
+<td align="left">119</td>
+<td align="left">w</td>
+<td align="left">%77</td>
+</tr>
+<tr>
+<td align="left">120</td>
+<td align="left">x</td>
+<td align="left">%78</td>
+</tr>
+<tr>
+<td align="left">121</td>
+<td align="left">y</td>
+<td align="left">%79</td>
+</tr>
+<tr>
+<td align="left">122</td>
+<td align="left">z</td>
+<td align="left">%7A</td>
+</tr>
+<tr>
+<td align="left">123</td>
+<td align="left">{</td>
+<td align="left">%7B</td>
+</tr>
+<tr>
+<td align="left">124</td>
+<td align="left">|</td>
+<td align="left">%7C</td>
+</tr>
+<tr>
+<td align="left">125</td>
+<td align="left">}</td>
+<td align="left">%7D</td>
+</tr>
+<tr>
+<td align="left">126</td>
+<td align="left">~</td>
+<td align="left">%7E</td>
+</tr>
+<tr>
+<td align="left">127</td>
+<td align="left">DEL(delete (rubout))</td>
+<td align="left">%7F</td>
+</tr>
+</tbody></table>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2019/06/03/kongzheng1993-resume/" data-id="cjzh3e0a4000416c803cg89j4" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-URLEncode/" data-id="ck8d4ki56002h20c8qsqzru1j" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/resume，简历/">resume，简历</a></li></ul>
+    </footer>
+  </div>
+  
+</article>
 
+
+  
+    <article id="post-kongzheng1993-申请亚马逊AWS账户" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/08/kongzheng1993-申请亚马逊AWS账户/" class="article-date">
+  <time datetime="2020-03-07T16:00:00.000Z" itemprop="datePublished">2020-03-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="申请亚马逊AWS账户"><a href="#申请亚马逊AWS账户" class="headerlink" title="申请亚马逊AWS账户"></a>申请亚马逊AWS账户</h1><p>访问aws.amazon.com，注册账户</p>
+<p><img src="/2020/03/08/kongzheng1993-申请亚马逊AWS账户/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200318111734263.png" alt="image-20200318111734263"></p>
+<p>登陆成功后，进入AWS管理控制台</p>
+<p>如果没有梯子，可能会有点慢</p>
+<p>图</p>
+<p>点击启动虚拟机，新建ec2</p>
+<p>图</p>
+<p>选择系统，我熟悉ubuntu，选择了ubuntu，注意符合条件的免费套餐</p>
+<p>图</p>
+<p>选择实例类型，注意符合条件的免费套餐</p>
+<p>图</p>
+<p>点击<code>审核和启动</code></p>
+<p>图</p>
+<p>点击<code>启动</code></p>
+<p>图</p>
+<p>选择创建新的密码对，输入一个密码对名称</p>
+<p>图</p>
+<p>点击下载密钥对</p>
+<p>图</p>
+<p>点击启动实例</p>
+<p>图</p>
+<p>启动成功</p>
+<p>图</p>
+<p>可以创建账单警报，以免费用超过免费套餐</p>
+<p>点击查看实例</p>
+<p>图</p>
+<p>可以看到我们的实例状态时running</p>
+<p>图</p>
+<p>点击连接</p>
+<p>图</p>
+<p>复制命令本地执行即可</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-申请亚马逊AWS账户/" data-id="ck8d4ki8k006f20c8wj04ojnl" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-kongzheng1993-Guava" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/06/kongzheng1993-Guava/" class="article-date">
+  <time datetime="2020-03-05T16:00:00.000Z" itemprop="datePublished">2020-03-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Guava（一）"><a href="#Guava（一）" class="headerlink" title="Guava（一）"></a>Guava（一）</h1><h2 id="Guava是什么"><a href="#Guava是什么" class="headerlink" title="Guava是什么"></a>Guava是什么</h2><p>Guava项目包含一些我们在基于Java的项目中依赖的Google核心库：集合，缓存，原语支持，并发库，通用批注，字符串处理，I/O等。这些工具中的每一种确实每天都会被Google员工用于生产服务中。</p>
+<p>更详细的介绍可以去<a href="https://github.com/google/guava/wiki" target="_blank" rel="noopener">github/guava</a>的Wiki了解。</p>
+<h2 id="引入Guava"><a href="#引入Guava" class="headerlink" title="引入Guava"></a>引入Guava</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.google.guava<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>guava<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>19.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Guava工具类"><a href="#Guava工具类" class="headerlink" title="Guava工具类"></a>Guava工具类</h2><h3 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h3><p>普通的集合：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; list = Lists.newArrayList();</span><br><span class="line">Set&lt;String&gt; set = Sets.newHashSet();</span><br><span class="line">Map&lt;String, String&gt; map = Maps.newHashMap();</span><br></pre></td></tr></table></figure>
+
+<p>不可变集合：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ImmutableList&lt;String&gt; iList = ImmutableList.of(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>);</span><br><span class="line">ImmutableSet&lt;String&gt; iSet = ImmutableSet.of(<span class="string">"e1"</span>, <span class="string">"e2"</span>);</span><br><span class="line">ImmutableMap&lt;String, String&gt; iMap = ImmutableMap.of(<span class="string">"k1"</span>, <span class="string">"v1"</span>, <span class="string">"k2"</span>, <span class="string">"v2"</span>);</span><br></pre></td></tr></table></figure>
+
+<pre><code>什么是不可变？
+- 在多线程操作下，是线程安全的。
+- 所有不可变集合会比可变集合更有效的利用资源。
+- 中途不可改变</code></pre><h4 id="一个简单的对比"><a href="#一个简单的对比" class="headerlink" title="一个简单的对比"></a>一个简单的对比</h4><p>我们搞一个Map中嵌套List的对象要几步？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String,List&lt;Integer&gt;&gt; map = <span class="keyword">new</span> HashMap&lt;String,List&lt;Integer&gt;&gt;();</span><br><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">list.add(<span class="number">1</span>);</span><br><span class="line">list.add(<span class="number">2</span>);</span><br><span class="line">map.put(<span class="string">"test"</span>, list);</span><br></pre></td></tr></table></figure>
+
+<p>如果用了Guava呢？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Multimap&lt;String,Integer&gt; mapM = ArrayListMultimap.create();</span><br><span class="line">mapM.put(<span class="string">"test"</span>,<span class="number">1</span>);</span><br><span class="line">mapM.put(<span class="string">"test"</span>,<span class="number">2</span>);</span><br></pre></td></tr></table></figure>
+
+<p>哪个方便？</p>
+<pre><code>代码量少了并不是简简单单的节省时间而已，而是减少了人为错误的机会，少一行代码就少一点犯错误的可能！</code></pre><h3 id="字符串连接"><a href="#字符串连接" class="headerlink" title="字符串连接"></a>字符串连接</h3><p>连接多个字符串，追加到StringBuilder</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">StringBuilder stringBuilder = <span class="keyword">new</span> StringBuilder(<span class="string">"你好！，"</span>);</span><br><span class="line"><span class="comment">// 字符串连接器，以|为分隔符，同时去掉null元素</span></span><br><span class="line">Joiner joiner1 = Joiner.on(<span class="string">"|"</span>).skipNulls();</span><br><span class="line"><span class="comment">// 构成一个字符串jim|jack|kevin并添加到stringBuilder</span></span><br><span class="line">stringBuilder = joiner1.appendTo(stringBuilder, <span class="string">"jim"</span>, <span class="string">"jack"</span>, <span class="keyword">null</span>, <span class="string">"kevin"</span>);</span><br><span class="line">System.out.println(stringBuilder); </span><br><span class="line"><span class="comment">// 执行结果：嗨，jim|jack|kevin</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到这里过滤了null</p>
+<h3 id="Map-amp-字符串互转"><a href="#Map-amp-字符串互转" class="headerlink" title="Map&amp;字符串互转"></a>Map&amp;字符串互转</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, String&gt; testMap = Maps.newLinkedHashMap();</span><br><span class="line">testMap.put(<span class="string">"Cookies"</span>, <span class="string">"12332"</span>);</span><br><span class="line">testMap.put(<span class="string">"Content-Length"</span>, <span class="string">"30000"</span>);</span><br><span class="line">testMap.put(<span class="string">"Date"</span>, <span class="string">"2018.07.04"</span>);</span><br><span class="line">testMap.put(<span class="string">"Mime"</span>, <span class="string">"text/html"</span>);</span><br><span class="line"><span class="comment">// 用:分割键值对，并用#分割每个元素，返回字符串</span></span><br><span class="line">String returnedString = Joiner.on(<span class="string">"#"</span>).withKeyValueSeparator(<span class="string">":"</span>).joi(testMap);</span><br><span class="line">System.out.println(returnedString);</span><br><span class="line"><span class="comment">// 执行结果：Cookies:12332#Content-Length:30000#Date:2018.07.04#Mime:text/html</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 接上一个，内部类的引用，得到分割器，将字符串解析为map</span></span><br><span class="line">Splitter.MapSplitter ms = Splitter.on(<span class="string">"#"</span>).withKeyValueSeparator(<span class="string">':'</span>);</span><br><span class="line">Map&lt;String, String&gt; ret = ms.split(returnedString);</span><br><span class="line"><span class="keyword">for</span> (String it2 : ret.keySet()) &#123;</span><br><span class="line">    System.out.println(it2 + <span class="string">" -&gt; "</span> + ret.get(it2));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="字符串工具类"><a href="#字符串工具类" class="headerlink" title="字符串工具类"></a>字符串工具类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(Strings.isNullOrEmpty(<span class="string">""</span>)); <span class="comment">// true</span></span><br><span class="line">System.out.println(Strings.isNullOrEmpty(<span class="keyword">null</span>)); <span class="comment">// true</span></span><br><span class="line">System.out.println(Strings.isNullOrEmpty(<span class="string">"hello"</span>)); <span class="comment">// false</span></span><br><span class="line"><span class="comment">// 将null转化为""</span></span><br><span class="line"> System.out.println(Strings.nullToEmpty(<span class="keyword">null</span>)); <span class="comment">// "" </span></span><br><span class="line"><span class="comment">// 从尾部不断补充T只到总共8个字符，如果源字符串已经达到或操作，则原样返回。类似的有padStart</span></span><br><span class="line">System.out.println(Strings.padEnd(<span class="string">"hello"</span>, <span class="number">8</span>, <span class="string">'T'</span>)); <span class="comment">// helloTTT</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="字符匹配器CharMatcher"><a href="#字符匹配器CharMatcher" class="headerlink" title="字符匹配器CharMatcher"></a>字符匹配器CharMatcher</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 空白回车换行对应换成一个#，一对一换</span></span><br><span class="line">String stringWithLinebreaks = <span class="string">"hello world\r\r\ryou are here\n\ntake it\t\t\teasy"</span>;</span><br><span class="line">String s6 = CharMatcher.BREAKING_WHITESPACE.replaceFrom(stringWithLinebreaks,<span class="string">'#'</span>);</span><br><span class="line">System.out.println(s6); </span><br><span class="line"><span class="comment">//执行结果：hello#world###you#are#here##take#it###easy</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="连续空白替换成一个字符"><a href="#连续空白替换成一个字符" class="headerlink" title="连续空白替换成一个字符"></a>连续空白替换成一个字符</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将所有连在一起的空白回车换行字符换成一个#，倒塌</span></span><br><span class="line">String tabString = <span class="string">"  hello   \n\t\tworld   you\r\nare             here  "</span>;</span><br><span class="line">String tabRet = CharMatcher.WHITESPACE.collapseFrom(tabString, <span class="string">'#'</span>);</span><br><span class="line">System.out.println(tabRet);</span><br></pre></td></tr></table></figure>
+
+<h3 id="去掉前后空白和缩成一个字符"><a href="#去掉前后空白和缩成一个字符" class="headerlink" title="去掉前后空白和缩成一个字符"></a>去掉前后空白和缩成一个字符</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在前面的基础上去掉字符串的前后空白，并将空白换成一个#</span></span><br><span class="line">String trimRet = CharMatcher.WHITESPACE.trimAndCollapseFrom(tabString, <span class="string">'#'</span>);</span><br><span class="line">System.out.println(trimRet);</span><br><span class="line"><span class="comment">//执行结果： hello#world#you#are#here</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="只保留数字"><a href="#只保留数字" class="headerlink" title="只保留数字"></a>只保留数字</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String letterAndNumber = <span class="string">"1234abcdABCD56789"</span>;</span><br><span class="line"><span class="comment">// 保留数字</span></span><br><span class="line">String number = CharMatcher.JAVA_DIGIT.retainFrom(letterAndNumber);</span><br><span class="line">System.out.println(number);<span class="comment">//123456789</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>使用Guava可以极大减少我们的代码量，减少犯错机会，提高工作效率。这次我们先介绍这些，下一篇我们深入Guava Caching！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2020/03/06/kongzheng1993-Guava/" data-id="ck8d4ki53002f20c8qlochii8" class="article-share-link">Share</a>
+      
+      
     </footer>
   </div>
   
@@ -426,7 +1026,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -437,7 +1037,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/">RSA</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/">SHA</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/加密/">加密</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/加密/签名/">签名</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/">github</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/git/">git</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jdk/">jdk</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/linux/ss/">ss</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/java/">java</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/">quartz</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/锁/">锁</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/锁/分布式/">分布式</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/resume/">resume</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/suse/">suse</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/">server</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/FTP/">FTP</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/编码/">编码</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/NIO-BIO-IO/">NIO BIO IO</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/">RSA</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/">SHA</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/加密/">加密</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/加密/签名/">签名</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/">github</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/git/">git</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jdk/">jdk</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/linux/ss/">ss</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/java/">java</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/">quartz</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/锁/">锁</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/锁/分布式/">分布式</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/resume/">resume</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/suse/">suse</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/">server</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/FTP/">FTP</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/编码/">编码</a></li></ul>
     </div>
   </div>
 
@@ -447,7 +1047,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Class/">Class</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FTP/">FTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RSA/">RSA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SHA/">SHA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/String/">String</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/catch，try/">catch，try</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/">console</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/distinct/">distinct</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/float/">float</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/group-by/">group by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/images/">images</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jdk/">jdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mq/">mq</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/new/">new</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/order-by/">order by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/">quartz</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/re/">re</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/resume，简历/">resume，简历</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sample-post/">sample post</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/select/">select</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/">server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/servlet/">servlet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlplus/">sqlplus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ss/">ss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/suse/">suse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sys/">sys</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/test/">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/业务/">业务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/加密/">加密</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/备份/">备份</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/学习/">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安全/">安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/对象，Class对象/">对象，Class对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/消息队列/">消息队列</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/签名/">签名</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编码/">编码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/职业/">职业</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/锁/">锁</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Class/">Class</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FTP/">FTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NIO-BIO-IO/">NIO BIO IO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RSA/">RSA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SHA/">SHA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/String/">String</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/catch，try/">catch，try</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/">console</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/distinct/">distinct</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/float/">float</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/group-by/">group by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/images/">images</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jdk/">jdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mq/">mq</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/new/">new</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/order-by/">order by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/">quartz</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/re/">re</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/resume，简历/">resume，简历</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sample-post/">sample post</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/select/">select</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/">server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/servlet/">servlet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlplus/">sqlplus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ss/">ss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/suse/">suse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sys/">sys</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/test/">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/业务/">业务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/加密/">加密</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/备份/">备份</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/学习/">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安全/">安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/对象，Class对象/">对象，Class对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/消息队列/">消息队列</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/签名/">签名</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编码/">编码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/职业/">职业</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/锁/">锁</a></li></ul>
     </div>
   </div>
 
@@ -457,7 +1057,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Class/" style="font-size: 10px;">Class</a> <a href="/tags/FTP/" style="font-size: 10px;">FTP</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/SHA/" style="font-size: 10px;">SHA</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/catch，try/" style="font-size: 10px;">catch，try</a> <a href="/tags/console/" style="font-size: 10px;">console</a> <a href="/tags/distinct/" style="font-size: 10px;">distinct</a> <a href="/tags/float/" style="font-size: 10px;">float</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/group-by/" style="font-size: 10px;">group by</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/images/" style="font-size: 16.67px;">images</a> <a href="/tags/java/" style="font-size: 16.67px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/mq/" style="font-size: 10px;">mq</a> <a href="/tags/mysql/" style="font-size: 13.33px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/oop/" style="font-size: 20px;">oop</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/order-by/" style="font-size: 10px;">order by</a> <a href="/tags/quartz/" style="font-size: 10px;">quartz</a> <a href="/tags/re/" style="font-size: 16.67px;">re</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/resume，简历/" style="font-size: 10px;">resume，简历</a> <a href="/tags/sample-post/" style="font-size: 16.67px;">sample post</a> <a href="/tags/select/" style="font-size: 10px;">select</a> <a href="/tags/server/" style="font-size: 10px;">server</a> <a href="/tags/servlet/" style="font-size: 10px;">servlet</a> <a href="/tags/sql/" style="font-size: 13.33px;">sql</a> <a href="/tags/sqlplus/" style="font-size: 10px;">sqlplus</a> <a href="/tags/ss/" style="font-size: 10px;">ss</a> <a href="/tags/suse/" style="font-size: 10px;">suse</a> <a href="/tags/sys/" style="font-size: 10px;">sys</a> <a href="/tags/test/" style="font-size: 16.67px;">test</a> <a href="/tags/业务/" style="font-size: 10px;">业务</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/加密/" style="font-size: 10px;">加密</a> <a href="/tags/备份/" style="font-size: 10px;">备份</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/学习/" style="font-size: 10px;">学习</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/对象，Class对象/" style="font-size: 10px;">对象，Class对象</a> <a href="/tags/消息队列/" style="font-size: 10px;">消息队列</a> <a href="/tags/签名/" style="font-size: 10px;">签名</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/职业/" style="font-size: 10px;">职业</a> <a href="/tags/锁/" style="font-size: 10px;">锁</a>
+      <a href="/tags/Class/" style="font-size: 10px;">Class</a> <a href="/tags/FTP/" style="font-size: 10px;">FTP</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/NIO-BIO-IO/" style="font-size: 10px;">NIO BIO IO</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/SHA/" style="font-size: 10px;">SHA</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/catch，try/" style="font-size: 10px;">catch，try</a> <a href="/tags/console/" style="font-size: 10px;">console</a> <a href="/tags/distinct/" style="font-size: 10px;">distinct</a> <a href="/tags/float/" style="font-size: 10px;">float</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/group-by/" style="font-size: 10px;">group by</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/images/" style="font-size: 16.67px;">images</a> <a href="/tags/java/" style="font-size: 16.67px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/mq/" style="font-size: 10px;">mq</a> <a href="/tags/mysql/" style="font-size: 16.67px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/oop/" style="font-size: 20px;">oop</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/order-by/" style="font-size: 10px;">order by</a> <a href="/tags/quartz/" style="font-size: 10px;">quartz</a> <a href="/tags/re/" style="font-size: 16.67px;">re</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/resume，简历/" style="font-size: 10px;">resume，简历</a> <a href="/tags/sample-post/" style="font-size: 16.67px;">sample post</a> <a href="/tags/select/" style="font-size: 10px;">select</a> <a href="/tags/server/" style="font-size: 10px;">server</a> <a href="/tags/servlet/" style="font-size: 10px;">servlet</a> <a href="/tags/sql/" style="font-size: 13.33px;">sql</a> <a href="/tags/sqlplus/" style="font-size: 10px;">sqlplus</a> <a href="/tags/ss/" style="font-size: 10px;">ss</a> <a href="/tags/suse/" style="font-size: 10px;">suse</a> <a href="/tags/sys/" style="font-size: 10px;">sys</a> <a href="/tags/test/" style="font-size: 16.67px;">test</a> <a href="/tags/业务/" style="font-size: 10px;">业务</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/加密/" style="font-size: 10px;">加密</a> <a href="/tags/备份/" style="font-size: 10px;">备份</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/学习/" style="font-size: 10px;">学习</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/对象，Class对象/" style="font-size: 10px;">对象，Class对象</a> <a href="/tags/消息队列/" style="font-size: 10px;">消息队列</a> <a href="/tags/签名/" style="font-size: 10px;">签名</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/职业/" style="font-size: 10px;">职业</a> <a href="/tags/锁/" style="font-size: 10px;">锁</a>
     </div>
   </div>
 
@@ -466,7 +1066,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
     </div>
   </div>
 
@@ -479,23 +1079,23 @@
       <ul>
         
           <li>
-            <a href="/2019/08/18/kongzheng1993-HashMap&ConcurrentHashMap/">HashMap&amp;ConcurrentHashMap</a>
+            <a href="/2020/03/25/kongzheng1993-一次老代码优化/">(no title)</a>
           </li>
         
           <li>
-            <a href="/2019/06/14/kongzheng1993-mysql超过最大连接数-一次生产问题定位/">mysql超过最大连接数一次生产问题定位.md</a>
+            <a href="/2020/03/25/kongzheng1993-RocketMQ定时消息示例/">(no title)</a>
           </li>
         
           <li>
-            <a href="/2019/06/14/kongzheng1993-compare-and-swap/">kongzheng1993-compare_and_swap.md</a>
+            <a href="/2020/03/19/kongzheng1993-Future/">(no title)</a>
           </li>
         
           <li>
-            <a href="/2019/06/13/kongzheng1993-Connect-timed-out与Read-timed-out/">kongzheng1993-Connect_timed_out与Read_timed_out.md</a>
+            <a href="/2020/03/19/kongzheng1993-Thread和Runnable/">(no title)</a>
           </li>
         
           <li>
-            <a href="/2019/06/13/kongzheng1993-RSA加密与SHA签名/">RSA加密与SHA签名</a>
+            <a href="/2020/03/08/kongzheng1993-Map遍历的几种方法/">(no title)</a>
           </li>
         
       </ul>
@@ -510,7 +1110,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2019 evilRat<br>
+      &copy; 2020 evilRat<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>

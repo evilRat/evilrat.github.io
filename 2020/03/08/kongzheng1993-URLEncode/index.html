@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Evil</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="URLEncoder今天写代码要发起一个HTTP GET请求，WebService接口我们随处可见，作为一个“业务程序员”我们也每天都在写。。。所以指尖跳动，分分钟就出现了下面的代码： 12345try &amp;#123;           encode = URLEncoder.encode(JsonUtil.convertObject2Json(reqParamsMap), &quot;UTF-8&quot;).re">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Evil">
+<meta property="og:url" content="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-URLEncode/index.html">
+<meta property="og:site_name" content="Evil">
+<meta property="og:description" content="URLEncoder今天写代码要发起一个HTTP GET请求，WebService接口我们随处可见，作为一个“业务程序员”我们也每天都在写。。。所以指尖跳动，分分钟就出现了下面的代码： 12345try &amp;#123;           encode = URLEncoder.encode(JsonUtil.convertObject2Json(reqParamsMap), &quot;UTF-8&quot;).re">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-URLEncode/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200317175415033.png">
+<meta property="og:image" content="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-URLEncode/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200317181423078.png">
+<meta property="og:image" content="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-URLEncode/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200317182519016.png">
+<meta property="og:updated_time" content="2020-03-17T10:36:58.506Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Evil">
+<meta name="twitter:description" content="URLEncoder今天写代码要发起一个HTTP GET请求，WebService接口我们随处可见，作为一个“业务程序员”我们也每天都在写。。。所以指尖跳动，分分钟就出现了下面的代码： 12345try &amp;#123;           encode = URLEncoder.encode(JsonUtil.convertObject2Json(reqParamsMap), &quot;UTF-8&quot;).re">
+<meta name="twitter:image" content="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-URLEncode/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200317175415033.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Evil" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Evil</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kongzheng1993.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-kongzheng1993-URLEncode" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/08/kongzheng1993-URLEncode/" class="article-date">
+  <time datetime="2020-03-07T16:00:00.000Z" itemprop="datePublished">2020-03-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="URLEncoder"><a href="#URLEncoder" class="headerlink" title="URLEncoder"></a>URLEncoder</h1><p>今天写代码要发起一个HTTP GET请求，WebService接口我们随处可见，作为一个“业务程序员”我们也每天都在写。。。所以指尖跳动，分分钟就出现了下面的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">           encode = URLEncoder.encode(JsonUtil.convertObject2Json(reqParamsMap), <span class="string">"UTF-8"</span>).replace(<span class="string">"\\+"</span>, <span class="string">"%20"</span>);</span><br><span class="line">       &#125; <span class="keyword">catch</span> (UnsupportedEncodingException e) &#123;</span><br><span class="line">           logger.error(<span class="string">"URLEncoder.encodec出错： "</span>, e);</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
+
+<p>撸完码我回头看了一眼，我习以为常的URL编码，到底是为什么呢？我想大概是怕传输数据中的特殊字符造成什么不可预知的问题吧。</p>
+<p>工作完成，测试没有问题。我今天打算打破砂锅问到底，让我们一探究竟，到底为什么要编码？</p>
+<p><font color="red">知道了How，我们还要知道Why！！！</font></p>
+<h2 id="找资料"><a href="#找资料" class="headerlink" title="找资料"></a>找资料</h2><p>打开bing，国际搜索（梯子断了很久了……）在<code>stackoverflow</code>上看到也有很多人提出了这个问题，很多的人回答都指向了一个RFC</p>
+<pre><code>RFC(Request For Comments)-意即“请求评议”，包含了关于Internet的几乎所有重要的文字资料。
+通常，当某家机构或团体开发出了一套标准或提出对某种标准的设想，
+想要征询外界的意见时，就会在Internet上发放一份RFC，
+对这一问题感兴趣的人可以阅读该RFC并提出自己的意见；
+
+绝大部分网络标准的指定都是以RFC的形式开始，经过大量的论证和修改过程，
+由主要的标准化组织所指定的，但在RFC中所收录的文件并不都是正在使用或为大家所公认的，
+也有很大一部分只在某个局部领域被使用或并没有被采用，
+一份RFC具体处于什么状态都在文件中作了明确的标识.</code></pre><p><a href="https://tools.ietf.org/html/rfc1738" target="_blank" rel="noopener">RFC1738</a></p>
+<p><img src="/2020/03/08/kongzheng1993-URLEncode/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200317175415033.png" alt="image-20200317175415033"></p>
+<p>可以看到这个RFC是小LEE提出来的，里面规定了很多东西，比如url的格式、编码、字符，还有很多scheme，我没看全，看到了FTP和HTTP。</p>
+<h2 id="总结一波"><a href="#总结一波" class="headerlink" title="总结一波"></a>总结一波</h2><p>URL（统一资源定位符）是万维网中资源的地址。URL具有明确定义的结构，该结构由<a href="https://en.wikipedia.org/wiki/Tim_Berners-Lee" target="_blank" rel="noopener">万维网</a>的发明者<a href="https://en.wikipedia.org/wiki/Tim_Berners-Lee" target="_blank" rel="noopener">Tim Berners-Lee</a>在<a href="https://tools.ietf.org/html/rfc1738" target="_blank" rel="noopener">RFC 1738</a>中提出。</p>
+<p>每个网址都采用<em>通用语法</em>，如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scheme:[//[user:password@]host[:port]]path[?query][<span class="comment">#fragment]</span></span><br></pre></td></tr></table></figure>
+
+<p><code>[user:password@]</code>由于安全原因，不建议使用URL语法的某些部分，因此很少使用。以下是您在互联网上经常看到的URL的示例-</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.google.com/search?q=hello+world<span class="comment">#brs</span></span><br></pre></td></tr></table></figure>
+
+<p>对定义统一资源定位符（URL）语法的初始RFC进行了许多改进。当前定义通用URI语法的<a href="https://tools.ietf.org/html/rfc3986" target="_blank" rel="noopener">RFC</a>是<a href="https://tools.ietf.org/html/rfc3986" target="_blank" rel="noopener">RFC 3986</a>。这篇文章包含最新RFC文档中的信息。</p>
+<p>URL由属于US-ASCII字符集的有限字符集组成。这些字符包括数字（0-9），字母（AZ，az），以及一些特殊字符（<code>&quot;-&quot;</code>，<code>&quot;.&quot;</code>，<code>&quot;_&quot;</code>，<code>&quot;~&quot;</code>）。</p>
+<p>ASCII控制字符（例如退格，垂直制表符，水平制表，换行等），不安全的字符像<code>space</code>，<code>\</code>，<code>&lt;</code>，<code>&gt;</code>，<code>{</code>，<code>}</code>等等，以及ASCII字符以外的任何字符被不允许直接的URL内放置。</p>
+<p>此外，URL中有些字符具有特殊含义。这些字符称为<strong>保留</strong>字符。的保留字符的一些例子是<code>?</code>，<code>/</code>，<code>#</code>，<code>:</code>等作为URL的一部分发送，无论是在查询字符串或路径段，必须不包含这些字符的任何数据。</p>
+<p>那么，当我们需要在URL中传输包含这些不允许的字符的任何数据时，我们该怎么办？好吧，<strong>我们对它们进行编码！</strong></p>
+<blockquote>
+<p>URL编码将URL中保留的，不安全的和非ASCII字符转换为所有Web浏览器和服务器普遍接受并理解的格式。它首先将字符转换为一个或多个字节。然后，每个字节由两个十六进制数字表示，后跟一个百分号（<code>%</code>）-（例如<code>%xy</code>）。百分号用作转义字符。</p>
+</blockquote>
+<p>URL编码也称为百分比编码，因为它使用百分号（<code>%</code>）作为转义字符。</p>
+<h4 id="URL编码示例"><a href="#URL编码示例" class="headerlink" title="URL编码示例"></a>URL编码示例</h4><p><strong>空格：</strong>您可能会遇到的最常见的URL编码字符是<code>space</code>。<code>space</code>十进制字符的ASCII码为<code>32</code>，转换为十六进制时为<code>20</code>。现在，我们在十六进制表示形式之前加一个百分号（<code>%</code>），这使我们获得了URL编码值- <code>%20</code>。</p>
+<p><strong>+:</strong> 看到我一开始代码里的replace，那是因为：</p>
+<p><img src="/2020/03/08/kongzheng1993-URLEncode/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200317181423078.png" alt="image-20200317181423078"></p>
+<p>w3c的规定是空格被替换为<code>+</code>，Java中的URLEncoder正式这种情况，会把空格转成<code>+</code></p>
+<p><img src="/2020/03/08/kongzheng1993-URLEncode/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200317182519016.png" alt="image-20200317182519016"></p>
+<p>这就会导致在一些遵循RFC的应用上无法解码或其他问题，所以我们取一个折中的方法，要在<code>URLEncoder.encode()</code>之后把<code>+</code>替换为<code>%20</code></p>
+<h2 id="ASCII字符编码参考"><a href="#ASCII字符编码参考" class="headerlink" title="ASCII字符编码参考"></a>ASCII字符编码参考</h2><p>下表是ASCII字符对其相应的URL编码形式的引用。</p>
+<blockquote>
+<p>请注意，不需要编码字母数字ASCII字符。例如，您不需要编码字符<code>&#39;0&#39;</code>以<code>%30</code>如图所示下表。可以原样发送。但是根据RFC编码仍然有效。表格中所有可以安全地在URL中传输的字符都显示为绿色。</p>
+</blockquote>
+<p><strong>下表使用RFC 3986中定义的URL编码规则。</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">Decimal</th>
+<th align="left">Character</th>
+<th align="left">URL Encoding (UTF-8)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">0</td>
+<td align="left">NUL(null character)</td>
+<td align="left">%00</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">SOH(start of header)</td>
+<td align="left">%01</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">STX(start of text)</td>
+<td align="left">%02</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">ETX(end of text)</td>
+<td align="left">%03</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">EOT(end of transmission)</td>
+<td align="left">%04</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">ENQ(enquiry)</td>
+<td align="left">%05</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left">ACK(acknowledge)</td>
+<td align="left">%06</td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left">BEL(bell (ring))</td>
+<td align="left">%07</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left">BS(backspace)</td>
+<td align="left">%08</td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left">HT(horizontal tab)</td>
+<td align="left">%09</td>
+</tr>
+<tr>
+<td align="left">10</td>
+<td align="left">LF(line feed)</td>
+<td align="left">%0A</td>
+</tr>
+<tr>
+<td align="left">11</td>
+<td align="left">VT(vertical tab)</td>
+<td align="left">%0B</td>
+</tr>
+<tr>
+<td align="left">12</td>
+<td align="left">FF(form feed)</td>
+<td align="left">%0C</td>
+</tr>
+<tr>
+<td align="left">13</td>
+<td align="left">CR(carriage return)</td>
+<td align="left">%0D</td>
+</tr>
+<tr>
+<td align="left">14</td>
+<td align="left">SO(shift out)</td>
+<td align="left">%0E</td>
+</tr>
+<tr>
+<td align="left">15</td>
+<td align="left">SI(shift in)</td>
+<td align="left">%0F</td>
+</tr>
+<tr>
+<td align="left">16</td>
+<td align="left">DLE(data link escape)</td>
+<td align="left">%10</td>
+</tr>
+<tr>
+<td align="left">17</td>
+<td align="left">DC1(device control 1)</td>
+<td align="left">%11</td>
+</tr>
+<tr>
+<td align="left">18</td>
+<td align="left">DC2(device control 2)</td>
+<td align="left">%12</td>
+</tr>
+<tr>
+<td align="left">19</td>
+<td align="left">DC3(device control 3)</td>
+<td align="left">%13</td>
+</tr>
+<tr>
+<td align="left">20</td>
+<td align="left">DC4(device control 4)</td>
+<td align="left">%14</td>
+</tr>
+<tr>
+<td align="left">21</td>
+<td align="left">NAK(negative acknowledge)</td>
+<td align="left">%15</td>
+</tr>
+<tr>
+<td align="left">22</td>
+<td align="left">SYN(synchronize)</td>
+<td align="left">%16</td>
+</tr>
+<tr>
+<td align="left">23</td>
+<td align="left">ETB(end transmission block)</td>
+<td align="left">%17</td>
+</tr>
+<tr>
+<td align="left">24</td>
+<td align="left">CAN(cancel)</td>
+<td align="left">%18</td>
+</tr>
+<tr>
+<td align="left">25</td>
+<td align="left">EM(end of medium)</td>
+<td align="left">%19</td>
+</tr>
+<tr>
+<td align="left">26</td>
+<td align="left">SUB(substitute)</td>
+<td align="left">%1A</td>
+</tr>
+<tr>
+<td align="left">27</td>
+<td align="left">ESC(escape)</td>
+<td align="left">%1B</td>
+</tr>
+<tr>
+<td align="left">28</td>
+<td align="left">FS(file separator)</td>
+<td align="left">%1C</td>
+</tr>
+<tr>
+<td align="left">29</td>
+<td align="left">GS(group separator)</td>
+<td align="left">%1D</td>
+</tr>
+<tr>
+<td align="left">30</td>
+<td align="left">RS(record separator)</td>
+<td align="left">%1E</td>
+</tr>
+<tr>
+<td align="left">31</td>
+<td align="left">US(unit separator)</td>
+<td align="left">%1F</td>
+</tr>
+<tr>
+<td align="left">32</td>
+<td align="left">space</td>
+<td align="left">%20</td>
+</tr>
+<tr>
+<td align="left">33</td>
+<td align="left">!</td>
+<td align="left">%21</td>
+</tr>
+<tr>
+<td align="left">34</td>
+<td align="left">“</td>
+<td align="left">%22</td>
+</tr>
+<tr>
+<td align="left">35</td>
+<td align="left">#</td>
+<td align="left">%23</td>
+</tr>
+<tr>
+<td align="left">36</td>
+<td align="left">$</td>
+<td align="left">%24</td>
+</tr>
+<tr>
+<td align="left">37</td>
+<td align="left">%</td>
+<td align="left">%25</td>
+</tr>
+<tr>
+<td align="left">38</td>
+<td align="left">&amp;</td>
+<td align="left">%26</td>
+</tr>
+<tr>
+<td align="left">39</td>
+<td align="left">‘</td>
+<td align="left">%27</td>
+</tr>
+<tr>
+<td align="left">40</td>
+<td align="left">(</td>
+<td align="left">%28</td>
+</tr>
+<tr>
+<td align="left">41</td>
+<td align="left">)</td>
+<td align="left">%29</td>
+</tr>
+<tr>
+<td align="left">42</td>
+<td align="left">*</td>
+<td align="left">%2A</td>
+</tr>
+<tr>
+<td align="left">43</td>
+<td align="left">+</td>
+<td align="left">%2B</td>
+</tr>
+<tr>
+<td align="left">44</td>
+<td align="left">,</td>
+<td align="left">%2C</td>
+</tr>
+<tr>
+<td align="left">45</td>
+<td align="left">-</td>
+<td align="left">%2D</td>
+</tr>
+<tr>
+<td align="left">46</td>
+<td align="left">.</td>
+<td align="left">%2E</td>
+</tr>
+<tr>
+<td align="left">47</td>
+<td align="left">/</td>
+<td align="left">%2F</td>
+</tr>
+<tr>
+<td align="left">48</td>
+<td align="left">0</td>
+<td align="left">%30</td>
+</tr>
+<tr>
+<td align="left">49</td>
+<td align="left">1</td>
+<td align="left">%31</td>
+</tr>
+<tr>
+<td align="left">50</td>
+<td align="left">2</td>
+<td align="left">%32</td>
+</tr>
+<tr>
+<td align="left">51</td>
+<td align="left">3</td>
+<td align="left">%33</td>
+</tr>
+<tr>
+<td align="left">52</td>
+<td align="left">4</td>
+<td align="left">%34</td>
+</tr>
+<tr>
+<td align="left">53</td>
+<td align="left">5</td>
+<td align="left">%35</td>
+</tr>
+<tr>
+<td align="left">54</td>
+<td align="left">6</td>
+<td align="left">%36</td>
+</tr>
+<tr>
+<td align="left">55</td>
+<td align="left">7</td>
+<td align="left">%37</td>
+</tr>
+<tr>
+<td align="left">56</td>
+<td align="left">8</td>
+<td align="left">%38</td>
+</tr>
+<tr>
+<td align="left">57</td>
+<td align="left">9</td>
+<td align="left">%39</td>
+</tr>
+<tr>
+<td align="left">58</td>
+<td align="left">:</td>
+<td align="left">%3A</td>
+</tr>
+<tr>
+<td align="left">59</td>
+<td align="left">;</td>
+<td align="left">%3B</td>
+</tr>
+<tr>
+<td align="left">60</td>
+<td align="left">&lt;</td>
+<td align="left">%3C</td>
+</tr>
+<tr>
+<td align="left">61</td>
+<td align="left">=</td>
+<td align="left">%3D</td>
+</tr>
+<tr>
+<td align="left">62</td>
+<td align="left">&gt;</td>
+<td align="left">%3E</td>
+</tr>
+<tr>
+<td align="left">63</td>
+<td align="left">?</td>
+<td align="left">%3F</td>
+</tr>
+<tr>
+<td align="left">64</td>
+<td align="left">@</td>
+<td align="left">%40</td>
+</tr>
+<tr>
+<td align="left">65</td>
+<td align="left">A</td>
+<td align="left">%41</td>
+</tr>
+<tr>
+<td align="left">66</td>
+<td align="left">B</td>
+<td align="left">%42</td>
+</tr>
+<tr>
+<td align="left">67</td>
+<td align="left">C</td>
+<td align="left">%43</td>
+</tr>
+<tr>
+<td align="left">68</td>
+<td align="left">D</td>
+<td align="left">%44</td>
+</tr>
+<tr>
+<td align="left">69</td>
+<td align="left">E</td>
+<td align="left">%45</td>
+</tr>
+<tr>
+<td align="left">70</td>
+<td align="left">F</td>
+<td align="left">%46</td>
+</tr>
+<tr>
+<td align="left">71</td>
+<td align="left">G</td>
+<td align="left">%47</td>
+</tr>
+<tr>
+<td align="left">72</td>
+<td align="left">H</td>
+<td align="left">%48</td>
+</tr>
+<tr>
+<td align="left">73</td>
+<td align="left">I</td>
+<td align="left">%49</td>
+</tr>
+<tr>
+<td align="left">74</td>
+<td align="left">J</td>
+<td align="left">%4A</td>
+</tr>
+<tr>
+<td align="left">75</td>
+<td align="left">K</td>
+<td align="left">%4B</td>
+</tr>
+<tr>
+<td align="left">76</td>
+<td align="left">L</td>
+<td align="left">%4C</td>
+</tr>
+<tr>
+<td align="left">77</td>
+<td align="left">M</td>
+<td align="left">%4D</td>
+</tr>
+<tr>
+<td align="left">78</td>
+<td align="left">N</td>
+<td align="left">%4E</td>
+</tr>
+<tr>
+<td align="left">79</td>
+<td align="left">O</td>
+<td align="left">%4F</td>
+</tr>
+<tr>
+<td align="left">80</td>
+<td align="left">P</td>
+<td align="left">%50</td>
+</tr>
+<tr>
+<td align="left">81</td>
+<td align="left">Q</td>
+<td align="left">%51</td>
+</tr>
+<tr>
+<td align="left">82</td>
+<td align="left">R</td>
+<td align="left">%52</td>
+</tr>
+<tr>
+<td align="left">83</td>
+<td align="left">S</td>
+<td align="left">%53</td>
+</tr>
+<tr>
+<td align="left">84</td>
+<td align="left">T</td>
+<td align="left">%54</td>
+</tr>
+<tr>
+<td align="left">85</td>
+<td align="left">U</td>
+<td align="left">%55</td>
+</tr>
+<tr>
+<td align="left">86</td>
+<td align="left">V</td>
+<td align="left">%56</td>
+</tr>
+<tr>
+<td align="left">87</td>
+<td align="left">W</td>
+<td align="left">%57</td>
+</tr>
+<tr>
+<td align="left">88</td>
+<td align="left">X</td>
+<td align="left">%58</td>
+</tr>
+<tr>
+<td align="left">89</td>
+<td align="left">Y</td>
+<td align="left">%59</td>
+</tr>
+<tr>
+<td align="left">90</td>
+<td align="left">Z</td>
+<td align="left">%5A</td>
+</tr>
+<tr>
+<td align="left">91</td>
+<td align="left">[</td>
+<td align="left">%5B</td>
+</tr>
+<tr>
+<td align="left">92</td>
+<td align="left">\</td>
+<td align="left">%5C</td>
+</tr>
+<tr>
+<td align="left">93</td>
+<td align="left">]</td>
+<td align="left">%5D</td>
+</tr>
+<tr>
+<td align="left">94</td>
+<td align="left">^</td>
+<td align="left">%5E</td>
+</tr>
+<tr>
+<td align="left">95</td>
+<td align="left">_</td>
+<td align="left">%5F</td>
+</tr>
+<tr>
+<td align="left">96</td>
+<td align="left">`</td>
+<td align="left">%60</td>
+</tr>
+<tr>
+<td align="left">97</td>
+<td align="left">a</td>
+<td align="left">%61</td>
+</tr>
+<tr>
+<td align="left">98</td>
+<td align="left">b</td>
+<td align="left">%62</td>
+</tr>
+<tr>
+<td align="left">99</td>
+<td align="left">c</td>
+<td align="left">%63</td>
+</tr>
+<tr>
+<td align="left">100</td>
+<td align="left">d</td>
+<td align="left">%64</td>
+</tr>
+<tr>
+<td align="left">101</td>
+<td align="left">e</td>
+<td align="left">%65</td>
+</tr>
+<tr>
+<td align="left">102</td>
+<td align="left">f</td>
+<td align="left">%66</td>
+</tr>
+<tr>
+<td align="left">103</td>
+<td align="left">g</td>
+<td align="left">%67</td>
+</tr>
+<tr>
+<td align="left">104</td>
+<td align="left">h</td>
+<td align="left">%68</td>
+</tr>
+<tr>
+<td align="left">105</td>
+<td align="left">i</td>
+<td align="left">%69</td>
+</tr>
+<tr>
+<td align="left">106</td>
+<td align="left">j</td>
+<td align="left">%6A</td>
+</tr>
+<tr>
+<td align="left">107</td>
+<td align="left">k</td>
+<td align="left">%6B</td>
+</tr>
+<tr>
+<td align="left">108</td>
+<td align="left">l</td>
+<td align="left">%6C</td>
+</tr>
+<tr>
+<td align="left">109</td>
+<td align="left">m</td>
+<td align="left">%6D</td>
+</tr>
+<tr>
+<td align="left">110</td>
+<td align="left">n</td>
+<td align="left">%6E</td>
+</tr>
+<tr>
+<td align="left">111</td>
+<td align="left">o</td>
+<td align="left">%6F</td>
+</tr>
+<tr>
+<td align="left">112</td>
+<td align="left">p</td>
+<td align="left">%70</td>
+</tr>
+<tr>
+<td align="left">113</td>
+<td align="left">q</td>
+<td align="left">%71</td>
+</tr>
+<tr>
+<td align="left">114</td>
+<td align="left">r</td>
+<td align="left">%72</td>
+</tr>
+<tr>
+<td align="left">115</td>
+<td align="left">s</td>
+<td align="left">%73</td>
+</tr>
+<tr>
+<td align="left">116</td>
+<td align="left">t</td>
+<td align="left">%74</td>
+</tr>
+<tr>
+<td align="left">117</td>
+<td align="left">u</td>
+<td align="left">%75</td>
+</tr>
+<tr>
+<td align="left">118</td>
+<td align="left">v</td>
+<td align="left">%76</td>
+</tr>
+<tr>
+<td align="left">119</td>
+<td align="left">w</td>
+<td align="left">%77</td>
+</tr>
+<tr>
+<td align="left">120</td>
+<td align="left">x</td>
+<td align="left">%78</td>
+</tr>
+<tr>
+<td align="left">121</td>
+<td align="left">y</td>
+<td align="left">%79</td>
+</tr>
+<tr>
+<td align="left">122</td>
+<td align="left">z</td>
+<td align="left">%7A</td>
+</tr>
+<tr>
+<td align="left">123</td>
+<td align="left">{</td>
+<td align="left">%7B</td>
+</tr>
+<tr>
+<td align="left">124</td>
+<td align="left">|</td>
+<td align="left">%7C</td>
+</tr>
+<tr>
+<td align="left">125</td>
+<td align="left">}</td>
+<td align="left">%7D</td>
+</tr>
+<tr>
+<td align="left">126</td>
+<td align="left">~</td>
+<td align="left">%7E</td>
+</tr>
+<tr>
+<td align="left">127</td>
+<td align="left">DEL(delete (rubout))</td>
+<td align="left">%7F</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-URLEncode/" data-id="ck8d4ki56002h20c8qsqzru1j" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/03/08/kongzheng1993-jmap/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/03/08/kongzheng1993-申请亚马逊AWS账户/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/NIO-BIO-IO/">NIO BIO IO</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/">RSA</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/">SHA</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/加密/">加密</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/加密/签名/">签名</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/">github</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/git/">git</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jdk/">jdk</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/linux/ss/">ss</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/java/">java</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/">quartz</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/锁/">锁</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/锁/分布式/">分布式</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/resume/">resume</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/suse/">suse</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/">server</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/FTP/">FTP</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/编码/">编码</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Class/">Class</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FTP/">FTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NIO-BIO-IO/">NIO BIO IO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RSA/">RSA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SHA/">SHA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/String/">String</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/catch，try/">catch，try</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/">console</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/distinct/">distinct</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/float/">float</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/group-by/">group by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/images/">images</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jdk/">jdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mq/">mq</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/new/">new</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/order-by/">order by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/">quartz</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/re/">re</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/resume，简历/">resume，简历</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sample-post/">sample post</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/select/">select</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/">server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/servlet/">servlet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlplus/">sqlplus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ss/">ss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/suse/">suse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sys/">sys</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/test/">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/业务/">业务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/加密/">加密</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/备份/">备份</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/学习/">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安全/">安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/对象，Class对象/">对象，Class对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/消息队列/">消息队列</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/签名/">签名</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编码/">编码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/职业/">职业</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/锁/">锁</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Class/" style="font-size: 10px;">Class</a> <a href="/tags/FTP/" style="font-size: 10px;">FTP</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/NIO-BIO-IO/" style="font-size: 10px;">NIO BIO IO</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/SHA/" style="font-size: 10px;">SHA</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/catch，try/" style="font-size: 10px;">catch，try</a> <a href="/tags/console/" style="font-size: 10px;">console</a> <a href="/tags/distinct/" style="font-size: 10px;">distinct</a> <a href="/tags/float/" style="font-size: 10px;">float</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/group-by/" style="font-size: 10px;">group by</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/images/" style="font-size: 16.67px;">images</a> <a href="/tags/java/" style="font-size: 16.67px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/mq/" style="font-size: 10px;">mq</a> <a href="/tags/mysql/" style="font-size: 16.67px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/oop/" style="font-size: 20px;">oop</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/order-by/" style="font-size: 10px;">order by</a> <a href="/tags/quartz/" style="font-size: 10px;">quartz</a> <a href="/tags/re/" style="font-size: 16.67px;">re</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/resume，简历/" style="font-size: 10px;">resume，简历</a> <a href="/tags/sample-post/" style="font-size: 16.67px;">sample post</a> <a href="/tags/select/" style="font-size: 10px;">select</a> <a href="/tags/server/" style="font-size: 10px;">server</a> <a href="/tags/servlet/" style="font-size: 10px;">servlet</a> <a href="/tags/sql/" style="font-size: 13.33px;">sql</a> <a href="/tags/sqlplus/" style="font-size: 10px;">sqlplus</a> <a href="/tags/ss/" style="font-size: 10px;">ss</a> <a href="/tags/suse/" style="font-size: 10px;">suse</a> <a href="/tags/sys/" style="font-size: 10px;">sys</a> <a href="/tags/test/" style="font-size: 16.67px;">test</a> <a href="/tags/业务/" style="font-size: 10px;">业务</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/加密/" style="font-size: 10px;">加密</a> <a href="/tags/备份/" style="font-size: 10px;">备份</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/学习/" style="font-size: 10px;">学习</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/对象，Class对象/" style="font-size: 10px;">对象，Class对象</a> <a href="/tags/消息队列/" style="font-size: 10px;">消息队列</a> <a href="/tags/签名/" style="font-size: 10px;">签名</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/职业/" style="font-size: 10px;">职业</a> <a href="/tags/锁/" style="font-size: 10px;">锁</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/03/25/kongzheng1993-一次老代码优化/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/25/kongzheng1993-RocketMQ定时消息示例/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/19/kongzheng1993-Future/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/19/kongzheng1993-Thread和Runnable/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/08/kongzheng1993-Map遍历的几种方法/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 evilRat<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
