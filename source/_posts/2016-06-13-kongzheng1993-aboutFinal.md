@@ -94,7 +94,7 @@ public class Test {
 　　
 　　大家可以先想一下这道题的输出结果。为什么第一个比较结果为true，而第二个比较结果为fasle。这里面就是final变量和普通变量的区别了，当final变量是基本数据类型以及String类型时，如果在编译期间能知道它的确切值，则编译器会把它当做编译期常量使用。也就是说在用到该final变量的地方，相当于直接访问的这个常量，不需要在运行时确定。这种和C语言中的宏替换有点像。因此在上面的一段代码中，由于变量b被final修饰，因此会被当做编译器常量，所以在使用到b的地方会直接将变量b 替换为它的  值。而对于变量d的访问却需要在运行时通过链接来进行。想必其中的区别大家应该明白了，不过要注意，只有在编译期间能确切知道final变量值的情况下，编译器才会进行这样的优化，比如下面的这段代码就不会进行优化：
 
-```
+```java
 
 public class Test {
     public static void main(String[] args)  {
@@ -104,12 +104,10 @@ public class Test {
         String c = b + 2;  
         System.out.println((a == c));
     }
-     
     public static String getHello() {
         return "hello";
     }
-} 
-
+}
 
 ```
 
@@ -120,7 +118,7 @@ public class Test {
 
 　　在上面提到被final修饰的引用变量一旦初始化赋值之后就不能再指向其他的对象，那么该引用变量指向的对象的内容可变吗？看下面这个例子：
 
-```
+```java
 
 public class Test {
     public static void main(String[] args)  {
@@ -130,7 +128,7 @@ public class Test {
 }
 class MyClass {
     public int i = 0;
-} 
+}
 
 ```
 
@@ -140,7 +138,7 @@ class MyClass {
 
 　　很多时候会容易把static和final关键字混淆，static作用于成员变量用来表示只保存一份副本，而final的作用是用来保证变量不可变。看下面这个例子：
 
-```
+```java
 
 public class Test {
     public static void main(String[] args)  {
@@ -156,9 +154,10 @@ public class Test {
 class MyClass {
     public final double i = Math.random();
     public static double j = Math.random();
-} 
+}
 
 ```
+
 　　运行这段代码就会发现，每次打印的两个j值都是一样的，而i的值却是不同的。从这里就可以知道final和static变量的区别了。
 
 #### 4.匿名内部类中使用的外部局部变量为什么只能是final变量？
@@ -173,13 +172,11 @@ class MyClass {
 
 　　看这个例子就清楚了：
 
-
-
 　　上面这段代码好像让人觉得用final修饰之后，就不能在方法中更改变量i的值了。殊不知，方法changeValue和main方法中的变量i根本就不是一个变量，因为java参数传递采用的是值传递，对于基本类型的变量，相当于直接将变量进行了拷贝。所以即使没有final修饰的情况下，在方法内部改变了变量i的值也不会影响方法外的i。
 
 　　再看下面这段代码：
 
-```
+```java
 
 
 public class Test {
@@ -198,11 +195,9 @@ public class Test {
 
 }
 
- 
+
 
 class MyClass {
-
-     
 
     void changeValue(final StringBuffer buffer) {
 
@@ -210,7 +205,7 @@ class MyClass {
 
     }
 
-} 
+}
 
 
 ```
@@ -224,7 +219,6 @@ class MyClass {
 　　《Java编程思想》
 
 ##### 本文摘自http://www.cnblogs.com/dolphin0520/p/3736238.html
-
 
 
 <html>

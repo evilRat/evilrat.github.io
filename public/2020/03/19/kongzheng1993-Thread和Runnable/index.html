@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Evil</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Thread和Runnable我们都知道Java中创建线程有两种方式，继承Thread类和实现Runnable接口。其实呢，我们看了Thread的源码就能了解到：Thread实现了Runnable，其实也是个Runnable。 Thread的构造方法中有一个是：  这里传入的是一个Runnable，而继续往下执行，到了最后也是执行的这个target的run()方法。 如果我们不传入Runnable">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Evil">
+<meta property="og:url" content="https://kongzheng1993.github.io/2020/03/19/kongzheng1993-Thread和Runnable/index.html">
+<meta property="og:site_name" content="Evil">
+<meta property="og:description" content="Thread和Runnable我们都知道Java中创建线程有两种方式，继承Thread类和实现Runnable接口。其实呢，我们看了Thread的源码就能了解到：Thread实现了Runnable，其实也是个Runnable。 Thread的构造方法中有一个是：  这里传入的是一个Runnable，而继续往下执行，到了最后也是执行的这个target的run()方法。 如果我们不传入Runnable">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://kongzheng1993.github.io/2020/03/19/kongzheng1993-Thread和Runnable/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200319172854321.png">
+<meta property="og:image" content="https://kongzheng1993.github.io/2020/03/19/kongzheng1993-Thread和Runnable/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200319173106843.png">
+<meta property="og:image" content="https://kongzheng1993.github.io/2020/03/19/kongzheng1993-Thread和Runnable/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200319181144600.png">
+<meta property="og:updated_time" content="2020-03-19T10:30:27.493Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Evil">
+<meta name="twitter:description" content="Thread和Runnable我们都知道Java中创建线程有两种方式，继承Thread类和实现Runnable接口。其实呢，我们看了Thread的源码就能了解到：Thread实现了Runnable，其实也是个Runnable。 Thread的构造方法中有一个是：  这里传入的是一个Runnable，而继续往下执行，到了最后也是执行的这个target的run()方法。 如果我们不传入Runnable">
+<meta name="twitter:image" content="https://kongzheng1993.github.io/2020/03/19/kongzheng1993-Thread和Runnable/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200319172854321.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Evil" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Evil</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kongzheng1993.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-kongzheng1993-Thread和Runnable" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/19/kongzheng1993-Thread和Runnable/" class="article-date">
+  <time datetime="2020-03-18T16:00:00.000Z" itemprop="datePublished">2020-03-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Thread和Runnable"><a href="#Thread和Runnable" class="headerlink" title="Thread和Runnable"></a>Thread和Runnable</h1><p>我们都知道Java中创建线程有两种方式，继承Thread类和实现Runnable接口。其实呢，我们看了Thread的源码就能了解到：Thread实现了Runnable，其实也是个Runnable。</p>
+<p>Thread的构造方法中有一个是：</p>
+<p><img src="/2020/03/19/kongzheng1993-Thread和Runnable/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200319172854321.png" alt="image-20200319172854321"></p>
+<p>这里传入的是一个Runnable，而继续往下执行，到了最后也是执行的这个target的<code>run()</code>方法。</p>
+<p>如果我们不传入Runnable呢？</p>
+<p><img src="/2020/03/19/kongzheng1993-Thread和Runnable/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200319173106843.png" alt="image-20200319173106843"></p>
+<p>可以看到这个方法target是null。最后执行的是Thread重写的<code>run()</code>方法。</p>
+<p>所以看到这里可以了解到：</p>
+<ul>
+<li><p>Runnable就是个接口，写一个类实现Runnable接口，它并不能执行，它要提交到一个线程（Thread），在Thread实例化调用它的构造方法的时候，才会触发Runnable的run方法。</p>
+</li>
+<li><p>继承Thread来创建线程，重写了<code>run()</code>方法，当我们实例化这个类的时候，将会调用到父类，也就是Thread的无参构造函数，也就会执行我们这里重写的<code>run()</code>方法了。而这里的Thread实现了Runnable接口，所以它其实也是个Runnable。</p>
+</li>
+</ul>
+<h2 id="重要属性"><a href="#重要属性" class="headerlink" title="重要属性"></a>重要属性</h2><h3 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">int</span>  priority;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> MIN_PRIORITY = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> NORM_PRIORITY = <span class="number">5</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> MAX_PRIORITY = <span class="number">10</span>;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">setPriority</span><span class="params">(<span class="keyword">int</span> newPriority)</span> </span>&#123;</span><br><span class="line">        ThreadGroup g;</span><br><span class="line">        checkAccess();</span><br><span class="line">        <span class="keyword">if</span> (newPriority &gt; MAX_PRIORITY || newPriority &lt; MIN_PRIORITY) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>((g = getThreadGroup()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (newPriority &gt; g.getMaxPriority()) &#123;</span><br><span class="line">                newPriority = g.getMaxPriority();</span><br><span class="line">            &#125;</span><br><span class="line">            setPriority0(priority = newPriority);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getPriority</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> priority;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="线程的状态"><a href="#线程的状态" class="headerlink" title="线程的状态"></a>线程的状态</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> State &#123;</span><br><span class="line">        NEW,</span><br><span class="line">        RUNNABLE,</span><br><span class="line">        BLOCKED,</span><br><span class="line">        WAITING,</span><br><span class="line">        TIMED_WAITING,</span><br><span class="line">        TERMINATED;</span><br><span class="line">    &#125;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> State <span class="title">getState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> sun.misc.VM.toThreadState(threadStatus);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>网上找到的图：</p>
+<p><img src="/2020/03/19/kongzheng1993-Thread和Runnable/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200319181144600.png" alt="image-20200319181144600"></p>
+<h3 id="主要方法"><a href="#主要方法" class="headerlink" title="主要方法"></a>主要方法</h3><ul>
+<li><p>本地方法获取当前线程</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">native</span> Thread <span class="title">currentThread</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>run()</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (target != <span class="keyword">null</span>) &#123;</span><br><span class="line">            target.run();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里就是上面说的，如果是传入Runnable的话，这里target就不会是null了，如果没有传入target，就不会执行什么，但是一般我们不传入target，就会重写<code>run()</code>方法了。</p>
+</li>
+<li><p>start()</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * This method is not invoked for the main method thread or "system"</span></span><br><span class="line"><span class="comment">         * group threads created/set up by the VM. Any new functionality added</span></span><br><span class="line"><span class="comment">         * to this method in the future may have to also be added to the VM.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * A zero status value corresponds to state "NEW".</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">if</span> (threadStatus != <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalThreadStateException();</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Notify the group that this thread is about to be started</span></span><br><span class="line"><span class="comment">         * so that it can be added to the group's list of threads</span></span><br><span class="line"><span class="comment">         * and the group's unstarted count can be decremented. */</span></span><br><span class="line">        group.add(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">boolean</span> started = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            start0();</span><br><span class="line">            started = <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (!started) &#123;</span><br><span class="line">                    group.threadStartFailed(<span class="keyword">this</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable ignore) &#123;</span><br><span class="line">                <span class="comment">/* do nothing. If start0 threw a Throwable then</span></span><br><span class="line"><span class="comment">                  it will be passed up the call stack */</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">start0</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>这里会调用一个本地方法<code>start0()</code>，应该会起一个线程执行<code>run()</code>方法。</p>
+</li>
+<li><p>boolean interrupted() &amp; void interrupt() &amp; boolean isInterrupted()</p>
+<p><strong>interrupt()</strong>:中断本线程(将中断状态标记为true)<br><strong>isInterrupted()</strong>:检测本线程是否已经中断 。如果已经中断，则返回true，否则false。中断状态不受该方法的影响。 如果中断调用时线程已经不处于活动状态，则返回false。<br><strong>interrupted()</strong>:检测当前线程是否已经中断 。如果当前线程存在中断，返回true，并且修改标记为false。再调用isIterruoted()会返回false。如果当前线程没有中断标记，返回false，不会修改中断标记。</p>
+</li>
+<li><p>void sleep(long millis) &amp; void sleep(long millis, int nanos)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">sleep</span><span class="params">(<span class="keyword">long</span> millis)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Causes the currently executing thread to sleep (temporarily cease</span></span><br><span class="line"><span class="comment">     * execution) for the specified number of milliseconds plus the specified</span></span><br><span class="line"><span class="comment">     * number of nanoseconds, subject to the precision and accuracy of system</span></span><br><span class="line"><span class="comment">     * timers and schedulers. The thread does not lose ownership of any</span></span><br><span class="line"><span class="comment">     * monitors.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  millis</span></span><br><span class="line"><span class="comment">     *         the length of time to sleep in milliseconds</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  nanos</span></span><br><span class="line"><span class="comment">     *         &#123;<span class="doctag">@code</span> 0-999999&#125; additional nanoseconds to sleep</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span>  IllegalArgumentException</span></span><br><span class="line"><span class="comment">     *          if the value of &#123;<span class="doctag">@code</span> millis&#125; is negative, or the value of</span></span><br><span class="line"><span class="comment">     *          &#123;<span class="doctag">@code</span> nanos&#125; is not in the range &#123;<span class="doctag">@code</span> 0-999999&#125;</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span>  InterruptedException</span></span><br><span class="line"><span class="comment">     *          if any thread has interrupted the current thread. The</span></span><br><span class="line"><span class="comment">     *          &lt;i&gt;interrupted status&lt;/i&gt; of the current thread is</span></span><br><span class="line"><span class="comment">     *          cleared when this exception is thrown.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sleep</span><span class="params">(<span class="keyword">long</span> millis, <span class="keyword">int</span> nanos)</span></span></span><br><span class="line"><span class="function">    <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (millis &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"timeout value is negative"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (nanos &lt; <span class="number">0</span> || nanos &gt; <span class="number">999999</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(</span><br><span class="line">                                <span class="string">"nanosecond timeout value out of range"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (nanos &gt;= <span class="number">500000</span> || (nanos != <span class="number">0</span> &amp;&amp; millis == <span class="number">0</span>)) &#123;</span><br><span class="line">            millis++;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        sleep(millis);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>两个参数的sleep只是将nanos转为millis(四舍五入转换)，调用sleep(millis)方法。<br>sleep(millis)是本地方法，让当前线程休眠指定时间。<br>sleep不释放锁。</p>
+</li>
+<li><p>void join() &amp; void join(long millis) &amp; void join(long millis, int nanos)</p>
+<p>将线程加入到当前线程中，使父线程等待子线程执行完毕再继续执行。</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2020/03/19/kongzheng1993-Thread和Runnable/" data-id="ck8d4ki8o006g20c851cdrd34" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/03/19/kongzheng1993-Future/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/03/08/kongzheng1993-Map遍历的几种方法/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/NIO-BIO-IO/">NIO BIO IO</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/">RSA</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/">SHA</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/加密/">加密</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/加密/签名/">签名</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/">github</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/git/">git</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jdk/">jdk</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/linux/ss/">ss</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/java/">java</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/">quartz</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/锁/">锁</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/锁/分布式/">分布式</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/resume/">resume</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/suse/">suse</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/">server</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/FTP/">FTP</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/编码/">编码</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Class/">Class</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FTP/">FTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NIO-BIO-IO/">NIO BIO IO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RSA/">RSA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SHA/">SHA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/String/">String</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/catch，try/">catch，try</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/">console</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/distinct/">distinct</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/float/">float</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/group-by/">group by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/images/">images</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jdk/">jdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mq/">mq</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/new/">new</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/order-by/">order by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/">quartz</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/re/">re</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/resume，简历/">resume，简历</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sample-post/">sample post</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/select/">select</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/">server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/servlet/">servlet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlplus/">sqlplus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ss/">ss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/suse/">suse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sys/">sys</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/test/">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/业务/">业务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/加密/">加密</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/备份/">备份</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/学习/">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安全/">安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/对象，Class对象/">对象，Class对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/消息队列/">消息队列</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/签名/">签名</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编码/">编码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/职业/">职业</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/锁/">锁</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Class/" style="font-size: 10px;">Class</a> <a href="/tags/FTP/" style="font-size: 10px;">FTP</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/NIO-BIO-IO/" style="font-size: 10px;">NIO BIO IO</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/SHA/" style="font-size: 10px;">SHA</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/catch，try/" style="font-size: 10px;">catch，try</a> <a href="/tags/console/" style="font-size: 10px;">console</a> <a href="/tags/distinct/" style="font-size: 10px;">distinct</a> <a href="/tags/float/" style="font-size: 10px;">float</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/group-by/" style="font-size: 10px;">group by</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/images/" style="font-size: 16.67px;">images</a> <a href="/tags/java/" style="font-size: 16.67px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/mq/" style="font-size: 10px;">mq</a> <a href="/tags/mysql/" style="font-size: 16.67px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/oop/" style="font-size: 20px;">oop</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/order-by/" style="font-size: 10px;">order by</a> <a href="/tags/quartz/" style="font-size: 10px;">quartz</a> <a href="/tags/re/" style="font-size: 16.67px;">re</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/resume，简历/" style="font-size: 10px;">resume，简历</a> <a href="/tags/sample-post/" style="font-size: 16.67px;">sample post</a> <a href="/tags/select/" style="font-size: 10px;">select</a> <a href="/tags/server/" style="font-size: 10px;">server</a> <a href="/tags/servlet/" style="font-size: 10px;">servlet</a> <a href="/tags/sql/" style="font-size: 13.33px;">sql</a> <a href="/tags/sqlplus/" style="font-size: 10px;">sqlplus</a> <a href="/tags/ss/" style="font-size: 10px;">ss</a> <a href="/tags/suse/" style="font-size: 10px;">suse</a> <a href="/tags/sys/" style="font-size: 10px;">sys</a> <a href="/tags/test/" style="font-size: 16.67px;">test</a> <a href="/tags/业务/" style="font-size: 10px;">业务</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/加密/" style="font-size: 10px;">加密</a> <a href="/tags/备份/" style="font-size: 10px;">备份</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/学习/" style="font-size: 10px;">学习</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/对象，Class对象/" style="font-size: 10px;">对象，Class对象</a> <a href="/tags/消息队列/" style="font-size: 10px;">消息队列</a> <a href="/tags/签名/" style="font-size: 10px;">签名</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/职业/" style="font-size: 10px;">职业</a> <a href="/tags/锁/" style="font-size: 10px;">锁</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/03/25/kongzheng1993-一次老代码优化/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/25/kongzheng1993-RocketMQ定时消息示例/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/19/kongzheng1993-Future/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/19/kongzheng1993-Thread和Runnable/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/08/kongzheng1993-Map遍历的几种方法/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 evilRat<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

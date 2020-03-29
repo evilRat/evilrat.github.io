@@ -10,11 +10,10 @@ comments: true
 
 ## java反射学习笔记
 
-#### 重新投入java的怀抱，我要改变我的生活，做自己想做的。
 
 复习java反射机制，发现我一直没理解Class的对象这个含义，Class是一个类名
 
-```
+```java
 
 import java.lang.reflect.Method;
 

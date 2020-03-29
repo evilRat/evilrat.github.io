@@ -62,56 +62,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-kongzheng1993-生产部署illegal-character" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-kongzheng1993-MySQL" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/05/30/kongzheng1993-生产部署illegal-character/" class="article-date">
-  <time datetime="2019-05-29T16:00:00.000Z" itemprop="datePublished">2019-05-30</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/编码/">编码</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/30/kongzheng1993-生产部署illegal-character/">***.java:[1,1] illegal character</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="千万不要用记事本写代码改代码……"><a href="#千万不要用记事本写代码改代码……" class="headerlink" title="千万不要用记事本写代码改代码……"></a>千万不要用记事本写代码改代码……</h2><p>刚接到今晚发布留守同事等电话：“你的代码报错了，给你发截图了，qq！！！”。我心里一惊，mmp，不可能吧。。。<br>赶紧登陆qq，看了一下他发来等截图<br><img src="/2019/05/30/kongzheng1993-生产部署illegal-character/WechatIMG1.jpeg" alt="编译报错"><br>mmp? 第一行，第一个字符就报错？<br>定睛一看，是非法字符。<br>仔细回想……<br>今天我提代码的时候在生产库用记事本改代码了……<br>“大哥，帮我把这个文件重新提一下，多谢多谢🙏”<br>重提这个文件，打包，发布，编译成功，总算松了口气。</p>
-<p>之前就记得windows记事本会文本文件编码做修改，静下来后百度下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">某些编辑器会往utf8文件中添加utf8标记（editplus称其为签名），它会在文件开始的地方插入三个不可见的字符（0xEF 0xBB 0xBF，即BOM），它的表示的是 Unicode 标记（BOM）。 因此要解决这个问题的关键就是把这个标记选项去掉，可按如下方法操作。 </span><br><span class="line">首先用editplus打开这个文件，从Doucument菜单中选择Permanet Settings,有三个分类，分别是General,File, Tools.点击File,右边会有一项是 UTF-8 signature: 选择 always remove signature. 点击OK 。中文版本的 Editplus 下操作的菜单结构如下: 文档-&gt;参数设置-&gt;文件-&gt;UTF-8签名-&gt;总是移除签名-&gt;确定 ，这样就设置了UTF-8格式不需要在文件前面加标记，最后把文件另存为utf-8格式就好了.</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2019/05/30/kongzheng1993-生产部署illegal-character/" data-id="cjzh3e0cc001e16c8h8jhnioa" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编码/">编码</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-mysql数据库导出导入" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/08/05/kongzheng1993-mysql数据库导出导入/" class="article-date">
-  <time datetime="2018-08-04T16:00:00.000Z" itemprop="datePublished">2018-08-05</time>
+    <a href="/2019/09/11/kongzheng1993-MySQL/" class="article-date">
+  <time datetime="2019-09-11T10:30:52.000Z" itemprop="datePublished">2019-09-11</time>
 </a>
     
   <div class="article-category">
@@ -126,7 +80,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/05/kongzheng1993-mysql数据库导出导入/">mysql数据库导出导入</a>
+      <a class="article-title" href="/2019/09/11/kongzheng1993-MySQL/">MySQL</a>
     </h1>
   
 
@@ -134,41 +88,234 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>一直在用oracle，今天学习了一下mysql如何导库。</p>
-<h2 id="mysqldump"><a href="#mysqldump" class="headerlink" title="mysqldump"></a>mysqldump</h2><p>mysqldump一般在/usr/bin/目录下，装晚mysql后就可以使用了。</p>
-<h2 id="导出"><a href="#导出" class="headerlink" title="导出"></a>导出</h2><ol>
-<li>一般形式：mysqldump -h IP -u 用户名 -p 数据库名 &gt; 导出的文件名</li>
-</ol>
-<p>mysqldump和mysql登陆数据库的格式差不多，-h指定ip，-u指定登陆用户，-p指定输入密码。后面加上输出重定向到文件名。</p>
-<p>这种一般形式是导出此数据库中的所有表和数据。</p>
-<ol start="2">
-<li>导出数据库所有表结构，但不导出数据。</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -h localhost -u root -p -d <span class="built_in">test</span> &gt; /home/evilrat/dbbak/test.sql</span><br></pre></td></tr></table></figure>
+        <h2 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h2><p>之前一只觉得数据库没什么，会用就行了，最近面试总是碰壁，很多又是数据库的问题打不上来，不够深入是我的大问题。所以准备总结一下。</p>
+<h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><p>索引是数据库查询操作中提升速度的一种手段，索引是一种数据结构。<br>索引是一个排序的列表，这个列表中存储着索引的值和包含这个值的数据所在的物理地址，数据量庞大的时候，索引可以快速定位需要查找的数据对应的物理地址，不需要扫描全表的数据。</p>
+<ol>
+<li><p>建标时创建索引</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> t_table(</span><br><span class="line">    <span class="keyword">ID</span> <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">    USER_NAME <span class="built_in">VARCHAR</span>(<span class="number">16</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">    <span class="keyword">INDEX</span> USER_NAME_INDEX (USER_NAME), <span class="comment">#单列索引</span></span><br><span class="line">    <span class="keyword">INDEX</span> (<span class="keyword">ID</span>,USER_NAME) <span class="comment">#组合索引</span></span><br><span class="line">) <span class="keyword">ENGINE</span> = <span class="keyword">INNODB</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span> = utf8 <span class="keyword">COMMENT</span> <span class="string">'注释'</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>建表后创建索引</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> t_TABLE <span class="keyword">ADD</span> <span class="keyword">UNIQUE</span> <span class="keyword">INDEX</span> (<span class="keyword">ID</span>);</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> T_TABLE <span class="keyword">ADD</span> <span class="keyword">INDEX</span> (<span class="keyword">ID</span>,USER_NAME);</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> T_TABLE <span class="keyword">ADD</span> PRIMARY <span class="keyword">KEY</span> (<span class="keyword">ID</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看已经创建的索引</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">index</span> <span class="keyword">from</span> t_table;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除索引</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">index</span> user_name_index <span class="keyword">on</span> t_table;</span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> t_table <span class="keyword">drop</span> <span class="keyword">index</span> user_name_index;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看索引使用情况（执行计划）</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span> * <span class="keyword">from</span> t_table <span class="keyword">where</span> user_name = <span class="string">'Tom'</span>;</span><br></pre></td></tr></table></figure>
 
-<ol start="3">
-<li>导出某张表的表结构，不含数据。</li>
+</li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -h localhost -u root -p -d <span class="built_in">test</span> t_user &gt; /home/evilrat/dbbak/tuser.sql</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; explain select * from t_test where username = &apos;Tom&apos;;</span><br><span class="line">+----+-------------+--------+------------+------+-----------------------+-----------------------+---------+-------+------+----------+-------------+</span><br><span class="line">| id | select_type | table  | partitions | type | possible_keys         | key                   | key_len | ref   | rows | filtered | Extra       |</span><br><span class="line">+----+-------------+--------+------------+------+-----------------------+-----------------------+---------+-------+------+----------+-------------+</span><br><span class="line">|  1 | SIMPLE      | t_test | NULL       | ref  | t_test_index_username | t_test_index_username | 67      | const |    1 |   100.00 | Using index |</span><br><span class="line">+----+-------------+--------+------------+------+-----------------------+-----------------------+---------+-------+------+----------+-------------+</span><br><span class="line">1 row in set, 1 warning (0.00 sec)</span><br></pre></td></tr></table></figure>
 
-<ol start="4">
-<li>备份多个数据库</li>
+<p>说明：</p>
+<p>id：SELECT识别符。这是SELECT的查询序列号。</p>
+<p>select_type：SELECT类型。</p>
+<pre><code>SIMPLE： 简单SELECT(不使用UNION或子查询)
+PRIMARY： 最外面的SELECT
+UNION：UNION中的第二个或后面的SELECT语句
+DEPENDENT UNION：UNION中的第二个或后面的SELECT语句，取决于外面的查询
+UNION RESULT：UNION的结果
+SUBQUERY：子查询中的第一个SELECT
+DEPENDENT SUBQUERY：子查询中的第一个SELECT，取决于外面的查询
+DERIVED：导出表的SELECT(FROM子句的子查询)</code></pre><p>table：表名</p>
+<p>type：联接类型。是SQL性能的非常重要的一个指标，结果值从好到坏依次是：system &gt; const &gt; eq_ref &gt; ref &gt; fulltext &gt; ref_or_null &gt; index_merge &gt; unique_subquery &gt; index_subquery &gt; range &gt; index &gt; ALL。<br>一般来说，得保证查询至少达到range级别。</p>
+<pre><code>system：表仅有一行(=系统表)。这是const联接类型的一个特例。
+const：表最多有一个匹配行，它将在查询开始时被读取。因为仅有一行，在这行的列值可被优化器剩余部分认为是常数。const用于用常数值比较PRIMARY KEY或UNIQUE索引的所有部分时。
+eq_ref：对于每个来自于前面的表的行组合，从该表中读取一行。这可能是最好的联接类型，除了const类型。它用在一个索引的所有部分被联接使用并且索引是UNIQUE或PRIMARY KEY。eq_ref可以用于使用= 操作符比较的带索引的列。比较值可以为常量或一个使用在该表前面所读取的表的列的表达式。
+ref：对于每个来自于前面的表的行组合，所有有匹配索引值的行将从这张表中读取。如果联接只使用键的最左边的前缀，或如果键不是UNIQUE或PRIMARY KEY(换句话说，如果联接不能基于关键字选择单个行的话)，则使用ref。如果使用的键仅仅匹配少量行，该联接类型是不错的。ref可以用于使用=或&lt;=&gt;操作符的带索引的列。
+ref_or_null：该联接类型如同ref，但是添加了MySQL可以专门搜索包含NULL值的行。在解决子查询中经常使用该联接类型的优化。
+index_merge：该联接类型表示使用了索引合并优化方法。在这种情况下，key列包含了使用的索引的清单，key_len包含了使用的索引的最长的关键元素。
+unique_subquery：该类型替换了下面形式的IN子查询的ref：value IN (SELECT primary_key FROMsingle_table WHERE some_expr);unique_subquery是一个索引查找函数，可以完全替换子查询，效率更高。
+index_subquery：该联接类型类似于unique_subquery。可以替换IN子查询，但只适合下列形式的子查询中的非唯一索引：value IN (SELECT key_column FROM single_table WHERE some_expr)
+range：只检索给定范围的行，使用一个索引来选择行。key列显示使用了哪个索引。key_len包含所使用索引的最长关键元素。在该类型中ref列为NULL。当使用=、&lt;&gt;、&gt;、&gt;=、&lt;、&lt;=、IS NULL、&lt;=&gt;、BETWEEN或者IN操作符，用常量比较关键字列时，可以使用range
+index：该联接类型与ALL相同，除了只有索引树被扫描。这通常比ALL快，因为索引文件通常比数据文件小。
+all：对于每个来自于先前的表的行组合，进行完整的表扫描。如果表是第一个没标记const的表，这通常不好，并且通常在它情况下很差。通常可以增加更多的索引而不要使用ALL，使得行能基于前面的表中的常数值或列值被检索出。</code></pre><p>possible_keys：possible_keys列指出MySQL能使用哪个索引在该表中找到行。注意，该列完全独立于EXPLAIN输出所示的表的次序。这意味着在possible_keys中的某些键实际上不能按生成的表次序使用。</p>
+<p>key：key列显示MySQL实际决定使用的键(索引)。如果没有选择索引，键是NULL。要想强制MySQL使用或忽视possible_keys列中的索引，在查询中使用FORCE INDEX、USE INDEX或者IGNORE INDEX。</p>
+<p>key_len：key_len列显示MySQL决定使用的键长度。如果键是NULL，则长度为NULL。注意通过key_len值我们可以确定MySQL将实际使用一个多部关键字的几个部分。</p>
+<p>ref：ref列显示使用哪个列或常数与key一起从表中选择行。</p>
+<p>rows：rows列显示MySQL认为它执行查询时必须检查的行数。</p>
+<p>Extra：该列包含MySQL解决查询的详细信息。</p>
+<pre><code>Distinct：MySQL发现第1个匹配行后，停止为当前的行组合搜索更多的行。
+Not exists：MySQL能够对查询进行LEFT JOIN优化，发现1个匹配LEFT JOIN标准的行后，不再为前面的的行组合在该表内检查更多的行。
+range checked for each record (index map: #)：MySQL没有发现好的可以使用的索引，但发现如果来自前面的表的列值已知，可能部分索引可以使用。对前面的表的每个行组合，MySQL检查是否可以使用range或index_merge访问方法来索取行。
+Using filesort：MySQL需要额外的一次传递，以找出如何按排序顺序检索行。通过根据联接类型浏览所有行并为所有匹配WHERE子句的行保存排序关键字和行的指针来完成排序。然后关键字被排序，并按排序顺序检索行。
+Using index：从只使用索引树中的信息而不需要进一步搜索读取实际的行来检索表中的列信息。当查询只使用作为单一索引一部分的列时，可以使用该策略。
+Using temporary：为了解决查询，MySQL需要创建一个临时表来容纳结果。典型情况如查询包含可以按不同情况列出列的GROUP BY和ORDER BY子句时。
+Using where：WHERE子句用于限制哪一个行匹配下一个表或发送到客户。除非你专门从表中索取或检查所有行，如果Extra值不为Using where并且表联接类型为ALL或index，查询可能会有一些错误。
+Using sort_union(...), Using union(...), Using intersect(...)：这些函数说明如何为index_merge联接类型合并索引扫描。
+Using index for group-by：类似于访问表的Using index方式，Using index for group-by表示MySQL发现了一个索引，可以用来查询GROUP BY或DISTINCT查询的所有列，而不要额外搜索硬盘访问实际的表。并且，按最有效的方式使用索引，以便对于每个组，只读取少量索引条目。</code></pre><ol start="6">
+<li>模糊查询时，%如果在前面，那么不会使用索引。涉及到多个索引字段时,如果这些索引字段中，不存在主键索引的话，那么就会使用该使用的索引。多个索引时，先使用哪个索引后使用哪个索引，是由MySQL的优化器经过一些列计算后作出的抉择。当对索引字段进行 &gt;， &lt;，&gt;=， &lt;=，not in，between …… and ……，函数(索引字段)，like模糊查询%在字段前时，不会使用该索引.在实际使用时，如果涉及到多列，我们一般都不会将这些列一 一创建为单列索引，而是将这些列创建为组合索引。</li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -h localhost -u root -p --databases test1 test2 &gt; /home/evilrat/dbbak/test1_test2.sql</span><br></pre></td></tr></table></figure>
+<ol start="7">
+<li><p>组合索引的使用<br> 最左原则<br> 假设组合索引为：a,b,c的话;那么当SQL中对应有：a或a，b或a，b，c的时候，可称为完全满足最左原则；当SQL中对应只有a，c的时候，可称为部分满足最左原则；当SQL中没有a的时候，可称为不满足最左原则。<br> 注：SQL语句中的对应条件的先后顺序与创建组合索引中列的顺序无关。如果完全满足最左原则，所有的列都会走索引，部分满足最左原则，那么最左的列会走索引，剩下的不会走索引。不满足最左原则的话就不会走索引。</p>
+</li>
+<li><p>索引无法存储null值</p>
+<p> a. 单列索引无法储null值，复合索引无法储全为null的值。<br> b. 查询时，采用is null条件时，不能利用到索引，只能全表扫描。<br> 为什么索引列无法存储Null值？<br> a.索引是有序的。NULL值进入索引时，无法确定其应该放在哪里。（将索引列值进行建树，其中必然涉及到诸多的比较操作，null值是不确定值，无法比较，无法确定null出现在索引树的叶子节点位置。）　<br> b.如果需要把空值存入索引，方法有二：其一，把NULL值转为一个特定的值，在WHERE中检索时，用该特定值查找。其二，建立一个复合索引。例如<code>create index ind_a on table(col1,1);</code>通过在复合索引中指定一个非空常量值，而使构成索引的列的组合中，不可能出现全空值。　</p>
+</li>
+<li><p>不适合键值较少的列（重复数据较多的列）<br> 假如索引列TYPE有5个键值，如果有1万条数据，那么<code>WHERE TYPE = 1</code>将访问表中的2000个数据块。再加上访问索引块，一共要访问大于200个的数据块。如果全表扫描，假设10条数据一个数据块，那么只需访问1000个数据块，既然全表扫描访问的数据块少一些，肯定就不会利用索引了。</p>
+<p> 3.前导模糊查询不能利用索引(like ‘%XX’或者like ‘%XX%’)<br> 假如有这样一列code的值为’AAA’,’AAB’,’BAA’,’BAB’ ,如果<code>where code like &#39;%AB&#39;</code>条件，由于前面是模糊的，所以不能利用索引的顺序，必须一个个去找，看是否满足条件。这样会导致全索引扫描或者全表扫描。如果是这样的条件<code>where code like &#39;A%&#39;</code>，就可以查找CODE中A开头的CODE的位置，当碰到B开头的数据时，就可以停止查找了，因为后面的数据一定不满足要求。这样就可以利用索引了。</p>
+</li>
+<li><p>索引失效的几种情况<br>1.如果条件中有or，即使其中有条件带索引也不会使用(这也是为什么尽量少用or的原因)要想使用or，又想让索引生效，只能将or条件中的每个列都加上索引<br>2.对于多列索引，不是使用的第一部分，则不会使用索引<br>3.like查询以%开头<br>4.如果列类型是字符串，那一定要在条件中将数据使用引号引用起来,否则不使用索引<br>5.如果mysql估计使用全表扫描要比使用索引快,则不使用索引</p>
+</li>
+<li><p>MySQL主要提供2种方式的索引：B-Tree索引，Hash索引<br>B树索引具有范围查找和前缀查找的能力，对于有N节点的B树，检索一条记录的复杂度为O(LogN)。相当于二分查找。哈希索引只能做等于查找，但是无论多大的Hash表，查找复杂度都是O(1)。<br>显然，如果值的差异性大，并且以等值查找（=、 &lt;、&gt;、in）为主，Hash索引是更高效的选择，它有O(1)的查找复杂度。<br>如果值的差异性相对较差，并且以范围查找为主，B树是更好的选择，它支持范围查找。</p>
+</li>
+</ol>
 
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2019/09/11/kongzheng1993-MySQL/" data-id="ck8d4ki4k001r20c8ux48u2gy" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-kongzheng1993-NIO&amp;BIO" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/11/kongzheng1993-NIO&BIO/" class="article-date">
+  <time datetime="2019-09-11T10:30:52.000Z" itemprop="datePublished">2019-09-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/NIO-BIO-IO/">NIO BIO IO</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/11/kongzheng1993-NIO&BIO/">NIO&amp;BIO</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="BIO"><a href="#BIO" class="headerlink" title="BIO"></a>BIO</h2><p>同步非阻塞， blocking I/O，服务器实现模式为一个连接一个线程，即客户端有连接请求时服务器就需要启动一个线程进行处理，如果这个连接不做任何事情就会造成不必要的线程开销。这种情况可以通过线程池机制改善。tomcat bio就是通过线程池实现的，默认200并发。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2019/09/11/kongzheng1993-NIO&BIO/" data-id="ck8d4ki5e002m20c87voz7af4" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NIO-BIO-IO/">NIO BIO IO</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-kongzheng1993-HashMap&amp;ConcurrentHashMap" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/08/18/kongzheng1993-HashMap&ConcurrentHashMap/" class="article-date">
+  <time datetime="2019-08-17T16:30:52.000Z" itemprop="datePublished">2019-08-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/jdk/">jdk</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/18/kongzheng1993-HashMap&ConcurrentHashMap/">HashMap&amp;ConcurrentHashMap</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="jdk1-7"><a href="#jdk1-7" class="headerlink" title="jdk1.7"></a>jdk1.7</h2><h3 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h3><ol>
+<li>HashMap默认大小是16，1 &lt;&lt; 4</li>
+<li>可以使用构造方法<code>HashMap(int initialCapacity, float loadFactor)</code>来创建一个HashMap，实际上使用无参的构造函数也会调用这个有参的构造方法。这里只会将初始容量和加载因子赋值给对象的成员变量。这里并没有创建HashMap的中的Entry数组</li>
+<li>加载因子决定了什么时候扩充HashMap的容量。比如默认的加载因子是0.75L，也就是当容量已经占用到4/3的时候就会触发扩容。</li>
+<li>当我们调用<code>public V put(K key, V value)</code>的时候，会判断table（Entry数组）是否为空。如果为空，会调用<code>inflateTable(threshold)</code>，这里的threshold就是一开始创建HashMap的初始容量。在这里threshold会被处理成比它自身大的最小的2的幂，比如传3，这里就会是4，10这里就会是16。然后接下来就会创建一个Entry数组了。在inflateTable方法初始化了Entry数组后，就会判断key是否为空，如果为空就调用<code>putForNullKey(value)</code>，也就是说HashMap允许key为null</li>
+<li>为什么创建对象的时候容量一定要是2的幂呢？这和HashMap计算每个key的位置有关系。怎么确定应该放在什么位置？</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">int</span> <span class="title">hash</span><span class="params">(Object k)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> h = hashSeed;</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">0</span> != h &amp;&amp; k <span class="keyword">instanceof</span> String) &#123;</span><br><span class="line">        <span class="keyword">return</span> sun.misc.Hashing.stringHash32((String) k);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    h ^= k.hashCode();</span><br><span class="line">    <span class="comment">// This function ensures that hashCodes that differ only by</span></span><br><span class="line">    <span class="comment">// constant multiples at each bit position have a bounded</span></span><br><span class="line">    <span class="comment">// number of collisions (approximately 8 at default load factor).</span></span><br><span class="line">    h ^= (h &gt;&gt;&gt; <span class="number">20</span>) ^ (h &gt;&gt;&gt; <span class="number">12</span>);</span><br><span class="line">    <span class="keyword">return</span> h ^ (h &gt;&gt;&gt; <span class="number">7</span>) ^ (h &gt;&gt;&gt; <span class="number">4</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果我们直接拿到key的hashcode，然后和数组长度进行取余，每次都会返回0~entry.length()之间的数字，也就可以唯一确认一个位置。</p>
+<p>但是考虑到效率问题，jdk里并没有这么做，因为计算机进行二进制的位运算是最快的，所以这里选择了位与运算。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">indexFor</span><span class="params">(<span class="keyword">int</span> h, <span class="keyword">int</span> length)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// assert Integer.bitCount(length) == 1 : "length must be a non-zero power of 2";</span></span><br><span class="line">    <span class="keyword">return</span> h &amp; (length-<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里返回的是最终存在数组中的位置。这里是hash方法结果与长度-1做与运算。</p>
+<p>先搞懂为什么是长度-1？<br>之前我们了解到数组长度肯定是2的幂，<br>比如key的hashcode的二进制为1010 1010<br>数组大小为8，也就是1000，减去1后就是0111<br>做与运算：<br>1010 1010<br>0000 0111<br>&amp;
+0000 0010</p>
+<p>可以看出，数组长度为2的幂，减一后，低位一定全是1，也就是会把key的hashcode的低位保留下来，而且低几位也是确定的，而这低几位，不论key的hashcode是多少，肯定也是在0-entry.length-1之间。达到了和取余一样的效果，而且性能更好。</p>
+<p>但是我们看到hash方法后面一顿位移操作，这又是为什么呢？</p>
+<p>我们刚才所说的方法，如果直接那key的hashcode来做的话，那么大的数，只有最后几位有用，高位的值对最终的位置不会有影响，这样会有很大机率发生哈希冲突。</p>
+<p>前面的hash方法中，在返回之前，做了右移和异或操作，这样的话把高位移到右边，再加上异或操作，使得高位也可以影响到最后产生的hash值，这样就可以减小发生hash冲突的可能性。这个操作也是因为<code>hash(Object k)</code>的参数可以是自定义的，那么这个自定义类的hashCode方法也是可以重写的，如果程序员设计的hashCode方法散列性不高，jdk源码中的右移和异或操作也可以增大散列性。</p>
+<ol start="6">
+<li>put方法中确定了位置之后，就开始遍历该位置的entry链表，如果有重复的，会将旧的值返回出去，并且把该位置的entry的value修改为新的value。如果没有重复的值，就回modCount++，然后调用<code>addEntry(hash, key, value, i)</code>，这个方法的逻辑就是，先判断size是否到达了阈值，也就是当前的容量大小*扩容因子，并且table[i]!=null，就会触发扩容（也就是table当前位置不为空的时候才会进行扩容，jdk1.8已经去掉），扩容是new一个新的entry数组，长度为之前容量的两倍，然后调用transfer方法，二重循环将旧数组中每个entry放到新的数组中，最后新数组会被赋值给旧数组变量，旧数组对象就会被回收。扩容处理完以后就会拿到数组中i位置的entry对象，然后调用new一个entry，next指向之前table[i]的entry，也就是放在了i位置的头部，然后把这个entry放在了table的i位置，之后size++，记录size是为了当调用map.size()的时候，更快的返回结果。</li>
+<li>到这里HashMap线程不安全的原因就明确了，当多线程中数组需要扩容时，new新数组的时候，就会发生一些预期外的结果。HashMap通过设置足够的容量可以避免线程不安全问题。</li>
+</ol>
+<h3 id="HashTable"><a href="#HashTable" class="headerlink" title="HashTable"></a>HashTable</h3><p>HashTable为了解决线程安全问题，在HashMap的基础上加入了锁，在方法中加入synchronized。但是这样做回严重影响效率，所以很少使用。</p>
+<h3 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h3><p>像HashTable，每个线程要去竞争同一把锁，这样回严重影响效率，但是如果分段加锁，可以减少竞争同一把锁的线程数，就可以有效的缓解线程之间的竞争，提高效率。</p>
+<ol>
+<li>增加了属性，并发级别，就是控制分多少段，默认16。</li>
+<li>增加了一个对象，segment，每个segment就像之前的一个HashMap。<br>ConcurrentHashMap中有个多个segment(小HashMap)，而且segment继承了ReentrantLock，也就是它自带锁，segment在执行put方法时会先去获取锁，操作完成后会释放锁。segment中有Entry数组。</li>
+<li>ConcurrentHashMap在执行put方法时，要先计算出应该放在哪个segment中，然后调用这个segment的put方法。segment的put方法逻辑就像之前HashMap的put方法了。</li>
+<li>初始化segment数组的时候，要根据构造方法传入的容量和并发级别计算出每个segment多大。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> ssize = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">while</span> (ssize &lt; concurrencyLevel) &#123;</span><br><span class="line">    ++sshift;</span><br><span class="line">    ssize &lt;&lt;= <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里的ssize就是初始话segment数组的大小。计算ssize，就是得到最小的大于并发级别的2的幂。</p>
+<ul>
+<li>容量为16，并发级别是8，那么segment数组的容量就是8</li>
+<li>容量是16，并发级别是4，那么segment数组的容量就是4</li>
+<li>容量为16，并发级别是5，那么segment数组的容量就是8</li>
+</ul>
 <ol start="5">
-<li>备份所有数据库的方法</li>
+<li>put时，会根据key计算出hash值，计算方法和HashMap稍有不同，不过思想是一样的。根据hash值得到要放在哪一个segment中，如果这个位置的segment是null，就要new一个segment。而一个segment有是一个entry数组，就要计算这个entry数组的大小应该是多少。不过这里很简单，就是整个ConcurrentHashMap的容量除以segment的容量</li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -h localhost -u root -p --all-databases &gt; /home/evilrat/dbbak/localhost.sql</span><br></pre></td></tr></table></figure>
+<h2 id="jdk1-8"><a href="#jdk1-8" class="headerlink" title="jdk1.8"></a>jdk1.8</h2><p>如果Map中的链表随着插入的entry的增多越来越长，就会导致每次操作越来越慢，因为链表是需要遍历的，每次put/get都要遍历判断链表上的每个entry。所以在jdk1.8引入了红黑树。</p>
+<h3 id="HashMap-1"><a href="#HashMap-1" class="headerlink" title="HashMap"></a>HashMap</h3><ol>
+<li>当链表长度大于8时就会把这个链表修改为空黑树，再把新的entry加入到红黑树中。</li>
+<li>已经引入了红黑树，所以jdk1.8在计算hash的时候也是1.7的思路，但是没有那么多的右移了。</li>
+<li>1.8把之前的Entry改成了Node</li>
+<li>思路大致和1.7一致，putVal方法中，会根据key计算hash，然后计算出应该存放在table哪个位置，如果这个位置是null，就会new一个Node，放在table的该位置。如果这个位置不是null，先判断table数组中该位置的node是否key是一致的，如果是一致的，就直接替换这个node，如果不一致，就会先判断这个node是不是一个TreeNode(红黑树)，如果不是红黑树，也就是一个链表，有一个和1.7不一样的地方是，1.8会直接将这个node插入到链表的尾部，而1.7是插入到头部，插入到尾部是因为加入了红黑树，插入的时候一定要判断链表长度，好决定要不要转换成红黑树，所以遍历完以后不如直接插入到尾部，而且这样还有一个好处，就是扩容的时候，移动node时不会导致顺序变化，多线程的时候就不会导致循环链表的问题（因为每次扩容都变化node顺序，另外一个线程获取到的next可能时这个线程的上一个），插入完成后，会判断长度是否到达了8，如果是就会转换成红黑树。如果是红黑树，就插入到红黑树。</li>
+</ol>
+<h3 id="ConcurrentHashMap-1"><a href="#ConcurrentHashMap-1" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h3><ol>
+<li>1.8的ConcurrentHashMap基于1.8的HashMap来的。</li>
+<li>1.7的ConcurrentHashMap是分段加锁，即每个segment一把锁，而基于1.8HashMap的思想，每次操作一个链表或者红黑树，都会操作table上的node，也就是链表的头部，或者树的根节点，所以只在table的node上加锁就可以了。</li>
+<li>1.8的ConcurrentHashMap中就没有segment这个概念了，因为旨在table上的node加锁嘛。</li>
+<li>怎么加的锁呢？在操作ConcurrentHashMap时，获取到当前key在table上所在的位置的时候，就给table上这个位置的node对象加锁，使用synchronized给node对象加锁。这样减少了对象的创建，节省了内存。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">final</span> V <span class="title">putVal</span><span class="params">(K key, V value, <span class="keyword">boolean</span> onlyIfAbsent)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (key == <span class="keyword">null</span> || value == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">        <span class="keyword">int</span> hash = spread(key.hashCode());</span><br><span class="line">        <span class="keyword">int</span> binCount = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (Node&lt;K,V&gt;[] tab = table;;) &#123;</span><br><span class="line">            Node&lt;K,V&gt; f; <span class="keyword">int</span> n, i, fh;</span><br><span class="line">            <span class="keyword">if</span> (tab == <span class="keyword">null</span> || (n = tab.length) == <span class="number">0</span>)</span><br><span class="line">                tab = initTable();</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> ((f = tabAt(tab, i = (n - <span class="number">1</span>) &amp; hash)) == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (casTabAt(tab, i, <span class="keyword">null</span>,</span><br><span class="line">                             <span class="keyword">new</span> Node&lt;K,V&gt;(hash, key, value, <span class="keyword">null</span>)))</span><br><span class="line">                    <span class="keyword">break</span>;                   <span class="comment">// no lock when adding to empty bin</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> ((fh = f.hash) == MOVED)</span><br><span class="line">                tab = helpTransfer(tab, f);</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                V oldVal = <span class="keyword">null</span>;</span><br><span class="line">                <span class="keyword">synchronized</span> (f) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (tabAt(tab, i) == f) &#123;</span><br><span class="line">                        <span class="keyword">if</span> (fh &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">                            binCount = <span class="number">1</span>;</span><br><span class="line">                            <span class="keyword">for</span> (Node&lt;K,V&gt; e = f;; ++binCount) &#123;</span><br><span class="line">                                K ek;</span><br><span class="line">                                <span class="keyword">if</span> (e.hash == hash &amp;&amp;</span><br><span class="line">                                    ((ek = e.key) == key ||</span><br><span class="line">                                     (ek != <span class="keyword">null</span> &amp;&amp; key.equals(ek)))) &#123;</span><br><span class="line">                                    oldVal = e.val;</span><br><span class="line">                                    <span class="keyword">if</span> (!onlyIfAbsent)</span><br><span class="line">                                        e.val = value;</span><br><span class="line">                                    <span class="keyword">break</span>;</span><br><span class="line">                                &#125;</span><br><span class="line">                                Node&lt;K,V&gt; pred = e;</span><br><span class="line">                                <span class="keyword">if</span> ((e = e.next) == <span class="keyword">null</span>) &#123;</span><br><span class="line">                                    pred.next = <span class="keyword">new</span> Node&lt;K,V&gt;(hash, key,</span><br><span class="line">                                                              value, <span class="keyword">null</span>);</span><br><span class="line">                                    <span class="keyword">break</span>;</span><br><span class="line">                                &#125;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">else</span> <span class="keyword">if</span> (f <span class="keyword">instanceof</span> TreeBin) &#123;</span><br><span class="line">                            Node&lt;K,V&gt; p;</span><br><span class="line">                            binCount = <span class="number">2</span>;</span><br><span class="line">                            <span class="keyword">if</span> ((p = ((TreeBin&lt;K,V&gt;)f).putTreeVal(hash, key,</span><br><span class="line">                                                           value)) != <span class="keyword">null</span>) &#123;</span><br><span class="line">                                oldVal = p.val;</span><br><span class="line">                                <span class="keyword">if</span> (!onlyIfAbsent)</span><br><span class="line">                                    p.val = value;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (binCount != <span class="number">0</span>) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (binCount &gt;= TREEIFY_THRESHOLD)</span><br><span class="line">                        treeifyBin(tab, i);</span><br><span class="line">                    <span class="keyword">if</span> (oldVal != <span class="keyword">null</span>)</span><br><span class="line">                        <span class="keyword">return</span> oldVal;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        addCount(<span class="number">1L</span>, binCount);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="导入"><a href="#导入" class="headerlink" title="导入"></a>导入</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql -h localhost -u root -p</span><br><span class="line">*******</span><br><span class="line">create database <span class="built_in">test</span>;</span><br><span class="line">show databases;</span><br><span class="line">use <span class="built_in">test</span>;</span><br><span class="line">show tables;</span><br><span class="line"><span class="built_in">source</span> /home/evilrat/dbbak/test.sql;</span><br><span class="line">show tables;</span><br><span class="line"><span class="built_in">exit</span>;</span><br></pre></td></tr></table></figure>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2018/08/05/kongzheng1993-mysql数据库导出导入/" data-id="cjzh3e0ca001c16c87zplpvtb" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2019/08/18/kongzheng1993-HashMap&ConcurrentHashMap/" data-id="ck8d4ki4l001t20c88o6sxcfm" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/备份/">备份</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jdk/">jdk</a></li></ul>
 
     </footer>
   </div>
@@ -177,14 +324,14 @@
 
 
   
-    <article id="post-kongzheng1993-java多线程总结" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-kongzheng1993-mysql超过最大连接数-一次生产问题定位" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/06/08/kongzheng1993-java多线程总结/" class="article-date">
-  <time datetime="2018-06-07T16:00:00.000Z" itemprop="datePublished">2018-06-08</time>
+    <a href="/2019/06/14/kongzheng1993-mysql超过最大连接数-一次生产问题定位/" class="article-date">
+  <time datetime="2019-06-14T04:34:44.000Z" itemprop="datePublished">2019-06-14</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/java/">java</a>
+    <a class="article-category-link" href="/categories/mysql/">mysql</a>►<a class="article-category-link" href="/categories/mysql/java/">java</a>
   </div>
 
   </div>
@@ -195,7 +342,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/06/08/kongzheng1993-java多线程总结/">java多线程总结</a>
+      <a class="article-title" href="/2019/06/14/kongzheng1993-mysql超过最大连接数-一次生产问题定位/">mysql超过最大连接数一次生产问题定位.md</a>
     </h1>
   
 
@@ -203,43 +350,29 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近面试两场，都是银行保险类的项目，面试官都问了我多线程的一些问题。今天抽空总结一下。</p>
-<h2 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h2><ol>
-<li>进程：一段程序的执行过程。是操作系统动态执行的基本单元，也是资源分配的基本单元。进程可以理解为是“进行中的程序”，处理器赋予时，程序才变成活动的，也就是进程。</li>
-<li>程序：指令和数据的有序集合。本身是静态的概念。</li>
-<li>线程：通常在一个进程中可以包含若干个线程，当然一个进程中至少有一个线程，不然没有存在的意义。线程可以利用进程所拥有的资源，在引入线程的操作系统中，通常都是把进程作为分配资源的基本单位，而把线程作为独立运行和独立调度的基本单位，由于线程比进程更小，基本上不拥有系统资源，故对它的调度所付出的开销就会小得多，能更高效的提高系统多个程序间并发执行的程度。</li>
-<li>多线程：在一个程序中，这些独立运行的程序片段叫作“线程”（Thread），利用它编程的概念就叫作“多线程处理”。多线程是为了同步完成多项任务，<font color="red">不是为了提高运行效率，而是为了提高资源使用效率来提高系统的效率。</font>线程是在同一时间需要完成多项任务的时候实现的。</li>
-<li>进程和线程的相同与不同：<br><br>&ensp;不同点：<br><br>&ensp;&ensp;&ensp;进程：每个进程都有独立的代码和数据空间（进程上下文），进程间的切换会有较大的开销，一个进程包含1–n个线程。（进程是资源分配的最小单位）。多进程是指操作系统能同时运行多个任务（程序）。<br><br>&ensp;&ensp;&ensp;线程：同一类线程共享代码和数据空间，每个线程有独立的运行栈和程序计数器(PC)，线程切换开销小。（线程是cpu调度的最小单位）。多线程是指在同一程序中有多个顺序流在执行。<br><br>&ensp;相同点：<br><br>&ensp;&ensp;&ensp;线程和进程一样分为五个阶段：创建、就绪、运行、阻塞、终止。</li>
-</ol>
-<h2 id="实现多线程"><a href="#实现多线程" class="headerlink" title="实现多线程"></a>实现多线程</h2><p>在java中要想实现多线程，有两种手段，一种是继续Thread类，另外一种是实现Runable接口。(其实准确来讲，应该有三种，还有一种是实现Callable接口，并与Future、线程池结合使用）。</p>
-<h4 id="实现Runnable接口比继承Thread类所具有的优势："><a href="#实现Runnable接口比继承Thread类所具有的优势：" class="headerlink" title="实现Runnable接口比继承Thread类所具有的优势："></a>实现Runnable接口比继承Thread类所具有的优势：</h4><ol>
-<li>适合多个相同的程序代码的线程去处理同一个资源</li>
-<li>可以避免java中的单继承的限制</li>
-<li>增加程序的健壮性，代码可以被多个线程共享，代码和数据独立</li>
-<li>线程池只能放入实现Runable或callable类线程，不能直接放入继承Thread的类</li>
-</ol>
-<h2 id="线程状态转换"><a href="#线程状态转换" class="headerlink" title="线程状态转换"></a>线程状态转换</h2><img src="/2018/06/08/kongzheng1993-java多线程总结/20150309140927553.jpeg">
+        <p>今天营业厅一体机小姐姐又来找我了，生产又有问题了。。。</p>
+<p>我查了下日志：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Caused by: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: User ngcrmpf_bj already has more than <span class="string">'max_user_connections'</span> active connections</span><br><span class="line">    at sun.reflect.GeneratedConstructorAccessor266.newInstance(Unknown Source)</span><br><span class="line">    at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:<span class="number">45</span>)</span><br><span class="line">    at java.lang.reflect.Constructor.newInstance(Constructor.java:<span class="number">423</span>)</span><br><span class="line">    at com.mysql.jdbc.Util.handleNewInstance(Util.java:<span class="number">404</span>)</span><br></pre></td></tr></table></figure>
 
-<ol>
-<li>新建状态（New）：新创建了一个线程对象。</li>
-<li>就绪状态（Runnable）：线程对象创建后，其他线程调用了该对象的start()方法。该状态的线程位于可运行线程池中，变得可运行，等待获取CPU的使用权。</li>
-<li>运行状态（Running）：就绪状态的线程获取了CPU，执行程序代码。</li>
-<li>阻塞状态（Blocked）：阻塞状态是线程因为某种原因放弃CPU使用权，暂时停止运行。直到线程进入就绪状态，才有机会转到运行状态。阻塞的情况分三种：<ol>
-<li>等待阻塞：运行的线程执行wait()方法，JVM会把该线程放入等待池中。(wait会释放持有的锁)</li>
-<li>同步阻塞：运行的线程在获取对象的同步锁时，若该同步锁被别的线程占用，则JVM会把该线程放入锁池中。</li>
-<li>其他阻塞：运行的线程执行sleep()或join()方法，或者发出了I/O请求时，JVM会把该线程置为阻塞状态。当sleep()状态超时、join()等待线程终止或者超时、或者I/O处理完毕时，线程重新转入就绪状态。（注意,sleep是不会释放持有的锁）</li>
-</ol>
-</li>
-<li>死亡状态（Dead）：线程执行完了或者因异常退出了run()方法，该线程结束生命周期。</li>
-</ol>
+<p>连接数超了。。。</p>
+<p>之前听同事说经常遇见这个问题，每次都是把服务器最大连接数调大一些，然后就好了。。。</p>
+<p>我想：就算每次都调大连接数上限，也终会达到最大连接数啊。为什么呢？ 应该是我们定期发布，重启tomcat后会断开所有连接，如果我们长时间不发布，就会到达上限。</p>
+<p>然后我开始翻代码，看到配置的最大连接数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ngcrmpf_bj.jdbc.maxActive=<span class="number">5</span></span><br></pre></td></tr></table></figure>
+
+<p>只有5条啊，8台tomcat加起来也就是四十条啊，为什么服务器设置1200还会超呢。。。。</p>
+<p>仔细看报错信息，发现有一个方法，不知道是哪位大哥写的，竟然自己写了jdbc，而且没有关闭连接。。。mmp。。。</p>
+<p>我们的接口参数都会加密传输，密钥存在mysql，他竟然用jdbc去数据库查密钥，而且没关闭连接。。。为什么不去redis？为什么不用mybatis？再不济，为什么不关闭连接。。。</p>
+<p>苍天啊，大地啊，我真的不知道怎么和客户解释。。。</p>
+<p>唉。。。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2018/06/08/kongzheng1993-java多线程总结/" data-id="cjzh3e0c4001816c84t1rsps7" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2019/06/14/kongzheng1993-mysql超过最大连接数-一次生产问题定位/" data-id="ck8d4ki4h001p20c8vni5822e" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/安全/">安全</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li></ul>
 
     </footer>
   </div>
@@ -248,16 +381,12 @@
 
 
   
-    <article id="post-kongzheng1993-linux命令行下的ss" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-kongzheng1993-compare-and-swap" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/05/02/kongzheng1993-linux命令行下的ss/" class="article-date">
-  <time datetime="2018-05-01T16:00:00.000Z" itemprop="datePublished">2018-05-02</time>
+    <a href="/2019/06/14/kongzheng1993-compare-and-swap/" class="article-date">
+  <time datetime="2019-06-14T01:53:28.000Z" itemprop="datePublished">2019-06-14</time>
 </a>
     
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/linux/">linux</a>►<a class="article-category-link" href="/categories/linux/ss/">ss</a>
-  </div>
-
   </div>
   <div class="article-inner">
     
@@ -266,7 +395,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/02/kongzheng1993-linux命令行下的ss/">linux命令行下的ss</a>
+      <a class="article-title" href="/2019/06/14/kongzheng1993-compare-and-swap/">kongzheng1993-compare_and_swap.md</a>
     </h1>
   
 
@@ -274,114 +403,13 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="为什么不用shadowsocks-qt5"><a href="#为什么不用shadowsocks-qt5" class="headerlink" title="为什么不用shadowsocks-qt5"></a>为什么不用shadowsocks-qt5</h2><p>我的pop! os基于ubuntu，因为装了图形界面，所以在用shadowsocks-qt5，而且很好用，只需要打开软件，就会自动连接朋友的ss-server。但是我的chromebook的fq问题一直存在，一度让我产生了卖掉它的想法。昨天开始我准备好好搞一下在shell运行ss客户端，然后了解到了有sslocal和ssserver这样的东西，简直是欣喜若狂，看到了随身携带我的cb的希望。</p>
-<h2 id="开始搞"><a href="#开始搞" class="headerlink" title="开始搞"></a>开始搞</h2><p>sslocal和ssserver都依赖python，所以要先安装python。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install python python-pip</span><br></pre></td></tr></table></figure>
-
-<p>之后开始安装shadowsocks</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install shadowsocks</span><br></pre></td></tr></table></figure>
-
-<p>运行ss<br>sslocal -s server_ip -p server_port -k “password” -l local_port -t 600 -m aes-256-cfb</p>
-<p>可以通过新建一个配置文件来省去这些参数<br>比如我们在/etc下新建一个shadowsock.json</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="string">"server"</span>:<span class="string">"server_ip"</span>,</span><br><span class="line"><span class="string">"server_port"</span>:server_port,</span><br><span class="line"><span class="string">"local_ip"</span>:<span class="string">"127.0.0.1"</span></span><br><span class="line"><span class="string">"local_port"</span>:1080,</span><br><span class="line"><span class="string">"password"</span>:<span class="string">"password"</span>,</span><br><span class="line"><span class="string">"timeout"</span>:600,</span><br><span class="line"><span class="string">"method"</span>:<span class="string">"aes-256-cfb"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>然后就可以直接sslocal -c /etc/shadowsock.json来启动sslocal</p>
-<p>因为我的设备是chromebook，所以要配置一下chrom代理，我使用的是SwitchyOmega，可以去google商店下载，但是如果环境允许，可以从github下载，然后托到chrome插件里。然后配置一下SwitchyOmega，新建个情景模式，选择代理服务器，用socks5，地址和端口就是sslocal的配置中的local_ip和local_port，然后设置一下自动切换，在按照规则列表匹配请求后面选择刚才新建的SS，默认情景模式选择直接连接。点击应用选项保存。再往下规则列表设置选择AutoProxy 然后将“<a href="https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt”填进去，点击下面的立即更新情景模式，会有提示更新成功！这样就配置完了。" target="_blank" rel="noopener">https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt”填进去，点击下面的立即更新情景模式，会有提示更新成功！这样就配置完了。</a></p>
-<p>在启动sslocal之后，点击chrome右上角的SwitchyOmega图表，选择自动切换，工具会根据gfwlist.txt的配置自动切换是否将请求转发到你的local_ip的local_port。可以节省ss服务器的流量。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总体来说还是比较顺利的，以后遇到什么问题要学会思考，不要盲目的尝试。要了解原理，像这次我遇到了很多报错，我都<code>more sslocal</code>看了脚本代码了，而且前面尝试了一个自动安装配置ss的脚本，wget一个脚本shadowsocks.sh，然后<code>./shadowsocks.sh install</code>就可以，但是我遇到了很多问题，也是进去好好研究了一下人家的代码。虽然最后这个方法没有研究透，不过能看一下大神们写的脚本也很好啊！！！</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2018/05/02/kongzheng1993-linux命令行下的ss/" data-id="cjzh3e0c9001a16c8ujr40lrt" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/console/">console</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ss/">ss</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-hexo搭建githubPages" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/02/01/kongzheng1993-hexo搭建githubPages/" class="article-date">
-  <time datetime="2018-01-31T16:00:00.000Z" itemprop="datePublished">2018-02-01</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/blog/">blog</a>►<a class="article-category-link" href="/categories/blog/github/">github</a>►<a class="article-category-link" href="/categories/blog/github/git/">git</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/01/kongzheng1993-hexo搭建githubPages/">Hexo+github搭建个人博客遇到的问题</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="hexo-github搭建个人博客遇到的问题"><a href="#hexo-github搭建个人博客遇到的问题" class="headerlink" title="hexo+github搭建个人博客遇到的问题"></a>hexo+github搭建个人博客遇到的问题</h3><ol>
-<li><p>hexo博客_config.yml中的配置</p>
-<ol>
-<li>Site配置网站相关的信息，比如网站标题、子标题、描述和作者等。</li>
-<li>URL配置博客在网站的目录，这里需要注意一些问题。如果是在根目录，url就配置为<a href="https://githubID.github.io，root就配置为/，但是如果有二级目录，比如blog，就要对应的设置为url:https://githubID.github.io/blog" target="_blank" rel="noopener">https://githubID.github.io，root就配置为/，但是如果有二级目录，比如blog，就要对应的设置为url:https://githubID.github.io/blog</a> root:/blog/。但是github pages有这么个问题，你访问的时候看起来是一级目录，其实是二级目录。所以我在设置为一记目录时，在本地hexo -s debug的时候是正常的，但是发布后网站是没有样式的，也就是说静态资源是访问不到的。所以我又尝试配置为二级目录url:<a href="https://githubID.github.io/blog" target="_blank" rel="noopener">https://githubID.github.io/blog</a> root:/githubID.github.io/，然后样式就正常了。</li>
-<li>我的博客是从jekyll迁移过来的，所以要把所有的_posts中的博文复制到source/_posts文件夹，然后修改_config.yml中的new_post_name参数，也就是让新的hexo生成的新博文符合原来jekyll博文的命名规则。</li>
-</ol>
-</li>
-<li><p>相关的建站的方法这里不再说明，可以到<code>hexo.io</code>跟着做。</p>
-</li>
-<li><p>安装服务器hexo-server</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-server --save</span><br></pre></td></tr></table></figure>
-
-<p>这个命令是安装hexo服务器，下面的命令是启动服务器，而且启动后修改文件无需重启，-p选项可以制定端口来运行server</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure>
-
-<p>运行成功后可以在命令行看到访问<a href="http://localhost:4000可以预览网站。" target="_blank" rel="noopener">http://localhost:4000可以预览网站。</a></p>
-</li>
-<li><p>我是在用github pages来建站，所以需要使用git来部署我的博客到github pages。<br>所以要使用下面的命令安装git的部署器。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
-
-<p>然后还需要修改配置_config.yml</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https://github.com/githubID/githubID.github.io.git</span><br><span class="line">  branch: #github会自动检测</span><br><span class="line">  message: #自定义的提交信息。</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-web_xml/" data-title="About trycatch" data-url="http://kongzheng1993.github.io/kongzheng1993"></div>
-<!-- 多说评论框 end -->
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"kongzheng1993"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-</html>
-
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2018/02/01/kongzheng1993-hexo搭建githubPages/" data-id="cjzh3e0bq001016c83so0lstj" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2019/06/14/kongzheng1993-compare-and-swap/" data-id="ck8d4ki5l002w20c8yqgmgvbh" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/github/">github</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li></ul>
-
     </footer>
   </div>
   
@@ -393,7 +421,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -404,7 +432,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/">RSA</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/">SHA</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/加密/">加密</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/加密/签名/">签名</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/">github</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/git/">git</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jdk/">jdk</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/linux/ss/">ss</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/java/">java</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/">quartz</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/锁/">锁</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/锁/分布式/">分布式</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/resume/">resume</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/suse/">suse</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/">server</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/FTP/">FTP</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/编码/">编码</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/NIO-BIO-IO/">NIO BIO IO</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/">RSA</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/">SHA</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/加密/">加密</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/加密/签名/">签名</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/">github</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/git/">git</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jdk/">jdk</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/linux/ss/">ss</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/java/">java</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/">quartz</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/锁/">锁</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/锁/分布式/">分布式</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/resume/">resume</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/suse/">suse</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/">server</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/FTP/">FTP</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/编码/">编码</a></li></ul>
     </div>
   </div>
 
@@ -414,7 +442,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Class/">Class</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FTP/">FTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RSA/">RSA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SHA/">SHA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/String/">String</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/catch，try/">catch，try</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/">console</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/distinct/">distinct</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/float/">float</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/group-by/">group by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/images/">images</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jdk/">jdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mq/">mq</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/new/">new</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/order-by/">order by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/">quartz</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/re/">re</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/resume，简历/">resume，简历</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sample-post/">sample post</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/select/">select</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/">server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/servlet/">servlet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlplus/">sqlplus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ss/">ss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/suse/">suse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sys/">sys</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/test/">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/业务/">业务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/加密/">加密</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/备份/">备份</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/学习/">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安全/">安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/对象，Class对象/">对象，Class对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/消息队列/">消息队列</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/签名/">签名</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编码/">编码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/职业/">职业</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/锁/">锁</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Class/">Class</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FTP/">FTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NIO-BIO-IO/">NIO BIO IO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RSA/">RSA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SHA/">SHA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/String/">String</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/catch，try/">catch，try</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/">console</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/distinct/">distinct</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/float/">float</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/group-by/">group by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/images/">images</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jdk/">jdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mq/">mq</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/new/">new</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/order-by/">order by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/">quartz</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/re/">re</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/resume，简历/">resume，简历</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sample-post/">sample post</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/select/">select</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/">server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/servlet/">servlet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlplus/">sqlplus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ss/">ss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/suse/">suse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sys/">sys</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/test/">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/业务/">业务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/加密/">加密</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/备份/">备份</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/学习/">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安全/">安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/对象，Class对象/">对象，Class对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/消息队列/">消息队列</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/签名/">签名</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编码/">编码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/职业/">职业</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/锁/">锁</a></li></ul>
     </div>
   </div>
 
@@ -424,7 +452,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Class/" style="font-size: 10px;">Class</a> <a href="/tags/FTP/" style="font-size: 10px;">FTP</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/SHA/" style="font-size: 10px;">SHA</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/catch，try/" style="font-size: 10px;">catch，try</a> <a href="/tags/console/" style="font-size: 10px;">console</a> <a href="/tags/distinct/" style="font-size: 10px;">distinct</a> <a href="/tags/float/" style="font-size: 10px;">float</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/group-by/" style="font-size: 10px;">group by</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/images/" style="font-size: 16.67px;">images</a> <a href="/tags/java/" style="font-size: 16.67px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/mq/" style="font-size: 10px;">mq</a> <a href="/tags/mysql/" style="font-size: 13.33px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/oop/" style="font-size: 20px;">oop</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/order-by/" style="font-size: 10px;">order by</a> <a href="/tags/quartz/" style="font-size: 10px;">quartz</a> <a href="/tags/re/" style="font-size: 16.67px;">re</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/resume，简历/" style="font-size: 10px;">resume，简历</a> <a href="/tags/sample-post/" style="font-size: 16.67px;">sample post</a> <a href="/tags/select/" style="font-size: 10px;">select</a> <a href="/tags/server/" style="font-size: 10px;">server</a> <a href="/tags/servlet/" style="font-size: 10px;">servlet</a> <a href="/tags/sql/" style="font-size: 13.33px;">sql</a> <a href="/tags/sqlplus/" style="font-size: 10px;">sqlplus</a> <a href="/tags/ss/" style="font-size: 10px;">ss</a> <a href="/tags/suse/" style="font-size: 10px;">suse</a> <a href="/tags/sys/" style="font-size: 10px;">sys</a> <a href="/tags/test/" style="font-size: 16.67px;">test</a> <a href="/tags/业务/" style="font-size: 10px;">业务</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/加密/" style="font-size: 10px;">加密</a> <a href="/tags/备份/" style="font-size: 10px;">备份</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/学习/" style="font-size: 10px;">学习</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/对象，Class对象/" style="font-size: 10px;">对象，Class对象</a> <a href="/tags/消息队列/" style="font-size: 10px;">消息队列</a> <a href="/tags/签名/" style="font-size: 10px;">签名</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/职业/" style="font-size: 10px;">职业</a> <a href="/tags/锁/" style="font-size: 10px;">锁</a>
+      <a href="/tags/Class/" style="font-size: 10px;">Class</a> <a href="/tags/FTP/" style="font-size: 10px;">FTP</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/NIO-BIO-IO/" style="font-size: 10px;">NIO BIO IO</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/SHA/" style="font-size: 10px;">SHA</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/catch，try/" style="font-size: 10px;">catch，try</a> <a href="/tags/console/" style="font-size: 10px;">console</a> <a href="/tags/distinct/" style="font-size: 10px;">distinct</a> <a href="/tags/float/" style="font-size: 10px;">float</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/group-by/" style="font-size: 10px;">group by</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/images/" style="font-size: 16.67px;">images</a> <a href="/tags/java/" style="font-size: 16.67px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/mq/" style="font-size: 10px;">mq</a> <a href="/tags/mysql/" style="font-size: 16.67px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/oop/" style="font-size: 20px;">oop</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/order-by/" style="font-size: 10px;">order by</a> <a href="/tags/quartz/" style="font-size: 10px;">quartz</a> <a href="/tags/re/" style="font-size: 16.67px;">re</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/resume，简历/" style="font-size: 10px;">resume，简历</a> <a href="/tags/sample-post/" style="font-size: 16.67px;">sample post</a> <a href="/tags/select/" style="font-size: 10px;">select</a> <a href="/tags/server/" style="font-size: 10px;">server</a> <a href="/tags/servlet/" style="font-size: 10px;">servlet</a> <a href="/tags/sql/" style="font-size: 13.33px;">sql</a> <a href="/tags/sqlplus/" style="font-size: 10px;">sqlplus</a> <a href="/tags/ss/" style="font-size: 10px;">ss</a> <a href="/tags/suse/" style="font-size: 10px;">suse</a> <a href="/tags/sys/" style="font-size: 10px;">sys</a> <a href="/tags/test/" style="font-size: 16.67px;">test</a> <a href="/tags/业务/" style="font-size: 10px;">业务</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/加密/" style="font-size: 10px;">加密</a> <a href="/tags/备份/" style="font-size: 10px;">备份</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/学习/" style="font-size: 10px;">学习</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/对象，Class对象/" style="font-size: 10px;">对象，Class对象</a> <a href="/tags/消息队列/" style="font-size: 10px;">消息队列</a> <a href="/tags/签名/" style="font-size: 10px;">签名</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/职业/" style="font-size: 10px;">职业</a> <a href="/tags/锁/" style="font-size: 10px;">锁</a>
     </div>
   </div>
 
@@ -433,7 +461,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
     </div>
   </div>
 
@@ -446,23 +474,23 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       <ul>
         
           <li>
-            <a href="/2019/08/18/kongzheng1993-HashMap&ConcurrentHashMap/">HashMap&amp;ConcurrentHashMap</a>
+            <a href="/2020/03/25/kongzheng1993-一次老代码优化/">(no title)</a>
           </li>
         
           <li>
-            <a href="/2019/06/14/kongzheng1993-mysql超过最大连接数-一次生产问题定位/">mysql超过最大连接数一次生产问题定位.md</a>
+            <a href="/2020/03/25/kongzheng1993-RocketMQ定时消息示例/">(no title)</a>
           </li>
         
           <li>
-            <a href="/2019/06/14/kongzheng1993-compare-and-swap/">kongzheng1993-compare_and_swap.md</a>
+            <a href="/2020/03/19/kongzheng1993-Future/">(no title)</a>
           </li>
         
           <li>
-            <a href="/2019/06/13/kongzheng1993-Connect-timed-out与Read-timed-out/">kongzheng1993-Connect_timed_out与Read_timed_out.md</a>
+            <a href="/2020/03/19/kongzheng1993-Thread和Runnable/">(no title)</a>
           </li>
         
           <li>
-            <a href="/2019/06/13/kongzheng1993-RSA加密与SHA签名/">RSA加密与SHA签名</a>
+            <a href="/2020/03/08/kongzheng1993-Map遍历的几种方法/">(no title)</a>
           </li>
         
       </ul>
@@ -477,7 +505,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2019 evilRat<br>
+      &copy; 2020 evilRat<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
