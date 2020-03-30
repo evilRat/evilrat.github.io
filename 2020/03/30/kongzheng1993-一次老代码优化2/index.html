@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Evil</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="记一次老代码优化2又发现了一个问题上次的优化结果：  老版本的转换方法用了204ms 每次去查数据库因为要多次连接数据库进行查询操作，需要531ms 而使用了缓存的方法，第一次我们还没有加载缓存，需要500ms，而第二次直接在缓存中读取，24ms，只用了之前方法的1/10。  让我们看一下上次优化的版本： 1234567891011121314151617181920212223242526272">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Evil">
+<meta property="og:url" content="https://kongzheng1993.github.io/2020/03/30/kongzheng1993-一次老代码优化2/index.html">
+<meta property="og:site_name" content="Evil">
+<meta property="og:description" content="记一次老代码优化2又发现了一个问题上次的优化结果：  老版本的转换方法用了204ms 每次去查数据库因为要多次连接数据库进行查询操作，需要531ms 而使用了缓存的方法，第一次我们还没有加载缓存，需要500ms，而第二次直接在缓存中读取，24ms，只用了之前方法的1/10。  让我们看一下上次优化的版本： 1234567891011121314151617181920212223242526272">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-03-30T09:07:42.210Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Evil">
+<meta name="twitter:description" content="记一次老代码优化2又发现了一个问题上次的优化结果：  老版本的转换方法用了204ms 每次去查数据库因为要多次连接数据库进行查询操作，需要531ms 而使用了缓存的方法，第一次我们还没有加载缓存，需要500ms，而第二次直接在缓存中读取，24ms，只用了之前方法的1/10。  让我们看一下上次优化的版本： 1234567891011121314151617181920212223242526272">
+  
+    <link rel="alternate" href="/atom.xml" title="Evil" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Evil</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kongzheng1993.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-kongzheng1993-一次老代码优化2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/30/kongzheng1993-一次老代码优化2/" class="article-date">
+  <time datetime="2020-03-29T16:00:00.000Z" itemprop="datePublished">2020-03-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="记一次老代码优化2"><a href="#记一次老代码优化2" class="headerlink" title="记一次老代码优化2"></a>记一次老代码优化2</h1><h2 id="又发现了一个问题"><a href="#又发现了一个问题" class="headerlink" title="又发现了一个问题"></a>又发现了一个问题</h2><p>上次的优化结果：</p>
+<ul>
+<li>老版本的转换方法用了204ms</li>
+<li>每次去查数据库因为要多次连接数据库进行查询操作，需要531ms</li>
+<li>而使用了缓存的方法，第一次我们还没有加载缓存，需要500ms，而第二次直接在缓存中读取，24ms，只用了之前方法的1/10。</li>
+</ul>
+<p>让我们看一下上次优化的版本：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">ospInOutParmConvert2</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">    Matcher m=p1.matcher(str);</span><br><span class="line">    String strTmp = <span class="string">""</span>;</span><br><span class="line">    String strTmp1= <span class="string">""</span>;</span><br><span class="line">    String nkKey = <span class="string">""</span>;</span><br><span class="line">    String camelKey = <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">final</span> Map&lt;String, String&gt; unSaveKeys = Maps.newHashMap();</span><br><span class="line">    <span class="keyword">while</span>(m.find())&#123;</span><br><span class="line">        strTmp = m.group();</span><br><span class="line">        nkKey = strTmp.replace(<span class="string">"\""</span>, <span class="string">""</span>).replace(<span class="string">":"</span>, <span class="string">""</span>);</span><br><span class="line">        camelKey = nkCamelKeyCacheService.getCamelKeyByNKKey(nkKey);</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isNotBlank(camelKey)) &#123;</span><br><span class="line">            str = str.replace(nkKey, camelKey);</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            camelKey = nkKey.toLowerCase();</span><br><span class="line">            str = str.replace(strTmp, strTmp.toLowerCase());</span><br><span class="line">            <span class="keyword">if</span> (StringUtil.isNotEmpty(strTmp) &amp;&amp; strTmp != <span class="string">"null"</span>) &#123;</span><br><span class="line">                strTmp1= strTmp.toLowerCase();</span><br><span class="line">                <span class="keyword">if</span> (strTmp1.indexOf(<span class="string">"_"</span>) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                    String[] strTmp1s = strTmp1.split(<span class="string">"_"</span>);</span><br><span class="line">                    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;strTmp1s.length-<span class="number">1</span>; i++)&#123;</span><br><span class="line">                        <span class="keyword">int</span> subInt = strTmp1.indexOf(<span class="string">"_"</span>);</span><br><span class="line">                        camelKey = camelKey.replace(strTmp1.substring(subInt,subInt + <span class="number">2</span>),strTmp1.substring(subInt + <span class="number">1</span>, subInt + <span class="number">2</span>).toUpperCase());</span><br><span class="line">                        <span class="keyword">if</span>(strTmp1s.length&gt;<span class="number">1</span>)&#123;</span><br><span class="line">                            strTmp1 = strTmp1.substring(subInt+<span class="number">1</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    str = str.replace(nkKey, camelKey);</span><br><span class="line">                &#125;</span><br><span class="line">                unSaveKeys.put(nkKey, camelKey);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (unSaveKeys.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                LocalJDBCUtil.addNkCamelKeys(unSaveKeys);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> str;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这一版没有对之前的算法进行优化，以为之前写代码的是个大佬，算法上应该没什么瑕疵。今天闲来无事仔细看了一下，发现一个问题：</p>
+<p>如果根据正则匹配到一个key，就进行转换。</p>
+<p>问题是，如果json中有<code>List&lt;Map&gt;</code>，那么list中的每条数据的map中的key都是相同的，每个都进行一遍运算会浪费很多资源。</p>
+<h2 id="怎么优化"><a href="#怎么优化" class="headerlink" title="怎么优化"></a>怎么优化</h2><p>这个问题是进行了不必要的运算，我们要记住哪些key已经计算并替换过了，当再次匹配到这些key的时候，直接跳过。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">ospInOutParmConvert</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">    Matcher m = p1.matcher(str);</span><br><span class="line">    String strTmp = <span class="string">""</span>;<span class="comment">//双引号+冒号的key</span></span><br><span class="line">    String strTmp1 = <span class="string">""</span>;<span class="comment">//转换为小写的双引号+冒号的key</span></span><br><span class="line">    String nkKey = <span class="string">""</span>;<span class="comment">//能开key</span></span><br><span class="line">    String camelKey = <span class="string">""</span>;<span class="comment">//驼峰key</span></span><br><span class="line">    <span class="keyword">final</span> Map&lt;String, String&gt; unSaveKeys = Maps.newHashMap();</span><br><span class="line">    Set&lt;String&gt; finishKeys = Sets.newHashSet();</span><br><span class="line">    <span class="keyword">while</span> (m.find()) &#123;</span><br><span class="line">        strTmp = m.group();</span><br><span class="line">        nkKey = strTmp.replace(<span class="string">"\""</span>, <span class="string">""</span>).replace(<span class="string">":"</span>, <span class="string">""</span>);</span><br><span class="line">        camelKey = nkCamelKeyCacheService.getCamelKeyByNKKey(nkKey);</span><br><span class="line">        <span class="keyword">if</span> (finishKeys.contains(nkKey)) &#123;</span><br><span class="line">            <span class="keyword">continue</span>;<span class="comment">//这个key已经替换过，跳过</span></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (StringUtils.isNotBlank(camelKey)) &#123;</span><br><span class="line">            str = str.replace(<span class="string">"\""</span> + nkKey + <span class="string">"\""</span>, <span class="string">"\""</span> + camelKey + <span class="string">"\""</span>);</span><br><span class="line">            finishKeys.add(nkKey);</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            camelKey = nkKey.toLowerCase();<span class="comment">//如果没有_，那么这里转成小写就处理完了</span></span><br><span class="line">            <span class="keyword">if</span> (StringUtil.isNotEmpty(strTmp) &amp;&amp; strTmp != <span class="string">"null"</span>) &#123;</span><br><span class="line">                strTmp1 = strTmp.toLowerCase();</span><br><span class="line">                <span class="keyword">if</span> (strTmp1.indexOf(<span class="string">"_"</span>) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                    String[] strTmp1s = strTmp1.split(<span class="string">"_"</span>);</span><br><span class="line">                    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; strTmp1s.length - <span class="number">1</span>; i++) &#123;</span><br><span class="line">                        <span class="keyword">int</span> subInt = strTmp1.indexOf(<span class="string">"_"</span>);</span><br><span class="line">                        camelKey = camelKey.replace(strTmp1.substring(subInt, subInt + <span class="number">2</span>), strTmp1.substring(subInt + <span class="number">1</span>, subInt + <span class="number">2</span>).toUpperCase());</span><br><span class="line">                        <span class="keyword">if</span> (strTmp1s.length &gt; <span class="number">1</span>) &#123;</span><br><span class="line">                            strTmp1 = strTmp1.substring(subInt + <span class="number">1</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                str = str.replace(<span class="string">"\""</span> + nkKey + <span class="string">"\""</span>, <span class="string">"\""</span> + camelKey + <span class="string">"\""</span>);</span><br><span class="line">                finishKeys.add(nkKey);</span><br><span class="line">                unSaveKeys.put(nkKey, camelKey);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (unSaveKeys.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                LocalJDBCUtil.addNkCamelKeys(unSaveKeys);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> str;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这一版本中我用了一个<code>finishKeys</code>的<code>Set</code>来存放已经转换过的key，在计算前判断这个key是不是包含在<code>finishKeys</code>中，如果包含，说明已经转换过，直接跳过。</p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>还是之前的测试用例。<br>不过这次新方法第二次跑完的时间是17ms！！！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2020/03/30/kongzheng1993-一次老代码优化2/" data-id="ck8egi7g0004i0tc8e6u8786m" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/03/25/kongzheng1993-RocketMQ定时消息示例/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/NIO-BIO-IO/">NIO BIO IO</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/">RSA</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/">SHA</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/加密/">加密</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/RSA/SHA/加密/签名/">签名</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/">github</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/github/git/">git</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/jdk/">jdk</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/linux/ss/">ss</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/java/">java</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/">quartz</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/锁/">锁</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/quartz/锁/分布式/">分布式</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/resume/">resume</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/suse/">suse</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/">server</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/suse/server/FTP/">FTP</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/编码/">编码</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Class/">Class</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FTP/">FTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NIO-BIO-IO/">NIO BIO IO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RSA/">RSA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SHA/">SHA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/String/">String</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/catch，try/">catch，try</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/">console</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/distinct/">distinct</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/float/">float</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/group-by/">group by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/images/">images</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jdk/">jdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mq/">mq</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/new/">new</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/order-by/">order by</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/">quartz</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/re/">re</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/resume，简历/">resume，简历</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sample-post/">sample post</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/select/">select</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/">server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/servlet/">servlet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlplus/">sqlplus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ss/">ss</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/suse/">suse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sys/">sys</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/test/">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/业务/">业务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/加密/">加密</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/备份/">备份</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/学习/">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安全/">安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/对象，Class对象/">对象，Class对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/消息队列/">消息队列</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/签名/">签名</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编码/">编码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/职业/">职业</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/锁/">锁</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Class/" style="font-size: 10px;">Class</a> <a href="/tags/FTP/" style="font-size: 10px;">FTP</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/NIO-BIO-IO/" style="font-size: 10px;">NIO BIO IO</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/SHA/" style="font-size: 10px;">SHA</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/catch，try/" style="font-size: 10px;">catch，try</a> <a href="/tags/console/" style="font-size: 10px;">console</a> <a href="/tags/distinct/" style="font-size: 10px;">distinct</a> <a href="/tags/float/" style="font-size: 10px;">float</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/group-by/" style="font-size: 10px;">group by</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/images/" style="font-size: 16.67px;">images</a> <a href="/tags/java/" style="font-size: 16.67px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/mq/" style="font-size: 10px;">mq</a> <a href="/tags/mysql/" style="font-size: 16.67px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/oop/" style="font-size: 20px;">oop</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/order-by/" style="font-size: 10px;">order by</a> <a href="/tags/quartz/" style="font-size: 10px;">quartz</a> <a href="/tags/re/" style="font-size: 16.67px;">re</a> <a href="/tags/reflect/" style="font-size: 10px;">reflect</a> <a href="/tags/resume，简历/" style="font-size: 10px;">resume，简历</a> <a href="/tags/sample-post/" style="font-size: 16.67px;">sample post</a> <a href="/tags/select/" style="font-size: 10px;">select</a> <a href="/tags/server/" style="font-size: 10px;">server</a> <a href="/tags/servlet/" style="font-size: 10px;">servlet</a> <a href="/tags/sql/" style="font-size: 13.33px;">sql</a> <a href="/tags/sqlplus/" style="font-size: 10px;">sqlplus</a> <a href="/tags/ss/" style="font-size: 10px;">ss</a> <a href="/tags/suse/" style="font-size: 10px;">suse</a> <a href="/tags/sys/" style="font-size: 10px;">sys</a> <a href="/tags/test/" style="font-size: 16.67px;">test</a> <a href="/tags/业务/" style="font-size: 10px;">业务</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/加密/" style="font-size: 10px;">加密</a> <a href="/tags/备份/" style="font-size: 10px;">备份</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/学习/" style="font-size: 10px;">学习</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/对象，Class对象/" style="font-size: 10px;">对象，Class对象</a> <a href="/tags/消息队列/" style="font-size: 10px;">消息队列</a> <a href="/tags/签名/" style="font-size: 10px;">签名</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/职业/" style="font-size: 10px;">职业</a> <a href="/tags/锁/" style="font-size: 10px;">锁</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/03/30/kongzheng1993-一次老代码优化2/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/25/kongzheng1993-RocketMQ定时消息示例/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/25/kongzheng1993-一次老代码优化/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/19/kongzheng1993-Future/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/19/kongzheng1993-Thread和Runnable/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 evilRat<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

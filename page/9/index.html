@@ -62,6 +62,63 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-kongzheng1993-ablout_try_catch" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/11/kongzheng1993-ablout_try_catch/" class="article-date">
+  <time datetime="2016-07-10T16:00:00.000Z" itemprop="datePublished">2016-07-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/11/kongzheng1993-ablout_try_catch/">关于try-catch</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import java.io.IOException;  </span><br><span class="line">public class ExceptionTryCatchTest &#123;  </span><br><span class="line">    public void doSomething() throws IOException&#123;  </span><br><span class="line">        System.out.println(&quot;do somthing&quot;);  </span><br><span class="line">    &#125;  </span><br><span class="line">    public static void main(String[] args)&#123;  </span><br><span class="line">        ExceptionTryCatchTest etct = new ExceptionTryCatchTest();  </span><br><span class="line">        try &#123;  </span><br><span class="line">            etct.doSomething();  </span><br><span class="line">        &#125; catch (Exception e) &#123;                </span><br><span class="line">        &#125; catch (IOException e) &#123;                </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上并不能通过编译。<br>因为编译的时候会报错:已捕捉到异常 java.io.IOException。  catch(IOException e)这句有错误。<br>分析：对于try..catch捕获异常的形式来说，对于异常的捕获，可以有多个catch。对于try里面发生的异常，他会根据发生的异常和catch里面的进行匹配(怎么匹配，按照catch块从上往下匹配)，当它匹配某一个catch块的时候，他就直接进入到这个catch块里面去了，后面在再有catch块的话，它不做任何处理，直接跳过去，全部忽略掉。如果有finally的话进入到finally里面继续执行。换句话说，如果有匹配的catch，它就会忽略掉这个catch后面所有的catch。对我们这个方法来说，抛出的是IOException，当执行etct.doSomething();时，可能会抛出IOException，一但抛出IOException，它首先进入到catch (Exception e) {}里面，先和Exception匹配，由于IOException extends Exception,根据多态的原则，IOException是匹配Exception的，所以程序就会进入到catch (Exception e) {}里面，进入到第一个catch后，后面的catch都不会执行了，所以catch (IOException e) {}永远都执行不到，就给我们报出了前面的错误:已捕捉到异常 java.io.IOException。 </p>
+<h4 id="【总结】"><a href="#【总结】" class="headerlink" title="【总结】"></a>【总结】</h4><p>在写异常处理的时候，一定要把异常范围小的放在前面，范围大的放在后面，Exception这个异常的根类一定要放在最后一个catch里面，如果放在前面或者中间，任何异常都会和Exception匹配的，就会报已捕获到…异常的错误。 </p>
+<html>
+<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-abouttrycatch/" data-title="About trycatch" data-url="http://kongzheng1993.github.io/kongzheng1993"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"kongzheng1993"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+</html>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2016/07/11/kongzheng1993-ablout_try_catch/" data-id="ck8egi7cy000i0tc84u37nwn6" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/catch，try/">catch，try</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-kongzheng1993-DB_Exchange" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/07/07/kongzheng1993-DB_Exchange/" class="article-date">
@@ -120,7 +177,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/07/kongzheng1993-DB_Exchange/" data-id="ck8d4ki1z000120c83i0exnmf" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/07/kongzheng1993-DB_Exchange/" data-id="ck8egi7dg00190tc8ryo66ff1" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
@@ -183,7 +240,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/05/kongzheng1993-PreparedStatement&Statement/" data-id="ck8d4ki38000e20c8alp5qfs3" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/05/kongzheng1993-PreparedStatement&Statement/" data-id="ck8egi7cw000h0tc8r25kmd01" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
@@ -280,7 +337,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/06/13/kongzheng1993-aboutFinal/" data-id="ck8d4ki4n001w20c83k9eaq6l" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/06/13/kongzheng1993-aboutFinal/" data-id="ck8egi7cu000d0tc8ew3wbh5s" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/images/">images</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sample-post/">sample post</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/test/">test</a></li></ul>
@@ -292,9 +349,9 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
 
 
   
-    <article id="post-kongzheng1993-aboutFloat" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-kongzheng1993-acoderinlove" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/06/10/kongzheng1993-aboutFloat/" class="article-date">
+    <a href="/2016/06/10/kongzheng1993-acoderinlove/" class="article-date">
   <time datetime="2016-06-09T16:00:00.000Z" itemprop="datePublished">2016-06-10</time>
 </a>
     
@@ -306,7 +363,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/10/kongzheng1993-aboutFloat/">关于float</a>
+      <a class="article-title" href="/2016/06/10/kongzheng1993-acoderinlove/">a coder in love</a>
     </h1>
   
 
@@ -314,137 +371,10 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="Java类型转换"><a href="#Java类型转换" class="headerlink" title="Java类型转换"></a>Java类型转换</h3><p>Java中不同类型之间的变量赋值时，需要先进行类型转换，才能进行赋值。Java类型转换分为自动转换和强制转换两种。<br>基本类型间的自动类型转换需要满足以下条件: </p>
-<p>(1).转换双方的类型必须兼容，例如int和long类型就是兼容的，而int和boolean就是不兼容的。 </p>
-<p>(2).只能是”窄类型”向”宽类型”转换,也就是目标类型的数据表示范围要比源类型的数据表示范围要大。 </p>
-<h3 id="数值常量默认类型"><a href="#数值常量默认类型" class="headerlink" title="数值常量默认类型"></a>数值常量默认类型</h3><p>1.Java中整型常量数值的默认类型是int类型，如果需要声明long类型的常量 ，需要在数值加上’l’或者’L’.<br>  例如:int i = 3;<br>       long l = 3L; </p>
-<p>2.Java中的浮点型常量数值默认是double类型，如果要声明一个数值为float型，则需要在数值后面加上’f’或者’F’.<br>  例如:double d = 3.14;<br>       float f = 3.14f; </p>
-<h3 id="float-f-3-4-语句是错误的"><a href="#float-f-3-4-语句是错误的" class="headerlink" title="float f = 3.4;语句是错误的"></a>float f = 3.4;语句是错误的</h3><p>3.4数值常量默认情况下是double类型，如果赋值给f,那么将由double转换成float类型，由前面的知识可以知道是不能自动类型转换的，所以可以将float f = 3.4修改成: </p>
-<p>(1)float f = 3.4f;<br>(2)float f = (float)3.4; </p>
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">while(alive)&#123;</span><br><span class="line">	</span><br><span class="line">	eat();</span><br><span class="line">	sleep();</span><br><span class="line">	code();</span><br><span class="line">	missyou();</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-aboutFloat/" data-title="About Float" data-url="http://kongzheng1993.github.io/kongzheng1993"></div>
-<!-- 多说评论框 end -->
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"kongzheng1993"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-</html>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/06/10/kongzheng1993-aboutFloat/" data-id="ck8d4ki2a000220c8mze7syab" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/float/">float</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-oracle" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/06/10/kongzheng1993-oracle/" class="article-date">
-  <time datetime="2016-06-09T16:00:00.000Z" itemprop="datePublished">2016-06-10</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/10/kongzheng1993-oracle/">sql学习笔记</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="sql学习笔记"><a href="#sql学习笔记" class="headerlink" title="sql学习笔记"></a>sql学习笔记</h2><h3 id="关于DISTINCT"><a href="#关于DISTINCT" class="headerlink" title="关于DISTINCT"></a>关于DISTINCT</h3><p>DISTINCT可以去除重复的内容，但是，如果查询的数据是多个列，那么只有在这多个列的数据都相同的时候才可以消除。如果一个列重复，另一个列不重复，那么这一行也不会被消除。</p>
-<h3 id="四则运算可以作为SELECT参数"><a href="#四则运算可以作为SELECT参数" class="headerlink" title="四则运算可以作为SELECT参数"></a>四则运算可以作为SELECT参数</h3><h3 id="给计算结果设计别名"><a href="#给计算结果设计别名" class="headerlink" title="给计算结果设计别名"></a>给计算结果设计别名</h3><p>SELECT empno，ename，sal*12 income FROM emp;</p>
-<p>这里打印出来的结果中sal*12那一列的列名就是income。</p>
-<h3 id="常量如果是字符串要使用单引号而不是双引号，如果是数字不用加引号，如果是日期，就要按照日期格式编写。"><a href="#常量如果是字符串要使用单引号而不是双引号，如果是数字不用加引号，如果是日期，就要按照日期格式编写。" class="headerlink" title="常量如果是字符串要使用单引号而不是双引号，如果是数字不用加引号，如果是日期，就要按照日期格式编写。"></a>常量如果是字符串要使用单引号而不是双引号，如果是数字不用加引号，如果是日期，就要按照日期格式编写。</h3><h3 id="两列内容的连接使用"><a href="#两列内容的连接使用" class="headerlink" title="两列内容的连接使用||"></a>两列内容的连接使用||</h3><p>select empno||ename from emp;</p>
-<p>这里的使用方法很像java里面的“+”：</p>
-<p><font face="黑体">例如：</font></p>
-<pre><code>select &apos;雇员编号：&apos;|| empno ||&apos;,姓名：&apos;|| ename ||&apos;,收入：&apos;|| income from student;</code></pre><h3 id="BETWEEN-最小值-AND-最大值"><a href="#BETWEEN-最小值-AND-最大值" class="headerlink" title="BETWEEN 最小值 AND 最大值;"></a>BETWEEN 最小值 AND 最大值;</h3><p><font color="red">这里一定要注意是闭区间！！！</font></p>
-<h3 id="空判断-IS-NULL和IS-NOT-NULL"><a href="#空判断-IS-NULL和IS-NOT-NULL" class="headerlink" title="空判断 IS NULL和IS NOT NULL"></a>空判断 IS NULL和IS NOT NULL</h3><h3 id="IN和NOT-IN"><a href="#IN和NOT-IN" class="headerlink" title="IN和NOT IN"></a>IN和NOT IN</h3><p>BETWEEN AND 给了一个大的可选范围，IN也用来规定一个范围，不过用起来更灵活。</p>
-<p><font face="黑体">例如：</font></p>
-<p>SELECT * FROM emp WHERE empno=1 OR empno=2 OR empno=3;<br>这句代码使用IN来做就是：<br>SELECT * FROM emp WHERE empno IN (1,2,3);</p>
-<p>指定值查找使用IN会比较方便</p>
-<h3 id="关于NOT-IN和NULL的问题"><a href="#关于NOT-IN和NULL的问题" class="headerlink" title="关于NOT IN和NULL的问题"></a>关于NOT IN和NULL的问题</h3><p>使用NOT IN进行范围判断的时候，如果范围里面包括NULL，那么就不会有任何结果。</p>
-<p><font face="黑体">例如：</font><br>SELECT * FROM emp WHERE empno NOT IN(1,2,3,NULL);</p>
-<p>之所以使用WHERE，就是要抓取有用信息，没有限制，显示所有行，对于大型数据库根本没有意义。</p>
-<p>使用NOT IN的目的是为了查询部分数据行，但是如果有了NULL（某些数据永远不可能为NULL）,就成了查询全部了。</p>
-<p>为什么sql里面NOT IN后面的子查询如果有记录为NULL的，主查询就查不到记录？？？原因很简单：<br>SELECT *
-FROM dbo.TableA AS a<br>WHERE a.id NOT IN ( 2, NULL )</p>
-<p>等同于：<br>SELECT *
-FROM Table_A AS a<br>WHERE a.id &lt;&gt; 2<br>AND a.ID &lt;&gt; NULL</p>
-<p><font color="red">于NULL值不能参与比较运算符，导致条件不成立，查询不出来数据。</font></p>
-<h3 id="LIKE"><a href="#LIKE" class="headerlink" title="LIKE"></a>LIKE</h3><p>“_”:匹配任意以为字符；<br>“%”:匹配任意的零位，多位字符。</p>
-<p><font face="黑体">注意：</font><br>LIKE 可以应用在各种数据类型上，不一定是字符串；<br>LIKE 如果不设置关键字，那么表示查询全部信息，就像LIKE ‘%%’。虽然这样可以查询全部数据，但是与不使用WHERE子句相比，不使用WHERE子句的效率更高。</p>
-<h3 id="ORDER-BY"><a href="#ORDER-BY" class="headerlink" title="ORDER BY"></a>ORDER BY</h3><p>排序方式有两种ASC(默认)和DESC。</p>
-<h3 id="COUNT-MAX-MIN-SUM-AVG"><a href="#COUNT-MAX-MIN-SUM-AVG" class="headerlink" title="COUNT(),MAX(),MIN(),SUM(),AVG()"></a>COUNT(),MAX(),MIN(),SUM(),AVG()</h3><p>count是统计个数，里面可以跟上<font color="red">distinct</font>字段。<br>max和min也可以用于<font color="red">日期</font>类型的数据。</p>
-<p><font face="黑体">注意：</font></p>
-<p>COUNT(*),COUNT(字段),COUNT(DISTINCT 字段)的区别？</p>
-<ul>
-<li>COUNT(*):明确的返回表中的数据个数，是最准确的；</li>
-<li>COUNT(字段):不统计为null的数据个数，如果某一列的数据不可能为null，那么结果与COUNT(*)相同；</li>
-<li>COUNT(DISTINCT 字段):统计消除掉重复数据后的数据个数。</li>
-</ul>
-<h3 id="GROUP-BY"><a href="#GROUP-BY" class="headerlink" title="GROUP BY"></a>GROUP BY</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">SELECT job,COUNT(empno),AVG(sal)</span><br><span class="line">FROM emp</span><br><span class="line">GROUP BY job;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">SELECT DEPTNO,COUNT(empno),MAX(SAL),MIN(SAL)</span><br><span class="line">FROM EMP</span><br><span class="line">GROUP BY DEPTNO;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>没有编写group by子句的时候（全表作为一组），那么select子句之中只允许出现统计函数，不允许出现其他字段。<br>例如：<br>select count(empno),ename from emp;<br>这里查询结果里面第一列已经显示了empno的数目了，这肯定只有一行，所以第二列不可能列出很多行ename的数据了，因为这不符合数据库的表达形式。</li>
-</ul>
-<ul>
-<li>在使用group by子句分组的时候，select子句之中只允许出现分组字段与统计函数，其他字段不允许出现。</li>
-</ul>
-<p>正确代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select job,count(empno) from emp group by job;</span><br></pre></td></tr></table></figure>
-
-<p>错误代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select job,count(empno),ename from group by job;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>统计函数允许嵌套查询，但是嵌套后的统计查询中，select子句中不允许再出现任何的字段，包括分组字段，只能够使用嵌套的统计函数。</li>
-</ul>
-<p>正确代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">SELECT deptno,AVG(sal)</span><br><span class="line">FROM emp </span><br><span class="line">GROUP BY deptno;</span><br></pre></td></tr></table></figure>
-
-<p>错误代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT deptno,MAX(AVG(sal))</span><br><span class="line">FROM emp</span><br><span class="line">GROUP BY deptno;</span><br></pre></td></tr></table></figure>
-
-<p>这里已经有了嵌套的统计函数，就不能再有deptno了。</p>
-<p>修改：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT MAX(AVG(sal))</span><br><span class="line">FROM emp</span><br><span class="line">GROUP BY deptno;</span><br></pre></td></tr></table></figure>
-
-<h3 id="多表查询"><a href="#多表查询" class="headerlink" title="多表查询"></a>多表查询</h3><p><font face="黑体">示例：</font></p>
-<p>查询出每个部门的名称、人数、平均工资：</p>
-<p>分析：<br>1.确定要使用的表：<br>（1）dept:部门名称<br>（2）emp:统计出人数，平均工资<br>2.确定已知的关联字段：<br>雇员与部门：emp.deptno=dept.deptno</p>
-<h4 id="第一步：查询每个雇员的编号，部门名称，工资"><a href="#第一步：查询每个雇员的编号，部门名称，工资" class="headerlink" title="第一步：查询每个雇员的编号，部门名称，工资"></a>第一步：查询每个雇员的编号，部门名称，工资</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">SELECT e.empno,d.dnama,e.sal</span><br><span class="line">FROM emp e,dept d</span><br><span class="line">WHERE e.deptno=d.deptno;</span><br></pre></td></tr></table></figure>
-
-<h4 id="第二步：通过以上的查询可以发现dname字段上出现了重复查询，有重复数据才可以分组。另外我们的查询明确要求是根据部门名称分组，现在对查询结果分组。（上面查询出来的结果可以看作是一张临时数据表）"><a href="#第二步：通过以上的查询可以发现dname字段上出现了重复查询，有重复数据才可以分组。另外我们的查询明确要求是根据部门名称分组，现在对查询结果分组。（上面查询出来的结果可以看作是一张临时数据表）" class="headerlink" title="第二步：通过以上的查询可以发现dname字段上出现了重复查询，有重复数据才可以分组。另外我们的查询明确要求是根据部门名称分组，现在对查询结果分组。（上面查询出来的结果可以看作是一张临时数据表）"></a>第二步：通过以上的查询可以发现dname字段上出现了重复查询，有重复数据才可以分组。另外我们的查询明确要求是根据部门名称分组，现在对查询结果分组。（上面查询出来的结果可以看作是一张临时数据表）</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">SELECT e.empno,d.dnama,e.sal</span><br><span class="line">FROM emp e,dept d</span><br><span class="line">WHERE e.deptno=d.deptno</span><br><span class="line">GROUP BY d.name;</span><br></pre></td></tr></table></figure>
-
-<h4 id="第三步：部门一共有三个，但是我们现在只出现了三个，加入外连接控制"><a href="#第三步：部门一共有三个，但是我们现在只出现了三个，加入外连接控制" class="headerlink" title="第三步：部门一共有三个，但是我们现在只出现了三个，加入外连接控制"></a>第三步：部门一共有三个，但是我们现在只出现了三个，加入外连接控制</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">SELECT e.empno,d.dnama,e.sal</span><br><span class="line">FROM emp e,dept d</span><br><span class="line">WHERE e.deptno(+)=d.deptno</span><br><span class="line">GROUP BY d.name;</span><br></pre></td></tr></table></figure>
-
-<h4 id="查询成功。"><a href="#查询成功。" class="headerlink" title="查询成功。"></a>查询成功。</h4><html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-sql/" data-title="lover" data-url="http://kongzheng1993.github.io/kongzheng1993-sql/"></div>
+<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-acoderinlove/" data-title="lover" data-url="http://kongzheng1993.github.io/kongzheng1993-acoderinlove/"></div>
 <!-- 多说评论框 end -->
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
@@ -463,10 +393,10 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/06/10/kongzheng1993-oracle/" data-id="ck8d4ki3d000l20c8g55jgy0l" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/06/10/kongzheng1993-acoderinlove/" data-id="ck8egi7ck00040tc8ut2ozc6x" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/distinct/">distinct</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/group-by/">group by</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/order-by/">order by</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/select/">select</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sql/">sql</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/images/">images</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sample-post/">sample post</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/test/">test</a></li></ul>
 
     </footer>
   </div>
@@ -532,11 +462,15 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       <ul>
         
           <li>
-            <a href="/2020/03/25/kongzheng1993-一次老代码优化/">(no title)</a>
+            <a href="/2020/03/30/kongzheng1993-一次老代码优化2/">(no title)</a>
           </li>
         
           <li>
             <a href="/2020/03/25/kongzheng1993-RocketMQ定时消息示例/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/25/kongzheng1993-一次老代码优化/">(no title)</a>
           </li>
         
           <li>
@@ -545,10 +479,6 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
         
           <li>
             <a href="/2020/03/19/kongzheng1993-Thread和Runnable/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/03/08/kongzheng1993-Map遍历的几种方法/">(no title)</a>
           </li>
         
       </ul>

@@ -62,9 +62,9 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-kongzheng1993-jhat" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-kongzheng1993-Map遍历的几种方法" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2020/03/08/kongzheng1993-jhat/" class="article-date">
+    <a href="/2020/03/08/kongzheng1993-Map遍历的几种方法/" class="article-date">
   <time datetime="2020-03-07T16:00:00.000Z" itemprop="datePublished">2020-03-08</time>
 </a>
     
@@ -74,45 +74,33 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="jhat"><a href="#jhat" class="headerlink" title="jhat"></a>jhat</h1><p>分析Java堆。此命令是实验性的，不受支持。</p>
-<h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p><code>jhat [ options ] heap-dump-file</code></p>
-<h2 id="选项"><a href="#选项" class="headerlink" title="选项"></a>选项</h2><p>命令行选项。</p>
+        <h2 id="关于Map遍历的几种方法总结"><a href="#关于Map遍历的几种方法总结" class="headerlink" title="关于Map遍历的几种方法总结"></a>关于Map遍历的几种方法总结</h2><p>在java中所有的map都实现了Map接口，因此所有的Map（如HashMap, TreeMap, LinkedHashMap, Hashtable等）都可以用以下的方式去遍历。</p>
 <ul>
-<li><p>-stack false | true<br>关闭跟踪对象分配调用堆栈。如果堆转储中没有分配站点信息，则必须将此标志设置为false。默认值为true。</p>
-</li>
-<li><p>-refs false | true<br>关闭对对象引用的跟踪。默认值为true。默认情况下，将为堆中的所有对象计算后向指针，即指向指定对象的对象，例如引用程序或传入引用。</p>
-</li>
-<li><p>-port 端口号<br>设置jhatHTTP服务器的端口。默认值为7000。</p>
-</li>
-<li><p>-exclude exclude-file<br>指定一个文件，该文件列出了应从可达对象查询中排除的数据成员。例如，如果文件列出java.lang.String.value，则无论何时o计算从特定对象可访问的对象列表，java.lang.String.value都不会考虑涉及字段的引用路径。</p>
-</li>
-<li><p>-baseline exclude-file<br>指定基线堆转储。两个堆转储中具有相同对象ID的对象都标记为不是新对象。其他对象被标记为新对象。这对于比较两个不同的堆转储很有用。</p>
-</li>
-<li><p>-debug int<br>设置此工具的调试级别。级别0表示没有调试输出。为更多详细模式设置较高的值。</p>
-</li>
-<li><p>-version<br>报告发布编号并退出</p>
-</li>
-<li><p>-h<br>显示帮助消息并退出。</p>
-</li>
-<li><p>-help<br>显示帮助消息并退出。</p>
-</li>
-<li><p>-Jflag<br>传递flag到在其jhat上运行命令的Java虚拟机。例如，-J-Xmx512m使用最大堆大小为512 MB。</p>
-</li>
+<li>方法一：在for循环中使用Entry实现Map的遍历：</li>
 </ul>
-<h2 id="堆转储文件"><a href="#堆转储文件" class="headerlink" title="堆转储文件"></a>堆转储文件</h2><p>要浏览的Java二进制堆转储文件。对于包含多个堆转储的转储文件，您可以通过#<number>在文件名后附加名称来指定文件中的哪个转储myfile.hprof#3。</number></p>
-<h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>该jhat命令解析Java堆转储文件并启动Web服务器。该jhat命令使您可以使用自己喜欢的Web浏览器浏览堆转储。该jhat命令支持预先设计的查询，例如显示已知类的所有实例MyClass以及对象查询语言（OQL）。OQL与SQL相似，除了查询堆转储。可从jhat命令显示的OQL帮助页面获得OQL帮助。使用默认端口，可以从<a href="http://localhost:7000/oqlhelp" target="_blank" rel="noopener">http://localhost:7000/oqlhelp</a> /获得OQL帮助。</p>
-<p>有几种方法可以生成Java堆转储：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 最常见也是大多数情况下用的最多的，一般在键值对都需要使用</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">Map &lt;String,String&gt;map = <span class="keyword">new</span> HashMap&lt;String,String&gt;();</span><br><span class="line">map.put(<span class="string">"Spring技术内幕"</span>, <span class="string">"计文柯"</span>);</span><br><span class="line">map.put(<span class="string">"架构探险"</span>, <span class="string">"黄勇"</span>);</span><br><span class="line"><span class="keyword">for</span>(Map.Entry&lt;String, String&gt; entry : map.entrySet())&#123;</span><br><span class="line">    String mapKey = entry.getKey();</span><br><span class="line">    String mapValue = entry.getValue();</span><br><span class="line">    System.out.println(mapKey+<span class="string">":"</span>+mapValue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li>使用该jmap -dump选项在运行时获取堆转储。参见jmap（1）。</li>
-<li>使用该jconsole选项HotSpotDiagnosticMXBean在运行时获取堆转储。请参阅jconsole（1）和HotSpotDiagnosticMXBean接口说明，网址为<br><a href="http://docs.oracle.com/javase/8/docs/jre/api/management/extension/com/sun/management/HotSpotDiagnosticMXBean.html" target="_blank" rel="noopener">http://docs.oracle.com/javase/8/docs/jre/api/management/extension/com/sun/management/HotSpotDiagnosticMXBean.html</a></li>
-<li>OutOfMemoryError通过指定-XX:+HeapDumpOnOutOfMemoryErrorJava虚拟机（JVM）选项引发时，将生成堆转储。</li>
-<li>使用hprof命令。请参阅HPROF：堆/ CPU分析工具，网址为：<br><a href="http://docs.oracle.com/javase/8/docs/technotes/samples/hprof.html" target="_blank" rel="noopener">http://docs.oracle.com/javase/8/docs/technotes/samples/hprof.html</a></li>
+<li>方法二：在for循环中遍历key或者values，一般适用于只需要map中的key或者value时使用，在性能上比使用entrySet较好；</li>
 </ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Map &lt;String,String&gt;map = <span class="keyword">new</span> HashMap&lt;String,String&gt;();</span><br><span class="line">map.put(<span class="string">"Spring技术内幕"</span>, <span class="string">"计文柯"</span>);</span><br><span class="line">map.put(<span class="string">"架构探险"</span>, <span class="string">"黄勇"</span>);</span><br><span class="line"><span class="comment">//key</span></span><br><span class="line"><span class="keyword">for</span>(String key : map.keySet())&#123;</span><br><span class="line">    System.out.println(key);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//value</span></span><br><span class="line"><span class="keyword">for</span>(String value : map.values())&#123;</span><br><span class="line">    System.out.println(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>方法三：通过Iterator遍历；</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Iterator&lt;Entry&lt;String, String&gt;&gt; entries = map.entrySet().iterator();</span><br><span class="line"><span class="keyword">while</span>(entries.hasNext())&#123;</span><br><span class="line">    Entry&lt;String, String&gt; entry = entries.next();</span><br><span class="line">    String key = entry.getKey();</span><br><span class="line">    String value = entry.getValue();</span><br><span class="line">    System.out.println(key+<span class="string">":"</span>+value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>方法四：通过键找值遍历，这种方式的效率比较低，因为本身从键取值是耗时的操作；</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(String key : map.keySet())&#123;</span><br><span class="line">    String value = map.get(key);</span><br><span class="line">    System.out.println(key+<span class="string">":"</span>+value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>如果绝大多数数据都要用到，那么我们最好使用Entry来遍历，像方法四，每次都拿着key去map里查一次value，开销是比较大的。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-jhat/" data-id="ck8d4ki4v002520c82uxv5rbr" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-Map遍历的几种方法/" data-id="ck8egi7fl00450tc8kkp3agpw" class="article-share-link">Share</a>
       
       
     </footer>
@@ -170,7 +158,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-jmap/" data-id="ck8d4ki50002c20c8kd6f3egp" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-jmap/" data-id="ck8egi7fs004a0tc8e4powtol" class="article-share-link">Share</a>
       
       
     </footer>
@@ -890,7 +878,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-URLEncode/" data-id="ck8d4ki56002h20c8qsqzru1j" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-URLEncode/" data-id="ck8egi7fu004c0tc8d936gst3" class="article-share-link">Share</a>
       
       
     </footer>
@@ -947,7 +935,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-申请亚马逊AWS账户/" data-id="ck8d4ki8k006f20c8wj04ojnl" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-申请亚马逊AWS账户/" data-id="ck8egi7fw004e0tc83q8tzmvk" class="article-share-link">Share</a>
       
       
     </footer>
@@ -957,10 +945,10 @@
 
 
   
-    <article id="post-kongzheng1993-Guava" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-kongzheng1993-jhat" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2020/03/06/kongzheng1993-Guava/" class="article-date">
-  <time datetime="2020-03-05T16:00:00.000Z" itemprop="datePublished">2020-03-06</time>
+    <a href="/2020/03/08/kongzheng1993-jhat/" class="article-date">
+  <time datetime="2020-03-07T16:00:00.000Z" itemprop="datePublished">2020-03-08</time>
 </a>
     
   </div>
@@ -969,50 +957,45 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Guava（一）"><a href="#Guava（一）" class="headerlink" title="Guava（一）"></a>Guava（一）</h1><h2 id="Guava是什么"><a href="#Guava是什么" class="headerlink" title="Guava是什么"></a>Guava是什么</h2><p>Guava项目包含一些我们在基于Java的项目中依赖的Google核心库：集合，缓存，原语支持，并发库，通用批注，字符串处理，I/O等。这些工具中的每一种确实每天都会被Google员工用于生产服务中。</p>
-<p>更详细的介绍可以去<a href="https://github.com/google/guava/wiki" target="_blank" rel="noopener">github/guava</a>的Wiki了解。</p>
-<h2 id="引入Guava"><a href="#引入Guava" class="headerlink" title="引入Guava"></a>引入Guava</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.google.guava<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>guava<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>19.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="Guava工具类"><a href="#Guava工具类" class="headerlink" title="Guava工具类"></a>Guava工具类</h2><h3 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h3><p>普通的集合：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; list = Lists.newArrayList();</span><br><span class="line">Set&lt;String&gt; set = Sets.newHashSet();</span><br><span class="line">Map&lt;String, String&gt; map = Maps.newHashMap();</span><br></pre></td></tr></table></figure>
-
-<p>不可变集合：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ImmutableList&lt;String&gt; iList = ImmutableList.of(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>);</span><br><span class="line">ImmutableSet&lt;String&gt; iSet = ImmutableSet.of(<span class="string">"e1"</span>, <span class="string">"e2"</span>);</span><br><span class="line">ImmutableMap&lt;String, String&gt; iMap = ImmutableMap.of(<span class="string">"k1"</span>, <span class="string">"v1"</span>, <span class="string">"k2"</span>, <span class="string">"v2"</span>);</span><br></pre></td></tr></table></figure>
-
-<pre><code>什么是不可变？
-- 在多线程操作下，是线程安全的。
-- 所有不可变集合会比可变集合更有效的利用资源。
-- 中途不可改变</code></pre><h4 id="一个简单的对比"><a href="#一个简单的对比" class="headerlink" title="一个简单的对比"></a>一个简单的对比</h4><p>我们搞一个Map中嵌套List的对象要几步？</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String,List&lt;Integer&gt;&gt; map = <span class="keyword">new</span> HashMap&lt;String,List&lt;Integer&gt;&gt;();</span><br><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">list.add(<span class="number">1</span>);</span><br><span class="line">list.add(<span class="number">2</span>);</span><br><span class="line">map.put(<span class="string">"test"</span>, list);</span><br></pre></td></tr></table></figure>
-
-<p>如果用了Guava呢？</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Multimap&lt;String,Integer&gt; mapM = ArrayListMultimap.create();</span><br><span class="line">mapM.put(<span class="string">"test"</span>,<span class="number">1</span>);</span><br><span class="line">mapM.put(<span class="string">"test"</span>,<span class="number">2</span>);</span><br></pre></td></tr></table></figure>
-
-<p>哪个方便？</p>
-<pre><code>代码量少了并不是简简单单的节省时间而已，而是减少了人为错误的机会，少一行代码就少一点犯错误的可能！</code></pre><h3 id="字符串连接"><a href="#字符串连接" class="headerlink" title="字符串连接"></a>字符串连接</h3><p>连接多个字符串，追加到StringBuilder</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">StringBuilder stringBuilder = <span class="keyword">new</span> StringBuilder(<span class="string">"你好！，"</span>);</span><br><span class="line"><span class="comment">// 字符串连接器，以|为分隔符，同时去掉null元素</span></span><br><span class="line">Joiner joiner1 = Joiner.on(<span class="string">"|"</span>).skipNulls();</span><br><span class="line"><span class="comment">// 构成一个字符串jim|jack|kevin并添加到stringBuilder</span></span><br><span class="line">stringBuilder = joiner1.appendTo(stringBuilder, <span class="string">"jim"</span>, <span class="string">"jack"</span>, <span class="keyword">null</span>, <span class="string">"kevin"</span>);</span><br><span class="line">System.out.println(stringBuilder); </span><br><span class="line"><span class="comment">// 执行结果：嗨，jim|jack|kevin</span></span><br></pre></td></tr></table></figure>
-
-<p>可以看到这里过滤了null</p>
-<h3 id="Map-amp-字符串互转"><a href="#Map-amp-字符串互转" class="headerlink" title="Map&amp;字符串互转"></a>Map&amp;字符串互转</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, String&gt; testMap = Maps.newLinkedHashMap();</span><br><span class="line">testMap.put(<span class="string">"Cookies"</span>, <span class="string">"12332"</span>);</span><br><span class="line">testMap.put(<span class="string">"Content-Length"</span>, <span class="string">"30000"</span>);</span><br><span class="line">testMap.put(<span class="string">"Date"</span>, <span class="string">"2018.07.04"</span>);</span><br><span class="line">testMap.put(<span class="string">"Mime"</span>, <span class="string">"text/html"</span>);</span><br><span class="line"><span class="comment">// 用:分割键值对，并用#分割每个元素，返回字符串</span></span><br><span class="line">String returnedString = Joiner.on(<span class="string">"#"</span>).withKeyValueSeparator(<span class="string">":"</span>).joi(testMap);</span><br><span class="line">System.out.println(returnedString);</span><br><span class="line"><span class="comment">// 执行结果：Cookies:12332#Content-Length:30000#Date:2018.07.04#Mime:text/html</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 接上一个，内部类的引用，得到分割器，将字符串解析为map</span></span><br><span class="line">Splitter.MapSplitter ms = Splitter.on(<span class="string">"#"</span>).withKeyValueSeparator(<span class="string">':'</span>);</span><br><span class="line">Map&lt;String, String&gt; ret = ms.split(returnedString);</span><br><span class="line"><span class="keyword">for</span> (String it2 : ret.keySet()) &#123;</span><br><span class="line">    System.out.println(it2 + <span class="string">" -&gt; "</span> + ret.get(it2));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="字符串工具类"><a href="#字符串工具类" class="headerlink" title="字符串工具类"></a>字符串工具类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(Strings.isNullOrEmpty(<span class="string">""</span>)); <span class="comment">// true</span></span><br><span class="line">System.out.println(Strings.isNullOrEmpty(<span class="keyword">null</span>)); <span class="comment">// true</span></span><br><span class="line">System.out.println(Strings.isNullOrEmpty(<span class="string">"hello"</span>)); <span class="comment">// false</span></span><br><span class="line"><span class="comment">// 将null转化为""</span></span><br><span class="line"> System.out.println(Strings.nullToEmpty(<span class="keyword">null</span>)); <span class="comment">// "" </span></span><br><span class="line"><span class="comment">// 从尾部不断补充T只到总共8个字符，如果源字符串已经达到或操作，则原样返回。类似的有padStart</span></span><br><span class="line">System.out.println(Strings.padEnd(<span class="string">"hello"</span>, <span class="number">8</span>, <span class="string">'T'</span>)); <span class="comment">// helloTTT</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="字符匹配器CharMatcher"><a href="#字符匹配器CharMatcher" class="headerlink" title="字符匹配器CharMatcher"></a>字符匹配器CharMatcher</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 空白回车换行对应换成一个#，一对一换</span></span><br><span class="line">String stringWithLinebreaks = <span class="string">"hello world\r\r\ryou are here\n\ntake it\t\t\teasy"</span>;</span><br><span class="line">String s6 = CharMatcher.BREAKING_WHITESPACE.replaceFrom(stringWithLinebreaks,<span class="string">'#'</span>);</span><br><span class="line">System.out.println(s6); </span><br><span class="line"><span class="comment">//执行结果：hello#world###you#are#here##take#it###easy</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="连续空白替换成一个字符"><a href="#连续空白替换成一个字符" class="headerlink" title="连续空白替换成一个字符"></a>连续空白替换成一个字符</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将所有连在一起的空白回车换行字符换成一个#，倒塌</span></span><br><span class="line">String tabString = <span class="string">"  hello   \n\t\tworld   you\r\nare             here  "</span>;</span><br><span class="line">String tabRet = CharMatcher.WHITESPACE.collapseFrom(tabString, <span class="string">'#'</span>);</span><br><span class="line">System.out.println(tabRet);</span><br></pre></td></tr></table></figure>
-
-<h3 id="去掉前后空白和缩成一个字符"><a href="#去掉前后空白和缩成一个字符" class="headerlink" title="去掉前后空白和缩成一个字符"></a>去掉前后空白和缩成一个字符</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在前面的基础上去掉字符串的前后空白，并将空白换成一个#</span></span><br><span class="line">String trimRet = CharMatcher.WHITESPACE.trimAndCollapseFrom(tabString, <span class="string">'#'</span>);</span><br><span class="line">System.out.println(trimRet);</span><br><span class="line"><span class="comment">//执行结果： hello#world#you#are#here</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="只保留数字"><a href="#只保留数字" class="headerlink" title="只保留数字"></a>只保留数字</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String letterAndNumber = <span class="string">"1234abcdABCD56789"</span>;</span><br><span class="line"><span class="comment">// 保留数字</span></span><br><span class="line">String number = CharMatcher.JAVA_DIGIT.retainFrom(letterAndNumber);</span><br><span class="line">System.out.println(number);<span class="comment">//123456789</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>使用Guava可以极大减少我们的代码量，减少犯错机会，提高工作效率。这次我们先介绍这些，下一篇我们深入Guava Caching！</p>
+        <h1 id="jhat"><a href="#jhat" class="headerlink" title="jhat"></a>jhat</h1><p>分析Java堆。此命令是实验性的，不受支持。</p>
+<h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p><code>jhat [ options ] heap-dump-file</code></p>
+<h2 id="选项"><a href="#选项" class="headerlink" title="选项"></a>选项</h2><p>命令行选项。</p>
+<ul>
+<li><p>-stack false | true<br>关闭跟踪对象分配调用堆栈。如果堆转储中没有分配站点信息，则必须将此标志设置为false。默认值为true。</p>
+</li>
+<li><p>-refs false | true<br>关闭对对象引用的跟踪。默认值为true。默认情况下，将为堆中的所有对象计算后向指针，即指向指定对象的对象，例如引用程序或传入引用。</p>
+</li>
+<li><p>-port 端口号<br>设置jhatHTTP服务器的端口。默认值为7000。</p>
+</li>
+<li><p>-exclude exclude-file<br>指定一个文件，该文件列出了应从可达对象查询中排除的数据成员。例如，如果文件列出java.lang.String.value，则无论何时o计算从特定对象可访问的对象列表，java.lang.String.value都不会考虑涉及字段的引用路径。</p>
+</li>
+<li><p>-baseline exclude-file<br>指定基线堆转储。两个堆转储中具有相同对象ID的对象都标记为不是新对象。其他对象被标记为新对象。这对于比较两个不同的堆转储很有用。</p>
+</li>
+<li><p>-debug int<br>设置此工具的调试级别。级别0表示没有调试输出。为更多详细模式设置较高的值。</p>
+</li>
+<li><p>-version<br>报告发布编号并退出</p>
+</li>
+<li><p>-h<br>显示帮助消息并退出。</p>
+</li>
+<li><p>-help<br>显示帮助消息并退出。</p>
+</li>
+<li><p>-Jflag<br>传递flag到在其jhat上运行命令的Java虚拟机。例如，-J-Xmx512m使用最大堆大小为512 MB。</p>
+</li>
+</ul>
+<h2 id="堆转储文件"><a href="#堆转储文件" class="headerlink" title="堆转储文件"></a>堆转储文件</h2><p>要浏览的Java二进制堆转储文件。对于包含多个堆转储的转储文件，您可以通过#<number>在文件名后附加名称来指定文件中的哪个转储myfile.hprof#3。</number></p>
+<h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>该jhat命令解析Java堆转储文件并启动Web服务器。该jhat命令使您可以使用自己喜欢的Web浏览器浏览堆转储。该jhat命令支持预先设计的查询，例如显示已知类的所有实例MyClass以及对象查询语言（OQL）。OQL与SQL相似，除了查询堆转储。可从jhat命令显示的OQL帮助页面获得OQL帮助。使用默认端口，可以从<a href="http://localhost:7000/oqlhelp" target="_blank" rel="noopener">http://localhost:7000/oqlhelp</a> /获得OQL帮助。</p>
+<p>有几种方法可以生成Java堆转储：</p>
+<ul>
+<li>使用该jmap -dump选项在运行时获取堆转储。参见jmap（1）。</li>
+<li>使用该jconsole选项HotSpotDiagnosticMXBean在运行时获取堆转储。请参阅jconsole（1）和HotSpotDiagnosticMXBean接口说明，网址为<br><a href="http://docs.oracle.com/javase/8/docs/jre/api/management/extension/com/sun/management/HotSpotDiagnosticMXBean.html" target="_blank" rel="noopener">http://docs.oracle.com/javase/8/docs/jre/api/management/extension/com/sun/management/HotSpotDiagnosticMXBean.html</a></li>
+<li>OutOfMemoryError通过指定-XX:+HeapDumpOnOutOfMemoryErrorJava虚拟机（JVM）选项引发时，将生成堆转储。</li>
+<li>使用hprof命令。请参阅HPROF：堆/ CPU分析工具，网址为：<br><a href="http://docs.oracle.com/javase/8/docs/technotes/samples/hprof.html" target="_blank" rel="noopener">http://docs.oracle.com/javase/8/docs/technotes/samples/hprof.html</a></li>
+</ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/06/kongzheng1993-Guava/" data-id="ck8d4ki53002f20c8qlochii8" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-jhat/" data-id="ck8egi7gg004z0tc8bmvf44x1" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1079,11 +1062,15 @@
       <ul>
         
           <li>
-            <a href="/2020/03/25/kongzheng1993-一次老代码优化/">(no title)</a>
+            <a href="/2020/03/30/kongzheng1993-一次老代码优化2/">(no title)</a>
           </li>
         
           <li>
             <a href="/2020/03/25/kongzheng1993-RocketMQ定时消息示例/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/25/kongzheng1993-一次老代码优化/">(no title)</a>
           </li>
         
           <li>
@@ -1092,10 +1079,6 @@
         
           <li>
             <a href="/2020/03/19/kongzheng1993-Thread和Runnable/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/03/08/kongzheng1993-Map遍历的几种方法/">(no title)</a>
           </li>
         
       </ul>

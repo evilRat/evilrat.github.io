@@ -62,6 +62,101 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-kongzheng1993-一次老代码优化2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/30/kongzheng1993-一次老代码优化2/" class="article-date">
+  <time datetime="2020-03-29T16:00:00.000Z" itemprop="datePublished">2020-03-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="记一次老代码优化2"><a href="#记一次老代码优化2" class="headerlink" title="记一次老代码优化2"></a>记一次老代码优化2</h1><h2 id="又发现了一个问题"><a href="#又发现了一个问题" class="headerlink" title="又发现了一个问题"></a>又发现了一个问题</h2><p>上次的优化结果：</p>
+<ul>
+<li>老版本的转换方法用了204ms</li>
+<li>每次去查数据库因为要多次连接数据库进行查询操作，需要531ms</li>
+<li>而使用了缓存的方法，第一次我们还没有加载缓存，需要500ms，而第二次直接在缓存中读取，24ms，只用了之前方法的1/10。</li>
+</ul>
+<p>让我们看一下上次优化的版本：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">ospInOutParmConvert2</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">    Matcher m=p1.matcher(str);</span><br><span class="line">    String strTmp = <span class="string">""</span>;</span><br><span class="line">    String strTmp1= <span class="string">""</span>;</span><br><span class="line">    String nkKey = <span class="string">""</span>;</span><br><span class="line">    String camelKey = <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">final</span> Map&lt;String, String&gt; unSaveKeys = Maps.newHashMap();</span><br><span class="line">    <span class="keyword">while</span>(m.find())&#123;</span><br><span class="line">        strTmp = m.group();</span><br><span class="line">        nkKey = strTmp.replace(<span class="string">"\""</span>, <span class="string">""</span>).replace(<span class="string">":"</span>, <span class="string">""</span>);</span><br><span class="line">        camelKey = nkCamelKeyCacheService.getCamelKeyByNKKey(nkKey);</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isNotBlank(camelKey)) &#123;</span><br><span class="line">            str = str.replace(nkKey, camelKey);</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            camelKey = nkKey.toLowerCase();</span><br><span class="line">            str = str.replace(strTmp, strTmp.toLowerCase());</span><br><span class="line">            <span class="keyword">if</span> (StringUtil.isNotEmpty(strTmp) &amp;&amp; strTmp != <span class="string">"null"</span>) &#123;</span><br><span class="line">                strTmp1= strTmp.toLowerCase();</span><br><span class="line">                <span class="keyword">if</span> (strTmp1.indexOf(<span class="string">"_"</span>) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                    String[] strTmp1s = strTmp1.split(<span class="string">"_"</span>);</span><br><span class="line">                    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;strTmp1s.length-<span class="number">1</span>; i++)&#123;</span><br><span class="line">                        <span class="keyword">int</span> subInt = strTmp1.indexOf(<span class="string">"_"</span>);</span><br><span class="line">                        camelKey = camelKey.replace(strTmp1.substring(subInt,subInt + <span class="number">2</span>),strTmp1.substring(subInt + <span class="number">1</span>, subInt + <span class="number">2</span>).toUpperCase());</span><br><span class="line">                        <span class="keyword">if</span>(strTmp1s.length&gt;<span class="number">1</span>)&#123;</span><br><span class="line">                            strTmp1 = strTmp1.substring(subInt+<span class="number">1</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    str = str.replace(nkKey, camelKey);</span><br><span class="line">                &#125;</span><br><span class="line">                unSaveKeys.put(nkKey, camelKey);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (unSaveKeys.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                LocalJDBCUtil.addNkCamelKeys(unSaveKeys);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> str;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这一版没有对之前的算法进行优化，以为之前写代码的是个大佬，算法上应该没什么瑕疵。今天闲来无事仔细看了一下，发现一个问题：</p>
+<p>如果根据正则匹配到一个key，就进行转换。</p>
+<p>问题是，如果json中有<code>List&lt;Map&gt;</code>，那么list中的每条数据的map中的key都是相同的，每个都进行一遍运算会浪费很多资源。</p>
+<h2 id="怎么优化"><a href="#怎么优化" class="headerlink" title="怎么优化"></a>怎么优化</h2><p>这个问题是进行了不必要的运算，我们要记住哪些key已经计算并替换过了，当再次匹配到这些key的时候，直接跳过。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">ospInOutParmConvert</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">    Matcher m = p1.matcher(str);</span><br><span class="line">    String strTmp = <span class="string">""</span>;<span class="comment">//双引号+冒号的key</span></span><br><span class="line">    String strTmp1 = <span class="string">""</span>;<span class="comment">//转换为小写的双引号+冒号的key</span></span><br><span class="line">    String nkKey = <span class="string">""</span>;<span class="comment">//能开key</span></span><br><span class="line">    String camelKey = <span class="string">""</span>;<span class="comment">//驼峰key</span></span><br><span class="line">    <span class="keyword">final</span> Map&lt;String, String&gt; unSaveKeys = Maps.newHashMap();</span><br><span class="line">    Set&lt;String&gt; finishKeys = Sets.newHashSet();</span><br><span class="line">    <span class="keyword">while</span> (m.find()) &#123;</span><br><span class="line">        strTmp = m.group();</span><br><span class="line">        nkKey = strTmp.replace(<span class="string">"\""</span>, <span class="string">""</span>).replace(<span class="string">":"</span>, <span class="string">""</span>);</span><br><span class="line">        camelKey = nkCamelKeyCacheService.getCamelKeyByNKKey(nkKey);</span><br><span class="line">        <span class="keyword">if</span> (finishKeys.contains(nkKey)) &#123;</span><br><span class="line">            <span class="keyword">continue</span>;<span class="comment">//这个key已经替换过，跳过</span></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (StringUtils.isNotBlank(camelKey)) &#123;</span><br><span class="line">            str = str.replace(<span class="string">"\""</span> + nkKey + <span class="string">"\""</span>, <span class="string">"\""</span> + camelKey + <span class="string">"\""</span>);</span><br><span class="line">            finishKeys.add(nkKey);</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            camelKey = nkKey.toLowerCase();<span class="comment">//如果没有_，那么这里转成小写就处理完了</span></span><br><span class="line">            <span class="keyword">if</span> (StringUtil.isNotEmpty(strTmp) &amp;&amp; strTmp != <span class="string">"null"</span>) &#123;</span><br><span class="line">                strTmp1 = strTmp.toLowerCase();</span><br><span class="line">                <span class="keyword">if</span> (strTmp1.indexOf(<span class="string">"_"</span>) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                    String[] strTmp1s = strTmp1.split(<span class="string">"_"</span>);</span><br><span class="line">                    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; strTmp1s.length - <span class="number">1</span>; i++) &#123;</span><br><span class="line">                        <span class="keyword">int</span> subInt = strTmp1.indexOf(<span class="string">"_"</span>);</span><br><span class="line">                        camelKey = camelKey.replace(strTmp1.substring(subInt, subInt + <span class="number">2</span>), strTmp1.substring(subInt + <span class="number">1</span>, subInt + <span class="number">2</span>).toUpperCase());</span><br><span class="line">                        <span class="keyword">if</span> (strTmp1s.length &gt; <span class="number">1</span>) &#123;</span><br><span class="line">                            strTmp1 = strTmp1.substring(subInt + <span class="number">1</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                str = str.replace(<span class="string">"\""</span> + nkKey + <span class="string">"\""</span>, <span class="string">"\""</span> + camelKey + <span class="string">"\""</span>);</span><br><span class="line">                finishKeys.add(nkKey);</span><br><span class="line">                unSaveKeys.put(nkKey, camelKey);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (unSaveKeys.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                LocalJDBCUtil.addNkCamelKeys(unSaveKeys);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> str;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这一版本中我用了一个<code>finishKeys</code>的<code>Set</code>来存放已经转换过的key，在计算前判断这个key是不是包含在<code>finishKeys</code>中，如果包含，说明已经转换过，直接跳过。</p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>还是之前的测试用例。<br>不过这次新方法第二次跑完的时间是17ms！！！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2020/03/30/kongzheng1993-一次老代码优化2/" data-id="ck8egi7g0004i0tc8e6u8786m" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-kongzheng1993-RocketMQ定时消息示例" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/25/kongzheng1993-RocketMQ定时消息示例/" class="article-date">
+  <time datetime="2020-03-24T16:00:00.000Z" itemprop="datePublished">2020-03-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="定时消息示例"><a href="#定时消息示例" class="headerlink" title="定时消息示例"></a>定时消息示例</h1><h2 id="什么是定时消息"><a href="#什么是定时消息" class="headerlink" title="什么是定时消息"></a>什么是定时消息</h2><p>预定的消息与正常的消息的不同之处在于，它们要等到指定的时间后才能传递。</p>
+<p>RocketMQ 支持定时消息，但是不支持任意时间精度，仅支持特定的 level，例如定时 5s， 10s， 1m 等。其中，level=0 级表示不延时，level=1 表示 1 级延时，level=2 表示 2 级延时，以此类推。</p>
+<p><strong>如何配置：</strong><br>在服务器端（rocketmq-broker端）的属性配置文件中加入以下行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">messageDelayLevel=1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h</span><br></pre></td></tr></table></figure>
+
+<p>描述了各级别与延时时间的对应映射关系。</p>
+<p>这个配置项配置了从1级开始各级延时的时间，如1表示延时1s，2表示延时5s，14表示延时10m，可以修改这个指定级别的延时时间。</p>
+<ul>
+<li>时间单位支持：s、m、h、d，分别表示秒、分、时、天</li>
+<li>默认值就是上面声明的，可手工调整</li>
+<li>默认值已经够用，不建议调整</li>
+</ul>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><ul>
+<li>启动消费者等待传入的订阅消息</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;</span><br><span class="line"> <span class="keyword">import</span> org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;</span><br><span class="line"> <span class="keyword">import</span> org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;</span><br><span class="line"> <span class="keyword">import</span> org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;</span><br><span class="line"> <span class="keyword">import</span> org.apache.rocketmq.common.message.MessageExt;</span><br><span class="line"> <span class="keyword">import</span> java.util.List;</span><br><span class="line">    </span><br><span class="line"> <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ScheduledMessageConsumer</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">         <span class="comment">// Instantiate message consumer</span></span><br><span class="line">         DefaultMQPushConsumer consumer = <span class="keyword">new</span> DefaultMQPushConsumer(<span class="string">"ExampleConsumer"</span>);</span><br><span class="line">         <span class="comment">// Subscribe topics</span></span><br><span class="line">         consumer.subscribe(<span class="string">"TestTopic"</span>, <span class="string">"*"</span>);</span><br><span class="line">         <span class="comment">// Register message listener</span></span><br><span class="line">         consumer.registerMessageListener(<span class="keyword">new</span> MessageListenerConcurrently() &#123;</span><br><span class="line">             <span class="meta">@Override</span></span><br><span class="line">             <span class="function"><span class="keyword">public</span> ConsumeConcurrentlyStatus <span class="title">consumeMessage</span><span class="params">(List&lt;MessageExt&gt; messages, ConsumeConcurrentlyContext context)</span> </span>&#123;</span><br><span class="line">                 <span class="keyword">for</span> (MessageExt message : messages) &#123;</span><br><span class="line">                     <span class="comment">// Print approximate delay time period</span></span><br><span class="line">                     System.out.println(<span class="string">"Receive message[msgId="</span> + message.getMsgId() + <span class="string">"] "</span></span><br><span class="line">                             + (System.currentTimeMillis() - message.getStoreTimestamp()) + <span class="string">"ms later"</span>);</span><br><span class="line">                 &#125;</span><br><span class="line">                 <span class="keyword">return</span> ConsumeConcurrentlyStatus.CONSUME_SUCCESS;</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;);</span><br><span class="line">         <span class="comment">// Launch consumer</span></span><br><span class="line">         consumer.start();</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>发送定时消息</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.rocketmq.client.producer.DefaultMQProducer;</span><br><span class="line"><span class="keyword">import</span> org.apache.rocketmq.common.message.Message;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ScheduledMessageProducer</span> </span>&#123;</span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">         <span class="comment">// Instantiate a producer to send scheduled messages</span></span><br><span class="line">         DefaultMQProducer producer = <span class="keyword">new</span> DefaultMQProducer(<span class="string">"ExampleProducerGroup"</span>);</span><br><span class="line">         <span class="comment">// Launch producer</span></span><br><span class="line">         producer.start();</span><br><span class="line">         <span class="keyword">int</span> totalMessagesToSend = <span class="number">100</span>;</span><br><span class="line">         <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; totalMessagesToSend; i++) &#123;</span><br><span class="line">             Message message = <span class="keyword">new</span> Message(<span class="string">"TestTopic"</span>, (<span class="string">"Hello scheduled message "</span> + i).getBytes());</span><br><span class="line">             <span class="comment">// This message will be delivered to consumer 10 seconds later.</span></span><br><span class="line">             message.setDelayTimeLevel(<span class="number">3</span>);</span><br><span class="line">             <span class="comment">// Send the message</span></span><br><span class="line">             producer.send(message);</span><br><span class="line">         &#125;    </span><br><span class="line">         <span class="comment">// Shutdown producer after use.</span></span><br><span class="line">         producer.shutdown();</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>验证</li>
+</ul>
+<p>可以看到，消息存储10s后才会消费消息。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2020/03/25/kongzheng1993-RocketMQ定时消息示例/" data-id="ck8egi7g2004l0tc875agb4ov" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-kongzheng1993-一次老代码优化" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/03/25/kongzheng1993-一次老代码优化/" class="article-date">
@@ -132,59 +227,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/25/kongzheng1993-一次老代码优化/" data-id="ck8d4ki58002j20c8jglpwgm6" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-RocketMQ定时消息示例" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/03/25/kongzheng1993-RocketMQ定时消息示例/" class="article-date">
-  <time datetime="2020-03-24T16:00:00.000Z" itemprop="datePublished">2020-03-25</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="定时消息示例"><a href="#定时消息示例" class="headerlink" title="定时消息示例"></a>定时消息示例</h1><h2 id="什么是定时消息"><a href="#什么是定时消息" class="headerlink" title="什么是定时消息"></a>什么是定时消息</h2><p>预定的消息与正常的消息的不同之处在于，它们要等到指定的时间后才能传递。</p>
-<p>RocketMQ 支持定时消息，但是不支持任意时间精度，仅支持特定的 level，例如定时 5s， 10s， 1m 等。其中，level=0 级表示不延时，level=1 表示 1 级延时，level=2 表示 2 级延时，以此类推。</p>
-<p><strong>如何配置：</strong><br>在服务器端（rocketmq-broker端）的属性配置文件中加入以下行：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">messageDelayLevel=1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h</span><br></pre></td></tr></table></figure>
-
-<p>描述了各级别与延时时间的对应映射关系。</p>
-<p>这个配置项配置了从1级开始各级延时的时间，如1表示延时1s，2表示延时5s，14表示延时10m，可以修改这个指定级别的延时时间。</p>
-<ul>
-<li>时间单位支持：s、m、h、d，分别表示秒、分、时、天</li>
-<li>默认值就是上面声明的，可手工调整</li>
-<li>默认值已经够用，不建议调整</li>
-</ul>
-<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><ul>
-<li>启动消费者等待传入的订阅消息</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;</span><br><span class="line"> <span class="keyword">import</span> org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;</span><br><span class="line"> <span class="keyword">import</span> org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;</span><br><span class="line"> <span class="keyword">import</span> org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;</span><br><span class="line"> <span class="keyword">import</span> org.apache.rocketmq.common.message.MessageExt;</span><br><span class="line"> <span class="keyword">import</span> java.util.List;</span><br><span class="line">    </span><br><span class="line"> <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ScheduledMessageConsumer</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">         <span class="comment">// Instantiate message consumer</span></span><br><span class="line">         DefaultMQPushConsumer consumer = <span class="keyword">new</span> DefaultMQPushConsumer(<span class="string">"ExampleConsumer"</span>);</span><br><span class="line">         <span class="comment">// Subscribe topics</span></span><br><span class="line">         consumer.subscribe(<span class="string">"TestTopic"</span>, <span class="string">"*"</span>);</span><br><span class="line">         <span class="comment">// Register message listener</span></span><br><span class="line">         consumer.registerMessageListener(<span class="keyword">new</span> MessageListenerConcurrently() &#123;</span><br><span class="line">             <span class="meta">@Override</span></span><br><span class="line">             <span class="function"><span class="keyword">public</span> ConsumeConcurrentlyStatus <span class="title">consumeMessage</span><span class="params">(List&lt;MessageExt&gt; messages, ConsumeConcurrentlyContext context)</span> </span>&#123;</span><br><span class="line">                 <span class="keyword">for</span> (MessageExt message : messages) &#123;</span><br><span class="line">                     <span class="comment">// Print approximate delay time period</span></span><br><span class="line">                     System.out.println(<span class="string">"Receive message[msgId="</span> + message.getMsgId() + <span class="string">"] "</span></span><br><span class="line">                             + (System.currentTimeMillis() - message.getStoreTimestamp()) + <span class="string">"ms later"</span>);</span><br><span class="line">                 &#125;</span><br><span class="line">                 <span class="keyword">return</span> ConsumeConcurrentlyStatus.CONSUME_SUCCESS;</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;);</span><br><span class="line">         <span class="comment">// Launch consumer</span></span><br><span class="line">         consumer.start();</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>发送定时消息</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.rocketmq.client.producer.DefaultMQProducer;</span><br><span class="line"><span class="keyword">import</span> org.apache.rocketmq.common.message.Message;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ScheduledMessageProducer</span> </span>&#123;</span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">         <span class="comment">// Instantiate a producer to send scheduled messages</span></span><br><span class="line">         DefaultMQProducer producer = <span class="keyword">new</span> DefaultMQProducer(<span class="string">"ExampleProducerGroup"</span>);</span><br><span class="line">         <span class="comment">// Launch producer</span></span><br><span class="line">         producer.start();</span><br><span class="line">         <span class="keyword">int</span> totalMessagesToSend = <span class="number">100</span>;</span><br><span class="line">         <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; totalMessagesToSend; i++) &#123;</span><br><span class="line">             Message message = <span class="keyword">new</span> Message(<span class="string">"TestTopic"</span>, (<span class="string">"Hello scheduled message "</span> + i).getBytes());</span><br><span class="line">             <span class="comment">// This message will be delivered to consumer 10 seconds later.</span></span><br><span class="line">             message.setDelayTimeLevel(<span class="number">3</span>);</span><br><span class="line">             <span class="comment">// Send the message</span></span><br><span class="line">             producer.send(message);</span><br><span class="line">         &#125;    </span><br><span class="line">         <span class="comment">// Shutdown producer after use.</span></span><br><span class="line">         producer.shutdown();</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>验证</li>
-</ul>
-<p>可以看到，消息存储10s后才会消费消息。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/25/kongzheng1993-RocketMQ定时消息示例/" data-id="ck8d4ki7y006e20c82urmvvlf" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2020/03/25/kongzheng1993-一次老代码优化/" data-id="ck8egi7g3004o0tc8urth0n4v" class="article-share-link">Share</a>
       
       
     </footer>
@@ -210,7 +253,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/19/kongzheng1993-Future/" data-id="ck8d4khzx000020c8fhg9w36z" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2020/03/19/kongzheng1993-Future/" data-id="ck8egi7bl00000tc8xs1xc8sy" class="article-share-link">Share</a>
       
       
     </footer>
@@ -282,55 +325,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/19/kongzheng1993-Thread和Runnable/" data-id="ck8d4ki8o006g20c851cdrd34" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-Map遍历的几种方法" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/03/08/kongzheng1993-Map遍历的几种方法/" class="article-date">
-  <time datetime="2020-03-07T16:00:00.000Z" itemprop="datePublished">2020-03-08</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="关于Map遍历的几种方法总结"><a href="#关于Map遍历的几种方法总结" class="headerlink" title="关于Map遍历的几种方法总结"></a>关于Map遍历的几种方法总结</h2><p>在java中所有的map都实现了Map接口，因此所有的Map（如HashMap, TreeMap, LinkedHashMap, Hashtable等）都可以用以下的方式去遍历。</p>
-<ul>
-<li>方法一：在for循环中使用Entry实现Map的遍历：</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 最常见也是大多数情况下用的最多的，一般在键值对都需要使用</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">Map &lt;String,String&gt;map = <span class="keyword">new</span> HashMap&lt;String,String&gt;();</span><br><span class="line">map.put(<span class="string">"Spring技术内幕"</span>, <span class="string">"计文柯"</span>);</span><br><span class="line">map.put(<span class="string">"架构探险"</span>, <span class="string">"黄勇"</span>);</span><br><span class="line"><span class="keyword">for</span>(Map.Entry&lt;String, String&gt; entry : map.entrySet())&#123;</span><br><span class="line">    String mapKey = entry.getKey();</span><br><span class="line">    String mapValue = entry.getValue();</span><br><span class="line">    System.out.println(mapKey+<span class="string">":"</span>+mapValue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>方法二：在for循环中遍历key或者values，一般适用于只需要map中的key或者value时使用，在性能上比使用entrySet较好；</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Map &lt;String,String&gt;map = <span class="keyword">new</span> HashMap&lt;String,String&gt;();</span><br><span class="line">map.put(<span class="string">"Spring技术内幕"</span>, <span class="string">"计文柯"</span>);</span><br><span class="line">map.put(<span class="string">"架构探险"</span>, <span class="string">"黄勇"</span>);</span><br><span class="line"><span class="comment">//key</span></span><br><span class="line"><span class="keyword">for</span>(String key : map.keySet())&#123;</span><br><span class="line">    System.out.println(key);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//value</span></span><br><span class="line"><span class="keyword">for</span>(String value : map.values())&#123;</span><br><span class="line">    System.out.println(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>方法三：通过Iterator遍历；</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Iterator&lt;Entry&lt;String, String&gt;&gt; entries = map.entrySet().iterator();</span><br><span class="line"><span class="keyword">while</span>(entries.hasNext())&#123;</span><br><span class="line">    Entry&lt;String, String&gt; entry = entries.next();</span><br><span class="line">    String key = entry.getKey();</span><br><span class="line">    String value = entry.getValue();</span><br><span class="line">    System.out.println(key+<span class="string">":"</span>+value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>方法四：通过键找值遍历，这种方式的效率比较低，因为本身从键取值是耗时的操作；</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(String key : map.keySet())&#123;</span><br><span class="line">    String value = map.get(key);</span><br><span class="line">    System.out.println(key+<span class="string">":"</span>+value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>如果绝大多数数据都要用到，那么我们最好使用Entry来遍历，像方法四，每次都拿着key去map里查一次value，开销是比较大的。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-Map遍历的几种方法/" data-id="ck8d4ki4r002220c89ig9oup1" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2020/03/19/kongzheng1993-Thread和Runnable/" data-id="ck8egi7g5004r0tc8li1qtm82" class="article-share-link">Share</a>
       
       
     </footer>
@@ -397,11 +392,15 @@
       <ul>
         
           <li>
-            <a href="/2020/03/25/kongzheng1993-一次老代码优化/">(no title)</a>
+            <a href="/2020/03/30/kongzheng1993-一次老代码优化2/">(no title)</a>
           </li>
         
           <li>
             <a href="/2020/03/25/kongzheng1993-RocketMQ定时消息示例/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/25/kongzheng1993-一次老代码优化/">(no title)</a>
           </li>
         
           <li>
@@ -410,10 +409,6 @@
         
           <li>
             <a href="/2020/03/19/kongzheng1993-Thread和Runnable/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/03/08/kongzheng1993-Map遍历的几种方法/">(no title)</a>
           </li>
         
       </ul>

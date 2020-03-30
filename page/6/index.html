@@ -62,6 +62,106 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-kongzheng1993-java多线程总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/08/kongzheng1993-java多线程总结/" class="article-date">
+  <time datetime="2018-06-07T16:00:00.000Z" itemprop="datePublished">2018-06-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/08/kongzheng1993-java多线程总结/">java多线程总结</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近面试两场，都是银行保险类的项目，面试官都问了我多线程的一些问题。今天抽空总结一下。</p>
+<h2 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h2><ol>
+<li>进程：一段程序的执行过程。是操作系统动态执行的基本单元，也是资源分配的基本单元。进程可以理解为是“进行中的程序”，处理器赋予时，程序才变成活动的，也就是进程。</li>
+<li>程序：指令和数据的有序集合。本身是静态的概念。</li>
+<li>线程：通常在一个进程中可以包含若干个线程，当然一个进程中至少有一个线程，不然没有存在的意义。线程可以利用进程所拥有的资源，在引入线程的操作系统中，通常都是把进程作为分配资源的基本单位，而把线程作为独立运行和独立调度的基本单位，由于线程比进程更小，基本上不拥有系统资源，故对它的调度所付出的开销就会小得多，能更高效的提高系统多个程序间并发执行的程度。</li>
+<li>多线程：在一个程序中，这些独立运行的程序片段叫作“线程”（Thread），利用它编程的概念就叫作“多线程处理”。多线程是为了同步完成多项任务，$\color{red}{不是为了提高运行效率，而是为了提高资源使用效率来提高系统的效率}$。线程是在同一时间需要完成多项任务的时候实现的。</li>
+<li>进程和线程的相同与不同：<ul>
+<li>不同点：<br>  进程：每个进程都有独立的代码和数据空间（进程上下文），进程间的切换会有较大的开销，一个进程包含1–n个线程。（进程是资源分配的最小单位）。多进程是指操作系统能同时运行多个任务（程序）。<br>  线程：同一类线程共享代码和数据空间，每个线程有独立的运行栈和程序计数器(PC)，线程切换开销小。（线程是cpu调度的最小单位）。多线程是指在同一程序中有多个顺序流在执行。</li>
+<li>相同点：<br>  线程和进程一样分为五个阶段：创建、就绪、运行、阻塞、终止。</li>
+</ul>
+</li>
+</ol>
+<h2 id="实现多线程"><a href="#实现多线程" class="headerlink" title="实现多线程"></a>实现多线程</h2><p>在java中要想实现多线程，有两种手段，一种是继续Thread类，另外一种是实现Runable接口。(其实准确来讲，应该有三种，还有一种是实现Callable接口，并与Future、线程池结合使用）。</p>
+<h3 id="实现Runnable接口比继承Thread类所具有的优势："><a href="#实现Runnable接口比继承Thread类所具有的优势：" class="headerlink" title="实现Runnable接口比继承Thread类所具有的优势："></a>实现Runnable接口比继承Thread类所具有的优势：</h3><ol>
+<li>适合多个相同的程序代码的线程去处理同一个资源</li>
+<li>可以避免java中的单继承的限制</li>
+<li>增加程序的健壮性，代码可以被多个线程共享，代码和数据独立</li>
+<li>线程池只能放入实现Runable或callable类线程，不能直接放入继承Thread的类</li>
+</ol>
+<h2 id="线程状态转换"><a href="#线程状态转换" class="headerlink" title="线程状态转换"></a>线程状态转换</h2><img src="/2018/06/08/kongzheng1993-java多线程总结/20150309140927553.jpeg">
+
+<ol>
+<li><p>新建状态（New）：新创建了一个线程对象。</p>
+</li>
+<li><p>就绪状态（Runnable）：线程对象创建后，其他线程调用了该对象的start()方法。该状态的线程位于可运行线程池中，变得可运行，等待获取CPU的使用权。</p>
+</li>
+<li><p>运行状态（Running）：就绪状态的线程获取了CPU，执行程序代码。</p>
+</li>
+<li><p>阻塞状态（Blocked）：阻塞状态是线程因为某种原因放弃CPU使用权，暂时停止运行。直到线程进入就绪状态，才有机会转到运行状态。阻塞的情况分三种：</p>
+<ol>
+<li>等待阻塞：运行的线程执行wait()方法，JVM会把该线程放入等待池中。(wait会释放持有的锁)</li>
+<li>同步阻塞：运行的线程在获取对象的同步锁时，若该同步锁被别的线程占用，则JVM会把该线程放入锁池中。</li>
+<li>其他阻塞：运行的线程执行sleep()或join()方法，或者发出了I/O请求时，JVM会把该线程置为阻塞状态。当sleep()状态超时、join()等待线程终止或者超时、或者I/O处理完毕时，线程重新转入就绪状态。（注意,sleep是不会释放持有的锁）</li>
+</ol>
+</li>
+<li><p>死亡状态（Dead）：线程执行完了或者因异常退出了run()方法，该线程结束生命周期。</p>
+</li>
+</ol>
+<h2 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h2><p>阿里的java开发手册中指出，线程资源必须通过线程池提供，不允许在应用中自行显示的创建线程，这样更加规范，而且可以合理控制开辟线程的数量；另一方面线程细节管理交给线程池处理，优化了资源的开销。而且手册指出，线程池不允许使用Executors去创建，要通过ThreadPoolExecutor方式，这一方面是由于jdk中Executor框架虽然提供了如newFixedThreadPool()、newSingleThreadExecutor()、newCachedThreadPool()等创建线程池的方法，但都有其局限性，不够灵活；另外由于前面几种方法内部也是通过ThreadPoolExecutor方式实现，使用ThreadPoolExecutor有助于大家明确线程池的运行规则，创建符合自己的业务场景需要的线程池，避免资源耗尽的风险。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                              <span class="keyword">int</span> maximumPoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                              <span class="keyword">long</span> keepAliveTime,</span></span></span><br><span class="line"><span class="function"><span class="params">                              TimeUnit unit,</span></span></span><br><span class="line"><span class="function"><span class="params">                              BlockingQueue&lt;Runnable&gt; workQueue,</span></span></span><br><span class="line"><span class="function"><span class="params">                              ThreadFactory threadFactory,</span></span></span><br><span class="line"><span class="function"><span class="params">                              RejectedExecutionHandler handler)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (corePoolSize &lt; <span class="number">0</span> ||</span><br><span class="line">            maximumPoolSize &lt;= <span class="number">0</span> ||</span><br><span class="line">            maximumPoolSize &lt; corePoolSize ||</span><br><span class="line">            keepAliveTime &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException();</span><br><span class="line">        <span class="keyword">if</span> (workQueue == <span class="keyword">null</span> || threadFactory == <span class="keyword">null</span> || handler == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">        <span class="keyword">this</span>.acc = System.getSecurityManager() == <span class="keyword">null</span> ?</span><br><span class="line">                <span class="keyword">null</span> :</span><br><span class="line">                AccessController.getContext();</span><br><span class="line">        <span class="keyword">this</span>.corePoolSize = corePoolSize;</span><br><span class="line">        <span class="keyword">this</span>.maximumPoolSize = maximumPoolSize;</span><br><span class="line">        <span class="keyword">this</span>.workQueue = workQueue;</span><br><span class="line">        <span class="keyword">this</span>.keepAliveTime = unit.toNanos(keepAliveTime);</span><br><span class="line">        <span class="keyword">this</span>.threadFactory = threadFactory;</span><br><span class="line">        <span class="keyword">this</span>.handler = handler;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面是ThreadPoolExecutor的构造函数：</p>
+<ul>
+<li><p>corePoolSize:指定了线程池中的线程数量，它的数量决定了添加的任务是开辟新的线程去执行，还是放到workQueue任务队列中去；</p>
+</li>
+<li><p>maximumPoolSize:指定了线程池中的最大线程数量，这个参数会根据你使用的workQueue任务队列的类型，决定线程池会开辟的最大线程数量；</p>
+</li>
+<li><p>keepAliveTime:当线程池中空闲线程数量超过corePoolSize时，多余的线程会在多长时间内被销毁；</p>
+</li>
+<li><p>unit:keepAliveTime的单位</p>
+</li>
+<li><p>workQueue:任务队列，被添加到线程池中，但尚未被执行的任务；它一般分为直接提交队列、有界任务队列、无界任务队列、优先任务队列几种；</p>
+</li>
+<li><p>threadFactory:线程工厂，用于创建线程，一般用默认即可；</p>
+</li>
+<li><p>handler:拒绝策略；当任务太多来不及处理时，如何拒绝任务；</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2018/06/08/kongzheng1993-java多线程总结/" data-id="ck8egi7df00170tc8dqv001sk" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/安全/">安全</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-kongzheng1993-linux命令行下的ss" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/05/02/kongzheng1993-linux命令行下的ss/" class="article-date">
@@ -107,7 +207,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2018/05/02/kongzheng1993-linux命令行下的ss/" data-id="ck8d4ki3z001620c8txzx0mzj" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2018/05/02/kongzheng1993-linux命令行下的ss/" data-id="ck8egi7dd00130tc8t9gtp23d" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/console/">console</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ss/">ss</a></li></ul>
@@ -191,7 +291,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2018/02/01/kongzheng1993-hexo搭建githubPages/" data-id="ck8d4ki3s001120c8p21k1xl2" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2018/02/01/kongzheng1993-hexo搭建githubPages/" data-id="ck8egi7db00110tc8oxz8y6bw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/github/">github</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li></ul>
@@ -246,7 +346,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2018/02/01/kongzheng1993-suse_ftp服务配置/" data-id="ck8d4ki3u001320c8fsyr1hvp" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2018/02/01/kongzheng1993-suse_ftp服务配置/" data-id="ck8egi7g8004t0tc8kph4lob3" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FTP/">FTP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/server/">server</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/suse/">suse</a></li></ul>
@@ -304,73 +404,10 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2017/03/08/kongzheng1993-JavaReflect/" data-id="ck8d4ki4p001y20c8t0axrs93" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2017/03/08/kongzheng1993-JavaReflect/" data-id="ck8egi7d4000r0tc801lrxa25" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Class/">Class</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/reflect/">reflect</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/对象，Class对象/">对象，Class对象</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-Properties" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/07/28/kongzheng1993-Properties/" class="article-date">
-  <time datetime="2016-07-27T16:00:00.000Z" itemprop="datePublished">2016-07-28</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/07/28/kongzheng1993-Properties/">properties文件的使用</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>java中的properties文件是一种配置文件，主要用于配置信息，文件类型为.properties，格式为文本文件，文件内容是“键=值”的格式，在properties文件中可以使用“#”来做注释，properties文件在Java编程中用到的地方很多，操作很方便。</p>
-<h2 id="Properties文件"><a href="#Properties文件" class="headerlink" title="Properties文件"></a>Properties文件</h2><p>config.properties</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">db_url=com.mysql.jdbc.Driver</span><br><span class="line">db_mysql=jdbc:mysql</span><br><span class="line">db_ip=127.0.0.1</span><br><span class="line">db_port=3306</span><br><span class="line">db_dbName=users</span><br><span class="line">db_usn=root</span><br><span class="line">db_pwd=root</span><br></pre></td></tr></table></figure>
-
-<h2 id="Properties类的方法"><a href="#Properties类的方法" class="headerlink" title="Properties类的方法"></a>Properties类的方法</h2><p>Properites类存在Java.util中，该类继承自Hashtable</p>
-<p>1 getProperty ( String  key) ，   用指定的键在此属性列表中搜索属性。也就是通过参数 key ，得到 key 所对应的 value。<br>2 load ( InputStream  inStream) ，从输入流中读取属性列表（键和元素对）。通过对指定的文件（比如说上面的 test.properties 文件）进行装载来获取该文</p>
-<p>件中的所有键 - 值对。以供 getProperty ( String  key) 来搜索。<br>3 setProperty ( String  key, String  value) ，调用 Hashtable 的方法 put 。他通过调用基类的put方法来设置 键 - 值对。<br>4 store ( OutputStream  out, String  comments) ，   以适合使用 load 方法加载到 Properties 表中的格式，将此 Properties 表中的属性列表（键和元素</p>
-<p>对）写入输出流。与 load 方法相反，该方法将键 - 值对写入到指定的文件中去。<br>5 clear () ，清除所有装载的 键 - 值对。该方法在基类中提供。</p>
-<h2 id="在JAVA文件中操作properties文件的方法"><a href="#在JAVA文件中操作properties文件的方法" class="headerlink" title="在JAVA文件中操作properties文件的方法"></a>在JAVA文件中操作properties文件的方法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">pr=new Properties();</span><br><span class="line">inStream=this.getClass().getResourceAsStream(&quot;config.properties&quot;);</span><br><span class="line">InputStream inStream=DBUtil.class.getResourceAsStream(&quot;config.properties&quot;);</span><br><span class="line">try &#123;</span><br><span class="line">    pr.load(inStream);</span><br><span class="line">    url=pr.getProperty(&quot;db_url&quot;);</span><br><span class="line">    mysql=pr.getProperty(&quot;db_mysql&quot;);</span><br><span class="line">    ip=pr.getProperty(&quot;db_ip&quot;);</span><br><span class="line">    port=pr.getProperty(&quot;db_port&quot;);</span><br><span class="line">    dbname=pr.getProperty(&quot;db_dbName&quot;);</span><br><span class="line">    dbusn=pr.getProperty(&quot;db_usn&quot;);</span><br><span class="line">    dbpwd=pr.getProperty(&quot;db_pwd&quot;);</span><br><span class="line">&#125; catch (IOException e) &#123;</span><br><span class="line">    // TODO Auto-generated catch block</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>java的properties文件需要放到classpath下面，这样程序才能读取到，有关classpath实际上就是java类或者库的存放路径，在java工程中，properties放到class文件一块。在web应用中，最简单的方法是放到web应用的WEB- INF\classes目录下即可，也可以放在其他文件夹下面，这时候需要在设置classpath环境变量的时候，将这个文件夹路径加到 classpath变量中，这样也也可以读取到。在此，你需要对classpath有个深刻理解，classpath绝非系统中刻意设定的那个系统环境变量，WEB-INF\classes其实也是，java工程的class文件目录也是。</p>
-<html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-properties/" data-title="properties" data-url="http://kongzheng1993.github.io/kongzheng1993-properties/"></div>
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"kongzheng1993"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-</html>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/28/kongzheng1993-Properties/" data-id="ck8d4ki2f000420c8t0kcv40s" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
 
     </footer>
   </div>
@@ -436,11 +473,15 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       <ul>
         
           <li>
-            <a href="/2020/03/25/kongzheng1993-一次老代码优化/">(no title)</a>
+            <a href="/2020/03/30/kongzheng1993-一次老代码优化2/">(no title)</a>
           </li>
         
           <li>
             <a href="/2020/03/25/kongzheng1993-RocketMQ定时消息示例/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/25/kongzheng1993-一次老代码优化/">(no title)</a>
           </li>
         
           <li>
@@ -449,10 +490,6 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
         
           <li>
             <a href="/2020/03/19/kongzheng1993-Thread和Runnable/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/03/08/kongzheng1993-Map遍历的几种方法/">(no title)</a>
           </li>
         
       </ul>
