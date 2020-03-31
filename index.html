@@ -62,6 +62,69 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-kongzheng1993-用nodejs做一个测试api服务" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/30/kongzheng1993-用nodejs做一个测试api服务/" class="article-date">
+  <time datetime="2020-03-29T16:00:00.000Z" itemprop="datePublished">2020-03-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="用node-js做一个测试api服务"><a href="#用node-js做一个测试api服务" class="headerlink" title="用node.js做一个测试api服务"></a>用node.js做一个测试api服务</h1><p>前两天被安排做一体机的项目。这可是个大坑，兄弟们都不想搞。我和他们不一样了，迎难而上，哈哈。这个是嵌入到营业厅一体机或者pad的一个系统，为什么说这是一个大坑呢？没有测试环境，只能生产联调。要是平时，可以在公司搭一个测试环境嘛，可是疫情期间在家办公，诸多不便。还有一个问题是，没有后台系统啊，所有接口都不通，盲写代码？</p>
+<h2 id="怎么快速搞一个工具获得我想要的接口呢"><a href="#怎么快速搞一个工具获得我想要的接口呢" class="headerlink" title="怎么快速搞一个工具获得我想要的接口呢"></a>怎么快速搞一个工具获得我想要的接口呢</h2><p>记得之前看过一本书《架构探险 轻量级微服务架构》，阿里大佬黄勇老师的书，内容通俗易懂，是我很喜欢的风格。里面有一章用node.js讲解并实现微服务网关，npm安装node.js第三方模块，快速实现功能，就像Python和pip，当时就让我对node.js产生了浓厚的兴趣，js统一前后端了，哈哈。所以我想用node.js来实现一个简单的根据url来返回特定json的工具，并用这个工具来进行一体机项目的开发。</p>
+<h2 id="开始搞"><a href="#开始搞" class="headerlink" title="开始搞"></a>开始搞</h2><ol>
+<li>修改npm为淘宝镜像</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install cnpm -g --registry=http://registry.npm.taobao.org</span><br></pre></td></tr></table></figure>
+
+<img src="/2020/03/30/kongzheng1993-用nodejs做一个测试api服务/cnpm.bmp">
+
+<ol start="2">
+<li>安装express</li>
+</ol>
+<p>express是一款基于node.js的web应用框架，提供了大量的工具函数与中间件，使web应用开发效率更加高效。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install express</span><br></pre></td></tr></table></figure>
+
+<img src="/2020/03/30/kongzheng1993-用nodejs做一个测试api服务/express.bmp">
+
+<ol start="3">
+<li>编码</li>
+</ol>
+<p>打开vscode，开始撸</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> port = <span class="number">8080</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> app = express();</span><br><span class="line">app.use(express.static(<span class="string">'.'</span>));</span><br><span class="line"></span><br><span class="line">app.get(<span class="string">'/querywriteCardBasicData'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    res.send(<span class="string">'&#123;"id":"123",name:"jack",arg:11111&#125;'</span>)</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.post(<span class="string">'/querywriteCardBasicData'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    res.send(<span class="string">'&#123;"id":"123",name:"jack",arg:11111&#125;'</span>)</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.post(<span class="string">'/querywriteCardBasicData'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    res.send(<span class="string">'&#123;"id":"123",name:"jack",arg:11111&#125;'</span>)</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.listen(port, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'server is running at %d'</span>, port);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>运行</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">node app.js</span><br><span class="line">`</span><br></pre></td></tr></table></figure>
+
+<img src="/2020/03/30/kongzheng1993-用nodejs做一个测试api服务/run.bmp">
+
+<ol start="5">
+<li>测试</li>
+</ol>
+<p>浏览器访问<code>http://localhost:8080/querywriteCardBasicData</code></p>
+<img src="/2020/03/30/kongzheng1993-用nodejs做一个测试api服务/test.bmp">
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行环境。Node.js 使用了一个事件驱动、非阻塞式 I/O 的模型,使其轻量又高效。<br>我喜欢写一些小工具，之前因为工作上的需要，写过许多小工具，比如Python写的接口配置工具、文件下载工具、sql脚本生成工具。这些小工具都得到了同事和领导的好评，我也收获了极大的满足。我喜欢用工具完成一些简单但是重复的工作，如果有一个特别麻烦的事儿挡在我面前，我一定会在第一时间思考，怎么搞个工具，哈哈，加油。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2020/03/30/kongzheng1993-用nodejs做一个测试api服务/" data-id="ck8fkhncp00396yc8r2pmr5a8" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-kongzheng1993-一次老代码优化2" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/03/30/kongzheng1993-一次老代码优化2/" class="article-date">
@@ -95,7 +158,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/30/kongzheng1993-一次老代码优化2/" data-id="ck8egi7g0004i0tc8e6u8786m" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2020/03/30/kongzheng1993-一次老代码优化2/" data-id="ck8fkhncr003b6yc8j4cauioq" class="article-share-link">Share</a>
       
       
     </footer>
@@ -147,7 +210,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/25/kongzheng1993-RocketMQ定时消息示例/" data-id="ck8egi7g2004l0tc875agb4ov" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2020/03/25/kongzheng1993-RocketMQ定时消息示例/" data-id="ck8fkhncm00326yc8kiv9ryov" class="article-share-link">Share</a>
       
       
     </footer>
@@ -227,7 +290,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/25/kongzheng1993-一次老代码优化/" data-id="ck8egi7g3004o0tc8urth0n4v" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2020/03/25/kongzheng1993-一次老代码优化/" data-id="ck8fkhncu003e6yc8qj2u1vs2" class="article-share-link">Share</a>
       
       
     </footer>
@@ -253,79 +316,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/19/kongzheng1993-Future/" data-id="ck8egi7bl00000tc8xs1xc8sy" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-Thread和Runnable" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/03/19/kongzheng1993-Thread和Runnable/" class="article-date">
-  <time datetime="2020-03-18T16:00:00.000Z" itemprop="datePublished">2020-03-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Thread和Runnable"><a href="#Thread和Runnable" class="headerlink" title="Thread和Runnable"></a>Thread和Runnable</h1><p>我们都知道Java中创建线程有两种方式，继承Thread类和实现Runnable接口。其实呢，我们看了Thread的源码就能了解到：Thread实现了Runnable，其实也是个Runnable。</p>
-<p>Thread的构造方法中有一个是：</p>
-<p><img src="/2020/03/19/kongzheng1993-Thread和Runnable/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200319172854321.png" alt="image-20200319172854321"></p>
-<p>这里传入的是一个Runnable，而继续往下执行，到了最后也是执行的这个target的<code>run()</code>方法。</p>
-<p>如果我们不传入Runnable呢？</p>
-<p><img src="/2020/03/19/kongzheng1993-Thread和Runnable/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200319173106843.png" alt="image-20200319173106843"></p>
-<p>可以看到这个方法target是null。最后执行的是Thread重写的<code>run()</code>方法。</p>
-<p>所以看到这里可以了解到：</p>
-<ul>
-<li><p>Runnable就是个接口，写一个类实现Runnable接口，它并不能执行，它要提交到一个线程（Thread），在Thread实例化调用它的构造方法的时候，才会触发Runnable的run方法。</p>
-</li>
-<li><p>继承Thread来创建线程，重写了<code>run()</code>方法，当我们实例化这个类的时候，将会调用到父类，也就是Thread的无参构造函数，也就会执行我们这里重写的<code>run()</code>方法了。而这里的Thread实现了Runnable接口，所以它其实也是个Runnable。</p>
-</li>
-</ul>
-<h2 id="重要属性"><a href="#重要属性" class="headerlink" title="重要属性"></a>重要属性</h2><h3 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">int</span>  priority;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> MIN_PRIORITY = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> NORM_PRIORITY = <span class="number">5</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> MAX_PRIORITY = <span class="number">10</span>;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">setPriority</span><span class="params">(<span class="keyword">int</span> newPriority)</span> </span>&#123;</span><br><span class="line">        ThreadGroup g;</span><br><span class="line">        checkAccess();</span><br><span class="line">        <span class="keyword">if</span> (newPriority &gt; MAX_PRIORITY || newPriority &lt; MIN_PRIORITY) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>((g = getThreadGroup()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (newPriority &gt; g.getMaxPriority()) &#123;</span><br><span class="line">                newPriority = g.getMaxPriority();</span><br><span class="line">            &#125;</span><br><span class="line">            setPriority0(priority = newPriority);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getPriority</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> priority;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="线程的状态"><a href="#线程的状态" class="headerlink" title="线程的状态"></a>线程的状态</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> State &#123;</span><br><span class="line">        NEW,</span><br><span class="line">        RUNNABLE,</span><br><span class="line">        BLOCKED,</span><br><span class="line">        WAITING,</span><br><span class="line">        TIMED_WAITING,</span><br><span class="line">        TERMINATED;</span><br><span class="line">    &#125;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> State <span class="title">getState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> sun.misc.VM.toThreadState(threadStatus);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>网上找到的图：</p>
-<p><img src="/2020/03/19/kongzheng1993-Thread和Runnable/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200319181144600.png" alt="image-20200319181144600"></p>
-<h3 id="主要方法"><a href="#主要方法" class="headerlink" title="主要方法"></a>主要方法</h3><ul>
-<li><p>本地方法获取当前线程</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">native</span> Thread <span class="title">currentThread</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>run()</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (target != <span class="keyword">null</span>) &#123;</span><br><span class="line">            target.run();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>这里就是上面说的，如果是传入Runnable的话，这里target就不会是null了，如果没有传入target，就不会执行什么，但是一般我们不传入target，就会重写<code>run()</code>方法了。</p>
-</li>
-<li><p>start()</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * This method is not invoked for the main method thread or "system"</span></span><br><span class="line"><span class="comment">         * group threads created/set up by the VM. Any new functionality added</span></span><br><span class="line"><span class="comment">         * to this method in the future may have to also be added to the VM.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * A zero status value corresponds to state "NEW".</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">if</span> (threadStatus != <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalThreadStateException();</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Notify the group that this thread is about to be started</span></span><br><span class="line"><span class="comment">         * so that it can be added to the group's list of threads</span></span><br><span class="line"><span class="comment">         * and the group's unstarted count can be decremented. */</span></span><br><span class="line">        group.add(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">boolean</span> started = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            start0();</span><br><span class="line">            started = <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (!started) &#123;</span><br><span class="line">                    group.threadStartFailed(<span class="keyword">this</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable ignore) &#123;</span><br><span class="line">                <span class="comment">/* do nothing. If start0 threw a Throwable then</span></span><br><span class="line"><span class="comment">                  it will be passed up the call stack */</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">start0</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
-
-<p>这里会调用一个本地方法<code>start0()</code>，应该会起一个线程执行<code>run()</code>方法。</p>
-</li>
-<li><p>boolean interrupted() &amp; void interrupt() &amp; boolean isInterrupted()</p>
-<p><strong>interrupt()</strong>:中断本线程(将中断状态标记为true)<br><strong>isInterrupted()</strong>:检测本线程是否已经中断 。如果已经中断，则返回true，否则false。中断状态不受该方法的影响。 如果中断调用时线程已经不处于活动状态，则返回false。<br><strong>interrupted()</strong>:检测当前线程是否已经中断 。如果当前线程存在中断，返回true，并且修改标记为false。再调用isIterruoted()会返回false。如果当前线程没有中断标记，返回false，不会修改中断标记。</p>
-</li>
-<li><p>void sleep(long millis) &amp; void sleep(long millis, int nanos)</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">sleep</span><span class="params">(<span class="keyword">long</span> millis)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Causes the currently executing thread to sleep (temporarily cease</span></span><br><span class="line"><span class="comment">     * execution) for the specified number of milliseconds plus the specified</span></span><br><span class="line"><span class="comment">     * number of nanoseconds, subject to the precision and accuracy of system</span></span><br><span class="line"><span class="comment">     * timers and schedulers. The thread does not lose ownership of any</span></span><br><span class="line"><span class="comment">     * monitors.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  millis</span></span><br><span class="line"><span class="comment">     *         the length of time to sleep in milliseconds</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  nanos</span></span><br><span class="line"><span class="comment">     *         &#123;<span class="doctag">@code</span> 0-999999&#125; additional nanoseconds to sleep</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span>  IllegalArgumentException</span></span><br><span class="line"><span class="comment">     *          if the value of &#123;<span class="doctag">@code</span> millis&#125; is negative, or the value of</span></span><br><span class="line"><span class="comment">     *          &#123;<span class="doctag">@code</span> nanos&#125; is not in the range &#123;<span class="doctag">@code</span> 0-999999&#125;</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span>  InterruptedException</span></span><br><span class="line"><span class="comment">     *          if any thread has interrupted the current thread. The</span></span><br><span class="line"><span class="comment">     *          &lt;i&gt;interrupted status&lt;/i&gt; of the current thread is</span></span><br><span class="line"><span class="comment">     *          cleared when this exception is thrown.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sleep</span><span class="params">(<span class="keyword">long</span> millis, <span class="keyword">int</span> nanos)</span></span></span><br><span class="line"><span class="function">    <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (millis &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"timeout value is negative"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (nanos &lt; <span class="number">0</span> || nanos &gt; <span class="number">999999</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(</span><br><span class="line">                                <span class="string">"nanosecond timeout value out of range"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (nanos &gt;= <span class="number">500000</span> || (nanos != <span class="number">0</span> &amp;&amp; millis == <span class="number">0</span>)) &#123;</span><br><span class="line">            millis++;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        sleep(millis);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>两个参数的sleep只是将nanos转为millis(四舍五入转换)，调用sleep(millis)方法。<br>sleep(millis)是本地方法，让当前线程休眠指定时间。<br>sleep不释放锁。</p>
-</li>
-<li><p>void join() &amp; void join(long millis) &amp; void join(long millis, int nanos)</p>
-<p>将线程加入到当前线程中，使父线程等待子线程执行完毕再继续执行。</p>
-</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/19/kongzheng1993-Thread和Runnable/" data-id="ck8egi7g5004r0tc8li1qtm82" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2020/03/19/kongzheng1993-Future/" data-id="ck8fkhn5t00006yc8f6p8n20f" class="article-share-link">Share</a>
       
       
     </footer>
@@ -339,7 +330,7 @@
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -392,6 +383,10 @@
       <ul>
         
           <li>
+            <a href="/2020/03/30/kongzheng1993-用nodejs做一个测试api服务/">(no title)</a>
+          </li>
+        
+          <li>
             <a href="/2020/03/30/kongzheng1993-一次老代码优化2/">(no title)</a>
           </li>
         
@@ -405,10 +400,6 @@
         
           <li>
             <a href="/2020/03/19/kongzheng1993-Future/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/03/19/kongzheng1993-Thread和Runnable/">(no title)</a>
           </li>
         
       </ul>

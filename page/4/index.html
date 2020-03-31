@@ -62,6 +62,63 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-kongzheng1993-mysql超过最大连接数-一次生产问题定位" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/06/14/kongzheng1993-mysql超过最大连接数-一次生产问题定位/" class="article-date">
+  <time datetime="2019-06-14T04:34:44.000Z" itemprop="datePublished">2019-06-14</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/mysql/">mysql</a>►<a class="article-category-link" href="/categories/mysql/java/">java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/06/14/kongzheng1993-mysql超过最大连接数-一次生产问题定位/">mysql超过最大连接数一次生产问题定位.md</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>今天营业厅一体机小姐姐又来找我了，生产又有问题了。。。</p>
+<p>我查了下日志：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Caused by: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: User ngcrmpf_bj already has more than <span class="string">'max_user_connections'</span> active connections</span><br><span class="line">    at sun.reflect.GeneratedConstructorAccessor266.newInstance(Unknown Source)</span><br><span class="line">    at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:<span class="number">45</span>)</span><br><span class="line">    at java.lang.reflect.Constructor.newInstance(Constructor.java:<span class="number">423</span>)</span><br><span class="line">    at com.mysql.jdbc.Util.handleNewInstance(Util.java:<span class="number">404</span>)</span><br></pre></td></tr></table></figure>
+
+<p>连接数超了。。。</p>
+<p>之前听同事说经常遇见这个问题，每次都是把服务器最大连接数调大一些，然后就好了。。。</p>
+<p>我想：就算每次都调大连接数上限，也终会达到最大连接数啊。为什么呢？ 应该是我们定期发布，重启tomcat后会断开所有连接，如果我们长时间不发布，就会到达上限。</p>
+<p>然后我开始翻代码，看到配置的最大连接数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ngcrmpf_bj.jdbc.maxActive=<span class="number">5</span></span><br></pre></td></tr></table></figure>
+
+<p>只有5条啊，8台tomcat加起来也就是四十条啊，为什么服务器设置1200还会超呢。。。。</p>
+<p>仔细看报错信息，发现有一个方法，不知道是哪位大哥写的，竟然自己写了jdbc，而且没有关闭连接。。。mmp。。。</p>
+<p>我们的接口参数都会加密传输，密钥存在mysql，他竟然用jdbc去数据库查密钥，而且没关闭连接。。。为什么不去redis？为什么不用mybatis？再不济，为什么不关闭连接。。。</p>
+<p>苍天啊，大地啊，我真的不知道怎么和客户解释。。。</p>
+<p>唉。。。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2019/06/14/kongzheng1993-mysql超过最大连接数-一次生产问题定位/" data-id="ck8fkhnc6002c6yc8tqpleu20" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-kongzheng1993-compare-and-swap" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/06/14/kongzheng1993-compare-and-swap/" class="article-date">
@@ -88,7 +145,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2019/06/14/kongzheng1993-compare-and-swap/" data-id="ck8egi7gd004y0tc8eiu09346" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2019/06/14/kongzheng1993-compare-and-swap/" data-id="ck8fkhnc100276yc8hyeuroag" class="article-share-link">Share</a>
       
       
     </footer>
@@ -124,7 +181,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2019/06/13/kongzheng1993-Connect-timed-out与Read-timed-out/" data-id="ck8egi7fo00470tc8rbv4hy1s" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2019/06/13/kongzheng1993-Connect-timed-out与Read-timed-out/" data-id="ck8fkhnbi001s6yc8olnpbjj9" class="article-share-link">Share</a>
       
       
     </footer>
@@ -172,7 +229,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2019/06/13/kongzheng1993-RSA加密与SHA签名/" data-id="ck8egi7fb003p0tc8ocuyagqk" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2019/06/13/kongzheng1993-RSA加密与SHA签名/" data-id="ck8fkhncb002g6yc80n13kcko" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RSA/">RSA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SHA/">SHA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/加密/">加密</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/签名/">签名</a></li></ul>
@@ -273,56 +330,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2019/06/11/kongzheng1993-关于分布式锁/" data-id="ck8egi7f7003l0tc8kmwbf23j" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2019/06/11/kongzheng1993-关于分布式锁/" data-id="ck8fkhnby00216yc8y7qjg5dh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/quartz/">quartz</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式/">分布式</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/锁/">锁</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-关于学习业务的思考" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/06/05/kongzheng1993-关于学习业务的思考/" class="article-date">
-  <time datetime="2019-06-05T06:02:45.000Z" itemprop="datePublished">2019-06-05</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/05/kongzheng1993-关于学习业务的思考/">关于学习业务的思考</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="事情经过"><a href="#事情经过" class="headerlink" title="事情经过"></a>事情经过</h2><p>昨天申请休年假了，之前做好的一个需求，已经交给测试人员了。BA下午通知我要去和五楼的客户过一个需求，这个客户要求看一下我们的代码。我心想：这客户厉害了啊，都会看代码了。之后了解到这个人是从我们公司去到甲方的。</p>
-<p>带着电脑来到五楼，见到了她，一个四十多岁的大妈，穿的很接地气，和我们三楼的甲方小姐姐天壤之别，虽然我们三楼的甲方小姐姐都很难解释通需求问题。</p>
-<p>她让我找出来我写的代码，然后让我给他解释代码逻辑。我就开始讲啊：“这里是一个开关，存在数据库，有缓存，1为开，0为关，然后判断……”。我像之前给三楼小姐姐讲代码一样去讲。突然她让我等一下，然后抢过去我的电脑去看，说：“你这个方式是去调接口吧”，我说对，然后她继续说：“把你调这个方法的地方全都找出来”。我find useage一下。“你这不对啊，咱们要修改的地方有五个，你这方法调用怎么只有当前这个类啊”。我开始懵逼，转头看ba，ba小姐姐也是一脸懵。我翻出来需求文档，说我就是按需求文档来的。大妈开始对ba说了一大堆，关于业务的，我全程懵逼。后来我离了一下，客户要求的是修改不良信息相关的五个地方，包括加解黑、不良信息处理、一级客服不良信息、开关机和一个后台task。但是需求文档上写的是修改不良信息处理，我就以为是只修改不良信息处理一个地方。然后客户要求我找到这五个地方的代码给他看一下。我找不出。。。</p>
-<p>最后ba打圆场，我们先撤了。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>对于客服系统，我并不感冒，一直页没有认真对待，因为中国移动的业务太复杂了，我不想浪费事件在业务上面，我心里一直只有技术。</p>
-<p>所以看到ba写的需求文档，我想也不想，就按这文档去做，不会去考虑业务。</p>
-<p>通过这件事，我知道我错了，我要重新理清技术和业务的关系了。</p>
-<p>知乎上有人说：只会写代码的人叫码农，技术过硬又精通业务才能称得上工程师。之前我一直认为，确认需求是ba的事儿，跟我没有关系，我只需要写代码。如果你只会写代码，你不是不可替代的，你是可有可无的，因为这个世界上不缺会写代码的人，毕竟程序员一抓一大把。多了解业务会让我们的思想高一个层次，不是只停留在能用就行的层面，而是让我们找到更好的解决方案，作出更完美的产品。积累业务能力，也能让我们更加了解行业，对职业发展有助力。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2019/06/05/kongzheng1993-关于学习业务的思考/" data-id="ck8egi7ez003i0tc8xhjfpz7l" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/业务/">业务</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/学习/">学习</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/职业/">职业</a></li></ul>
 
     </footer>
   </div>
@@ -335,7 +346,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -388,6 +399,10 @@
       <ul>
         
           <li>
+            <a href="/2020/03/30/kongzheng1993-用nodejs做一个测试api服务/">(no title)</a>
+          </li>
+        
+          <li>
             <a href="/2020/03/30/kongzheng1993-一次老代码优化2/">(no title)</a>
           </li>
         
@@ -401,10 +416,6 @@
         
           <li>
             <a href="/2020/03/19/kongzheng1993-Future/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/03/19/kongzheng1993-Thread和Runnable/">(no title)</a>
           </li>
         
       </ul>

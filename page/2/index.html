@@ -62,6 +62,78 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-kongzheng1993-Thread和Runnable" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/19/kongzheng1993-Thread和Runnable/" class="article-date">
+  <time datetime="2020-03-18T16:00:00.000Z" itemprop="datePublished">2020-03-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Thread和Runnable"><a href="#Thread和Runnable" class="headerlink" title="Thread和Runnable"></a>Thread和Runnable</h1><p>我们都知道Java中创建线程有两种方式，继承Thread类和实现Runnable接口。其实呢，我们看了Thread的源码就能了解到：Thread实现了Runnable，其实也是个Runnable。</p>
+<p>Thread的构造方法中有一个是：</p>
+<p><img src="/2020/03/19/kongzheng1993-Thread和Runnable/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200319172854321.png" alt="image-20200319172854321"></p>
+<p>这里传入的是一个Runnable，而继续往下执行，到了最后也是执行的这个target的<code>run()</code>方法。</p>
+<p>如果我们不传入Runnable呢？</p>
+<p><img src="/2020/03/19/kongzheng1993-Thread和Runnable/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200319173106843.png" alt="image-20200319173106843"></p>
+<p>可以看到这个方法target是null。最后执行的是Thread重写的<code>run()</code>方法。</p>
+<p>所以看到这里可以了解到：</p>
+<ul>
+<li><p>Runnable就是个接口，写一个类实现Runnable接口，它并不能执行，它要提交到一个线程（Thread），在Thread实例化调用它的构造方法的时候，才会触发Runnable的run方法。</p>
+</li>
+<li><p>继承Thread来创建线程，重写了<code>run()</code>方法，当我们实例化这个类的时候，将会调用到父类，也就是Thread的无参构造函数，也就会执行我们这里重写的<code>run()</code>方法了。而这里的Thread实现了Runnable接口，所以它其实也是个Runnable。</p>
+</li>
+</ul>
+<h2 id="重要属性"><a href="#重要属性" class="headerlink" title="重要属性"></a>重要属性</h2><h3 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">int</span>  priority;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> MIN_PRIORITY = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> NORM_PRIORITY = <span class="number">5</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> MAX_PRIORITY = <span class="number">10</span>;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">setPriority</span><span class="params">(<span class="keyword">int</span> newPriority)</span> </span>&#123;</span><br><span class="line">        ThreadGroup g;</span><br><span class="line">        checkAccess();</span><br><span class="line">        <span class="keyword">if</span> (newPriority &gt; MAX_PRIORITY || newPriority &lt; MIN_PRIORITY) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>((g = getThreadGroup()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (newPriority &gt; g.getMaxPriority()) &#123;</span><br><span class="line">                newPriority = g.getMaxPriority();</span><br><span class="line">            &#125;</span><br><span class="line">            setPriority0(priority = newPriority);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getPriority</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> priority;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="线程的状态"><a href="#线程的状态" class="headerlink" title="线程的状态"></a>线程的状态</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> State &#123;</span><br><span class="line">        NEW,</span><br><span class="line">        RUNNABLE,</span><br><span class="line">        BLOCKED,</span><br><span class="line">        WAITING,</span><br><span class="line">        TIMED_WAITING,</span><br><span class="line">        TERMINATED;</span><br><span class="line">    &#125;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> State <span class="title">getState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> sun.misc.VM.toThreadState(threadStatus);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>网上找到的图：</p>
+<p><img src="/2020/03/19/kongzheng1993-Thread和Runnable/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200319181144600.png" alt="image-20200319181144600"></p>
+<h3 id="主要方法"><a href="#主要方法" class="headerlink" title="主要方法"></a>主要方法</h3><ul>
+<li><p>本地方法获取当前线程</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">native</span> Thread <span class="title">currentThread</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>run()</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (target != <span class="keyword">null</span>) &#123;</span><br><span class="line">            target.run();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里就是上面说的，如果是传入Runnable的话，这里target就不会是null了，如果没有传入target，就不会执行什么，但是一般我们不传入target，就会重写<code>run()</code>方法了。</p>
+</li>
+<li><p>start()</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * This method is not invoked for the main method thread or "system"</span></span><br><span class="line"><span class="comment">         * group threads created/set up by the VM. Any new functionality added</span></span><br><span class="line"><span class="comment">         * to this method in the future may have to also be added to the VM.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * A zero status value corresponds to state "NEW".</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">if</span> (threadStatus != <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalThreadStateException();</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Notify the group that this thread is about to be started</span></span><br><span class="line"><span class="comment">         * so that it can be added to the group's list of threads</span></span><br><span class="line"><span class="comment">         * and the group's unstarted count can be decremented. */</span></span><br><span class="line">        group.add(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">boolean</span> started = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            start0();</span><br><span class="line">            started = <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (!started) &#123;</span><br><span class="line">                    group.threadStartFailed(<span class="keyword">this</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable ignore) &#123;</span><br><span class="line">                <span class="comment">/* do nothing. If start0 threw a Throwable then</span></span><br><span class="line"><span class="comment">                  it will be passed up the call stack */</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">start0</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>这里会调用一个本地方法<code>start0()</code>，应该会起一个线程执行<code>run()</code>方法。</p>
+</li>
+<li><p>boolean interrupted() &amp; void interrupt() &amp; boolean isInterrupted()</p>
+<p><strong>interrupt()</strong>:中断本线程(将中断状态标记为true)<br><strong>isInterrupted()</strong>:检测本线程是否已经中断 。如果已经中断，则返回true，否则false。中断状态不受该方法的影响。 如果中断调用时线程已经不处于活动状态，则返回false。<br><strong>interrupted()</strong>:检测当前线程是否已经中断 。如果当前线程存在中断，返回true，并且修改标记为false。再调用isIterruoted()会返回false。如果当前线程没有中断标记，返回false，不会修改中断标记。</p>
+</li>
+<li><p>void sleep(long millis) &amp; void sleep(long millis, int nanos)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">sleep</span><span class="params">(<span class="keyword">long</span> millis)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Causes the currently executing thread to sleep (temporarily cease</span></span><br><span class="line"><span class="comment">     * execution) for the specified number of milliseconds plus the specified</span></span><br><span class="line"><span class="comment">     * number of nanoseconds, subject to the precision and accuracy of system</span></span><br><span class="line"><span class="comment">     * timers and schedulers. The thread does not lose ownership of any</span></span><br><span class="line"><span class="comment">     * monitors.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  millis</span></span><br><span class="line"><span class="comment">     *         the length of time to sleep in milliseconds</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  nanos</span></span><br><span class="line"><span class="comment">     *         &#123;<span class="doctag">@code</span> 0-999999&#125; additional nanoseconds to sleep</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span>  IllegalArgumentException</span></span><br><span class="line"><span class="comment">     *          if the value of &#123;<span class="doctag">@code</span> millis&#125; is negative, or the value of</span></span><br><span class="line"><span class="comment">     *          &#123;<span class="doctag">@code</span> nanos&#125; is not in the range &#123;<span class="doctag">@code</span> 0-999999&#125;</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span>  InterruptedException</span></span><br><span class="line"><span class="comment">     *          if any thread has interrupted the current thread. The</span></span><br><span class="line"><span class="comment">     *          &lt;i&gt;interrupted status&lt;/i&gt; of the current thread is</span></span><br><span class="line"><span class="comment">     *          cleared when this exception is thrown.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sleep</span><span class="params">(<span class="keyword">long</span> millis, <span class="keyword">int</span> nanos)</span></span></span><br><span class="line"><span class="function">    <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (millis &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"timeout value is negative"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (nanos &lt; <span class="number">0</span> || nanos &gt; <span class="number">999999</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(</span><br><span class="line">                                <span class="string">"nanosecond timeout value out of range"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (nanos &gt;= <span class="number">500000</span> || (nanos != <span class="number">0</span> &amp;&amp; millis == <span class="number">0</span>)) &#123;</span><br><span class="line">            millis++;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        sleep(millis);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>两个参数的sleep只是将nanos转为millis(四舍五入转换)，调用sleep(millis)方法。<br>sleep(millis)是本地方法，让当前线程休眠指定时间。<br>sleep不释放锁。</p>
+</li>
+<li><p>void join() &amp; void join(long millis) &amp; void join(long millis, int nanos)</p>
+<p>将线程加入到当前线程中，使父线程等待子线程执行完毕再继续执行。</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2020/03/19/kongzheng1993-Thread和Runnable/" data-id="ck8fkhnco00366yc82ysn2plf" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-kongzheng1993-Map遍历的几种方法" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/03/08/kongzheng1993-Map遍历的几种方法/" class="article-date">
@@ -100,7 +172,67 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-Map遍历的几种方法/" data-id="ck8egi7fl00450tc8kkp3agpw" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-Map遍历的几种方法/" data-id="ck8fkhnch002q6yc8i7q7ryrm" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-kongzheng1993-jhat" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/08/kongzheng1993-jhat/" class="article-date">
+  <time datetime="2020-03-07T16:00:00.000Z" itemprop="datePublished">2020-03-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="jhat"><a href="#jhat" class="headerlink" title="jhat"></a>jhat</h1><p>分析Java堆。此命令是实验性的，不受支持。</p>
+<h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p><code>jhat [ options ] heap-dump-file</code></p>
+<h2 id="选项"><a href="#选项" class="headerlink" title="选项"></a>选项</h2><p>命令行选项。</p>
+<ul>
+<li><p>-stack false | true<br>关闭跟踪对象分配调用堆栈。如果堆转储中没有分配站点信息，则必须将此标志设置为false。默认值为true。</p>
+</li>
+<li><p>-refs false | true<br>关闭对对象引用的跟踪。默认值为true。默认情况下，将为堆中的所有对象计算后向指针，即指向指定对象的对象，例如引用程序或传入引用。</p>
+</li>
+<li><p>-port 端口号<br>设置jhatHTTP服务器的端口。默认值为7000。</p>
+</li>
+<li><p>-exclude exclude-file<br>指定一个文件，该文件列出了应从可达对象查询中排除的数据成员。例如，如果文件列出java.lang.String.value，则无论何时o计算从特定对象可访问的对象列表，java.lang.String.value都不会考虑涉及字段的引用路径。</p>
+</li>
+<li><p>-baseline exclude-file<br>指定基线堆转储。两个堆转储中具有相同对象ID的对象都标记为不是新对象。其他对象被标记为新对象。这对于比较两个不同的堆转储很有用。</p>
+</li>
+<li><p>-debug int<br>设置此工具的调试级别。级别0表示没有调试输出。为更多详细模式设置较高的值。</p>
+</li>
+<li><p>-version<br>报告发布编号并退出</p>
+</li>
+<li><p>-h<br>显示帮助消息并退出。</p>
+</li>
+<li><p>-help<br>显示帮助消息并退出。</p>
+</li>
+<li><p>-Jflag<br>传递flag到在其jhat上运行命令的Java虚拟机。例如，-J-Xmx512m使用最大堆大小为512 MB。</p>
+</li>
+</ul>
+<h2 id="堆转储文件"><a href="#堆转储文件" class="headerlink" title="堆转储文件"></a>堆转储文件</h2><p>要浏览的Java二进制堆转储文件。对于包含多个堆转储的转储文件，您可以通过#<number>在文件名后附加名称来指定文件中的哪个转储myfile.hprof#3。</number></p>
+<h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>该jhat命令解析Java堆转储文件并启动Web服务器。该jhat命令使您可以使用自己喜欢的Web浏览器浏览堆转储。该jhat命令支持预先设计的查询，例如显示已知类的所有实例MyClass以及对象查询语言（OQL）。OQL与SQL相似，除了查询堆转储。可从jhat命令显示的OQL帮助页面获得OQL帮助。使用默认端口，可以从<a href="http://localhost:7000/oqlhelp" target="_blank" rel="noopener">http://localhost:7000/oqlhelp</a> /获得OQL帮助。</p>
+<p>有几种方法可以生成Java堆转储：</p>
+<ul>
+<li>使用该jmap -dump选项在运行时获取堆转储。参见jmap（1）。</li>
+<li>使用该jconsole选项HotSpotDiagnosticMXBean在运行时获取堆转储。请参阅jconsole（1）和HotSpotDiagnosticMXBean接口说明，网址为<br><a href="http://docs.oracle.com/javase/8/docs/jre/api/management/extension/com/sun/management/HotSpotDiagnosticMXBean.html" target="_blank" rel="noopener">http://docs.oracle.com/javase/8/docs/jre/api/management/extension/com/sun/management/HotSpotDiagnosticMXBean.html</a></li>
+<li>OutOfMemoryError通过指定-XX:+HeapDumpOnOutOfMemoryErrorJava虚拟机（JVM）选项引发时，将生成堆转储。</li>
+<li>使用hprof命令。请参阅HPROF：堆/ CPU分析工具，网址为：<br><a href="http://docs.oracle.com/javase/8/docs/technotes/samples/hprof.html" target="_blank" rel="noopener">http://docs.oracle.com/javase/8/docs/technotes/samples/hprof.html</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-jhat/" data-id="ck8fkhnci002u6yc82r1i386i" class="article-share-link">Share</a>
       
       
     </footer>
@@ -158,7 +290,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-jmap/" data-id="ck8egi7fs004a0tc8e4powtol" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-jmap/" data-id="ck8fkhncj002w6yc8hmb728s5" class="article-share-link">Share</a>
       
       
     </footer>
@@ -878,124 +1010,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-URLEncode/" data-id="ck8egi7fu004c0tc8d936gst3" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-申请亚马逊AWS账户" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/03/08/kongzheng1993-申请亚马逊AWS账户/" class="article-date">
-  <time datetime="2020-03-07T16:00:00.000Z" itemprop="datePublished">2020-03-08</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="申请亚马逊AWS账户"><a href="#申请亚马逊AWS账户" class="headerlink" title="申请亚马逊AWS账户"></a>申请亚马逊AWS账户</h1><p>访问aws.amazon.com，注册账户</p>
-<p><img src="/2020/03/08/kongzheng1993-申请亚马逊AWS账户/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200318111734263.png" alt="image-20200318111734263"></p>
-<p>登陆成功后，进入AWS管理控制台</p>
-<p>如果没有梯子，可能会有点慢</p>
-<p>图</p>
-<p>点击启动虚拟机，新建ec2</p>
-<p>图</p>
-<p>选择系统，我熟悉ubuntu，选择了ubuntu，注意符合条件的免费套餐</p>
-<p>图</p>
-<p>选择实例类型，注意符合条件的免费套餐</p>
-<p>图</p>
-<p>点击<code>审核和启动</code></p>
-<p>图</p>
-<p>点击<code>启动</code></p>
-<p>图</p>
-<p>选择创建新的密码对，输入一个密码对名称</p>
-<p>图</p>
-<p>点击下载密钥对</p>
-<p>图</p>
-<p>点击启动实例</p>
-<p>图</p>
-<p>启动成功</p>
-<p>图</p>
-<p>可以创建账单警报，以免费用超过免费套餐</p>
-<p>点击查看实例</p>
-<p>图</p>
-<p>可以看到我们的实例状态时running</p>
-<p>图</p>
-<p>点击连接</p>
-<p>图</p>
-<p>复制命令本地执行即可</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-申请亚马逊AWS账户/" data-id="ck8egi7fw004e0tc83q8tzmvk" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-jhat" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/03/08/kongzheng1993-jhat/" class="article-date">
-  <time datetime="2020-03-07T16:00:00.000Z" itemprop="datePublished">2020-03-08</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="jhat"><a href="#jhat" class="headerlink" title="jhat"></a>jhat</h1><p>分析Java堆。此命令是实验性的，不受支持。</p>
-<h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p><code>jhat [ options ] heap-dump-file</code></p>
-<h2 id="选项"><a href="#选项" class="headerlink" title="选项"></a>选项</h2><p>命令行选项。</p>
-<ul>
-<li><p>-stack false | true<br>关闭跟踪对象分配调用堆栈。如果堆转储中没有分配站点信息，则必须将此标志设置为false。默认值为true。</p>
-</li>
-<li><p>-refs false | true<br>关闭对对象引用的跟踪。默认值为true。默认情况下，将为堆中的所有对象计算后向指针，即指向指定对象的对象，例如引用程序或传入引用。</p>
-</li>
-<li><p>-port 端口号<br>设置jhatHTTP服务器的端口。默认值为7000。</p>
-</li>
-<li><p>-exclude exclude-file<br>指定一个文件，该文件列出了应从可达对象查询中排除的数据成员。例如，如果文件列出java.lang.String.value，则无论何时o计算从特定对象可访问的对象列表，java.lang.String.value都不会考虑涉及字段的引用路径。</p>
-</li>
-<li><p>-baseline exclude-file<br>指定基线堆转储。两个堆转储中具有相同对象ID的对象都标记为不是新对象。其他对象被标记为新对象。这对于比较两个不同的堆转储很有用。</p>
-</li>
-<li><p>-debug int<br>设置此工具的调试级别。级别0表示没有调试输出。为更多详细模式设置较高的值。</p>
-</li>
-<li><p>-version<br>报告发布编号并退出</p>
-</li>
-<li><p>-h<br>显示帮助消息并退出。</p>
-</li>
-<li><p>-help<br>显示帮助消息并退出。</p>
-</li>
-<li><p>-Jflag<br>传递flag到在其jhat上运行命令的Java虚拟机。例如，-J-Xmx512m使用最大堆大小为512 MB。</p>
-</li>
-</ul>
-<h2 id="堆转储文件"><a href="#堆转储文件" class="headerlink" title="堆转储文件"></a>堆转储文件</h2><p>要浏览的Java二进制堆转储文件。对于包含多个堆转储的转储文件，您可以通过#<number>在文件名后附加名称来指定文件中的哪个转储myfile.hprof#3。</number></p>
-<h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>该jhat命令解析Java堆转储文件并启动Web服务器。该jhat命令使您可以使用自己喜欢的Web浏览器浏览堆转储。该jhat命令支持预先设计的查询，例如显示已知类的所有实例MyClass以及对象查询语言（OQL）。OQL与SQL相似，除了查询堆转储。可从jhat命令显示的OQL帮助页面获得OQL帮助。使用默认端口，可以从<a href="http://localhost:7000/oqlhelp" target="_blank" rel="noopener">http://localhost:7000/oqlhelp</a> /获得OQL帮助。</p>
-<p>有几种方法可以生成Java堆转储：</p>
-<ul>
-<li>使用该jmap -dump选项在运行时获取堆转储。参见jmap（1）。</li>
-<li>使用该jconsole选项HotSpotDiagnosticMXBean在运行时获取堆转储。请参阅jconsole（1）和HotSpotDiagnosticMXBean接口说明，网址为<br><a href="http://docs.oracle.com/javase/8/docs/jre/api/management/extension/com/sun/management/HotSpotDiagnosticMXBean.html" target="_blank" rel="noopener">http://docs.oracle.com/javase/8/docs/jre/api/management/extension/com/sun/management/HotSpotDiagnosticMXBean.html</a></li>
-<li>OutOfMemoryError通过指定-XX:+HeapDumpOnOutOfMemoryErrorJava虚拟机（JVM）选项引发时，将生成堆转储。</li>
-<li>使用hprof命令。请参阅HPROF：堆/ CPU分析工具，网址为：<br><a href="http://docs.oracle.com/javase/8/docs/technotes/samples/hprof.html" target="_blank" rel="noopener">http://docs.oracle.com/javase/8/docs/technotes/samples/hprof.html</a></li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-jhat/" data-id="ck8egi7gg004z0tc8bmvf44x1" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-URLEncode/" data-id="ck8fkhncl00306yc8m1co3g1x" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1009,7 +1024,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -1062,6 +1077,10 @@
       <ul>
         
           <li>
+            <a href="/2020/03/30/kongzheng1993-用nodejs做一个测试api服务/">(no title)</a>
+          </li>
+        
+          <li>
             <a href="/2020/03/30/kongzheng1993-一次老代码优化2/">(no title)</a>
           </li>
         
@@ -1075,10 +1094,6 @@
         
           <li>
             <a href="/2020/03/19/kongzheng1993-Future/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/03/19/kongzheng1993-Thread和Runnable/">(no title)</a>
           </li>
         
       </ul>

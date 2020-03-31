@@ -62,10 +62,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-kongzheng1993-Properties" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-kongzheng1993-JavaReflect" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/07/28/kongzheng1993-Properties/" class="article-date">
-  <time datetime="2016-07-27T16:00:00.000Z" itemprop="datePublished">2016-07-28</time>
+    <a href="/2017/03/08/kongzheng1993-JavaReflect/" class="article-date">
+  <time datetime="2017-03-07T16:00:00.000Z" itemprop="datePublished">2017-03-08</time>
 </a>
     
   </div>
@@ -76,7 +76,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/07/28/kongzheng1993-Properties/">properties文件的使用</a>
+      <a class="article-title" href="/2017/03/08/kongzheng1993-JavaReflect/">java反射的学习笔记</a>
     </h1>
   
 
@@ -84,19 +84,12 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>java中的properties文件是一种配置文件，主要用于配置信息，文件类型为.properties，格式为文本文件，文件内容是“键=值”的格式，在properties文件中可以使用“#”来做注释，properties文件在Java编程中用到的地方很多，操作很方便。</p>
-<h2 id="Properties文件"><a href="#Properties文件" class="headerlink" title="Properties文件"></a>Properties文件</h2><p>config.properties</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">db_url=com.mysql.jdbc.Driver</span><br><span class="line">db_mysql=jdbc:mysql</span><br><span class="line">db_ip=127.0.0.1</span><br><span class="line">db_port=3306</span><br><span class="line">db_dbName=users</span><br><span class="line">db_usn=root</span><br><span class="line">db_pwd=root</span><br></pre></td></tr></table></figure>
+        <h2 id="java反射学习笔记"><a href="#java反射学习笔记" class="headerlink" title="java反射学习笔记"></a>java反射学习笔记</h2><p>复习java反射机制，发现我一直没理解Class的对象这个含义，Class是一个类名</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by evilrat on 3/8/17.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GetMethods</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        Students s = <span class="keyword">new</span> Students();</span><br><span class="line">        Class c = s.getClass();</span><br><span class="line">        Method m = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            m = s.getClass().getDeclaredMethod(<span class="string">"getSex"</span>,<span class="keyword">null</span>);</span><br><span class="line">            System.out.println(<span class="string">"Students类中有方法："</span>+m);</span><br><span class="line"></span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            System.out.println(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="Properties类的方法"><a href="#Properties类的方法" class="headerlink" title="Properties类的方法"></a>Properties类的方法</h2><p>Properites类存在Java.util中，该类继承自Hashtable</p>
-<p>1 getProperty ( String  key) ，   用指定的键在此属性列表中搜索属性。也就是通过参数 key ，得到 key 所对应的 value。<br>2 load ( InputStream  inStream) ，从输入流中读取属性列表（键和元素对）。通过对指定的文件（比如说上面的 test.properties 文件）进行装载来获取该文</p>
-<p>件中的所有键 - 值对。以供 getProperty ( String  key) 来搜索。<br>3 setProperty ( String  key, String  value) ，调用 Hashtable 的方法 put 。他通过调用基类的put方法来设置 键 - 值对。<br>4 store ( OutputStream  out, String  comments) ，   以适合使用 load 方法加载到 Properties 表中的格式，将此 Properties 表中的属性列表（键和元素</p>
-<p>对）写入输出流。与 load 方法相反，该方法将键 - 值对写入到指定的文件中去。<br>5 clear () ，清除所有装载的 键 - 值对。该方法在基类中提供。</p>
-<h2 id="在JAVA文件中操作properties文件的方法"><a href="#在JAVA文件中操作properties文件的方法" class="headerlink" title="在JAVA文件中操作properties文件的方法"></a>在JAVA文件中操作properties文件的方法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">pr=new Properties();</span><br><span class="line">inStream=this.getClass().getResourceAsStream(&quot;config.properties&quot;);</span><br><span class="line">InputStream inStream=DBUtil.class.getResourceAsStream(&quot;config.properties&quot;);</span><br><span class="line">try &#123;</span><br><span class="line">    pr.load(inStream);</span><br><span class="line">    url=pr.getProperty(&quot;db_url&quot;);</span><br><span class="line">    mysql=pr.getProperty(&quot;db_mysql&quot;);</span><br><span class="line">    ip=pr.getProperty(&quot;db_ip&quot;);</span><br><span class="line">    port=pr.getProperty(&quot;db_port&quot;);</span><br><span class="line">    dbname=pr.getProperty(&quot;db_dbName&quot;);</span><br><span class="line">    dbusn=pr.getProperty(&quot;db_usn&quot;);</span><br><span class="line">    dbpwd=pr.getProperty(&quot;db_pwd&quot;);</span><br><span class="line">&#125; catch (IOException e) &#123;</span><br><span class="line">    // TODO Auto-generated catch block</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>java的properties文件需要放到classpath下面，这样程序才能读取到，有关classpath实际上就是java类或者库的存放路径，在java工程中，properties放到class文件一块。在web应用中，最简单的方法是放到web应用的WEB- INF\classes目录下即可，也可以放在其他文件夹下面，这时候需要在设置classpath环境变量的时候，将这个文件夹路径加到 classpath变量中，这样也也可以读取到。在此，你需要对classpath有个深刻理解，classpath绝非系统中刻意设定的那个系统环境变量，WEB-INF\classes其实也是，java工程的class文件目录也是。</p>
+<p>这里先声明了一个Students类的对象，然后调用s.getClass()获得了s的类的对象。这个类的对象是Class类型的。</p>
 <html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-properties/" data-title="properties" data-url="http://kongzheng1993.github.io/kongzheng1993-properties/"></div>
+<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-mto/" data-title="mto" data-url="http://kongzheng1993.github.io/kongzheng1993-mto/"></div>
 <script type="text/javascript">
 var duoshuoQuery = {short_name:"kongzheng1993"};
     (function() {
@@ -110,13 +103,15 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
 </script>
 </html>
 
+
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/28/kongzheng1993-Properties/" data-id="ck8egi7d7000w0tc82o2jv21u" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2017/03/08/kongzheng1993-JavaReflect/" data-id="ck8fkhnaw000x6yc838fpwrp2" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Class/">Class</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/reflect/">reflect</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/对象，Class对象/">对象，Class对象</a></li></ul>
 
     </footer>
   </div>
@@ -197,7 +192,70 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/28/kongzheng1993-method_of_request&response/" data-id="ck8egi7dj001e0tc87pnc3h98" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/28/kongzheng1993-method_of_request&response/" data-id="ck8fkhn8f00046yc80zgb82zr" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-kongzheng1993-Properties" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/28/kongzheng1993-Properties/" class="article-date">
+  <time datetime="2016-07-27T16:00:00.000Z" itemprop="datePublished">2016-07-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/28/kongzheng1993-Properties/">properties文件的使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>java中的properties文件是一种配置文件，主要用于配置信息，文件类型为.properties，格式为文本文件，文件内容是“键=值”的格式，在properties文件中可以使用“#”来做注释，properties文件在Java编程中用到的地方很多，操作很方便。</p>
+<h2 id="Properties文件"><a href="#Properties文件" class="headerlink" title="Properties文件"></a>Properties文件</h2><p>config.properties</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">db_url=com.mysql.jdbc.Driver</span><br><span class="line">db_mysql=jdbc:mysql</span><br><span class="line">db_ip=127.0.0.1</span><br><span class="line">db_port=3306</span><br><span class="line">db_dbName=users</span><br><span class="line">db_usn=root</span><br><span class="line">db_pwd=root</span><br></pre></td></tr></table></figure>
+
+<h2 id="Properties类的方法"><a href="#Properties类的方法" class="headerlink" title="Properties类的方法"></a>Properties类的方法</h2><p>Properites类存在Java.util中，该类继承自Hashtable</p>
+<p>1 getProperty ( String  key) ，   用指定的键在此属性列表中搜索属性。也就是通过参数 key ，得到 key 所对应的 value。<br>2 load ( InputStream  inStream) ，从输入流中读取属性列表（键和元素对）。通过对指定的文件（比如说上面的 test.properties 文件）进行装载来获取该文</p>
+<p>件中的所有键 - 值对。以供 getProperty ( String  key) 来搜索。<br>3 setProperty ( String  key, String  value) ，调用 Hashtable 的方法 put 。他通过调用基类的put方法来设置 键 - 值对。<br>4 store ( OutputStream  out, String  comments) ，   以适合使用 load 方法加载到 Properties 表中的格式，将此 Properties 表中的属性列表（键和元素</p>
+<p>对）写入输出流。与 load 方法相反，该方法将键 - 值对写入到指定的文件中去。<br>5 clear () ，清除所有装载的 键 - 值对。该方法在基类中提供。</p>
+<h2 id="在JAVA文件中操作properties文件的方法"><a href="#在JAVA文件中操作properties文件的方法" class="headerlink" title="在JAVA文件中操作properties文件的方法"></a>在JAVA文件中操作properties文件的方法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">pr=new Properties();</span><br><span class="line">inStream=this.getClass().getResourceAsStream(&quot;config.properties&quot;);</span><br><span class="line">InputStream inStream=DBUtil.class.getResourceAsStream(&quot;config.properties&quot;);</span><br><span class="line">try &#123;</span><br><span class="line">    pr.load(inStream);</span><br><span class="line">    url=pr.getProperty(&quot;db_url&quot;);</span><br><span class="line">    mysql=pr.getProperty(&quot;db_mysql&quot;);</span><br><span class="line">    ip=pr.getProperty(&quot;db_ip&quot;);</span><br><span class="line">    port=pr.getProperty(&quot;db_port&quot;);</span><br><span class="line">    dbname=pr.getProperty(&quot;db_dbName&quot;);</span><br><span class="line">    dbusn=pr.getProperty(&quot;db_usn&quot;);</span><br><span class="line">    dbpwd=pr.getProperty(&quot;db_pwd&quot;);</span><br><span class="line">&#125; catch (IOException e) &#123;</span><br><span class="line">    // TODO Auto-generated catch block</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>java的properties文件需要放到classpath下面，这样程序才能读取到，有关classpath实际上就是java类或者库的存放路径，在java工程中，properties放到class文件一块。在web应用中，最简单的方法是放到web应用的WEB- INF\classes目录下即可，也可以放在其他文件夹下面，这时候需要在设置classpath环境变量的时候，将这个文件夹路径加到 classpath变量中，这样也也可以读取到。在此，你需要对classpath有个深刻理解，classpath绝非系统中刻意设定的那个系统环境变量，WEB-INF\classes其实也是，java工程的class文件目录也是。</p>
+<html>
+<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-properties/" data-title="properties" data-url="http://kongzheng1993.github.io/kongzheng1993-properties/"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"kongzheng1993"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+</html>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2016/07/28/kongzheng1993-Properties/" data-id="ck8fkhn8n00066yc83wl7uie3" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
@@ -263,7 +321,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/27/kongzheng1993-Session/" data-id="ck8egi7by00010tc8rbzv875w" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/27/kongzheng1993-Session/" data-id="ck8fkhn8t000b6yc86e7ygpjs" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
@@ -327,81 +385,10 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-servlet/" data-id="ck8egi7c700020tc8k28so9vd" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-servlet/" data-id="ck8fkhn8400026yc8naj5xc05" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/servlet/">servlet</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-请求转发与重定向" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/07/26/kongzheng1993-请求转发与重定向/" class="article-date">
-  <time datetime="2016-07-25T16:00:00.000Z" itemprop="datePublished">2016-07-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/07/26/kongzheng1993-请求转发与重定向/">请求转发和重定向</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="重定向与转发的区别："><a href="#重定向与转发的区别：" class="headerlink" title="重定向与转发的区别："></a>重定向与转发的区别：</h3><p>1.重定向访问服务器两次，转发只访问服务器一次。<br>2.重定向可以看见目标页面的URL，转发只能看见第一次访问的页面URL，以后的工作都是有服务器来做的。<br>3.重定向跳转后必须加上return，要不然页面虽然跳转了，但是还会执行跳转后面的语句，转发是执行了跳转页面，下面的代码就不会在执行了。<br>4.在request级别使用信息共享，使用重定向必然出错<br>5.还有一个大的区别就是，重定向可以访问自己web应用以外的资源</p>
-<h3 id="一、调用方式"><a href="#一、调用方式" class="headerlink" title="一、调用方式"></a>一、调用方式</h3><p>我们知道，在servlet中调用转发、重定向的语句如下：<br>request.getRequestDispatcher(“new.jsp”).forward(request, response);//转发到new.jsp<br>response.sendRedirect(“new.jsp”);//重定向到new.jsp </p>
-<p>在jsp页面中你也会看到通过下面的方式实现转发：<br>&lt;jsp:forward page=”apage.jsp” /&gt; </p>
-<p>当然也可以在jsp页面中实现重定向：<br>&lt;%response.sendRedirect(“new.jsp”);//重定向到new.jsp%&gt; </p>
-<h3 id="二、本质区别"><a href="#二、本质区别" class="headerlink" title="二、本质区别"></a>二、本质区别</h3><h4 id="解释一"><a href="#解释一" class="headerlink" title="解释一　　"></a>解释一　　</h4><p>一句话，转发是服务器行为，重定向是客户端行为。为什么这样说呢，这就要看两个动作的工作流程： </p>
-<p>转发过程：客户浏览器发送http请求—-》web服务器接受此请求–》调用内部的一个方法在容器内部完成请求处理和转发动作—-》将目标资源发送给客户；在这里，转发的路径必须是同一个web容器下的url，其不能转向到其他的web路径上去，中间传递的是自己的容器内的request。在客户浏览器路径栏显示的仍然是其第一次访问的路径，也就是说客户是感觉不到服务器做了转发的。转发行为是浏览器只做了一次访问请求。 </p>
-<p>重定向过程：客户浏览器发送http请求—-》web服务器接受后发送302状态码响应及对应新的location给客户浏览器–》客户浏览器发现是302响应，则自动再发送一个新的http请求，请求url是新的location地址—-》服务器根据此请求寻找资源并发送给客户。在这里location可以重定向到任意URL，既然是浏览器重新发出了请求，则就没有什么request传递的概念了。在客户浏览器路径栏显示的是其重定向的路径，客户可以观察到地址的变化的。重定向行为是浏览器做了至少两次的访问请求的。 </p>
-<h4 id="解释二"><a href="#解释二" class="headerlink" title="解释二"></a>解释二</h4><p>重定向，其实是两次request,<br>第一次，客户端request A,服务器响应，并response回来，告诉浏览器，你应该去B。这个时候IE可以看到地址变了，而且历史的回退按钮也亮了。重定向可以访问自己web应用以外的资源。在重定向的过程中，传输的信息会被丢失。 </p>
-<p>请求转发是服务器内部把对一个request/response的处理权，移交给另外一个<br>对于客户端而言，它只知道自己最早请求的那个A，而不知道中间的B，甚至C、D。 传输的信息不会丢失。 </p>
-<h4 id="解释三"><a href="#解释三" class="headerlink" title="解释三"></a>解释三</h4><p>假设你去办理某个执照， </p>
-<p>重定向：你先去了A局，A局的人说：“这个事情不归我们管，去B局”，然后，你就从A退了出来，自己乘车去了B局。 </p>
-<p>转发：你先去了A局，A局看了以后，知道这个事情其实应该B局来管，但是他没有把你退回来，而是让你坐一会儿，自己到后面办公室联系了B的人，让他们办好后，送了过来。 </p>
-<h3 id="三、请求重定向与请求转发的比较"><a href="#三、请求重定向与请求转发的比较" class="headerlink" title="三、请求重定向与请求转发的比较"></a>三、请求重定向与请求转发的比较</h3><p>尽管HttpServletResponse.sendRedirect方法和RequestDispatcher.forward方法都可以让浏览器获得另外一个URL所指向的资源，但两者的内部运行机制有着很大的区别。下面是HttpServletResponse.sendRedirect方法实现的请求重定向与RequestDispatcher.forward方法实现的请求转发的总结比较： </p>
-<p>（1）RequestDispatcher.forward方法只能将请求转发给同一个WEB应用中的组件；而HttpServletResponse.sendRedirect 方法不仅可以重定向到当前应用程序中的其他资源，还可以重定向到同一个站点上的其他应用程序中的资源，甚至是使用绝对URL重定向到其他站点的资源。如果传递给HttpServletResponse.sendRedirect 方法的相对URL以“/”开头，它是相对于整个WEB站点的根目录；如果创建RequestDispatcher对象时指定的相对URL以“/”开头，它是相对于当前WEB应用程序的根目录。 </p>
-<p>（2）调用HttpServletResponse.sendRedirect方法重定向的访问过程结束后，浏览器地址栏中显示的URL会发生改变，由初始的URL地址变成重定向的目标URL；而调用RequestDispatcher.forward 方法的请求转发过程结束后，浏览器地址栏保持初始的URL地址不变。 </p>
-<p>（3）HttpServletResponse.sendRedirect方法对浏览器的请求直接作出响应，响应的结果就是告诉浏览器去重新发出对另外一个URL的 访问请求，这个过程好比有个绰号叫“浏览器”的人写信找张三借钱，张三回信说没有钱，让“浏览器”去找李四借，并将李四现在的通信地址告诉给了“浏览器”。于是，“浏览器”又按张三提供通信地址给李四写信借钱，李四收到信后就把钱汇给了“浏览器”。可见，“浏览器”一共发出了两封信和收到了两次回复， “浏览器”也知道他借到的钱出自李四之手。RequestDispatcher.forward方 法在服务器端内部将请求转发给另外一个资源，浏览器只知道发出了请求并得到了响应结果，并不知道在服务器程序内部发生了转发行为。这个过程好比绰号叫“浏览器”的人写信找张三借钱，张三没有钱，于是张三找李四借了一些钱，甚至还可以加上自己的一些钱，然后再将这些钱汇给了“浏览器”。可见，“浏览器”只发 出了一封信和收到了一次回复，他只知道从张三那里借到了钱，并不知道有一部分钱出自李四之手。 </p>
-<p>（4）RequestDispatcher.forward方法的调用者与被调用者之间共享相同的request对象和response对象，它们属于同一个访问请求和响应过程；而HttpServletResponse.sendRedirect方法调用者与被调用者使用各自的request对象和response对象，它们属于两个独立的访问请求和响应过程。对于同一个WEB应用程序的内部资源之间的跳转，特别是跳转之前要对请求进行一些前期预处理，并要使用HttpServletRequest.setAttribute方法传递预处理结果，那就应该使用RequestDispatcher.forward方法。不同WEB应用程序之间的重定向，特别是要重定向到另外一个WEB站点上的资源的情况，都应该使用HttpServletResponse.sendRedirect方法。 </p>
-<p>（5）无论是RequestDispatcher.forward方法，还是HttpServletResponse.sendRedirect方法，在调用它们之前，都不能有内容已经被实际输出到了客户端。如果缓冲区中已经有了一些内容，这些内容将被从缓冲区中清除。</p>
-<html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-requestdispatcherandsendredirect/" data-title="requestdispatcherandsendredirect" data-url="http://kongzheng1993.github.io/kongzheng1993-requestdispatcherandsendredirect/"></div>
-<!-- 多说评论框 end -->
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"kongzheng1993"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-</html>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-请求转发与重定向/" data-id="ck8egi7cm00050tc8nsrrwvd0" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/re/">re</a></li></ul>
 
     </footer>
   </div>
@@ -414,7 +401,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -467,6 +454,10 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       <ul>
         
           <li>
+            <a href="/2020/03/30/kongzheng1993-用nodejs做一个测试api服务/">(no title)</a>
+          </li>
+        
+          <li>
             <a href="/2020/03/30/kongzheng1993-一次老代码优化2/">(no title)</a>
           </li>
         
@@ -480,10 +471,6 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
         
           <li>
             <a href="/2020/03/19/kongzheng1993-Future/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/03/19/kongzheng1993-Thread和Runnable/">(no title)</a>
           </li>
         
       </ul>

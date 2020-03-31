@@ -62,6 +62,74 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-kongzheng1993-String_Original" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/11/kongzheng1993-String_Original/" class="article-date">
+  <time datetime="2016-07-10T16:00:00.000Z" itemprop="datePublished">2016-07-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/11/kongzheng1993-String_Original/">String str</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>String str=new String(“abc”); 跟着这段代码之后，我们会想到一个问题，就是这行代码究竟创建了几个String对象呢？<br>答案是2个。<br>String str只是定义了一个名为str的String类型的变量，因此它并没有创建对象；=是对变量str进行初始化，将某个对象的引用（或者叫句柄）赋值给它，显然也没有创建对象；现在只剩下了new String(“abc”)了。那么，new String(“abc”)什么又能被看作成“abc”和<br>new String()呢？<br>这就要了解一下String的构造器：<br>public String (String original){<br>    //other code…<br>}
+平常我们创建一个类的实例的方法有两种：<br>1.使用new创建对象；<br>2.调用Class类里面的newInstance方法，利用反射机制创建对象。</p>
+<p>我们正是使用new调用了String类的上面那个构造器方法创建了一个对象，并将它的引用赋值给了str变量。同时我们注意到，被调用的构造器方法接受的参数也是一个String对象，这个对象正是”abc”。由此我们又要引入另外一种创建String对象的方式的讨论——引号内包含文本。</p>
+<p>这种方式是String特有的，并且它与new的方式存在很大区别。  </p>
+<p>String str=”abc”;  </p>
+<p>毫无疑问，这行代码创建了一个String对象。  </p>
+<p>String a=”abc”;  String b=”abc”;   那这里呢？</p>
+<p>答案还是一个。  </p>
+<p>String a=”ab”+”cd”;   再看看这里呢？</p>
+<p>答案是三个。<br>说到这里，我们就需要引入对字符串池相关知识的回顾了。  </p>
+<p>在JAVA虚拟机（JVM）中存在着一个字符串池，其中保存着很多String对象，并且可以被共享使用，因此它提高了效率。由于String类是final的，它的值一经创建就不可改变，因此我们不用担心String对象共享而带来程序的混乱。字符串池由String类维护，我们可以调用intern()方法来访问字符串池。  </p>
+<p>我们再回头看看String a=”abc”;，这行代码被执行的时候，JAVA虚拟机首先在字符串池中查找是否已经存在了值为”abc”的这么一个对象，它的判断依据是String类equals(Object obj)方法的返回值。如果有，则不再创建新的对象，直接返回已存在对象的引用；如果没有，则先创建这个对象，然后把它加入到字符串池中，再将它的引用返回。因此，我们不难理解前面三个例子中头两个例子为什么是这个答案了。</p>
+<p>只有使用引号包含文本的方式创建的String对象之间使用“+”连接产生的新对象才会被加入字符串池中。对于所有包含new方式新建对象（包括null）的“+”连接表达式，它所产生的新对象都不会被加入字符串池中，对此我们不再赘述。因此我们提倡大家用引号包含文本的方式来创建String对象以提高效率，实际上这也是我们在编程中常采用的。</p>
+<p>栈（stack）：主要保存基本类型（或者叫内置类型）（char、byte、short、int、long、float、double、boolean）和对象的引用，数据可以共享，速度仅次于寄存器（register），快于堆。<br>堆（heap）：用于存储对象</p>
+<html>
+<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-String_Original/" data-title="String_Original" data-url="http://kongzheng1993.github.io/kongzheng1993-String_Original/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"kongzheng1993"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+</html>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2016/07/11/kongzheng1993-String_Original/" data-id="ck8fkhna5000l6yc8vdcscow3" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/String/">String</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/new/">new</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-kongzheng1993-ablout_try_catch" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/07/11/kongzheng1993-ablout_try_catch/" class="article-date">
@@ -107,7 +175,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/11/kongzheng1993-ablout_try_catch/" data-id="ck8egi7cy000i0tc84u37nwn6" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/11/kongzheng1993-ablout_try_catch/" data-id="ck8fkhnas000t6yc89e5nbdpo" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/catch，try/">catch，try</a></li></ul>
@@ -177,7 +245,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/07/kongzheng1993-DB_Exchange/" data-id="ck8egi7dg00190tc8ryo66ff1" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/07/kongzheng1993-DB_Exchange/" data-id="ck8fkhn6800016yc8m5wgxl5y" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
@@ -240,7 +308,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/05/kongzheng1993-PreparedStatement&Statement/" data-id="ck8egi7cw000h0tc8r25kmd01" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/05/kongzheng1993-PreparedStatement&Statement/" data-id="ck8fkhnay000z6yc8osj82fnc" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
@@ -337,63 +405,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/06/13/kongzheng1993-aboutFinal/" data-id="ck8egi7cu000d0tc8ew3wbh5s" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/images/">images</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sample-post/">sample post</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/test/">test</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-acoderinlove" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/06/10/kongzheng1993-acoderinlove/" class="article-date">
-  <time datetime="2016-06-09T16:00:00.000Z" itemprop="datePublished">2016-06-10</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/10/kongzheng1993-acoderinlove/">a coder in love</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">while(alive)&#123;</span><br><span class="line">	</span><br><span class="line">	eat();</span><br><span class="line">	sleep();</span><br><span class="line">	code();</span><br><span class="line">	missyou();</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-acoderinlove/" data-title="lover" data-url="http://kongzheng1993.github.io/kongzheng1993-acoderinlove/"></div>
-<!-- 多说评论框 end -->
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"kongzheng1993"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-</html>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/06/10/kongzheng1993-acoderinlove/" data-id="ck8egi7ck00040tc8ut2ozc6x" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/06/13/kongzheng1993-aboutFinal/" data-id="ck8fkhnab000n6yc8r877n1cj" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/images/">images</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sample-post/">sample post</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/test/">test</a></li></ul>
@@ -409,7 +421,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/8/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/10/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/8/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/10/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -462,6 +474,10 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       <ul>
         
           <li>
+            <a href="/2020/03/30/kongzheng1993-用nodejs做一个测试api服务/">(no title)</a>
+          </li>
+        
+          <li>
             <a href="/2020/03/30/kongzheng1993-一次老代码优化2/">(no title)</a>
           </li>
         
@@ -475,10 +491,6 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
         
           <li>
             <a href="/2020/03/19/kongzheng1993-Future/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/03/19/kongzheng1993-Thread和Runnable/">(no title)</a>
           </li>
         
       </ul>

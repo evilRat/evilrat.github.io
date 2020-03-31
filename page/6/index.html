@@ -62,6 +62,75 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-kongzheng1993-mysql数据库导出导入" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/05/kongzheng1993-mysql数据库导出导入/" class="article-date">
+  <time datetime="2018-08-04T16:00:00.000Z" itemprop="datePublished">2018-08-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/mysql/">mysql</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/05/kongzheng1993-mysql数据库导出导入/">mysql数据库导出导入</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一直在用oracle，今天学习了一下mysql如何导库。</p>
+<h2 id="mysqldump"><a href="#mysqldump" class="headerlink" title="mysqldump"></a>mysqldump</h2><p>mysqldump一般在/usr/bin/目录下，装晚mysql后就可以使用了。</p>
+<h2 id="导出"><a href="#导出" class="headerlink" title="导出"></a>导出</h2><ol>
+<li>一般形式：mysqldump -h IP -u 用户名 -p 数据库名 &gt; 导出的文件名</li>
+</ol>
+<p>mysqldump和mysql登陆数据库的格式差不多，-h指定ip，-u指定登陆用户，-p指定输入密码。后面加上输出重定向到文件名。</p>
+<p>这种一般形式是导出此数据库中的所有表和数据。</p>
+<ol start="2">
+<li>导出数据库所有表结构，但不导出数据。</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -h localhost -u root -p -d <span class="built_in">test</span> &gt; /home/evilrat/dbbak/test.sql</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>导出某张表的表结构，不含数据。</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -h localhost -u root -p -d <span class="built_in">test</span> t_user &gt; /home/evilrat/dbbak/tuser.sql</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>备份多个数据库</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -h localhost -u root -p --databases test1 test2 &gt; /home/evilrat/dbbak/test1_test2.sql</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>备份所有数据库的方法</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -h localhost -u root -p --all-databases &gt; /home/evilrat/dbbak/localhost.sql</span><br></pre></td></tr></table></figure>
+
+<h2 id="导入"><a href="#导入" class="headerlink" title="导入"></a>导入</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql -h localhost -u root -p</span><br><span class="line">*******</span><br><span class="line">create database <span class="built_in">test</span>;</span><br><span class="line">show databases;</span><br><span class="line">use <span class="built_in">test</span>;</span><br><span class="line">show tables;</span><br><span class="line"><span class="built_in">source</span> /home/evilrat/dbbak/test.sql;</span><br><span class="line">show tables;</span><br><span class="line"><span class="built_in">exit</span>;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2018/08/05/kongzheng1993-mysql数据库导出导入/" data-id="ck8fkhnb8001f6yc8an1cxpph" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/备份/">备份</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-kongzheng1993-java多线程总结" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/06/08/kongzheng1993-java多线程总结/" class="article-date">
@@ -150,7 +219,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2018/06/08/kongzheng1993-java多线程总结/" data-id="ck8egi7df00170tc8dqv001sk" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2018/06/08/kongzheng1993-java多线程总结/" data-id="ck8fkhnba001i6yc8v4wkovsn" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/安全/">安全</a></li></ul>
@@ -207,7 +276,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2018/05/02/kongzheng1993-linux命令行下的ss/" data-id="ck8egi7dd00130tc8t9gtp23d" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2018/05/02/kongzheng1993-linux命令行下的ss/" data-id="ck8fkhnbc001l6yc8tihzgxfo" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/console/">console</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ss/">ss</a></li></ul>
@@ -291,7 +360,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2018/02/01/kongzheng1993-hexo搭建githubPages/" data-id="ck8egi7db00110tc8oxz8y6bw" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2018/02/01/kongzheng1993-hexo搭建githubPages/" data-id="ck8fkhnb300176yc8herdniia" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/github/">github</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li></ul>
@@ -346,68 +415,10 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2018/02/01/kongzheng1993-suse_ftp服务配置/" data-id="ck8egi7g8004t0tc8kph4lob3" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2018/02/01/kongzheng1993-suse_ftp服务配置/" data-id="ck8fkhncf002o6yc8gdczmxy4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FTP/">FTP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/server/">server</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/suse/">suse</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-JavaReflect" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/03/08/kongzheng1993-JavaReflect/" class="article-date">
-  <time datetime="2017-03-07T16:00:00.000Z" itemprop="datePublished">2017-03-08</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/08/kongzheng1993-JavaReflect/">java反射的学习笔记</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="java反射学习笔记"><a href="#java反射学习笔记" class="headerlink" title="java反射学习笔记"></a>java反射学习笔记</h2><p>复习java反射机制，发现我一直没理解Class的对象这个含义，Class是一个类名</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by evilrat on 3/8/17.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GetMethods</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        Students s = <span class="keyword">new</span> Students();</span><br><span class="line">        Class c = s.getClass();</span><br><span class="line">        Method m = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            m = s.getClass().getDeclaredMethod(<span class="string">"getSex"</span>,<span class="keyword">null</span>);</span><br><span class="line">            System.out.println(<span class="string">"Students类中有方法："</span>+m);</span><br><span class="line"></span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            System.out.println(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这里先声明了一个Students类的对象，然后调用s.getClass()获得了s的类的对象。这个类的对象是Class类型的。</p>
-<html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-mto/" data-title="mto" data-url="http://kongzheng1993.github.io/kongzheng1993-mto/"></div>
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"kongzheng1993"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-</html>
-
-
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2017/03/08/kongzheng1993-JavaReflect/" data-id="ck8egi7d4000r0tc801lrxa25" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Class/">Class</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/reflect/">reflect</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/对象，Class对象/">对象，Class对象</a></li></ul>
 
     </footer>
   </div>
@@ -420,7 +431,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/5/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/7/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/5/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/7/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -473,6 +484,10 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       <ul>
         
           <li>
+            <a href="/2020/03/30/kongzheng1993-用nodejs做一个测试api服务/">(no title)</a>
+          </li>
+        
+          <li>
             <a href="/2020/03/30/kongzheng1993-一次老代码优化2/">(no title)</a>
           </li>
         
@@ -486,10 +501,6 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
         
           <li>
             <a href="/2020/03/19/kongzheng1993-Future/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/03/19/kongzheng1993-Thread和Runnable/">(no title)</a>
           </li>
         
       </ul>
