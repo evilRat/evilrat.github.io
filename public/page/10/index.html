@@ -62,9 +62,9 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-kongzheng1993-about_sqlplus_sys" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-kongzheng1993-aboutFloat" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/06/10/kongzheng1993-about_sqlplus_sys/" class="article-date">
+    <a href="/2016/06/10/kongzheng1993-aboutFloat/" class="article-date">
   <time datetime="2016-06-09T16:00:00.000Z" itemprop="datePublished">2016-06-10</time>
 </a>
     
@@ -76,7 +76,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/10/kongzheng1993-about_sqlplus_sys/">使用sys登陆sqlplus的问题</a>
+      <a class="article-title" href="/2016/06/10/kongzheng1993-aboutFloat/">关于float</a>
     </h1>
   
 
@@ -84,27 +84,15 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="使用sys-root登陆sqlplus"><a href="#使用sys-root登陆sqlplus" class="headerlink" title="使用sys/root登陆sqlplus"></a>使用sys/root登陆sqlplus</h3><p>我们用sys/root的账号密码正常登陆sqlplus会出现以下问题：</p>
-<img src="/2016/06/10/kongzheng1993-about_sqlplus_sys/assets/img/sqlplus.bmp">
-
-
-<p>但是我们如果在输入password时不输入我们的密码（root），而是输入sys as sysdba,就可以顺利登陆，我也不知道什么原理，如果有知道的朋友，可以给我留言。</p>
-<p>如果我们先用其他用户登陆比如learner/learner,然后断开，再使用connect sys/root as sysdba就可以登陆。</p>
-<img src="/2016/06/10/kongzheng1993-about_sqlplus_sys/assets/img/sqlplusloginsuccess.bmp">
-
-
-
-
-
-
-
-
-
-
-
-
+        <h3 id="Java类型转换"><a href="#Java类型转换" class="headerlink" title="Java类型转换"></a>Java类型转换</h3><p>Java中不同类型之间的变量赋值时，需要先进行类型转换，才能进行赋值。Java类型转换分为自动转换和强制转换两种。<br>基本类型间的自动类型转换需要满足以下条件: </p>
+<p>(1).转换双方的类型必须兼容，例如int和long类型就是兼容的，而int和boolean就是不兼容的。 </p>
+<p>(2).只能是”窄类型”向”宽类型”转换,也就是目标类型的数据表示范围要比源类型的数据表示范围要大。 </p>
+<h3 id="数值常量默认类型"><a href="#数值常量默认类型" class="headerlink" title="数值常量默认类型"></a>数值常量默认类型</h3><p>1.Java中整型常量数值的默认类型是int类型，如果需要声明long类型的常量 ，需要在数值加上’l’或者’L’.<br>  例如:int i = 3;<br>       long l = 3L; </p>
+<p>2.Java中的浮点型常量数值默认是double类型，如果要声明一个数值为float型，则需要在数值后面加上’f’或者’F’.<br>  例如:double d = 3.14;<br>       float f = 3.14f; </p>
+<h3 id="float-f-3-4-语句是错误的"><a href="#float-f-3-4-语句是错误的" class="headerlink" title="float f = 3.4;语句是错误的"></a>float f = 3.4;语句是错误的</h3><p>3.4数值常量默认情况下是double类型，如果赋值给f,那么将由double转换成float类型，由前面的知识可以知道是不能自动类型转换的，所以可以将float f = 3.4修改成: </p>
+<p>(1)float f = 3.4f;<br>(2)float f = (float)3.4; </p>
 <html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-sqlplusloginsys/" data-title="sqlplusloginsys" data-url="http://kongzheng1993.github.io/kongzheng1993-sqlplusloginsys/"></div>
+<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-aboutFloat/" data-title="About Float" data-url="http://kongzheng1993.github.io/kongzheng1993"></div>
 <!-- 多说评论框 end -->
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
@@ -122,10 +110,10 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/06/10/kongzheng1993-about_sqlplus_sys/" data-id="ck8d4ki3k000r20c83gy3711c" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/06/10/kongzheng1993-aboutFloat/" data-id="ck8fkhn8h00056yc8wu9akw1h" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sql/">sql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sqlplus/">sqlplus</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sys/">sys</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/float/">float</a></li></ul>
 
     </footer>
   </div>
@@ -178,7 +166,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/06/10/kongzheng1993-acoderinlove/" data-id="ck8d4ki5f002o20c8nakjjsjb" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/06/10/kongzheng1993-acoderinlove/" data-id="ck8fkhna2000k6yc8vbps7crc" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/images/">images</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sample-post/">sample post</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/test/">test</a></li></ul>
@@ -257,7 +245,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/06/10/kongzheng1993-thewayofsort/" data-id="ck8d4ki5i002t20c8hpjaweu4" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/06/10/kongzheng1993-thewayofsort/" data-id="ck8fkhnag000o6yc8fmq313mj" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/images/">images</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sample-post/">sample post</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/test/">test</a></li></ul>
@@ -269,10 +257,10 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
 
 
   
-    <article id="post-kongzheng1993-synchronized" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-kongzheng1993-about_sqlplus_sys" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/05/20/kongzheng1993-synchronized/" class="article-date">
-  <time datetime="2016-05-19T16:00:00.000Z" itemprop="datePublished">2016-05-20</time>
+    <a href="/2016/06/10/kongzheng1993-about_sqlplus_sys/" class="article-date">
+  <time datetime="2016-06-09T16:00:00.000Z" itemprop="datePublished">2016-06-10</time>
 </a>
     
   </div>
@@ -283,7 +271,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/05/20/kongzheng1993-synchronized/">synchronized浅析</a>
+      <a class="article-title" href="/2016/06/10/kongzheng1993-about_sqlplus_sys/">使用sys登陆sqlplus的问题</a>
     </h1>
   
 
@@ -291,31 +279,29 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="关于synchronized"><a href="#关于synchronized" class="headerlink" title="关于synchronized"></a>关于synchronized</h2><h3 id="一"><a href="#一" class="headerlink" title="一"></a>一</h3><h3 id="1、synchronized关键字的作用域有二种："><a href="#1、synchronized关键字的作用域有二种：" class="headerlink" title="1、synchronized关键字的作用域有二种："></a>1、synchronized关键字的作用域有二种：</h3><h4 id="1）是某个对象实例内，synchronized-aMethod-可以防止多个线程同时访问这个对象的synchronized方法（如果一个对象有多个synchronized方法，只要一个线程访问了其中的一个synchronized方法，其它线程不能同时访问这个对象中任何一个synchronized方法）。这时，不同的对象实例的synchronized方法是不相干扰的。也就是说，其它线程照样可以同时访问相同类的另一个对象实例中的synchronized方法；"><a href="#1）是某个对象实例内，synchronized-aMethod-可以防止多个线程同时访问这个对象的synchronized方法（如果一个对象有多个synchronized方法，只要一个线程访问了其中的一个synchronized方法，其它线程不能同时访问这个对象中任何一个synchronized方法）。这时，不同的对象实例的synchronized方法是不相干扰的。也就是说，其它线程照样可以同时访问相同类的另一个对象实例中的synchronized方法；" class="headerlink" title="1）是某个对象实例内，synchronized aMethod(){}可以防止多个线程同时访问这个对象的synchronized方法（如果一个对象有多个synchronized方法，只要一个线程访问了其中的一个synchronized方法，其它线程不能同时访问这个对象中任何一个synchronized方法）。这时，不同的对象实例的synchronized方法是不相干扰的。也就是说，其它线程照样可以同时访问相同类的另一个对象实例中的synchronized方法；"></a>1）是某个对象实例内，synchronized aMethod(){}可以防止多个线程同时访问这个对象的synchronized方法（如果一个对象有多个synchronized方法，只要一个线程访问了其中的一个synchronized方法，其它线程不能同时访问这个对象中任何一个synchronized方法）。这时，不同的对象实例的synchronized方法是不相干扰的。也就是说，其它线程照样可以同时访问相同类的另一个对象实例中的synchronized方法；</h4><h4 id="2）是某个类的范围，synchronized-static-aStaticMethod-防止多个线程同时访问这个类中的synchronized-static-方法。它可以对类的所有对象实例起作用。"><a href="#2）是某个类的范围，synchronized-static-aStaticMethod-防止多个线程同时访问这个类中的synchronized-static-方法。它可以对类的所有对象实例起作用。" class="headerlink" title="2）是某个类的范围，synchronized static aStaticMethod{}防止多个线程同时访问这个类中的synchronized static 方法。它可以对类的所有对象实例起作用。"></a>2）是某个类的范围，synchronized static aStaticMethod{}防止多个线程同时访问这个类中的synchronized static 方法。它可以对类的所有对象实例起作用。</h4><h3 id="2、除了方法前用synchronized关键字，synchronized关键字还可以用于方法中的某个区块中，表示只对这个区块的资源实行互斥访问。用法是-synchronized-this-区块-，它的作用域是当前对象；"><a href="#2、除了方法前用synchronized关键字，synchronized关键字还可以用于方法中的某个区块中，表示只对这个区块的资源实行互斥访问。用法是-synchronized-this-区块-，它的作用域是当前对象；" class="headerlink" title="2、除了方法前用synchronized关键字，synchronized关键字还可以用于方法中的某个区块中，表示只对这个区块的资源实行互斥访问。用法是: synchronized(this){/区块/}，它的作用域是当前对象；"></a>2、除了方法前用synchronized关键字，synchronized关键字还可以用于方法中的某个区块中，表示只对这个区块的资源实行互斥访问。用法是: synchronized(this){/<em>区块</em>/}，它的作用域是当前对象；</h3><h3 id="3、synchronized关键字是不能继承的，也就是说，基类的方法synchronized-f-在继承类中并不自动是synchronized-f-，而是变成了f-。继承类需要你显式的指定它的某个方法为synchronized方法；"><a href="#3、synchronized关键字是不能继承的，也就是说，基类的方法synchronized-f-在继承类中并不自动是synchronized-f-，而是变成了f-。继承类需要你显式的指定它的某个方法为synchronized方法；" class="headerlink" title="3、synchronized关键字是不能继承的，也就是说，基类的方法synchronized f(){} 在继承类中并不自动是synchronized f(){}，而是变成了f(){}。继承类需要你显式的指定它的某个方法为synchronized方法；"></a>3、synchronized关键字是不能继承的，也就是说，基类的方法synchronized f(){} 在继承类中并不自动是synchronized f(){}，而是变成了f(){}。继承类需要你显式的指定它的某个方法为synchronized方法；</h3><p>Java语言的关键字，当它用来修饰一个方法或者一个代码块的时候，能够保证在同一时刻最多只有一个线程执行该段代码。<br>     一、当两个并发线程访问同一个对象object中的这个synchronized(this)同步代码块时，一个时间内只能有一个线程得到执行。另一个线程必须等待当前线程执行完这个代码块以后才能执行该代码块。<br>     二、然而，当一个线程访问object的一个synchronized(this)同步代码块时，另一个线程仍然可以访问该object中的非synchronized(this)同步代码块。<br>     三、尤其关键的是，当一个线程访问object的一个synchronized(this)同步代码块时，其他线程对object中所有其它synchronized(this)同步代码块的访问将被阻塞。<br>     四、第三个例子同样适用其它同步代码块。也就是说，当一个线程访问object的一个synchronized(this)同步代码块时，它就获得了这个object的对象锁。结果，其它线程对该object对象所有同步代码部分的访问都被暂时阻塞。<br>     五、以上规则对其它对象锁同样适用.</p>
-<h3 id="二"><a href="#二" class="headerlink" title="二"></a>二</h3><p>synchronized 关键字，它包括两种用法：synchronized 方法和 synchronized 块。  </p>
-<ol>
-<li>synchronized 方法：通过在方法声明中加入 synchronized关键字来声明 synchronized 方法。如：<br>public synchronized void accessVal(int newVal);<br>synchronized 方法控制对类成员变量的访问：每个类实例对应一把锁，每个 synchronized 方法都必须获得调用该方法的类实例的锁方能</li>
-</ol>
-<p>执行，否则所属线程阻塞，方法一旦执行，就独占该锁，直到从该方法返回时才将锁释放，此后被阻塞的线程方能获得该锁，重新进入可执行</p>
-<p>状态。这种机制确保了同一时刻对于每一个类实例，其所有声明为 synchronized 的成员函数中至多只有一个处于可执行状态（因为至多只有</p>
-<p>一个能够获得该类实例对应的锁），从而有效避免了类成员变量的访问冲突（只要所有可能访问类成员变量的方法均被声明为 synchronized）</p>
-<p>。  
-在 Java 中，不光是类实例，每一个类也对应一把锁，这样我们也可将类的静态成员函数声明为 synchronized ，以控制其对类的静态成</p>
-<p>员变量的访问。<br>synchronized 方法的缺陷：若将一个大的方法声明为synchronized 将会大大影响效率，典型地，若将线程类的方法 run() 声明为</p>
-<p>synchronized ，由于在线程的整个生命期内它一直在运行，因此将导致它对本类任何 synchronized 方法的调用都永远不会成功。当然我们可</p>
-<p>以通过将访问类成员变量的代码放到专门的方法中，将其声明为 synchronized ，并在主方法中调用来解决这一问题，但是 Java 为我们提供</p>
-<p>了更好的解决办法，那就是 synchronized 块。  </p>
-<ol start="2">
-<li>synchronized 块：通过 synchronized关键字来声明synchronized 块。语法如下：<br>synchronized(syncObject) {<br>//允许访问控制的代码<br>}  
-synchronized 块是这样一个代码块，其中的代码必须获得对象 syncObject （如前所述，可以是类实例或类）的锁方能执行，具体机</li>
-</ol>
-<p>制同前所述。由于可以针对任意代码块，且可任意指定上锁的对象，故灵活性较高。<br>对synchronized(this)的一些理解<br>一、当两个并发线程访问同一个对象object中的这个synchronized(this)同步代码块时，一个时间内只能有一个线程得到执行。另一个线</p>
-<p>程必须等待当前线程执行完这个代码块以后才能执行该代码块。<br>二、然而，当一个线程访问object的一个synchronized(this)同步代码块时，另一个线程仍然可以访问该object中的非synchronized</p>
-<p>(this)同步代码块。<br>三、尤其关键的是，当一个线程访问object的一个synchronized(this)同步代码块时，其他线程对object中所有其它synchronized(this)</p>
-<p>同步代码块的访问将被阻塞。<br>四、第三个例子同样适用其它同步代码块。也就是说，当一个线程访问object的一个synchronized(this)同步代码块时，它就获得了这个</p>
-<p>object的对象锁。结果，其它线程对该object对象所有同步代码部分的访问都被暂时阻塞。<br>五、以上规则对其它对象锁同样适用</p>
+        <h3 id="使用sys-root登陆sqlplus"><a href="#使用sys-root登陆sqlplus" class="headerlink" title="使用sys/root登陆sqlplus"></a>使用sys/root登陆sqlplus</h3><p>我们用sys/root的账号密码正常登陆sqlplus会出现以下问题：</p>
+<img src="/2016/06/10/kongzheng1993-about_sqlplus_sys/assets/img/sqlplus.bmp">
+
+
+<p>但是我们如果在输入password时不输入我们的密码（root），而是输入sys as sysdba,就可以顺利登陆，我也不知道什么原理，如果有知道的朋友，可以给我留言。</p>
+<p>如果我们先用其他用户登陆比如learner/learner,然后断开，再使用connect sys/root as sysdba就可以登陆。</p>
+<img src="/2016/06/10/kongzheng1993-about_sqlplus_sys/assets/img/sqlplusloginsuccess.bmp">
+
+
+
+
+
+
+
+
+
+
+
+
 <html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-howManyTimes/" data-title="howManyTimes" data-url="http://kongzheng1993.github.io/kongzheng1993-howManyTimes/"></div>
+<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-sqlplusloginsys/" data-title="sqlplusloginsys" data-url="http://kongzheng1993.github.io/kongzheng1993-sqlplusloginsys/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
 var duoshuoQuery = {short_name:"kongzheng1993"};
     (function() {
@@ -331,10 +317,133 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/05/20/kongzheng1993-synchronized/" data-id="ck8d4ki2x000b20c8vw3ubouu" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/06/10/kongzheng1993-about_sqlplus_sys/" data-id="ck8fkhnav000w6yc8rn1qzr9m" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sql/">sql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sqlplus/">sqlplus</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sys/">sys</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-kongzheng1993-oracle" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/06/10/kongzheng1993-oracle/" class="article-date">
+  <time datetime="2016-06-09T16:00:00.000Z" itemprop="datePublished">2016-06-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/06/10/kongzheng1993-oracle/">sql学习笔记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="sql学习笔记"><a href="#sql学习笔记" class="headerlink" title="sql学习笔记"></a>sql学习笔记</h2><h3 id="关于DISTINCT"><a href="#关于DISTINCT" class="headerlink" title="关于DISTINCT"></a>关于DISTINCT</h3><p>DISTINCT可以去除重复的内容，但是，如果查询的数据是多个列，那么只有在这多个列的数据都相同的时候才可以消除。如果一个列重复，另一个列不重复，那么这一行也不会被消除。</p>
+<h3 id="四则运算可以作为SELECT参数"><a href="#四则运算可以作为SELECT参数" class="headerlink" title="四则运算可以作为SELECT参数"></a>四则运算可以作为SELECT参数</h3><h3 id="给计算结果设计别名"><a href="#给计算结果设计别名" class="headerlink" title="给计算结果设计别名"></a>给计算结果设计别名</h3><p>SELECT empno，ename，sal*12 income FROM emp;</p>
+<p>这里打印出来的结果中sal*12那一列的列名就是income。</p>
+<h3 id="常量如果是字符串要使用单引号而不是双引号，如果是数字不用加引号，如果是日期，就要按照日期格式编写。"><a href="#常量如果是字符串要使用单引号而不是双引号，如果是数字不用加引号，如果是日期，就要按照日期格式编写。" class="headerlink" title="常量如果是字符串要使用单引号而不是双引号，如果是数字不用加引号，如果是日期，就要按照日期格式编写。"></a>常量如果是字符串要使用单引号而不是双引号，如果是数字不用加引号，如果是日期，就要按照日期格式编写。</h3><h3 id="两列内容的连接使用"><a href="#两列内容的连接使用" class="headerlink" title="两列内容的连接使用||"></a>两列内容的连接使用||</h3><p>select empno||ename from emp;</p>
+<p>这里的使用方法很像java里面的“+”：</p>
+<p><font face="黑体">例如：</font></p>
+<pre><code>select &apos;雇员编号：&apos;|| empno ||&apos;,姓名：&apos;|| ename ||&apos;,收入：&apos;|| income from student;</code></pre><h3 id="BETWEEN-最小值-AND-最大值"><a href="#BETWEEN-最小值-AND-最大值" class="headerlink" title="BETWEEN 最小值 AND 最大值;"></a>BETWEEN 最小值 AND 最大值;</h3><p><font color="red">这里一定要注意是闭区间！！！</font></p>
+<h3 id="空判断-IS-NULL和IS-NOT-NULL"><a href="#空判断-IS-NULL和IS-NOT-NULL" class="headerlink" title="空判断 IS NULL和IS NOT NULL"></a>空判断 IS NULL和IS NOT NULL</h3><h3 id="IN和NOT-IN"><a href="#IN和NOT-IN" class="headerlink" title="IN和NOT IN"></a>IN和NOT IN</h3><p>BETWEEN AND 给了一个大的可选范围，IN也用来规定一个范围，不过用起来更灵活。</p>
+<p><font face="黑体">例如：</font></p>
+<p>SELECT * FROM emp WHERE empno=1 OR empno=2 OR empno=3;<br>这句代码使用IN来做就是：<br>SELECT * FROM emp WHERE empno IN (1,2,3);</p>
+<p>指定值查找使用IN会比较方便</p>
+<h3 id="关于NOT-IN和NULL的问题"><a href="#关于NOT-IN和NULL的问题" class="headerlink" title="关于NOT IN和NULL的问题"></a>关于NOT IN和NULL的问题</h3><p>使用NOT IN进行范围判断的时候，如果范围里面包括NULL，那么就不会有任何结果。</p>
+<p><font face="黑体">例如：</font><br>SELECT * FROM emp WHERE empno NOT IN(1,2,3,NULL);</p>
+<p>之所以使用WHERE，就是要抓取有用信息，没有限制，显示所有行，对于大型数据库根本没有意义。</p>
+<p>使用NOT IN的目的是为了查询部分数据行，但是如果有了NULL（某些数据永远不可能为NULL）,就成了查询全部了。</p>
+<p>为什么sql里面NOT IN后面的子查询如果有记录为NULL的，主查询就查不到记录？？？原因很简单：<br>SELECT *
+FROM dbo.TableA AS a<br>WHERE a.id NOT IN ( 2, NULL )</p>
+<p>等同于：<br>SELECT *
+FROM Table_A AS a<br>WHERE a.id &lt;&gt; 2<br>AND a.ID &lt;&gt; NULL</p>
+<p><font color="red">于NULL值不能参与比较运算符，导致条件不成立，查询不出来数据。</font></p>
+<h3 id="LIKE"><a href="#LIKE" class="headerlink" title="LIKE"></a>LIKE</h3><p>“_”:匹配任意以为字符；<br>“%”:匹配任意的零位，多位字符。</p>
+<p><font face="黑体">注意：</font><br>LIKE 可以应用在各种数据类型上，不一定是字符串；<br>LIKE 如果不设置关键字，那么表示查询全部信息，就像LIKE ‘%%’。虽然这样可以查询全部数据，但是与不使用WHERE子句相比，不使用WHERE子句的效率更高。</p>
+<h3 id="ORDER-BY"><a href="#ORDER-BY" class="headerlink" title="ORDER BY"></a>ORDER BY</h3><p>排序方式有两种ASC(默认)和DESC。</p>
+<h3 id="COUNT-MAX-MIN-SUM-AVG"><a href="#COUNT-MAX-MIN-SUM-AVG" class="headerlink" title="COUNT(),MAX(),MIN(),SUM(),AVG()"></a>COUNT(),MAX(),MIN(),SUM(),AVG()</h3><p>count是统计个数，里面可以跟上<font color="red">distinct</font>字段。<br>max和min也可以用于<font color="red">日期</font>类型的数据。</p>
+<p><font face="黑体">注意：</font></p>
+<p>COUNT(*),COUNT(字段),COUNT(DISTINCT 字段)的区别？</p>
+<ul>
+<li>COUNT(*):明确的返回表中的数据个数，是最准确的；</li>
+<li>COUNT(字段):不统计为null的数据个数，如果某一列的数据不可能为null，那么结果与COUNT(*)相同；</li>
+<li>COUNT(DISTINCT 字段):统计消除掉重复数据后的数据个数。</li>
+</ul>
+<h3 id="GROUP-BY"><a href="#GROUP-BY" class="headerlink" title="GROUP BY"></a>GROUP BY</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">SELECT job,COUNT(empno),AVG(sal)</span><br><span class="line">FROM emp</span><br><span class="line">GROUP BY job;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">SELECT DEPTNO,COUNT(empno),MAX(SAL),MIN(SAL)</span><br><span class="line">FROM EMP</span><br><span class="line">GROUP BY DEPTNO;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>没有编写group by子句的时候（全表作为一组），那么select子句之中只允许出现统计函数，不允许出现其他字段。<br>例如：<br>select count(empno),ename from emp;<br>这里查询结果里面第一列已经显示了empno的数目了，这肯定只有一行，所以第二列不可能列出很多行ename的数据了，因为这不符合数据库的表达形式。</li>
+</ul>
+<ul>
+<li>在使用group by子句分组的时候，select子句之中只允许出现分组字段与统计函数，其他字段不允许出现。</li>
+</ul>
+<p>正确代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select job,count(empno) from emp group by job;</span><br></pre></td></tr></table></figure>
+
+<p>错误代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select job,count(empno),ename from group by job;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>统计函数允许嵌套查询，但是嵌套后的统计查询中，select子句中不允许再出现任何的字段，包括分组字段，只能够使用嵌套的统计函数。</li>
+</ul>
+<p>正确代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">SELECT deptno,AVG(sal)</span><br><span class="line">FROM emp </span><br><span class="line">GROUP BY deptno;</span><br></pre></td></tr></table></figure>
+
+<p>错误代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT deptno,MAX(AVG(sal))</span><br><span class="line">FROM emp</span><br><span class="line">GROUP BY deptno;</span><br></pre></td></tr></table></figure>
+
+<p>这里已经有了嵌套的统计函数，就不能再有deptno了。</p>
+<p>修改：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT MAX(AVG(sal))</span><br><span class="line">FROM emp</span><br><span class="line">GROUP BY deptno;</span><br></pre></td></tr></table></figure>
+
+<h3 id="多表查询"><a href="#多表查询" class="headerlink" title="多表查询"></a>多表查询</h3><p><font face="黑体">示例：</font></p>
+<p>查询出每个部门的名称、人数、平均工资：</p>
+<p>分析：<br>1.确定要使用的表：<br>（1）dept:部门名称<br>（2）emp:统计出人数，平均工资<br>2.确定已知的关联字段：<br>雇员与部门：emp.deptno=dept.deptno</p>
+<h4 id="第一步：查询每个雇员的编号，部门名称，工资"><a href="#第一步：查询每个雇员的编号，部门名称，工资" class="headerlink" title="第一步：查询每个雇员的编号，部门名称，工资"></a>第一步：查询每个雇员的编号，部门名称，工资</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">SELECT e.empno,d.dnama,e.sal</span><br><span class="line">FROM emp e,dept d</span><br><span class="line">WHERE e.deptno=d.deptno;</span><br></pre></td></tr></table></figure>
+
+<h4 id="第二步：通过以上的查询可以发现dname字段上出现了重复查询，有重复数据才可以分组。另外我们的查询明确要求是根据部门名称分组，现在对查询结果分组。（上面查询出来的结果可以看作是一张临时数据表）"><a href="#第二步：通过以上的查询可以发现dname字段上出现了重复查询，有重复数据才可以分组。另外我们的查询明确要求是根据部门名称分组，现在对查询结果分组。（上面查询出来的结果可以看作是一张临时数据表）" class="headerlink" title="第二步：通过以上的查询可以发现dname字段上出现了重复查询，有重复数据才可以分组。另外我们的查询明确要求是根据部门名称分组，现在对查询结果分组。（上面查询出来的结果可以看作是一张临时数据表）"></a>第二步：通过以上的查询可以发现dname字段上出现了重复查询，有重复数据才可以分组。另外我们的查询明确要求是根据部门名称分组，现在对查询结果分组。（上面查询出来的结果可以看作是一张临时数据表）</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">SELECT e.empno,d.dnama,e.sal</span><br><span class="line">FROM emp e,dept d</span><br><span class="line">WHERE e.deptno=d.deptno</span><br><span class="line">GROUP BY d.name;</span><br></pre></td></tr></table></figure>
+
+<h4 id="第三步：部门一共有三个，但是我们现在只出现了三个，加入外连接控制"><a href="#第三步：部门一共有三个，但是我们现在只出现了三个，加入外连接控制" class="headerlink" title="第三步：部门一共有三个，但是我们现在只出现了三个，加入外连接控制"></a>第三步：部门一共有三个，但是我们现在只出现了三个，加入外连接控制</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">SELECT e.empno,d.dnama,e.sal</span><br><span class="line">FROM emp e,dept d</span><br><span class="line">WHERE e.deptno(+)=d.deptno</span><br><span class="line">GROUP BY d.name;</span><br></pre></td></tr></table></figure>
+
+<h4 id="查询成功。"><a href="#查询成功。" class="headerlink" title="查询成功。"></a>查询成功。</h4><html>
+<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-sql/" data-title="lover" data-url="http://kongzheng1993.github.io/kongzheng1993-sql/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"kongzheng1993"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+</html>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2016/06/10/kongzheng1993-oracle/" data-id="ck8fkhnb500196yc8qouw7wjk" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/distinct/">distinct</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/group-by/">group by</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/order-by/">order by</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/select/">select</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sql/">sql</a></li></ul>
 
     </footer>
   </div>
@@ -347,7 +456,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/9/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span>
+    <a class="extend prev" rel="prev" href="/page/9/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/11/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -400,7 +509,11 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       <ul>
         
           <li>
-            <a href="/2020/03/25/kongzheng1993-一次老代码优化/">(no title)</a>
+            <a href="/2020/03/30/kongzheng1993-用nodejs做一个测试api服务/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/30/kongzheng1993-一次老代码优化2/">(no title)</a>
           </li>
         
           <li>
@@ -408,15 +521,11 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
           </li>
         
           <li>
+            <a href="/2020/03/25/kongzheng1993-一次老代码优化/">(no title)</a>
+          </li>
+        
+          <li>
             <a href="/2020/03/19/kongzheng1993-Future/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/03/19/kongzheng1993-Thread和Runnable/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/03/08/kongzheng1993-Map遍历的几种方法/">(no title)</a>
           </li>
         
       </ul>

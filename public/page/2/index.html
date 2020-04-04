@@ -62,6 +62,126 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-kongzheng1993-Thread和Runnable" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/19/kongzheng1993-Thread和Runnable/" class="article-date">
+  <time datetime="2020-03-18T16:00:00.000Z" itemprop="datePublished">2020-03-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Thread和Runnable"><a href="#Thread和Runnable" class="headerlink" title="Thread和Runnable"></a>Thread和Runnable</h1><p>我们都知道Java中创建线程有两种方式，继承Thread类和实现Runnable接口。其实呢，我们看了Thread的源码就能了解到：Thread实现了Runnable，其实也是个Runnable。</p>
+<p>Thread的构造方法中有一个是：</p>
+<p><img src="/2020/03/19/kongzheng1993-Thread和Runnable/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200319172854321.png" alt="image-20200319172854321"></p>
+<p>这里传入的是一个Runnable，而继续往下执行，到了最后也是执行的这个target的<code>run()</code>方法。</p>
+<p>如果我们不传入Runnable呢？</p>
+<p><img src="/2020/03/19/kongzheng1993-Thread和Runnable/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200319173106843.png" alt="image-20200319173106843"></p>
+<p>可以看到这个方法target是null。最后执行的是Thread重写的<code>run()</code>方法。</p>
+<p>所以看到这里可以了解到：</p>
+<ul>
+<li><p>Runnable就是个接口，写一个类实现Runnable接口，它并不能执行，它要提交到一个线程（Thread），在Thread实例化调用它的构造方法的时候，才会触发Runnable的run方法。</p>
+</li>
+<li><p>继承Thread来创建线程，重写了<code>run()</code>方法，当我们实例化这个类的时候，将会调用到父类，也就是Thread的无参构造函数，也就会执行我们这里重写的<code>run()</code>方法了。而这里的Thread实现了Runnable接口，所以它其实也是个Runnable。</p>
+</li>
+</ul>
+<h2 id="重要属性"><a href="#重要属性" class="headerlink" title="重要属性"></a>重要属性</h2><h3 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">int</span>  priority;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> MIN_PRIORITY = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> NORM_PRIORITY = <span class="number">5</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> MAX_PRIORITY = <span class="number">10</span>;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">setPriority</span><span class="params">(<span class="keyword">int</span> newPriority)</span> </span>&#123;</span><br><span class="line">        ThreadGroup g;</span><br><span class="line">        checkAccess();</span><br><span class="line">        <span class="keyword">if</span> (newPriority &gt; MAX_PRIORITY || newPriority &lt; MIN_PRIORITY) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>((g = getThreadGroup()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (newPriority &gt; g.getMaxPriority()) &#123;</span><br><span class="line">                newPriority = g.getMaxPriority();</span><br><span class="line">            &#125;</span><br><span class="line">            setPriority0(priority = newPriority);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getPriority</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> priority;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="线程的状态"><a href="#线程的状态" class="headerlink" title="线程的状态"></a>线程的状态</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> State &#123;</span><br><span class="line">        NEW,</span><br><span class="line">        RUNNABLE,</span><br><span class="line">        BLOCKED,</span><br><span class="line">        WAITING,</span><br><span class="line">        TIMED_WAITING,</span><br><span class="line">        TERMINATED;</span><br><span class="line">    &#125;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> State <span class="title">getState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> sun.misc.VM.toThreadState(threadStatus);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>网上找到的图：</p>
+<p><img src="/2020/03/19/kongzheng1993-Thread和Runnable/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200319181144600.png" alt="image-20200319181144600"></p>
+<h3 id="主要方法"><a href="#主要方法" class="headerlink" title="主要方法"></a>主要方法</h3><ul>
+<li><p>本地方法获取当前线程</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">native</span> Thread <span class="title">currentThread</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>run()</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (target != <span class="keyword">null</span>) &#123;</span><br><span class="line">            target.run();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里就是上面说的，如果是传入Runnable的话，这里target就不会是null了，如果没有传入target，就不会执行什么，但是一般我们不传入target，就会重写<code>run()</code>方法了。</p>
+</li>
+<li><p>start()</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * This method is not invoked for the main method thread or "system"</span></span><br><span class="line"><span class="comment">         * group threads created/set up by the VM. Any new functionality added</span></span><br><span class="line"><span class="comment">         * to this method in the future may have to also be added to the VM.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * A zero status value corresponds to state "NEW".</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">if</span> (threadStatus != <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalThreadStateException();</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Notify the group that this thread is about to be started</span></span><br><span class="line"><span class="comment">         * so that it can be added to the group's list of threads</span></span><br><span class="line"><span class="comment">         * and the group's unstarted count can be decremented. */</span></span><br><span class="line">        group.add(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">boolean</span> started = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            start0();</span><br><span class="line">            started = <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (!started) &#123;</span><br><span class="line">                    group.threadStartFailed(<span class="keyword">this</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable ignore) &#123;</span><br><span class="line">                <span class="comment">/* do nothing. If start0 threw a Throwable then</span></span><br><span class="line"><span class="comment">                  it will be passed up the call stack */</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">start0</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>这里会调用一个本地方法<code>start0()</code>，应该会起一个线程执行<code>run()</code>方法。</p>
+</li>
+<li><p>boolean interrupted() &amp; void interrupt() &amp; boolean isInterrupted()</p>
+<p><strong>interrupt()</strong>:中断本线程(将中断状态标记为true)<br><strong>isInterrupted()</strong>:检测本线程是否已经中断 。如果已经中断，则返回true，否则false。中断状态不受该方法的影响。 如果中断调用时线程已经不处于活动状态，则返回false。<br><strong>interrupted()</strong>:检测当前线程是否已经中断 。如果当前线程存在中断，返回true，并且修改标记为false。再调用isIterruoted()会返回false。如果当前线程没有中断标记，返回false，不会修改中断标记。</p>
+</li>
+<li><p>void sleep(long millis) &amp; void sleep(long millis, int nanos)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">sleep</span><span class="params">(<span class="keyword">long</span> millis)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Causes the currently executing thread to sleep (temporarily cease</span></span><br><span class="line"><span class="comment">     * execution) for the specified number of milliseconds plus the specified</span></span><br><span class="line"><span class="comment">     * number of nanoseconds, subject to the precision and accuracy of system</span></span><br><span class="line"><span class="comment">     * timers and schedulers. The thread does not lose ownership of any</span></span><br><span class="line"><span class="comment">     * monitors.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  millis</span></span><br><span class="line"><span class="comment">     *         the length of time to sleep in milliseconds</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  nanos</span></span><br><span class="line"><span class="comment">     *         &#123;<span class="doctag">@code</span> 0-999999&#125; additional nanoseconds to sleep</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span>  IllegalArgumentException</span></span><br><span class="line"><span class="comment">     *          if the value of &#123;<span class="doctag">@code</span> millis&#125; is negative, or the value of</span></span><br><span class="line"><span class="comment">     *          &#123;<span class="doctag">@code</span> nanos&#125; is not in the range &#123;<span class="doctag">@code</span> 0-999999&#125;</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span>  InterruptedException</span></span><br><span class="line"><span class="comment">     *          if any thread has interrupted the current thread. The</span></span><br><span class="line"><span class="comment">     *          &lt;i&gt;interrupted status&lt;/i&gt; of the current thread is</span></span><br><span class="line"><span class="comment">     *          cleared when this exception is thrown.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sleep</span><span class="params">(<span class="keyword">long</span> millis, <span class="keyword">int</span> nanos)</span></span></span><br><span class="line"><span class="function">    <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (millis &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"timeout value is negative"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (nanos &lt; <span class="number">0</span> || nanos &gt; <span class="number">999999</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(</span><br><span class="line">                                <span class="string">"nanosecond timeout value out of range"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (nanos &gt;= <span class="number">500000</span> || (nanos != <span class="number">0</span> &amp;&amp; millis == <span class="number">0</span>)) &#123;</span><br><span class="line">            millis++;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        sleep(millis);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>两个参数的sleep只是将nanos转为millis(四舍五入转换)，调用sleep(millis)方法。<br>sleep(millis)是本地方法，让当前线程休眠指定时间。<br>sleep不释放锁。</p>
+</li>
+<li><p>void join() &amp; void join(long millis) &amp; void join(long millis, int nanos)</p>
+<p>将线程加入到当前线程中，使父线程等待子线程执行完毕再继续执行。</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2020/03/19/kongzheng1993-Thread和Runnable/" data-id="ck8fkhnco00366yc82ysn2plf" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-kongzheng1993-Map遍历的几种方法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/08/kongzheng1993-Map遍历的几种方法/" class="article-date">
+  <time datetime="2020-03-07T16:00:00.000Z" itemprop="datePublished">2020-03-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="关于Map遍历的几种方法总结"><a href="#关于Map遍历的几种方法总结" class="headerlink" title="关于Map遍历的几种方法总结"></a>关于Map遍历的几种方法总结</h2><p>在java中所有的map都实现了Map接口，因此所有的Map（如HashMap, TreeMap, LinkedHashMap, Hashtable等）都可以用以下的方式去遍历。</p>
+<ul>
+<li>方法一：在for循环中使用Entry实现Map的遍历：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 最常见也是大多数情况下用的最多的，一般在键值对都需要使用</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">Map &lt;String,String&gt;map = <span class="keyword">new</span> HashMap&lt;String,String&gt;();</span><br><span class="line">map.put(<span class="string">"Spring技术内幕"</span>, <span class="string">"计文柯"</span>);</span><br><span class="line">map.put(<span class="string">"架构探险"</span>, <span class="string">"黄勇"</span>);</span><br><span class="line"><span class="keyword">for</span>(Map.Entry&lt;String, String&gt; entry : map.entrySet())&#123;</span><br><span class="line">    String mapKey = entry.getKey();</span><br><span class="line">    String mapValue = entry.getValue();</span><br><span class="line">    System.out.println(mapKey+<span class="string">":"</span>+mapValue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>方法二：在for循环中遍历key或者values，一般适用于只需要map中的key或者value时使用，在性能上比使用entrySet较好；</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Map &lt;String,String&gt;map = <span class="keyword">new</span> HashMap&lt;String,String&gt;();</span><br><span class="line">map.put(<span class="string">"Spring技术内幕"</span>, <span class="string">"计文柯"</span>);</span><br><span class="line">map.put(<span class="string">"架构探险"</span>, <span class="string">"黄勇"</span>);</span><br><span class="line"><span class="comment">//key</span></span><br><span class="line"><span class="keyword">for</span>(String key : map.keySet())&#123;</span><br><span class="line">    System.out.println(key);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//value</span></span><br><span class="line"><span class="keyword">for</span>(String value : map.values())&#123;</span><br><span class="line">    System.out.println(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>方法三：通过Iterator遍历；</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Iterator&lt;Entry&lt;String, String&gt;&gt; entries = map.entrySet().iterator();</span><br><span class="line"><span class="keyword">while</span>(entries.hasNext())&#123;</span><br><span class="line">    Entry&lt;String, String&gt; entry = entries.next();</span><br><span class="line">    String key = entry.getKey();</span><br><span class="line">    String value = entry.getValue();</span><br><span class="line">    System.out.println(key+<span class="string">":"</span>+value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>方法四：通过键找值遍历，这种方式的效率比较低，因为本身从键取值是耗时的操作；</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(String key : map.keySet())&#123;</span><br><span class="line">    String value = map.get(key);</span><br><span class="line">    System.out.println(key+<span class="string">":"</span>+value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>如果绝大多数数据都要用到，那么我们最好使用Entry来遍历，像方法四，每次都拿着key去map里查一次value，开销是比较大的。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-Map遍历的几种方法/" data-id="ck8fkhnch002q6yc8i7q7ryrm" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-kongzheng1993-jhat" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/03/08/kongzheng1993-jhat/" class="article-date">
@@ -112,7 +232,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-jhat/" data-id="ck8d4ki4v002520c82uxv5rbr" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-jhat/" data-id="ck8fkhnci002u6yc82r1i386i" class="article-share-link">Share</a>
       
       
     </footer>
@@ -170,7 +290,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-jmap/" data-id="ck8d4ki50002c20c8kd6f3egp" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-jmap/" data-id="ck8fkhncj002w6yc8hmb728s5" class="article-share-link">Share</a>
       
       
     </footer>
@@ -890,129 +1010,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-URLEncode/" data-id="ck8d4ki56002h20c8qsqzru1j" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-申请亚马逊AWS账户" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/03/08/kongzheng1993-申请亚马逊AWS账户/" class="article-date">
-  <time datetime="2020-03-07T16:00:00.000Z" itemprop="datePublished">2020-03-08</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="申请亚马逊AWS账户"><a href="#申请亚马逊AWS账户" class="headerlink" title="申请亚马逊AWS账户"></a>申请亚马逊AWS账户</h1><p>访问aws.amazon.com，注册账户</p>
-<p><img src="/2020/03/08/kongzheng1993-申请亚马逊AWS账户/C:%5CUsers%5Ckongz%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200318111734263.png" alt="image-20200318111734263"></p>
-<p>登陆成功后，进入AWS管理控制台</p>
-<p>如果没有梯子，可能会有点慢</p>
-<p>图</p>
-<p>点击启动虚拟机，新建ec2</p>
-<p>图</p>
-<p>选择系统，我熟悉ubuntu，选择了ubuntu，注意符合条件的免费套餐</p>
-<p>图</p>
-<p>选择实例类型，注意符合条件的免费套餐</p>
-<p>图</p>
-<p>点击<code>审核和启动</code></p>
-<p>图</p>
-<p>点击<code>启动</code></p>
-<p>图</p>
-<p>选择创建新的密码对，输入一个密码对名称</p>
-<p>图</p>
-<p>点击下载密钥对</p>
-<p>图</p>
-<p>点击启动实例</p>
-<p>图</p>
-<p>启动成功</p>
-<p>图</p>
-<p>可以创建账单警报，以免费用超过免费套餐</p>
-<p>点击查看实例</p>
-<p>图</p>
-<p>可以看到我们的实例状态时running</p>
-<p>图</p>
-<p>点击连接</p>
-<p>图</p>
-<p>复制命令本地执行即可</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-申请亚马逊AWS账户/" data-id="ck8d4ki8k006f20c8wj04ojnl" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-Guava" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/03/06/kongzheng1993-Guava/" class="article-date">
-  <time datetime="2020-03-05T16:00:00.000Z" itemprop="datePublished">2020-03-06</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Guava（一）"><a href="#Guava（一）" class="headerlink" title="Guava（一）"></a>Guava（一）</h1><h2 id="Guava是什么"><a href="#Guava是什么" class="headerlink" title="Guava是什么"></a>Guava是什么</h2><p>Guava项目包含一些我们在基于Java的项目中依赖的Google核心库：集合，缓存，原语支持，并发库，通用批注，字符串处理，I/O等。这些工具中的每一种确实每天都会被Google员工用于生产服务中。</p>
-<p>更详细的介绍可以去<a href="https://github.com/google/guava/wiki" target="_blank" rel="noopener">github/guava</a>的Wiki了解。</p>
-<h2 id="引入Guava"><a href="#引入Guava" class="headerlink" title="引入Guava"></a>引入Guava</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.google.guava<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>guava<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>19.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="Guava工具类"><a href="#Guava工具类" class="headerlink" title="Guava工具类"></a>Guava工具类</h2><h3 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h3><p>普通的集合：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; list = Lists.newArrayList();</span><br><span class="line">Set&lt;String&gt; set = Sets.newHashSet();</span><br><span class="line">Map&lt;String, String&gt; map = Maps.newHashMap();</span><br></pre></td></tr></table></figure>
-
-<p>不可变集合：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ImmutableList&lt;String&gt; iList = ImmutableList.of(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>);</span><br><span class="line">ImmutableSet&lt;String&gt; iSet = ImmutableSet.of(<span class="string">"e1"</span>, <span class="string">"e2"</span>);</span><br><span class="line">ImmutableMap&lt;String, String&gt; iMap = ImmutableMap.of(<span class="string">"k1"</span>, <span class="string">"v1"</span>, <span class="string">"k2"</span>, <span class="string">"v2"</span>);</span><br></pre></td></tr></table></figure>
-
-<pre><code>什么是不可变？
-- 在多线程操作下，是线程安全的。
-- 所有不可变集合会比可变集合更有效的利用资源。
-- 中途不可改变</code></pre><h4 id="一个简单的对比"><a href="#一个简单的对比" class="headerlink" title="一个简单的对比"></a>一个简单的对比</h4><p>我们搞一个Map中嵌套List的对象要几步？</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String,List&lt;Integer&gt;&gt; map = <span class="keyword">new</span> HashMap&lt;String,List&lt;Integer&gt;&gt;();</span><br><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">list.add(<span class="number">1</span>);</span><br><span class="line">list.add(<span class="number">2</span>);</span><br><span class="line">map.put(<span class="string">"test"</span>, list);</span><br></pre></td></tr></table></figure>
-
-<p>如果用了Guava呢？</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Multimap&lt;String,Integer&gt; mapM = ArrayListMultimap.create();</span><br><span class="line">mapM.put(<span class="string">"test"</span>,<span class="number">1</span>);</span><br><span class="line">mapM.put(<span class="string">"test"</span>,<span class="number">2</span>);</span><br></pre></td></tr></table></figure>
-
-<p>哪个方便？</p>
-<pre><code>代码量少了并不是简简单单的节省时间而已，而是减少了人为错误的机会，少一行代码就少一点犯错误的可能！</code></pre><h3 id="字符串连接"><a href="#字符串连接" class="headerlink" title="字符串连接"></a>字符串连接</h3><p>连接多个字符串，追加到StringBuilder</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">StringBuilder stringBuilder = <span class="keyword">new</span> StringBuilder(<span class="string">"你好！，"</span>);</span><br><span class="line"><span class="comment">// 字符串连接器，以|为分隔符，同时去掉null元素</span></span><br><span class="line">Joiner joiner1 = Joiner.on(<span class="string">"|"</span>).skipNulls();</span><br><span class="line"><span class="comment">// 构成一个字符串jim|jack|kevin并添加到stringBuilder</span></span><br><span class="line">stringBuilder = joiner1.appendTo(stringBuilder, <span class="string">"jim"</span>, <span class="string">"jack"</span>, <span class="keyword">null</span>, <span class="string">"kevin"</span>);</span><br><span class="line">System.out.println(stringBuilder); </span><br><span class="line"><span class="comment">// 执行结果：嗨，jim|jack|kevin</span></span><br></pre></td></tr></table></figure>
-
-<p>可以看到这里过滤了null</p>
-<h3 id="Map-amp-字符串互转"><a href="#Map-amp-字符串互转" class="headerlink" title="Map&amp;字符串互转"></a>Map&amp;字符串互转</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, String&gt; testMap = Maps.newLinkedHashMap();</span><br><span class="line">testMap.put(<span class="string">"Cookies"</span>, <span class="string">"12332"</span>);</span><br><span class="line">testMap.put(<span class="string">"Content-Length"</span>, <span class="string">"30000"</span>);</span><br><span class="line">testMap.put(<span class="string">"Date"</span>, <span class="string">"2018.07.04"</span>);</span><br><span class="line">testMap.put(<span class="string">"Mime"</span>, <span class="string">"text/html"</span>);</span><br><span class="line"><span class="comment">// 用:分割键值对，并用#分割每个元素，返回字符串</span></span><br><span class="line">String returnedString = Joiner.on(<span class="string">"#"</span>).withKeyValueSeparator(<span class="string">":"</span>).joi(testMap);</span><br><span class="line">System.out.println(returnedString);</span><br><span class="line"><span class="comment">// 执行结果：Cookies:12332#Content-Length:30000#Date:2018.07.04#Mime:text/html</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 接上一个，内部类的引用，得到分割器，将字符串解析为map</span></span><br><span class="line">Splitter.MapSplitter ms = Splitter.on(<span class="string">"#"</span>).withKeyValueSeparator(<span class="string">':'</span>);</span><br><span class="line">Map&lt;String, String&gt; ret = ms.split(returnedString);</span><br><span class="line"><span class="keyword">for</span> (String it2 : ret.keySet()) &#123;</span><br><span class="line">    System.out.println(it2 + <span class="string">" -&gt; "</span> + ret.get(it2));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="字符串工具类"><a href="#字符串工具类" class="headerlink" title="字符串工具类"></a>字符串工具类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(Strings.isNullOrEmpty(<span class="string">""</span>)); <span class="comment">// true</span></span><br><span class="line">System.out.println(Strings.isNullOrEmpty(<span class="keyword">null</span>)); <span class="comment">// true</span></span><br><span class="line">System.out.println(Strings.isNullOrEmpty(<span class="string">"hello"</span>)); <span class="comment">// false</span></span><br><span class="line"><span class="comment">// 将null转化为""</span></span><br><span class="line"> System.out.println(Strings.nullToEmpty(<span class="keyword">null</span>)); <span class="comment">// "" </span></span><br><span class="line"><span class="comment">// 从尾部不断补充T只到总共8个字符，如果源字符串已经达到或操作，则原样返回。类似的有padStart</span></span><br><span class="line">System.out.println(Strings.padEnd(<span class="string">"hello"</span>, <span class="number">8</span>, <span class="string">'T'</span>)); <span class="comment">// helloTTT</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="字符匹配器CharMatcher"><a href="#字符匹配器CharMatcher" class="headerlink" title="字符匹配器CharMatcher"></a>字符匹配器CharMatcher</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 空白回车换行对应换成一个#，一对一换</span></span><br><span class="line">String stringWithLinebreaks = <span class="string">"hello world\r\r\ryou are here\n\ntake it\t\t\teasy"</span>;</span><br><span class="line">String s6 = CharMatcher.BREAKING_WHITESPACE.replaceFrom(stringWithLinebreaks,<span class="string">'#'</span>);</span><br><span class="line">System.out.println(s6); </span><br><span class="line"><span class="comment">//执行结果：hello#world###you#are#here##take#it###easy</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="连续空白替换成一个字符"><a href="#连续空白替换成一个字符" class="headerlink" title="连续空白替换成一个字符"></a>连续空白替换成一个字符</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将所有连在一起的空白回车换行字符换成一个#，倒塌</span></span><br><span class="line">String tabString = <span class="string">"  hello   \n\t\tworld   you\r\nare             here  "</span>;</span><br><span class="line">String tabRet = CharMatcher.WHITESPACE.collapseFrom(tabString, <span class="string">'#'</span>);</span><br><span class="line">System.out.println(tabRet);</span><br></pre></td></tr></table></figure>
-
-<h3 id="去掉前后空白和缩成一个字符"><a href="#去掉前后空白和缩成一个字符" class="headerlink" title="去掉前后空白和缩成一个字符"></a>去掉前后空白和缩成一个字符</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在前面的基础上去掉字符串的前后空白，并将空白换成一个#</span></span><br><span class="line">String trimRet = CharMatcher.WHITESPACE.trimAndCollapseFrom(tabString, <span class="string">'#'</span>);</span><br><span class="line">System.out.println(trimRet);</span><br><span class="line"><span class="comment">//执行结果： hello#world#you#are#here</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="只保留数字"><a href="#只保留数字" class="headerlink" title="只保留数字"></a>只保留数字</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String letterAndNumber = <span class="string">"1234abcdABCD56789"</span>;</span><br><span class="line"><span class="comment">// 保留数字</span></span><br><span class="line">String number = CharMatcher.JAVA_DIGIT.retainFrom(letterAndNumber);</span><br><span class="line">System.out.println(number);<span class="comment">//123456789</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>使用Guava可以极大减少我们的代码量，减少犯错机会，提高工作效率。这次我们先介绍这些，下一篇我们深入Guava Caching！</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/06/kongzheng1993-Guava/" data-id="ck8d4ki53002f20c8qlochii8" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-URLEncode/" data-id="ck8fkhncl00306yc8m1co3g1x" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1026,7 +1024,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -1079,7 +1077,11 @@
       <ul>
         
           <li>
-            <a href="/2020/03/25/kongzheng1993-一次老代码优化/">(no title)</a>
+            <a href="/2020/03/30/kongzheng1993-用nodejs做一个测试api服务/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/30/kongzheng1993-一次老代码优化2/">(no title)</a>
           </li>
         
           <li>
@@ -1087,15 +1089,11 @@
           </li>
         
           <li>
+            <a href="/2020/03/25/kongzheng1993-一次老代码优化/">(no title)</a>
+          </li>
+        
+          <li>
             <a href="/2020/03/19/kongzheng1993-Future/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/03/19/kongzheng1993-Thread和Runnable/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/03/08/kongzheng1993-Map遍历的几种方法/">(no title)</a>
           </li>
         
       </ul>
