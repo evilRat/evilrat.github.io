@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
 
@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="Evil">
 <meta property="og:description" content="记一次老代码优化为什么要优化之前经常收到服务器告警信息，CPU占用率过高，当时用jstack分析了线程状态，确认是我们在处理接口返回报文时的大写+_转驼峰时效率太低导致的。 同时我们发现很多调用超3s的接口都是因为响应报文太长，报文转换时间太长导致的。这是个亟待解决的问题。 老代码分析我看了下老代码，之前的处理逻辑上很简单，但是效率上真的问题有点大。服务方给我们返回的报文是xml的，我们会转成js">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-03-29T14:12:15.338Z">
+<meta property="og:updated_time" content="2020-04-04T09:10:43.387Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Evil">
 <meta name="twitter:description" content="记一次老代码优化为什么要优化之前经常收到服务器告警信息，CPU占用率过高，当时用jstack分析了线程状态，确认是我们在处理接口返回报文时的大写+_转驼峰时效率太低导致的。 同时我们发现很多调用超3s的接口都是因为响应报文太长，报文转换时间太长导致的。这是个亟待解决的问题。 老代码分析我看了下老代码，之前的处理逻辑上很简单，但是效率上真的问题有点大。服务方给我们返回的报文是xml的，我们会转成js">
@@ -134,7 +134,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/25/kongzheng1993-一次老代码优化/" data-id="ck8fkhncu003e6yc8qj2u1vs2" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2020/03/25/kongzheng1993-一次老代码优化/" data-id="ck8lozeph0069gy5isoce4yqf" class="article-share-link">Share</a>
       
       
     </footer>
@@ -143,7 +143,7 @@
     
 <nav id="article-nav">
   
-    <a href="/2020/03/25/kongzheng1993-RocketMQ定时消息示例/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2020/03/30/kongzheng1993-一次老代码优化2/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
@@ -153,7 +153,7 @@
     </a>
   
   
-    <a href="/2020/03/19/kongzheng1993-Future/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2020/03/25/kongzheng1993-RocketMQ定时消息示例/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title"></div>
     </a>
@@ -200,7 +200,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
     </div>
   </div>
 
@@ -213,6 +213,14 @@
       <ul>
         
           <li>
+            <a href="/2020/04/04/kongzheng1993-TCP三次握手&四次挥手/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/02/kongzheng1993-localStorage/">(no title)</a>
+          </li>
+        
+          <li>
             <a href="/2020/03/30/kongzheng1993-用nodejs做一个测试api服务/">(no title)</a>
           </li>
         
@@ -221,15 +229,7 @@
           </li>
         
           <li>
-            <a href="/2020/03/25/kongzheng1993-RocketMQ定时消息示例/">(no title)</a>
-          </li>
-        
-          <li>
             <a href="/2020/03/25/kongzheng1993-一次老代码优化/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/03/19/kongzheng1993-Future/">(no title)</a>
           </li>
         
       </ul>

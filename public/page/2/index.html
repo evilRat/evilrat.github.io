@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
 
@@ -61,6 +61,58 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-kongzheng1993-RocketMQ定时消息示例" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/25/kongzheng1993-RocketMQ定时消息示例/" class="article-date">
+  <time datetime="2020-03-24T16:00:00.000Z" itemprop="datePublished">2020-03-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="定时消息示例"><a href="#定时消息示例" class="headerlink" title="定时消息示例"></a>定时消息示例</h1><h2 id="什么是定时消息"><a href="#什么是定时消息" class="headerlink" title="什么是定时消息"></a>什么是定时消息</h2><p>预定的消息与正常的消息的不同之处在于，它们要等到指定的时间后才能传递。</p>
+<p>RocketMQ 支持定时消息，但是不支持任意时间精度，仅支持特定的 level，例如定时 5s， 10s， 1m 等。其中，level=0 级表示不延时，level=1 表示 1 级延时，level=2 表示 2 级延时，以此类推。</p>
+<p><strong>如何配置：</strong><br>在服务器端（rocketmq-broker端）的属性配置文件中加入以下行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">messageDelayLevel=1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h</span><br></pre></td></tr></table></figure>
+
+<p>描述了各级别与延时时间的对应映射关系。</p>
+<p>这个配置项配置了从1级开始各级延时的时间，如1表示延时1s，2表示延时5s，14表示延时10m，可以修改这个指定级别的延时时间。</p>
+<ul>
+<li>时间单位支持：s、m、h、d，分别表示秒、分、时、天</li>
+<li>默认值就是上面声明的，可手工调整</li>
+<li>默认值已经够用，不建议调整</li>
+</ul>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><ul>
+<li>启动消费者等待传入的订阅消息</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;</span><br><span class="line"> <span class="keyword">import</span> org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;</span><br><span class="line"> <span class="keyword">import</span> org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;</span><br><span class="line"> <span class="keyword">import</span> org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;</span><br><span class="line"> <span class="keyword">import</span> org.apache.rocketmq.common.message.MessageExt;</span><br><span class="line"> <span class="keyword">import</span> java.util.List;</span><br><span class="line">    </span><br><span class="line"> <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ScheduledMessageConsumer</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">         <span class="comment">// Instantiate message consumer</span></span><br><span class="line">         DefaultMQPushConsumer consumer = <span class="keyword">new</span> DefaultMQPushConsumer(<span class="string">"ExampleConsumer"</span>);</span><br><span class="line">         <span class="comment">// Subscribe topics</span></span><br><span class="line">         consumer.subscribe(<span class="string">"TestTopic"</span>, <span class="string">"*"</span>);</span><br><span class="line">         <span class="comment">// Register message listener</span></span><br><span class="line">         consumer.registerMessageListener(<span class="keyword">new</span> MessageListenerConcurrently() &#123;</span><br><span class="line">             <span class="meta">@Override</span></span><br><span class="line">             <span class="function"><span class="keyword">public</span> ConsumeConcurrentlyStatus <span class="title">consumeMessage</span><span class="params">(List&lt;MessageExt&gt; messages, ConsumeConcurrentlyContext context)</span> </span>&#123;</span><br><span class="line">                 <span class="keyword">for</span> (MessageExt message : messages) &#123;</span><br><span class="line">                     <span class="comment">// Print approximate delay time period</span></span><br><span class="line">                     System.out.println(<span class="string">"Receive message[msgId="</span> + message.getMsgId() + <span class="string">"] "</span></span><br><span class="line">                             + (System.currentTimeMillis() - message.getStoreTimestamp()) + <span class="string">"ms later"</span>);</span><br><span class="line">                 &#125;</span><br><span class="line">                 <span class="keyword">return</span> ConsumeConcurrentlyStatus.CONSUME_SUCCESS;</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;);</span><br><span class="line">         <span class="comment">// Launch consumer</span></span><br><span class="line">         consumer.start();</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>发送定时消息</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.rocketmq.client.producer.DefaultMQProducer;</span><br><span class="line"><span class="keyword">import</span> org.apache.rocketmq.common.message.Message;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ScheduledMessageProducer</span> </span>&#123;</span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">         <span class="comment">// Instantiate a producer to send scheduled messages</span></span><br><span class="line">         DefaultMQProducer producer = <span class="keyword">new</span> DefaultMQProducer(<span class="string">"ExampleProducerGroup"</span>);</span><br><span class="line">         <span class="comment">// Launch producer</span></span><br><span class="line">         producer.start();</span><br><span class="line">         <span class="keyword">int</span> totalMessagesToSend = <span class="number">100</span>;</span><br><span class="line">         <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; totalMessagesToSend; i++) &#123;</span><br><span class="line">             Message message = <span class="keyword">new</span> Message(<span class="string">"TestTopic"</span>, (<span class="string">"Hello scheduled message "</span> + i).getBytes());</span><br><span class="line">             <span class="comment">// This message will be delivered to consumer 10 seconds later.</span></span><br><span class="line">             message.setDelayTimeLevel(<span class="number">3</span>);</span><br><span class="line">             <span class="comment">// Send the message</span></span><br><span class="line">             producer.send(message);</span><br><span class="line">         &#125;    </span><br><span class="line">         <span class="comment">// Shutdown producer after use.</span></span><br><span class="line">         producer.shutdown();</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>验证</li>
+</ul>
+<p>可以看到，消息存储10s后才会消费消息。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2020/03/25/kongzheng1993-RocketMQ定时消息示例/" data-id="ck8lozemh002fgy5ibjuep5n9" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-kongzheng1993-Thread和Runnable" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -124,7 +176,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/19/kongzheng1993-Thread和Runnable/" data-id="ck8fkhnco00366yc82ysn2plf" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2020/03/19/kongzheng1993-Thread和Runnable/" data-id="ck8lozemj002jgy5i9n32sil9" class="article-share-link">Share</a>
       
       
     </footer>
@@ -134,10 +186,10 @@
 
 
   
-    <article id="post-kongzheng1993-Map遍历的几种方法" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-kongzheng1993-Future" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2020/03/08/kongzheng1993-Map遍历的几种方法/" class="article-date">
-  <time datetime="2020-03-07T16:00:00.000Z" itemprop="datePublished">2020-03-08</time>
+    <a href="/2020/03/19/kongzheng1993-Future/" class="article-date">
+  <time datetime="2020-03-18T16:00:00.000Z" itemprop="datePublished">2020-03-19</time>
 </a>
     
   </div>
@@ -146,151 +198,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="关于Map遍历的几种方法总结"><a href="#关于Map遍历的几种方法总结" class="headerlink" title="关于Map遍历的几种方法总结"></a>关于Map遍历的几种方法总结</h2><p>在java中所有的map都实现了Map接口，因此所有的Map（如HashMap, TreeMap, LinkedHashMap, Hashtable等）都可以用以下的方式去遍历。</p>
-<ul>
-<li>方法一：在for循环中使用Entry实现Map的遍历：</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 最常见也是大多数情况下用的最多的，一般在键值对都需要使用</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">Map &lt;String,String&gt;map = <span class="keyword">new</span> HashMap&lt;String,String&gt;();</span><br><span class="line">map.put(<span class="string">"Spring技术内幕"</span>, <span class="string">"计文柯"</span>);</span><br><span class="line">map.put(<span class="string">"架构探险"</span>, <span class="string">"黄勇"</span>);</span><br><span class="line"><span class="keyword">for</span>(Map.Entry&lt;String, String&gt; entry : map.entrySet())&#123;</span><br><span class="line">    String mapKey = entry.getKey();</span><br><span class="line">    String mapValue = entry.getValue();</span><br><span class="line">    System.out.println(mapKey+<span class="string">":"</span>+mapValue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>方法二：在for循环中遍历key或者values，一般适用于只需要map中的key或者value时使用，在性能上比使用entrySet较好；</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Map &lt;String,String&gt;map = <span class="keyword">new</span> HashMap&lt;String,String&gt;();</span><br><span class="line">map.put(<span class="string">"Spring技术内幕"</span>, <span class="string">"计文柯"</span>);</span><br><span class="line">map.put(<span class="string">"架构探险"</span>, <span class="string">"黄勇"</span>);</span><br><span class="line"><span class="comment">//key</span></span><br><span class="line"><span class="keyword">for</span>(String key : map.keySet())&#123;</span><br><span class="line">    System.out.println(key);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//value</span></span><br><span class="line"><span class="keyword">for</span>(String value : map.values())&#123;</span><br><span class="line">    System.out.println(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>方法三：通过Iterator遍历；</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Iterator&lt;Entry&lt;String, String&gt;&gt; entries = map.entrySet().iterator();</span><br><span class="line"><span class="keyword">while</span>(entries.hasNext())&#123;</span><br><span class="line">    Entry&lt;String, String&gt; entry = entries.next();</span><br><span class="line">    String key = entry.getKey();</span><br><span class="line">    String value = entry.getValue();</span><br><span class="line">    System.out.println(key+<span class="string">":"</span>+value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>方法四：通过键找值遍历，这种方式的效率比较低，因为本身从键取值是耗时的操作；</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(String key : map.keySet())&#123;</span><br><span class="line">    String value = map.get(key);</span><br><span class="line">    System.out.println(key+<span class="string">":"</span>+value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>如果绝大多数数据都要用到，那么我们最好使用Entry来遍历，像方法四，每次都拿着key去map里查一次value，开销是比较大的。</p>
-
+        
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-Map遍历的几种方法/" data-id="ck8fkhnch002q6yc8i7q7ryrm" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-jhat" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/03/08/kongzheng1993-jhat/" class="article-date">
-  <time datetime="2020-03-07T16:00:00.000Z" itemprop="datePublished">2020-03-08</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="jhat"><a href="#jhat" class="headerlink" title="jhat"></a>jhat</h1><p>分析Java堆。此命令是实验性的，不受支持。</p>
-<h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p><code>jhat [ options ] heap-dump-file</code></p>
-<h2 id="选项"><a href="#选项" class="headerlink" title="选项"></a>选项</h2><p>命令行选项。</p>
-<ul>
-<li><p>-stack false | true<br>关闭跟踪对象分配调用堆栈。如果堆转储中没有分配站点信息，则必须将此标志设置为false。默认值为true。</p>
-</li>
-<li><p>-refs false | true<br>关闭对对象引用的跟踪。默认值为true。默认情况下，将为堆中的所有对象计算后向指针，即指向指定对象的对象，例如引用程序或传入引用。</p>
-</li>
-<li><p>-port 端口号<br>设置jhatHTTP服务器的端口。默认值为7000。</p>
-</li>
-<li><p>-exclude exclude-file<br>指定一个文件，该文件列出了应从可达对象查询中排除的数据成员。例如，如果文件列出java.lang.String.value，则无论何时o计算从特定对象可访问的对象列表，java.lang.String.value都不会考虑涉及字段的引用路径。</p>
-</li>
-<li><p>-baseline exclude-file<br>指定基线堆转储。两个堆转储中具有相同对象ID的对象都标记为不是新对象。其他对象被标记为新对象。这对于比较两个不同的堆转储很有用。</p>
-</li>
-<li><p>-debug int<br>设置此工具的调试级别。级别0表示没有调试输出。为更多详细模式设置较高的值。</p>
-</li>
-<li><p>-version<br>报告发布编号并退出</p>
-</li>
-<li><p>-h<br>显示帮助消息并退出。</p>
-</li>
-<li><p>-help<br>显示帮助消息并退出。</p>
-</li>
-<li><p>-Jflag<br>传递flag到在其jhat上运行命令的Java虚拟机。例如，-J-Xmx512m使用最大堆大小为512 MB。</p>
-</li>
-</ul>
-<h2 id="堆转储文件"><a href="#堆转储文件" class="headerlink" title="堆转储文件"></a>堆转储文件</h2><p>要浏览的Java二进制堆转储文件。对于包含多个堆转储的转储文件，您可以通过#<number>在文件名后附加名称来指定文件中的哪个转储myfile.hprof#3。</number></p>
-<h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>该jhat命令解析Java堆转储文件并启动Web服务器。该jhat命令使您可以使用自己喜欢的Web浏览器浏览堆转储。该jhat命令支持预先设计的查询，例如显示已知类的所有实例MyClass以及对象查询语言（OQL）。OQL与SQL相似，除了查询堆转储。可从jhat命令显示的OQL帮助页面获得OQL帮助。使用默认端口，可以从<a href="http://localhost:7000/oqlhelp" target="_blank" rel="noopener">http://localhost:7000/oqlhelp</a> /获得OQL帮助。</p>
-<p>有几种方法可以生成Java堆转储：</p>
-<ul>
-<li>使用该jmap -dump选项在运行时获取堆转储。参见jmap（1）。</li>
-<li>使用该jconsole选项HotSpotDiagnosticMXBean在运行时获取堆转储。请参阅jconsole（1）和HotSpotDiagnosticMXBean接口说明，网址为<br><a href="http://docs.oracle.com/javase/8/docs/jre/api/management/extension/com/sun/management/HotSpotDiagnosticMXBean.html" target="_blank" rel="noopener">http://docs.oracle.com/javase/8/docs/jre/api/management/extension/com/sun/management/HotSpotDiagnosticMXBean.html</a></li>
-<li>OutOfMemoryError通过指定-XX:+HeapDumpOnOutOfMemoryErrorJava虚拟机（JVM）选项引发时，将生成堆转储。</li>
-<li>使用hprof命令。请参阅HPROF：堆/ CPU分析工具，网址为：<br><a href="http://docs.oracle.com/javase/8/docs/technotes/samples/hprof.html" target="_blank" rel="noopener">http://docs.oracle.com/javase/8/docs/technotes/samples/hprof.html</a></li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-jhat/" data-id="ck8fkhnci002u6yc82r1i386i" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-jmap" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/03/08/kongzheng1993-jmap/" class="article-date">
-  <time datetime="2020-03-07T16:00:00.000Z" itemprop="datePublished">2020-03-08</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="jmap"><a href="#jmap" class="headerlink" title="jmap"></a>jmap</h2><p>打印进程，核心文件或远程调试服务器的共享对象内存映射或堆内存详细信息。此命令是实验性的，不受支持。</p>
-<h3 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jmap [ 选项 ] pid</span><br><span class="line">jmap [ options ] 可执行 核心</span><br><span class="line">jmap [ 选项 ] [ pid ] 服务器ID @] remote-hostname-or-IP</span><br></pre></td></tr></table></figure>
-
-<h4 id="选项"><a href="#选项" class="headerlink" title="选项"></a>选项</h4><p>命令行选项。</p>
-<ul>
-<li><p>&lt;无选择&gt;<br>不使用任何选项时，该jmap命令将打印共享对象映射。对于目标JVM中加载的每个共享对象，将打印共享对象文件的开始地址，映射的大小和完整路径。此行为类似于Oracle Solaris pmap实用程序。</p>
-</li>
-<li><p>-dump：[live，]format=b，file=filename<br>将Java堆以hprof二进制格式转储到filename。的live子选项是可选的，但是当指定时，仅在堆活动对象被倾倒。要浏览堆转储，可以使用jhat（1）命令读取生成的文件。</p>
-</li>
-<li><p>-finalizerinfo<br>打印有关正在等待完成的对象的信息。</p>
-</li>
-<li><p>-heap<br>打印所用垃圾收集的堆摘要，头配置和逐代堆使用情况。此外，还会打印实习字符串的数量和大小。</p>
-</li>
-<li><p>-histo [：live]<br>打印堆的直方图。对于每个Java类，将打印对象数量，以字节为单位的内存大小以及完全限定的类名称。JVM内部类名称打印有星号（*）前缀。如果live指定了子选项，则仅计算活动对象。</p>
-</li>
-<li><p>-clstats<br>打印Java堆的类加载器明智的统计信息。对于每个类加载器，将打印其名称，活动程度，地址，父类加载器以及已加载的类的数量和大小。</p>
-</li>
-<li><p>-F<br>力。当pid不响应时，将此选项与jmap -dump或选项一起使用jmap -histo。该live子选项并不在此模式下支持。</p>
-</li>
-<li><p>-h<br>打印帮助信息。</p>
-</li>
-<li><p>-help<br>打印帮助信息。</p>
-</li>
-<li><p>-Jflag<br>传递flag到jmap运行命令的Java虚拟机。</p>
-</li>
-</ul>
-<h4 id="pid"><a href="#pid" class="headerlink" title="pid"></a>pid</h4><p>要为其打印内存映射的进程ID。该进程必须是Java进程。要获取机器上运行的Java进程的列表，请使用jps（1）命令。</p>
-<h4 id="可执行文件"><a href="#可执行文件" class="headerlink" title="可执行文件"></a>可执行文件</h4><p>生成核心转储的Java可执行文件。</p>
-<h4 id="核心"><a href="#核心" class="headerlink" title="核心"></a>核心</h4><p>要为其打印内存映射的核心文件。</p>
-<h4 id="远程主机名或IP"><a href="#远程主机名或IP" class="headerlink" title="远程主机名或IP"></a>远程主机名或IP</h4><p>远程调试服务器hostname或IP地址。参见jsadebugd（1）。</p>
-<h4 id="服务器ID"><a href="#服务器ID" class="headerlink" title="服务器ID"></a>服务器ID</h4><p>当多个调试服务器在同一远程主机上运行时使用的可选唯一ID。</p>
-<h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>该jmap命令显示指定进程，核心文件或远程调试服务器的共享对象内存映射或堆内存详细信息。如果指定的进程在64位Java虚拟机（JVM）上运行，则可能需要指定该-J-d64选项，例如：jmap -J-d64 -heap pid。</p>
-<pre><code>注意：此实用程序不受支持，在以后的JDK版本中可能不可用。在dbgeng.dll不存在该文件的Windows系统上，必须安装Windows调试工具才能使这些工具正常工作。在PATH环境变量中应包含的位置jvm.dll所使用的目标进程或从中故障转储文件被产生，例如位置的文件：set PATH=%JDK_HOME%\jre\bin\client;%PATH%。</code></pre>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-jmap/" data-id="ck8fkhncj002w6yc8hmb728s5" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2020/03/19/kongzheng1993-Future/" data-id="ck8lozehz0000gy5iue6powho" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1010,7 +922,55 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-URLEncode/" data-id="ck8fkhncl00306yc8m1co3g1x" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-URLEncode/" data-id="ck8lozepf0067gy5ito671yvu" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-kongzheng1993-Map遍历的几种方法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/08/kongzheng1993-Map遍历的几种方法/" class="article-date">
+  <time datetime="2020-03-07T16:00:00.000Z" itemprop="datePublished">2020-03-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="关于Map遍历的几种方法总结"><a href="#关于Map遍历的几种方法总结" class="headerlink" title="关于Map遍历的几种方法总结"></a>关于Map遍历的几种方法总结</h2><p>在java中所有的map都实现了Map接口，因此所有的Map（如HashMap, TreeMap, LinkedHashMap, Hashtable等）都可以用以下的方式去遍历。</p>
+<ul>
+<li>方法一：在for循环中使用Entry实现Map的遍历：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 最常见也是大多数情况下用的最多的，一般在键值对都需要使用</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">Map &lt;String,String&gt;map = <span class="keyword">new</span> HashMap&lt;String,String&gt;();</span><br><span class="line">map.put(<span class="string">"Spring技术内幕"</span>, <span class="string">"计文柯"</span>);</span><br><span class="line">map.put(<span class="string">"架构探险"</span>, <span class="string">"黄勇"</span>);</span><br><span class="line"><span class="keyword">for</span>(Map.Entry&lt;String, String&gt; entry : map.entrySet())&#123;</span><br><span class="line">    String mapKey = entry.getKey();</span><br><span class="line">    String mapValue = entry.getValue();</span><br><span class="line">    System.out.println(mapKey+<span class="string">":"</span>+mapValue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>方法二：在for循环中遍历key或者values，一般适用于只需要map中的key或者value时使用，在性能上比使用entrySet较好；</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Map &lt;String,String&gt;map = <span class="keyword">new</span> HashMap&lt;String,String&gt;();</span><br><span class="line">map.put(<span class="string">"Spring技术内幕"</span>, <span class="string">"计文柯"</span>);</span><br><span class="line">map.put(<span class="string">"架构探险"</span>, <span class="string">"黄勇"</span>);</span><br><span class="line"><span class="comment">//key</span></span><br><span class="line"><span class="keyword">for</span>(String key : map.keySet())&#123;</span><br><span class="line">    System.out.println(key);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//value</span></span><br><span class="line"><span class="keyword">for</span>(String value : map.values())&#123;</span><br><span class="line">    System.out.println(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>方法三：通过Iterator遍历；</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Iterator&lt;Entry&lt;String, String&gt;&gt; entries = map.entrySet().iterator();</span><br><span class="line"><span class="keyword">while</span>(entries.hasNext())&#123;</span><br><span class="line">    Entry&lt;String, String&gt; entry = entries.next();</span><br><span class="line">    String key = entry.getKey();</span><br><span class="line">    String value = entry.getValue();</span><br><span class="line">    System.out.println(key+<span class="string">":"</span>+value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>方法四：通过键找值遍历，这种方式的效率比较低，因为本身从键取值是耗时的操作；</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(String key : map.keySet())&#123;</span><br><span class="line">    String value = map.get(key);</span><br><span class="line">    System.out.println(key+<span class="string">":"</span>+value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>如果绝大多数数据都要用到，那么我们最好使用Entry来遍历，像方法四，每次都拿着key去map里查一次value，开销是比较大的。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2020/03/08/kongzheng1993-Map遍历的几种方法/" data-id="ck8lozem80024gy5iehyazdd4" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1064,7 +1024,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
     </div>
   </div>
 
@@ -1077,6 +1037,14 @@
       <ul>
         
           <li>
+            <a href="/2020/04/04/kongzheng1993-TCP三次握手&四次挥手/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/02/kongzheng1993-localStorage/">(no title)</a>
+          </li>
+        
+          <li>
             <a href="/2020/03/30/kongzheng1993-用nodejs做一个测试api服务/">(no title)</a>
           </li>
         
@@ -1085,15 +1053,7 @@
           </li>
         
           <li>
-            <a href="/2020/03/25/kongzheng1993-RocketMQ定时消息示例/">(no title)</a>
-          </li>
-        
-          <li>
             <a href="/2020/03/25/kongzheng1993-一次老代码优化/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/03/19/kongzheng1993-Future/">(no title)</a>
           </li>
         
       </ul>

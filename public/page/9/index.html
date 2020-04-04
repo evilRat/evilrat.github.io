@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
 
@@ -62,6 +62,154 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-kongzheng1993-有关字符串的笔记" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/22/kongzheng1993-有关字符串的笔记/" class="article-date">
+  <time datetime="2016-07-21T16:00:00.000Z" itemprop="datePublished">2016-07-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/22/kongzheng1993-有关字符串的笔记/">Java IO</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="有关字符串的笔记"><a href="#有关字符串的笔记" class="headerlink" title="有关字符串的笔记"></a>有关字符串的笔记</h2><p>最近学习到StringBuffer，心中有好些疑问，搜索了一些关于String，StringBuffer，StringBuilder的东西，现在整理一下。</p>
+<p>关于这三个类在字符串处理中的位置不言而喻，那么他们到底有什么优缺点，到底什么时候该用谁呢？下面我们从以下几点说明一下：</p>
+<h3 id="三者在执行速度方面的比较：StringBuilder-gt-StringBuffer-gt-String"><a href="#三者在执行速度方面的比较：StringBuilder-gt-StringBuffer-gt-String" class="headerlink" title="三者在执行速度方面的比较：StringBuilder &gt;  StringBuffer  &gt;  String"></a>三者在执行速度方面的比较：StringBuilder &gt;  StringBuffer  &gt;  String</h3><h3 id="String-lt-（StringBuffer，StringBuilder）的原因"><a href="#String-lt-（StringBuffer，StringBuilder）的原因" class="headerlink" title="String &lt;（StringBuffer，StringBuilder）的原因"></a>String &lt;（StringBuffer，StringBuilder）的原因</h3><p>　　　　String：字符串常量</p>
+<p>　　　　StringBuffer：字符串变量</p>
+<p>　　　　StringBuilder：字符串变量</p>
+<p>从上面的名字可以看到，String是“字符串常量”，也就是不可改变的对象。对于这句话的理解你可能会产生这样一个疑问  ，比如这段代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">String s = &quot;abcd&quot;;</span><br><span class="line">s = s+1;</span><br><span class="line">System.out.print(s);// result : abcd1</span><br></pre></td></tr></table></figure>
+
+<p>我们明明就是改变了String型的变量s的，为什么说是没有改变呢? 其实这是一种欺骗，JVM是这样解析这段代码的：首先创建对象s，赋予一个abcd，然后再创建一个新的对象s用来　　　　执行第二行代码，也就是说我们之前对象s并没有变化，所以我们说String类型是不可改变的对象了，由于这种机制，每当用String操作字符串时，实际上是在不断的创建新的对象，而原来的对象就会变为垃圾被ＧＣ回收掉，可想而知这样执行效率会有多底。</p>
+<p>而StringBuffer与StringBuilder就不一样了，他们是字符串变量，是可改变的对象，每当我们用它们对字符串做操作时，实际上是在一个对象上操作的，这样就不会像String一样创建一些而外的对象进行操作了，当然速度就快了。</p>
+<h3 id="一个特殊的例子："><a href="#一个特殊的例子：" class="headerlink" title="一个特殊的例子："></a>一个特殊的例子：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">String str = “This is only a” + “ simple” + “ test”;</span><br><span class="line">StringBuffer builder = new StringBuilder(“This is only a”).append(“ simple”).append(“ test”);</span><br></pre></td></tr></table></figure>
+
+<p>　　</p>
+<p>你会很惊讶的发现，生成str对象的速度简直太快了，而这个时候StringBuffer居然速度上根本一点都不占优势。其实这是JVM的一个把戏，实际上：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">　　　　String str = “This is only a” + “ simple” + “test”;</span><br></pre></td></tr></table></figure>
+
+<p>其实就是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">　　　　String str = “This is only a simple test”;</span><br></pre></td></tr></table></figure>
+
+<p>所以不需要太多的时间了。但大家这里要注意的是，如果你的字符串是来自另外的String对象的话，速度就没那么快了，譬如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">　　　　String str2 = “This is only a”;</span><br><span class="line"></span><br><span class="line">　　　　String str3 = “ simple”;</span><br><span class="line"></span><br><span class="line">　　　　String str4 = “ test”;</span><br><span class="line"></span><br><span class="line">　　　　String str1 = str2 +str3 + str4;</span><br></pre></td></tr></table></figure>
+
+<p>这时候JVM会规规矩矩的按照原来的方式去做。</p>
+<h3 id="StringBuilder与-StringBuffer"><a href="#StringBuilder与-StringBuffer" class="headerlink" title="StringBuilder与 StringBuffer"></a>StringBuilder与 StringBuffer</h3><p>　　　　StringBuilder：线程非安全的</p>
+<p>　　　　StringBuffer：线程安全的</p>
+<p>当我们在字符串缓冲去被多个线程使用是，JVM不能保证StringBuilder的操作是安全的，虽然他的速度最快，但是可以保证StringBuffer是可以正确操作的。当然大多数情况下就是我们是在单线程下进行的操作，所以大多数情况下是建议用StringBuilder而不用StringBuffer的，就是速度的原因。</p>
+<h3 id="对于三者使用的总结："><a href="#对于三者使用的总结：" class="headerlink" title="对于三者使用的总结："></a>对于三者使用的总结：</h3><p>1.如果要操作少量的数据用 = String<br>2.单线程操作字符串缓冲区 下操作大量数据 = StringBuilder<br>3.多线程操作字符串缓冲区 下操作大量数据 = StringBuffer</p>
+<html>
+<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-有关字符串的笔记/" data-title="String" data-url="http://kongzheng1993.github.io/kongzheng1993-有关字符串的笔记/"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"kongzheng1993"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+</html>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2016/07/22/kongzheng1993-有关字符串的笔记/" data-id="ck8lozekz000ygy5itipek0te" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-kongzheng1993-OracleAfterChangetheNameofComputer" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/20/kongzheng1993-OracleAfterChangetheNameofComputer/" class="article-date">
+  <time datetime="2016-07-19T16:00:00.000Z" itemprop="datePublished">2016-07-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/20/kongzheng1993-OracleAfterChangetheNameofComputer/">修改主机名oracle无法正常启动</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在刚开始学习Oracle时，安装完Oracle后，我发现我的主机名不是很炫酷，就去计算机管理把电脑的名字改成了EvilRat，然后我的Oracle就连不上了，因为listener服务一直启动不了，显示类似下面的情况：（图是从网上找的，不好在弄回去截图了，大家知道是什么情况能解决问题就行）。</p>
+<center>
+<img src="/2016/07/20/kongzheng1993-OracleAfterChangetheNameofComputer/assets/img/oracle_listener.bmp">
+</center>
+然后我从网上查了资料，发现是因为listener的配置文件里面的主机名还没有改过来，于是我就是手动改过来了。
+<center>
+<img src="/2016/07/20/kongzheng1993-OracleAfterChangetheNameofComputer/assets/img/listener.bmp">
+</center>
+将箭头指的地方修改后，应该就没问题了，这是我真是遇到的问题，希望可以帮助到大家。
+
+
+
+
+
+
+
+
+<html>
+<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-oraclepcname/" data-title="oraclepcname" data-url="http://kongzheng1993.github.io/kongzheng1993-oraclepcname/"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"kongzheng1993"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+</html>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2016/07/20/kongzheng1993-OracleAfterChangetheNameofComputer/" data-id="ck8lozekt000qgy5it35spxxx" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oracle/">oracle</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-kongzheng1993-String_Original" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/07/11/kongzheng1993-String_Original/" class="article-date">
@@ -118,7 +266,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/11/kongzheng1993-String_Original/" data-id="ck8fkhna5000l6yc8vdcscow3" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/11/kongzheng1993-String_Original/" data-id="ck8lozekm000igy5ilnwvfpao" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/String/">String</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/new/">new</a></li></ul>
@@ -175,7 +323,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/11/kongzheng1993-ablout_try_catch/" data-id="ck8fkhnas000t6yc89e5nbdpo" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/11/kongzheng1993-ablout_try_catch/" data-id="ck8lozekr000ngy5i7blpmgcl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/catch，try/">catch，try</a></li></ul>
@@ -245,170 +393,10 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/07/kongzheng1993-DB_Exchange/" data-id="ck8fkhn6800016yc8m5wgxl5y" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/07/kongzheng1993-DB_Exchange/" data-id="ck8lozejg0001gy5irwesp6en" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-PreparedStatement&amp;Statement" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/07/05/kongzheng1993-PreparedStatement&Statement/" class="article-date">
-  <time datetime="2016-07-04T16:00:00.000Z" itemprop="datePublished">2016-07-05</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/07/05/kongzheng1993-PreparedStatement&Statement/">PreparedStatement的优点</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="在JDBC应用中-如果你已经是稍有水平开发者-你就应该始终以PreparedStatement代替Statement-也就是说-在任何时候都不要使用Statement"><a href="#在JDBC应用中-如果你已经是稍有水平开发者-你就应该始终以PreparedStatement代替Statement-也就是说-在任何时候都不要使用Statement" class="headerlink" title="在JDBC应用中,如果你已经是稍有水平开发者,你就应该始终以PreparedStatement代替Statement.也就是说,在任何时候都不要使用Statement"></a>在JDBC应用中,如果你已经是稍有水平开发者,你就应该始终以PreparedStatement代替Statement.也就是说,在任何时候都不要使用Statement</h3><h4 id="一-代码的可读性和可维护性"><a href="#一-代码的可读性和可维护性" class="headerlink" title="一.代码的可读性和可维护性"></a>一.代码的可读性和可维护性</h4><p>虽然用PreparedStatement来代替Statement会使代码多出几行,但这样的代码无论从可读性还是可维护性上来说.都比直接用Statement的代码高很多档次:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">stmt.executeUpdate(&quot;insert into tb_name (col1,col2,col2,col4) values (&apos;&quot;+var1+&quot;&apos;,&apos;&quot;+var2+&quot;&apos;,&quot;+var3+&quot;,&apos;&quot;+var4+&quot;&apos;)&quot;);</span><br><span class="line"></span><br><span class="line">perstmt = con.prepareStatement(&quot;insert into tb_name (col1,col2,col2,col4) values (?,?,?,?)&quot;);</span><br><span class="line">perstmt.setString(1,var1);</span><br><span class="line">perstmt.setString(2,var2);</span><br><span class="line">perstmt.setString(3,var3);</span><br><span class="line">perstmt.setString(4,var4);</span><br><span class="line">perstmt.executeUpdate();</span><br></pre></td></tr></table></figure>
-
-<p>哪一种更好，一目了然。</p>
-<h4 id="二-PreparedStatement尽最大可能提高性能"><a href="#二-PreparedStatement尽最大可能提高性能" class="headerlink" title="二.PreparedStatement尽最大可能提高性能."></a>二.PreparedStatement尽最大可能提高性能.</h4><p>每一种数据库都会尽最大努力对预编译语句提供最大的性能优化.因为预编译语句有可能被重复调用.所以语句在被DB的编译器编译后的执行代码被缓存下来,那么下次调用时只要是相同的预编译语句就不需要编译,只要将参数直接传入编译过的语句执行代码中(相当于一个涵数)就会得到执行.这并不是说只有一个Connection中多次执行的预编译语句被缓存,而是对于整个DB中,只要预编译的语句语法和缓存中匹配.那么在任何时候就可以不需要再次编译而可以直接执行.而statement的语句中,即使是相同一操作,而由于每次操作的数据不同所以使整个语句相匹配的机会极小,几乎不太可能匹配.比如:<br>insert into tb_name (col1,col2) values (‘11’,’22’);<br>insert into tb_name (col1,col2) values (‘11’,’23’);<br>即使是相同操作但因为数据内容不一样,所以整个个语句本身不能匹配,没有缓存语句的意义.事实是没有数据库会对普通语句编译后的执行代码缓存.这样每执行一次都要对传入的语句编译一次.</p>
-<p>当然并不是所以预编译语句都一定会被缓存,数据库本身会用一种策略,比如使用频度等因素来决定什么时候不再缓存已有的预编译结果.以保存有更多的空间存储新的预编译语句.</p>
-<h4 id="三-最重要的一点是极大地提高了安全性"><a href="#三-最重要的一点是极大地提高了安全性" class="headerlink" title="三.最重要的一点是极大地提高了安全性."></a>三.最重要的一点是极大地提高了安全性.</h4><p>即使到目前为止,仍有一些人连基本的恶义SQL语法都不知道.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">String sql = &quot;select * from tb_name where name= &apos;&quot;+varname+&quot;&apos; and passwd=&apos;&quot;+varpasswd+&quot;&apos;&quot;;</span><br></pre></td></tr></table></figure>
-
-<p>如果我们把[‘ or ‘1’ = ‘1]作为varpasswd传入进来.用户名随意,看看会成为什么?</p>
-<p>select * from tb_name = ‘随意’ and passwd = ‘’ or ‘1’ = ‘1’;<br>因为’1’=’1’肯定成立,所以可以任何通过验证.更有甚者:<br>把[‘;drop table tb_name;]作为varpasswd传入进来,则:<br>select * from tb_name = ‘随意’ and passwd = ‘’;drop table tb_name;有些数据库是不会让你成功的,但也有很多数据库就可以使这些语句得到执行.</p>
-<p>而如果你使用预编译语句.你传入的任何内容就不会和原来的语句发生任何匹配的关系.(前提是数据库本身支持预编译,但上前可能没有什么服务端数据库不支持编译了,只有少数的桌面数据库,就是直接文件访问的那些)只要全使用预编译语句,你就用不着对传入的数据做任何过虑.而如果使用普通的statement,有可能要对drop,;等做费尽心机的判断和过虑.</p>
-<html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-PreparedStatement/" data-title="PreparedStatement" data-url="http://kongzheng1993.github.io/kongzheng1993-PreparedStatement/"></div>
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"kongzheng1993"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-</html>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/05/kongzheng1993-PreparedStatement&Statement/" data-id="ck8fkhnay000z6yc8osj82fnc" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-aboutFinal" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/06/13/kongzheng1993-aboutFinal/" class="article-date">
-  <time datetime="2016-06-12T16:00:00.000Z" itemprop="datePublished">2016-06-13</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/13/kongzheng1993-aboutFinal/">About the Usage of Final</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="浅析Java中的final关键字"><a href="#浅析Java中的final关键字" class="headerlink" title="浅析Java中的final关键字"></a>浅析Java中的final关键字</h2><p>　　谈到final关键字，想必很多人都不陌生，在使用匿名内部类的时候可能会经常用到final关键字。另外，Java中的String类就是一个final类，那么今天我们就来了解final这个关键字的用法。下面是本文的目录大纲：</p>
-<h3 id="一-final关键字的基本用法"><a href="#一-final关键字的基本用法" class="headerlink" title="一.final关键字的基本用法"></a>一.final关键字的基本用法</h3><p>　　在Java中，final关键字可以用来修饰类、方法和变量（包括成员变量和局部变量）。下面就从这三个方面来了解一下final关键字的基本用法。</p>
-<h4 id="1-修饰类"><a href="#1-修饰类" class="headerlink" title="1.修饰类"></a>1.修饰类</h4><p>　　当用final修饰一个类时，表明这个类不能被继承。也就是说，如果一个类你永远不会让他被继承，就可以用final进行修饰。final类中的成员变量可以根据需要设为final，但是要注意final类中的所有成员方法都会被隐式地指定为final方法。</p>
-<p>　　在使用final修饰类的时候，要注意谨慎选择，除非这个类真的在以后不会用来继承或者出于安全的考虑，尽量不要将类设计为final类。</p>
-<h4 id="2-修饰方法"><a href="#2-修饰方法" class="headerlink" title="2.修饰方法"></a>2.修饰方法</h4><p>　　下面这段话摘自《Java编程思想》第四版第143页：</p>
-<p>　　“使用final方法的原因有两个。第一个原因是把方法锁定，以防任何继承类修改它的含义；第二个原因是效率。在早期的Java实现版本中，会将final方法转为内嵌调用。但是如果方法过于庞大，可能看不到内嵌调用带来的任何性能提升。在最近的Java版本中，不需要使用final方法进行这些优化了。“</p>
-<p>　　因此，如果只有在想明确禁止 该方法在子类中被覆盖的情况下才将方法设置为final的。</p>
-<p>　　注：类的private方法会隐式地被指定为final方法。</p>
-<h4 id="3-修饰变量"><a href="#3-修饰变量" class="headerlink" title="3.修饰变量"></a>3.修饰变量</h4><p>　　修饰变量是final用得最多的地方，也是本文接下来要重点阐述的内容。首先了解一下final变量的基本语法：</p>
-<p>　　对于一个final变量，如果是基本数据类型的变量，则其数值一旦在初始化之后便不能更改；如果是引用类型的变量，则在对其初始化之后便不能再让其指向另一个对象。</p>
-<p>　　举个例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">class Man&#123;</span><br><span class="line">    private final int a=0;</span><br><span class="line">    pbulic Man&#123;</span><br><span class="line">        i=1;</span><br><span class="line">        final Object obj=new Object();</span><br><span class="line">        obj=new Object();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>　　上面的一段代码中，对变量i和obj的重新赋值都报错了。</p>
-<h3 id="二-深入理解final关键字"><a href="#二-深入理解final关键字" class="headerlink" title="二.深入理解final关键字"></a>二.深入理解final关键字</h3><p>　　在了解了final关键字的基本用法之后，这一节我们来看一下final关键字容易混淆的地方。</p>
-<h4 id="1-类的final变量和普通变量有什么区别？"><a href="#1-类的final变量和普通变量有什么区别？" class="headerlink" title="1.类的final变量和普通变量有什么区别？"></a>1.类的final变量和普通变量有什么区别？</h4><p>　　当用final作用于类的成员变量时，成员变量（注意是类的成员变量，局部变量只需要保证在使用之前被初始化赋值即可）必须在定义时或者构造器中进行初始化赋值，而且final变量一旦被初始化赋值之后，就不能再被赋值了。</p>
-<p>　　那么final变量和普通变量到底有何区别呢？下面请看一个例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">public class Test &#123;</span><br><span class="line">    public static void main(String[] args)  &#123;</span><br><span class="line">        String a = &quot;hello2&quot;;  </span><br><span class="line">        final String b = &quot;hello&quot;;</span><br><span class="line">        String d = &quot;hello&quot;;</span><br><span class="line">        String c = b + 2;  </span><br><span class="line">        String e = d + 2;</span><br><span class="line">        System.out.println((a == c));</span><br><span class="line">        System.out.println((a == e));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>　　<br>　　大家可以先想一下这道题的输出结果。为什么第一个比较结果为true，而第二个比较结果为fasle。这里面就是final变量和普通变量的区别了，当final变量是基本数据类型以及String类型时，如果在编译期间能知道它的确切值，则编译器会把它当做编译期常量使用。也就是说在用到该final变量的地方，相当于直接访问的这个常量，不需要在运行时确定。这种和C语言中的宏替换有点像。因此在上面的一段代码中，由于变量b被final修饰，因此会被当做编译器常量，所以在使用到b的地方会直接将变量b 替换为它的  值。而对于变量d的访问却需要在运行时通过链接来进行。想必其中的区别大家应该明白了，不过要注意，只有在编译期间能确切知道final变量值的情况下，编译器才会进行这样的优化，比如下面的这段代码就不会进行优化：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span>  </span>&#123;</span><br><span class="line"></span><br><span class="line">        String a = <span class="string">"hello2"</span>;  </span><br><span class="line">        <span class="keyword">final</span> String b = getHello();</span><br><span class="line">        String c = b + <span class="number">2</span>;  </span><br><span class="line">        System.out.println((a == c));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getHello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"hello"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>　　这段代码的输出结果为false。</p>
-<h4 id="2-被final修饰的引用变量指向的对象内容可变吗？"><a href="#2-被final修饰的引用变量指向的对象内容可变吗？" class="headerlink" title="2.被final修饰的引用变量指向的对象内容可变吗？"></a>2.被final修饰的引用变量指向的对象内容可变吗？</h4><p>　　在上面提到被final修饰的引用变量一旦初始化赋值之后就不能再指向其他的对象，那么该引用变量指向的对象的内容可变吗？看下面这个例子：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span>  </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> MyClass myClass = <span class="keyword">new</span> MyClass();</span><br><span class="line">        System.out.println(++myClass.i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>　　这段代码可以顺利编译通过并且有输出结果，输出结果为1。这说明引用变量被final修饰之后，虽然不能再指向其他对象，但是它指向的对象的内容是可变的。</p>
-<h4 id="3-final和static"><a href="#3-final和static" class="headerlink" title="3.final和static"></a>3.final和static</h4><p>　　很多时候会容易把static和final关键字混淆，static作用于成员变量用来表示只保存一份副本，而final的作用是用来保证变量不可变。看下面这个例子：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span>  </span>&#123;</span><br><span class="line">        MyClass myClass1 = <span class="keyword">new</span> MyClass();</span><br><span class="line">        MyClass myClass2 = <span class="keyword">new</span> MyClass();</span><br><span class="line">        System.out.println(myClass1.i);</span><br><span class="line">        System.out.println(myClass1.j);</span><br><span class="line">        System.out.println(myClass2.i);</span><br><span class="line">        System.out.println(myClass2.j);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">double</span> i = Math.random();</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> j = Math.random();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>　　运行这段代码就会发现，每次打印的两个j值都是一样的，而i的值却是不同的。从这里就可以知道final和static变量的区别了。</p>
-<h4 id="4-匿名内部类中使用的外部局部变量为什么只能是final变量？"><a href="#4-匿名内部类中使用的外部局部变量为什么只能是final变量？" class="headerlink" title="4.匿名内部类中使用的外部局部变量为什么只能是final变量？"></a>4.匿名内部类中使用的外部局部变量为什么只能是final变量？</h4><p>　　这个问题请参见上一篇博文中《Java内部类详解》中的解释，在此处不再赘述。</p>
-<h4 id="5-关于final参数的问题"><a href="#5-关于final参数的问题" class="headerlink" title="5.关于final参数的问题"></a>5.关于final参数的问题</h4><p>　　关于网上流传的”当你在方法中不需要改变作为参数的对象变量时，明确使用final进行声明，会防止你无意的修改而影响到调用方法外的变量“这句话，我个人理解这样说是不恰当的。</p>
-<p>　　因为无论参数是基本数据类型的变量还是引用类型的变量，使用final声明都不会达到上面所说的效果。</p>
-<p>　　看这个例子就清楚了：</p>
-<p>　　上面这段代码好像让人觉得用final修饰之后，就不能在方法中更改变量i的值了。殊不知，方法changeValue和main方法中的变量i根本就不是一个变量，因为java参数传递采用的是值传递，对于基本类型的变量，相当于直接将变量进行了拷贝。所以即使没有final修饰的情况下，在方法内部改变了变量i的值也不会影响方法外的i。</p>
-<p>　　再看下面这段代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span>  </span>&#123;</span><br><span class="line"></span><br><span class="line">        MyClass myClass = <span class="keyword">new</span> MyClass();</span><br><span class="line"></span><br><span class="line">        StringBuffer buffer = <span class="keyword">new</span> StringBuffer(<span class="string">"hello"</span>);</span><br><span class="line"></span><br><span class="line">        myClass.changeValue(buffer);</span><br><span class="line"></span><br><span class="line">        System.out.println(buffer.toString());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">changeValue</span><span class="params">(<span class="keyword">final</span> StringBuffer buffer)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        buffer.append(<span class="string">"world"</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>　　运行这段代码就会发现输出结果为 helloworld。很显然，用final进行修饰并没有阻止在changeValue中改变buffer指向的对象的内容。有人说假如把final去掉了，万一在changeValue中让buffer指向了其他对象怎么办。有这种想法的朋友可以自己动手写代码试一下这样的结果是什么，如果把final去掉了，然后在changeValue中让buffer指向了其他对象，也不会影响到main方法中的buffer，原因在于java采用的是值传递，对于引用变量，传递的是引用的值，也就是说让实参和形参同时指向了同一个对象，因此让形参重新指向另一个对象对实参并没有任何影响。</p>
-<p>　　所以关于网上流传的final参数的说法，我个人不是很赞同。</p>
-<p>参考资料：</p>
-<p>　　《Java编程思想》</p>
-<h5 id="本文摘自http-www-cnblogs-com-dolphin0520-p-3736238-html"><a href="#本文摘自http-www-cnblogs-com-dolphin0520-p-3736238-html" class="headerlink" title="本文摘自http://www.cnblogs.com/dolphin0520/p/3736238.html"></a>本文摘自<a href="http://www.cnblogs.com/dolphin0520/p/3736238.html" target="_blank" rel="noopener">http://www.cnblogs.com/dolphin0520/p/3736238.html</a></h5><html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-aboutFinal/" data-title="about the usage of final" data-url="http://kongzheng1993.github.io/kongzheng1993-aboutFinal/"></div>
-<!-- 多说评论框 end -->
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"kongzheng1993"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-</html>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/06/13/kongzheng1993-aboutFinal/" data-id="ck8fkhnab000n6yc8r877n1cj" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/images/">images</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sample-post/">sample post</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/test/">test</a></li></ul>
 
     </footer>
   </div>
@@ -461,7 +449,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
     </div>
   </div>
 
@@ -474,6 +462,14 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       <ul>
         
           <li>
+            <a href="/2020/04/04/kongzheng1993-TCP三次握手&四次挥手/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/02/kongzheng1993-localStorage/">(no title)</a>
+          </li>
+        
+          <li>
             <a href="/2020/03/30/kongzheng1993-用nodejs做一个测试api服务/">(no title)</a>
           </li>
         
@@ -482,15 +478,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
           </li>
         
           <li>
-            <a href="/2020/03/25/kongzheng1993-RocketMQ定时消息示例/">(no title)</a>
-          </li>
-        
-          <li>
             <a href="/2020/03/25/kongzheng1993-一次老代码优化/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/03/19/kongzheng1993-Future/">(no title)</a>
           </li>
         
       </ul>

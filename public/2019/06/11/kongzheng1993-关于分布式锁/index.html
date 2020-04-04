@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
 
@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Evil">
 <meta property="og:description" content="前段时间上线了一个需求：用户在页面填写计划任务，在用户的计划时间给用户下发短信提醒。 我当时一想这不简单，给页面提供一个接口，数据入库，后台做一个定时任务，每分钟去取当前时间需要下发短信的数据，调用短信接口。 为此还特地学习了一下quartz。需求很快完成了，接着就上线了。 第二天验证，每条数据竟然收到了八条短信！！！ 找日志看了一下，每个tomcat都跑了task，都取到了所有的数据，都下发了短">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-06-11T09:27:51.696Z">
+<meta property="og:updated_time" content="2020-04-04T09:10:43.381Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于分布式锁.md">
 <meta name="twitter:description" content="前段时间上线了一个需求：用户在页面填写计划任务，在用户的计划时间给用户下发短信提醒。 我当时一想这不简单，给页面提供一个接口，数据入库，后台做一个定时任务，每分钟去取当前时间需要下发短信的数据，调用短信接口。 为此还特地学习了一下quartz。需求很快完成了，接着就上线了。 第二天验证，每条数据竟然收到了八条短信！！！ 找日志看了一下，每个tomcat都跑了task，都取到了所有的数据，都下发了短">
@@ -154,7 +154,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2019/06/11/kongzheng1993-关于分布式锁/" data-id="ck8fkhnby00216yc8y7qjg5dh" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2019/06/11/kongzheng1993-关于分布式锁/" data-id="ck8lozelt001ogy5iximsihp4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/quartz/">quartz</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式/">分布式</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/锁/">锁</a></li></ul>
@@ -222,7 +222,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
     </div>
   </div>
 
@@ -235,6 +235,14 @@
       <ul>
         
           <li>
+            <a href="/2020/04/04/kongzheng1993-TCP三次握手&四次挥手/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/02/kongzheng1993-localStorage/">(no title)</a>
+          </li>
+        
+          <li>
             <a href="/2020/03/30/kongzheng1993-用nodejs做一个测试api服务/">(no title)</a>
           </li>
         
@@ -243,15 +251,7 @@
           </li>
         
           <li>
-            <a href="/2020/03/25/kongzheng1993-RocketMQ定时消息示例/">(no title)</a>
-          </li>
-        
-          <li>
             <a href="/2020/03/25/kongzheng1993-一次老代码优化/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/03/19/kongzheng1993-Future/">(no title)</a>
           </li>
         
       </ul>

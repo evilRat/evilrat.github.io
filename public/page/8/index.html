@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
 
@@ -62,6 +62,72 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-kongzheng1993-Session" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/27/kongzheng1993-Session/" class="article-date">
+  <time datetime="2016-07-26T16:00:00.000Z" itemprop="datePublished">2016-07-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/27/kongzheng1993-Session/">Session笔记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Session简介"><a href="#Session简介" class="headerlink" title="Session简介"></a>Session简介</h3><p>在WEB开发中，服务器可以为每个用户浏览器创建一个会话对象（session对象），注意：一个浏览器独占一个session对象(默认情况下)。因此，在需要保存用户数据时，服务器程序可以把用户数据写到用户浏览器独占的session中，当用户使用浏览器访问其它程序时，其它程序可以从用户的session中取出该用户的数据，为用户服务。</p>
+<h3 id="Session和Cookie的区别"><a href="#Session和Cookie的区别" class="headerlink" title="Session和Cookie的区别"></a>Session和Cookie的区别</h3><ul>
+<li>Cookie是把用户的数据写给用户的浏览器。</li>
+<li>Session技术把用户的数据写到用户独占的session中。</li>
+<li>Session对象由服务器创建，开发人员可以调用request对象的getSession方法得到session对象。</li>
+</ul>
+<h3 id="Session实现原理"><a href="#Session实现原理" class="headerlink" title="Session实现原理"></a>Session实现原理</h3><p>servlet中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">response.sendRedirect(&quot;pages/login.jsp&quot;);</span><br><span class="line">String username=request.getParameter(&quot;usn&quot;);</span><br><span class="line">HttpSession session=request.getSession();</span><br><span class="line"> session.setAttribute(&quot;username&quot;,username);</span><br></pre></td></tr></table></figure>
+
+<p>通过<code>HttpSession session=request.getSession();</code>，如果此线程中已经存在一个session，就使用这个session，如果没有，就创建一个。这个getSession()方法可以添加boolean的参数，true表示如果没有就创建一个，如果有就使用存在的那一个，false表示，直接创建一个，默认是true。session.setAttribute()来创建一个属性，这样另一端就可以get了。</p>
+<p>Jsp中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Object usn=session.getAttribute(&quot;username&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>直接使用servlet中创建的Session对象，调用getAttribute();得到servlet中set的属性。这里即便是使用getSession()方法再次得到session也是在servlet中设置的Session对象。</p>
+<html>
+<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-session/" data-title="session" data-url="http://kongzheng1993.github.io/kongzheng1993-session/"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"kongzheng1993"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+</html>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2016/07/27/kongzheng1993-Session/" data-id="ck8lozejt0004gy5iuz9aqh46" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-kongzheng1993-请求转发与重定向" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/07/26/kongzheng1993-请求转发与重定向/" class="article-date">
@@ -121,10 +187,74 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-请求转发与重定向/" data-id="ck8fkhn8r00096yc8ann0aouq" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-请求转发与重定向/" data-id="ck8lozekg000bgy5iv2shivo4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/re/">re</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-kongzheng1993-servlet" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/26/kongzheng1993-servlet/" class="article-date">
+  <time datetime="2016-07-25T16:00:00.000Z" itemprop="datePublished">2016-07-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/26/kongzheng1993-servlet/">Servlet</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="WHAT"><a href="#WHAT" class="headerlink" title="WHAT"></a>WHAT</h2><p>当一个请求到了web服务器，接收请求和响应请求是web服务器完成的，可是处理请求呢？接收和响应都是固定的东西，但是处理请求是包含业务逻辑在里面的，需要我们自己处理，所以就抽取出来了Servlet让我们来完成请求的处理，当然请求处理咱么又拆分出三层架构：servlet+service+dao。每个servlet来处理对应映射的url来的请求，很多servlet需要统一管理，所以tomcat还是一个servlet容器。</p>
+<p>后来spring家族出现，servlet就退居幕后了。现在咱们用的springMVC其实核心组件DispatcherServlet本质上就是Servlet，只是在原来的HttpServlet基础上封装了一层。</p>
+<h2 id="Servlet是怎么工作的"><a href="#Servlet是怎么工作的" class="headerlink" title="Servlet是怎么工作的"></a>Servlet是怎么工作的</h2><p><img src="/2016/07/26/kongzheng1993-servlet/servlet%E6%8E%A5%E5%8F%A3.jpg" alt="Servlet接口"></p>
+<p>Servlet是一个接口，其中有init()，getServletConfig()，service()，getServiceInfo()，destroy()方法。Tomcat已经替我们完成了大部分工作，并且传入了三个对象ServletConfig、ServletRequest、ServletResponse。</p>
+<p>!(servlet实例化过程.jpg)</p>
+<ol>
+<li>ServletConfig是servlet配置，也就是我们在web.xml里的配置。</li>
+<li>Request/Response，也就是请求和响应。tomcat在收到http请求后，tomcat就解析了报文中的字段，然后封装进了Request对象。所以我们通过调用request对象的一些get方法就能获取请求的信息。response在tomcat传给servlet的时候还是空的。servlet逻辑处理后得到结果，最后通过response.write()写入response，tomcat或在servlet处理结束后拿到response组装成http响应发给客户端。</li>
+</ol>
+<p>Servlet接口五个方法，init、service、destroy是声明周期方法。init和destroy各自执行一次，即创建和销毁。而service是在每次有新请求的时候被调用，也就是我们写业务代码的地方。</p>
+<p>如果我们直接实现Servlet接口，会很麻烦，要自己处理请求类型，所以提供了抽象类GenericServlet：</p>
+<ol>
+<li>提升了init方法中原本形参的servletConfig对象的作用域，方便其他方法使用</li>
+<li>init方法中调用了一个init空参方法，如果我们希望servlet创建时做一些自定义的操作，可以继承GenericServlet后覆盖init空参方法。</li>
+<li>由于其他方法内也可以使用ServletConfig，于是写了一个getServletContext方法</li>
+<li>service是没有实现的。</li>
+</ol>
+<p>向下找，会找到HttpServlet抽象类，他继承了GenericServlet。虽然他是一个抽象类，但是他并没有抽象方法。HttpServlet类完成了请求方法判断。<br>一个类被声明为抽象类，一般有两个原因：</p>
+<ol>
+<li>有抽象方法。</li>
+<li>没有抽象方法，但是不希望别人直接实例化使用。</li>
+</ol>
+<p>所以这里仅仅是为了不让我们直接使用httpServlet。</p>
+<p>HttpServlet的doGet和doPost方法的默认实现是直接返回405，也就是请求不支持。所以我们要重写这两个方法。</p>
+<p>设计模式： Filter用到了责任链模式，Listener用到了观察者模式，Servlet使用的就是模板方法模式。</p>
+<p>所以到这里，我们写servlet需要重写的方法就是doGet和doPost。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-servlet/" data-id="ck8lozeke0009gy5iiwwi2tsn" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/servlet/">servlet</a></li></ul>
 
     </footer>
   </div>
@@ -195,7 +325,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-about_comparator_and_comparable/" data-id="ck8fkhnaz00116yc8jh8r5osu" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-about_comparator_and_comparable/" data-id="ck8lozel10010gy5ichddlep6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/re/">re</a></li></ul>
@@ -267,158 +397,10 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-centos7_mysql/" data-id="ck8fkhnb100146yc8wufc4plo" class="article-share-link">Share</a>
+      <a data-url="https://kongzheng1993.github.io/2016/07/26/kongzheng1993-centos7_mysql/" data-id="ck8lozeoa005zgy5it701o6kz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/re/">re</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-有关字符串的笔记" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/07/22/kongzheng1993-有关字符串的笔记/" class="article-date">
-  <time datetime="2016-07-21T16:00:00.000Z" itemprop="datePublished">2016-07-22</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/07/22/kongzheng1993-有关字符串的笔记/">Java IO</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="有关字符串的笔记"><a href="#有关字符串的笔记" class="headerlink" title="有关字符串的笔记"></a>有关字符串的笔记</h2><p>最近学习到StringBuffer，心中有好些疑问，搜索了一些关于String，StringBuffer，StringBuilder的东西，现在整理一下。</p>
-<p>关于这三个类在字符串处理中的位置不言而喻，那么他们到底有什么优缺点，到底什么时候该用谁呢？下面我们从以下几点说明一下：</p>
-<h3 id="三者在执行速度方面的比较：StringBuilder-gt-StringBuffer-gt-String"><a href="#三者在执行速度方面的比较：StringBuilder-gt-StringBuffer-gt-String" class="headerlink" title="三者在执行速度方面的比较：StringBuilder &gt;  StringBuffer  &gt;  String"></a>三者在执行速度方面的比较：StringBuilder &gt;  StringBuffer  &gt;  String</h3><h3 id="String-lt-（StringBuffer，StringBuilder）的原因"><a href="#String-lt-（StringBuffer，StringBuilder）的原因" class="headerlink" title="String &lt;（StringBuffer，StringBuilder）的原因"></a>String &lt;（StringBuffer，StringBuilder）的原因</h3><p>　　　　String：字符串常量</p>
-<p>　　　　StringBuffer：字符串变量</p>
-<p>　　　　StringBuilder：字符串变量</p>
-<p>从上面的名字可以看到，String是“字符串常量”，也就是不可改变的对象。对于这句话的理解你可能会产生这样一个疑问  ，比如这段代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">String s = &quot;abcd&quot;;</span><br><span class="line">s = s+1;</span><br><span class="line">System.out.print(s);// result : abcd1</span><br></pre></td></tr></table></figure>
-
-<p>我们明明就是改变了String型的变量s的，为什么说是没有改变呢? 其实这是一种欺骗，JVM是这样解析这段代码的：首先创建对象s，赋予一个abcd，然后再创建一个新的对象s用来　　　　执行第二行代码，也就是说我们之前对象s并没有变化，所以我们说String类型是不可改变的对象了，由于这种机制，每当用String操作字符串时，实际上是在不断的创建新的对象，而原来的对象就会变为垃圾被ＧＣ回收掉，可想而知这样执行效率会有多底。</p>
-<p>而StringBuffer与StringBuilder就不一样了，他们是字符串变量，是可改变的对象，每当我们用它们对字符串做操作时，实际上是在一个对象上操作的，这样就不会像String一样创建一些而外的对象进行操作了，当然速度就快了。</p>
-<h3 id="一个特殊的例子："><a href="#一个特殊的例子：" class="headerlink" title="一个特殊的例子："></a>一个特殊的例子：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">String str = “This is only a” + “ simple” + “ test”;</span><br><span class="line">StringBuffer builder = new StringBuilder(“This is only a”).append(“ simple”).append(“ test”);</span><br></pre></td></tr></table></figure>
-
-<p>　　</p>
-<p>你会很惊讶的发现，生成str对象的速度简直太快了，而这个时候StringBuffer居然速度上根本一点都不占优势。其实这是JVM的一个把戏，实际上：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">　　　　String str = “This is only a” + “ simple” + “test”;</span><br></pre></td></tr></table></figure>
-
-<p>其实就是：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">　　　　String str = “This is only a simple test”;</span><br></pre></td></tr></table></figure>
-
-<p>所以不需要太多的时间了。但大家这里要注意的是，如果你的字符串是来自另外的String对象的话，速度就没那么快了，譬如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">　　　　String str2 = “This is only a”;</span><br><span class="line"></span><br><span class="line">　　　　String str3 = “ simple”;</span><br><span class="line"></span><br><span class="line">　　　　String str4 = “ test”;</span><br><span class="line"></span><br><span class="line">　　　　String str1 = str2 +str3 + str4;</span><br></pre></td></tr></table></figure>
-
-<p>这时候JVM会规规矩矩的按照原来的方式去做。</p>
-<h3 id="StringBuilder与-StringBuffer"><a href="#StringBuilder与-StringBuffer" class="headerlink" title="StringBuilder与 StringBuffer"></a>StringBuilder与 StringBuffer</h3><p>　　　　StringBuilder：线程非安全的</p>
-<p>　　　　StringBuffer：线程安全的</p>
-<p>当我们在字符串缓冲去被多个线程使用是，JVM不能保证StringBuilder的操作是安全的，虽然他的速度最快，但是可以保证StringBuffer是可以正确操作的。当然大多数情况下就是我们是在单线程下进行的操作，所以大多数情况下是建议用StringBuilder而不用StringBuffer的，就是速度的原因。</p>
-<h3 id="对于三者使用的总结："><a href="#对于三者使用的总结：" class="headerlink" title="对于三者使用的总结："></a>对于三者使用的总结：</h3><p>1.如果要操作少量的数据用 = String<br>2.单线程操作字符串缓冲区 下操作大量数据 = StringBuilder<br>3.多线程操作字符串缓冲区 下操作大量数据 = StringBuffer</p>
-<html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-有关字符串的笔记/" data-title="String" data-url="http://kongzheng1993.github.io/kongzheng1993-有关字符串的笔记/"></div>
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"kongzheng1993"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-</html>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/22/kongzheng1993-有关字符串的笔记/" data-id="ck8fkhnbd001n6yc8buj0d4n4" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-kongzheng1993-OracleAfterChangetheNameofComputer" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/07/20/kongzheng1993-OracleAfterChangetheNameofComputer/" class="article-date">
-  <time datetime="2016-07-19T16:00:00.000Z" itemprop="datePublished">2016-07-20</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/07/20/kongzheng1993-OracleAfterChangetheNameofComputer/">修改主机名oracle无法正常启动</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在刚开始学习Oracle时，安装完Oracle后，我发现我的主机名不是很炫酷，就去计算机管理把电脑的名字改成了EvilRat，然后我的Oracle就连不上了，因为listener服务一直启动不了，显示类似下面的情况：（图是从网上找的，不好在弄回去截图了，大家知道是什么情况能解决问题就行）。</p>
-<center>
-<img src="/2016/07/20/kongzheng1993-OracleAfterChangetheNameofComputer/assets/img/oracle_listener.bmp">
-</center>
-然后我从网上查了资料，发现是因为listener的配置文件里面的主机名还没有改过来，于是我就是手动改过来了。
-<center>
-<img src="/2016/07/20/kongzheng1993-OracleAfterChangetheNameofComputer/assets/img/listener.bmp">
-</center>
-将箭头指的地方修改后，应该就没问题了，这是我真是遇到的问题，希望可以帮助到大家。
-
-
-
-
-
-
-
-
-<html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-oraclepcname/" data-title="oraclepcname" data-url="http://kongzheng1993.github.io/kongzheng1993-oraclepcname/"></div>
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"kongzheng1993"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-</html>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kongzheng1993.github.io/2016/07/20/kongzheng1993-OracleAfterChangetheNameofComputer/" data-id="ck8fkhnb7001d6yc83bdky1g1" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oracle/">oracle</a></li></ul>
 
     </footer>
   </div>
@@ -471,7 +453,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
     </div>
   </div>
 
@@ -484,6 +466,14 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
       <ul>
         
           <li>
+            <a href="/2020/04/04/kongzheng1993-TCP三次握手&四次挥手/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/02/kongzheng1993-localStorage/">(no title)</a>
+          </li>
+        
+          <li>
             <a href="/2020/03/30/kongzheng1993-用nodejs做一个测试api服务/">(no title)</a>
           </li>
         
@@ -492,15 +482,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
           </li>
         
           <li>
-            <a href="/2020/03/25/kongzheng1993-RocketMQ定时消息示例/">(no title)</a>
-          </li>
-        
-          <li>
             <a href="/2020/03/25/kongzheng1993-一次老代码优化/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/03/19/kongzheng1993-Future/">(no title)</a>
           </li>
         
       </ul>
