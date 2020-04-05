@@ -96,7 +96,7 @@ searchAll: false
 copyright: true
 # Copyright info. of post | 文末版权信息
 
-word_count: false
+word_count: true
 # true 开启字数统计
 # 开启此功能需要安装插件 ：在 hexo根目录 执行npm i hexo-wordcount --save
 
@@ -231,7 +231,7 @@ gentie:
 
 gitalk:
   githubID: kongzheng1993
-  repo: https://github.com/kongzheng1993/kongzheng1993.github.io
+  repo: kongzheng1993.github.io
   ClientID: 8eb9176cf9a501aa08df
   ClientSecret: 6eb3cbb91e811217972e3adac41fd47881aa5b58
   adminUser: kongzheng1993
