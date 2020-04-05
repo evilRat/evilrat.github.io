@@ -1,3 +1,13 @@
+---
+title: Thread和Runnable
+excerpt: ''
+tags: [Java]
+categories: [Java]
+comments: true
+date: 2020-03-19 00:30:52
+---
+
+
 # Thread和Runnable
 
 我们都知道Java中创建线程有两种方式，继承Thread类和实现Runnable接口。其实呢，我们看了Thread的源码就能了解到：Thread实现了Runnable，其实也是个Runnable。

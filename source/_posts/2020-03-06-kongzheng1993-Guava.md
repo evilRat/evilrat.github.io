@@ -1,3 +1,12 @@
+---
+title: Guava
+excerpt: ''
+tags: [Guava]
+categories: [Java]
+comments: true
+date: 2020-03-06 00:30:52
+---
+
 # Guava（一）
 ## Guava是什么
 Guava项目包含一些我们在基于Java的项目中依赖的Google核心库：集合，缓存，原语支持，并发库，通用批注，字符串处理，I/O等。这些工具中的每一种确实每天都会被Google员工用于生产服务中。

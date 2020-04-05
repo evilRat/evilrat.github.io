@@ -1,3 +1,12 @@
+---
+title: URLEncoder
+excerpt: ''
+tags: [Web]
+categories: [Web]
+comments: true
+date: 2020-03-08 00:30:52
+---
+
 # URLEncoder
 
 今天写代码要发起一个HTTP GET请求，WebService接口我们随处可见，作为一个“业务程序员”我们也每天都在写。。。所以指尖跳动，分分钟就出现了下面的代码：

@@ -1,3 +1,12 @@
+---
+title: jhat
+excerpt: ''
+tags: [jvm]
+categories: [jvm]
+comments: true
+date: 2020-03-08 00:30:52
+---
+
 # jhat
 
 分析Java堆。此命令是实验性的，不受支持。

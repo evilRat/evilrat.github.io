@@ -1,3 +1,12 @@
+---
+title: jmap
+excerpt: ''
+tags: [jvm]
+categories: [jvm]
+comments: true
+date: 2020-03-08 00:30:52
+---
+
 ## jmap
 打印进程，核心文件或远程调试服务器的共享对象内存映射或堆内存详细信息。此命令是实验性的，不受支持。
 
