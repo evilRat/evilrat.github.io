@@ -3,8 +3,9 @@ layout: post
 title: "Resume"
 date: 2019-06-03
 excerpt: "resume 简历"
-tags: [resume，简历]
+tags: [resume,简历]
 categories: [resume]
+top: 999
 comments: true
 ---
 
@@ -26,6 +27,7 @@ comments: true
  - 毕业时间：2016年7月
  - 技术博客：[https://kongzheng1993.github.io](https://kongzheng1993.github.io)
  - Github: [https://github.com/kongzheng1993](https://github.com/kongzheng1993)
+ - 微信公众号：evilRat
  - 期望职位：Java开发工程师
 
 ---
@@ -56,6 +58,12 @@ comments: true
 ---
 
 # 项目经验
+
+## NGTASK任务调度系统
+### 项目介绍
+由于携号转网业务需要同步携转数据，客户要求开发一个任务调度系统，可以通过web页面新增、修改、删除、查询任务。
+### 责任描述
+独立开发。springboot+quartz+mysql+zookeeper，实现mysql数据导入导出任务，ftp/sftp上传下载任务。任务失败告警功能。
 
 ## 中移在线一体机项目 （2019年3月-2019年4月）
 ### 项目介绍
@@ -119,7 +127,7 @@ iBet彩票微信小程序。父母经营一个福利彩票投注站，因为国�
 ---
 
 # 自我评价
-有较好的职业素养，对工作积极负责，有创新意识和团队合作精神。热爱技术、热爱编码。热情帮助同事解决问题。热爱学习，喜欢阅读技术书刊、源码，学习能力较强，能快速将学习内容转化为生产力。
+有较好的职业素养，对工作积极负责，有创新意识和团队合作精神。热爱技术、热爱编码。热情帮助同事解决问题。热爱学习，喜欢阅读技术书刊、源码，学习能力较强，能快速将学习内容转化为生产力。喜欢做一些小工具，在我的github可以看到几个作品。
 
 ---
 
