@@ -68,7 +68,7 @@ app.listen(port, function () {
 
 ```shell
 node app.js
-````
+```
 
 <img src='run.bmp'>
 
