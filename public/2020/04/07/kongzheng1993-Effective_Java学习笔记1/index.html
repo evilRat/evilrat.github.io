@@ -2,9 +2,9 @@
 <html>
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
-  <title>记一次老代码优化2 | Evil</title>
+  <title>Effectiv Java学习笔记（一） | Evil</title>
   <meta name="keywords" content=" Java ">
-  <meta name="description" content="记一次老代码优化2 | Evil">
+  <meta name="description" content="Effectiv Java学习笔记（一） | Evil">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="博客改造动机之前搭博客就是想有个地方输出，有输出了也能激励自己输入嘛。之前很简陋，github pages+hexo+默认主题，各种bug，阅读博客不方便，主页直接就是一篇一篇的博客。。。 前段时间开始写公众号了，日更，虽然内容不是很好，但是也算是自己成长的记录，想着不然就同步发到博客吧，反正文章都写了。但是突然感觉是时候整整我的博客了，对用户根本不友好嘛。。 换主题之前的主题是默认的，而且撞衫的">
 <meta name="keywords" content="blog">
@@ -1136,13 +1136,11 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="post-kongzheng1993-一次老代码优化2" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-kongzheng1993-Effective_Java学习笔记1" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">记一次老代码优化2</h1>
+        <h1 class="article-title">Effectiv Java学习笔记（一）</h1>
     
     <div class="article-meta">
-        
-        <span class="top"><a>置顶</a></span>
         
         
         
@@ -1162,12 +1160,12 @@
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2020-04-07 17:30:55'>2020-03-30 00:30</time>
+        创建时间:<time class="date" title='更新时间: 2020-04-07 19:09:17'>2020-04-07 00:30</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:814</span>
+        <span>字数:781</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1197,7 +1195,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#记一次老代码优化2"><span class="toc-text">记一次老代码优化2</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#又发现了一个问题"><span class="toc-text">又发现了一个问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#怎么优化"><span class="toc-text">怎么优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试"><span class="toc-text">测试</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#创建和销毁对象"><span class="toc-text">创建和销毁对象</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-考虑使用静态工厂方法代替构造器"><span class="toc-text">1.考虑使用静态工厂方法代替构造器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-遇到多个构造器参数时要考虑使用构造器"><span class="toc-text">2.遇到多个构造器参数时要考虑使用构造器</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1213,111 +1211,92 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="记一次老代码优化2"><a href="#记一次老代码优化2" class="headerlink" title="记一次老代码优化2"></a>记一次老代码优化2</h1><h2 id="又发现了一个问题"><a href="#又发现了一个问题" class="headerlink" title="又发现了一个问题"></a>又发现了一个问题</h2><p>上次的优化结果：</p>
+        <h1 id="创建和销毁对象"><a href="#创建和销毁对象" class="headerlink" title="创建和销毁对象"></a>创建和销毁对象</h1><h2 id="1-考虑使用静态工厂方法代替构造器"><a href="#1-考虑使用静态工厂方法代替构造器" class="headerlink" title="1.考虑使用静态工厂方法代替构造器"></a>1.考虑使用静态工厂方法代替构造器</h2><p>我们平时创建对象都是new一个，而new会调用类对应的构造器。但是还有一个方法，就是<strong>静态工厂方法</strong>。</p>
+<pre><code class="java">public static Boolean valueOf(boolean b) {
+    return b ? Boolean.TRUE : Boolean.FALSE;
+}</code></pre>
+<p>上面是一个典型的示例。</p>
+<p>优点：</p>
 <ul>
-<li>老版本的转换方法用了204ms</li>
-<li>每次去查数据库因为要多次连接数据库进行查询操作，需要531ms</li>
-<li>而使用了缓存的方法，第一次我们还没有加载缓存，需要500ms，而第二次直接在缓存中读取，24ms，只用了之前方法的1/10。</li>
+<li><strong>静态工厂方法有方法名。</strong> 新建对象可以通过参数列表不同来调用不通的构造器，但是这样没有文字描述，调用者很难一下理解构造器做了哪些操作。</li>
+<li><strong>每次调用不必都创建一个新对象。</strong> 这使得不可变类可以使用预先构造好的示例，或者将构建好的示例缓存起来，重复利用，从而避免创建不必要的重复对象。像上面的例子，就没有创建对象。这样有利于提高性能。单例的对象也能在这样的方法里得以实现。</li>
+<li><strong>可以返回原返回类型的任何子类型。</strong> 可以返回对象，同时又不会使对象的类变成公有的。这种技术适用于基于接口的框架。</li>
+<li><strong>在创建参数化类型示例的时候，使代码变得更加简洁。</strong></li>
 </ul>
-<p>让我们看一下上次优化的版本：</p>
-<pre><code class="java">public static String ospInOutParmConvert2(String str) {
-    Matcher m=p1.matcher(str);
-    String strTmp = &quot;&quot;;
-    String strTmp1= &quot;&quot;;
-    String nkKey = &quot;&quot;;
-    String camelKey = &quot;&quot;;
-    final Map&lt;String, String&gt; unSaveKeys = Maps.newHashMap();
-    while(m.find()){
-        strTmp = m.group();
-        nkKey = strTmp.replace(&quot;\&quot;&quot;, &quot;&quot;).replace(&quot;:&quot;, &quot;&quot;);
-        camelKey = nkCamelKeyCacheService.getCamelKeyByNKKey(nkKey);
-        if (StringUtils.isNotBlank(camelKey)) {
-            str = str.replace(nkKey, camelKey);
-            continue;
-        } else {
-            camelKey = nkKey.toLowerCase();
-            str = str.replace(strTmp, strTmp.toLowerCase());
-            if (StringUtil.isNotEmpty(strTmp) &amp;&amp; strTmp != &quot;null&quot;) {
-                strTmp1= strTmp.toLowerCase();
-                if (strTmp1.indexOf(&quot;_&quot;) &gt; 0) {
-                    String[] strTmp1s = strTmp1.split(&quot;_&quot;);
-                    for(int i=0; i&lt;strTmp1s.length-1; i++){
-                        int subInt = strTmp1.indexOf(&quot;_&quot;);
-                        camelKey = camelKey.replace(strTmp1.substring(subInt,subInt + 2),strTmp1.substring(subInt + 1, subInt + 2).toUpperCase());
-                        if(strTmp1s.length&gt;1){
-                            strTmp1 = strTmp1.substring(subInt+1);
-                        }
-                    }
-                    str = str.replace(nkKey, camelKey);
-                }
-                unSaveKeys.put(nkKey, camelKey);
-            }
+<p>缺点：</p>
+<ul>
+<li><strong>类如果不含共有的或者受保护的构造器，就不能被子类化。</strong></li>
+<li><strong>静态工厂方法与其他静态方法实际上没有任何区别。</strong> 大家都知道用构造器实例化对象，却不能一眼看出这个静态方法是用来实例化对象的。</li>
+</ul>
+<p>静态工厂方法惯用名：</p>
+<ul>
+<li><strong>valueOf</strong>—-主要用于类型转换。</li>
+<li><strong>of</strong>—-valueOf的简洁方案。</li>
+<li><strong>getInstance</strong>—-返回的示例是通过参数来描述的，对于Singleton来说，该方法应该没有参数，直接返回唯一实例。</li>
+<li><strong>newInstance</strong>—-返回一个新的实例。</li>
+</ul>
+<h2 id="2-遇到多个构造器参数时要考虑使用构造器"><a href="#2-遇到多个构造器参数时要考虑使用构造器" class="headerlink" title="2.遇到多个构造器参数时要考虑使用构造器"></a>2.遇到多个构造器参数时要考虑使用构造器</h2><p>这里讲了把生活中一个对象抽象成类，我们实例化对象的三种设计思路：</p>
+<ul>
+<li><strong>重叠构造器模式</strong> 编写各种成员变量组合的构造器，实例化时选择我们需要的来。但是参数太多的话，构造器的数量就太多了，难以编写。</li>
+<li><strong>JavaBean模式</strong> 通过setter方法来设置参数，但是这样无法实现不可变对象，引发线程安全问题。</li>
+<li><strong>Builder模式</strong> 通过一个Builder内部类，实现setter赋值，然后再构造函数里将Builder的成员赋给我们实例化的对象。</li>
+</ul>
+<p><strong>Builder模式</strong>：</p>
+<pre><code class="java">
+/**
+ * @Description:
+ * @Author: kongz
+ * @Date: 2020/4/7 18:55
+ */
+public class People {
+
+    private String name;
+    private int age;
+    private String gender;
+
+    public People(Builder builder) {
+        name = builder.name;
+        age = builder.age;
+        gender = builder.gender;
+    }
+
+    public static class Builder {
+
+        private String name;
+        private int age;
+        private String gender;
+
+        public Builder(String name) {
+            this.name = name;
         }
-    }
-    if (unSaveKeys.size() &gt; 0) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                LocalJDBCUtil.addNkCamelKeys(unSaveKeys);
-            }
-        }).start();
-    }
-    return str;
-}</code></pre>
-<p>这一版没有对之前的算法进行优化，以为之前写代码的是个大佬，算法上应该没什么瑕疵。今天闲来无事仔细看了一下，发现一个问题：</p>
-<p>如果根据正则匹配到一个key，就进行转换。</p>
-<p>问题是，如果json中有<code>List&lt;Map&gt;</code>，那么list中的每条数据的map中的key都是相同的，每个都进行一遍运算会浪费很多资源。</p>
-<h2 id="怎么优化"><a href="#怎么优化" class="headerlink" title="怎么优化"></a>怎么优化</h2><p>这个问题是进行了不必要的运算，我们要记住哪些key已经计算并替换过了，当再次匹配到这些key的时候，直接跳过。</p>
-<pre><code class="java">public static String ospInOutParmConvert(String str) {
-    Matcher m = p1.matcher(str);
-    String strTmp = &quot;&quot;;//双引号+冒号的key
-    String strTmp1 = &quot;&quot;;//转换为小写的双引号+冒号的key
-    String nkKey = &quot;&quot;;//能开key
-    String camelKey = &quot;&quot;;//驼峰key
-    final Map&lt;String, String&gt; unSaveKeys = Maps.newHashMap();
-    Set&lt;String&gt; finishKeys = Sets.newHashSet();
-    while (m.find()) {
-        strTmp = m.group();
-        nkKey = strTmp.replace(&quot;\&quot;&quot;, &quot;&quot;).replace(&quot;:&quot;, &quot;&quot;);
-        camelKey = nkCamelKeyCacheService.getCamelKeyByNKKey(nkKey);
-        if (finishKeys.contains(nkKey)) {
-            continue;//这个key已经替换过，跳过
-        } else if (StringUtils.isNotBlank(camelKey)) {
-            str = str.replace(&quot;\&quot;&quot; + nkKey + &quot;\&quot;&quot;, &quot;\&quot;&quot; + camelKey + &quot;\&quot;&quot;);
-            finishKeys.add(nkKey);
-            continue;
-        } else {
-            camelKey = nkKey.toLowerCase();//如果没有_，那么这里转成小写就处理完了
-            if (StringUtil.isNotEmpty(strTmp) &amp;&amp; strTmp != &quot;null&quot;) {
-                strTmp1 = strTmp.toLowerCase();
-                if (strTmp1.indexOf(&quot;_&quot;) &gt; 0) {
-                    String[] strTmp1s = strTmp1.split(&quot;_&quot;);
-                    for (int i = 0; i &lt; strTmp1s.length - 1; i++) {
-                        int subInt = strTmp1.indexOf(&quot;_&quot;);
-                        camelKey = camelKey.replace(strTmp1.substring(subInt, subInt + 2), strTmp1.substring(subInt + 1, subInt + 2).toUpperCase());
-                        if (strTmp1s.length &gt; 1) {
-                            strTmp1 = strTmp1.substring(subInt + 1);
-                        }
-                    }
-                }
-                str = str.replace(&quot;\&quot;&quot; + nkKey + &quot;\&quot;&quot;, &quot;\&quot;&quot; + camelKey + &quot;\&quot;&quot;);
-                finishKeys.add(nkKey);
-                unSaveKeys.put(nkKey, camelKey);
-            }
+
+        public Builder age(int age) {
+            this.age = age;
+            return this;
         }
+
+        public Builder gender(String gender) {
+            this.gender = gender;
+            return this;
+        }
+
+        public People build() {
+            return new People(this);
+        }
+
     }
-    if (unSaveKeys.size() &gt; 0) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                LocalJDBCUtil.addNkCamelKeys(unSaveKeys);
-            }
-        }).start();
+
+    @Override
+    public String toString() {
+        return this.name + &quot;--&quot; + this.age + &quot;--&quot; + this.gender;
     }
-    return str;
+
+    public static void main(String[] args) {
+        People people = new Builder(&quot;kongz&quot;).age(20).gender(&quot;男&quot;).build();
+        System.out.println(people.toString());
+    }
+
 }</code></pre>
-<p>在这一版本中我用了一个<code>finishKeys</code>的<code>Set</code>来存放已经转换过的key，在计算前判断这个key是不是包含在<code>finishKeys</code>中，如果包含，说明已经转换过，直接跳过。</p>
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>还是之前的测试用例。<br>不过这次新方法第二次跑完的时间是17ms！！！</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 kongzheng1993@hotmail.com </span>
@@ -1331,12 +1310,12 @@
 
 
 <div class="article_copyright">
-    <p><span class="copy-title">文章标题:</span>记一次老代码优化2</p>
-    <p><span class="copy-title">文章字数:</span><span class="post-count">814</span></p>
+    <p><span class="copy-title">文章标题:</span>Effectiv Java学习笔记（一）</p>
+    <p><span class="copy-title">文章字数:</span><span class="post-count">781</span></p>
     <p><span class="copy-title">本文作者:</span><a  title="evilRat">evilRat</a></p>
-    <p><span class="copy-title">发布时间:</span>2020-03-30, 00:30:52</p>
-    <p><span class="copy-title">最后更新:</span>2020-04-07, 17:30:55</p>
-    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/03/30/kongzheng1993-一次老代码优化2/" title="记一次老代码优化2">https://kongzheng1993.github.io/2020/03/30/kongzheng1993-一次老代码优化2/</a>
+    <p><span class="copy-title">发布时间:</span>2020-04-07, 00:30:52</p>
+    <p><span class="copy-title">最后更新:</span>2020-04-07, 19:09:17</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/04/07/kongzheng1993-Effective_Java学习笔记1/" title="Effectiv Java学习笔记（一）">https://kongzheng1993.github.io/2020/04/07/kongzheng1993-Effective_Java学习笔记1/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
     </p>
