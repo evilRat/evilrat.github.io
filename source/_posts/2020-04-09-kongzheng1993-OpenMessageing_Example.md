@@ -59,7 +59,7 @@ public class OMSProducer {
         producer.shutdown();
         messagingAccessPoint.shutdown();
     }
-}																																													    }
+}
 ```
 
 **OMSPull消费者**
@@ -76,7 +76,7 @@ public class OMSPullConsumer {
 
         messagingAccessPoint.startup();
         System.out.printf("MessagingAccessPoint startup OK%n");
-        
+
         consumer.startup();
         System.out.printf("Consumer startup OK%n");
 
@@ -115,7 +115,7 @@ public class OMSPushConsumer {
                 messagingAccessPoint.shutdown();
             }
         }));
-        
+
         consumer.attachQueue("OMS_HELLO_TOPIC", new MessageListener() {
             @Override
             public void onMessage(final Message message, final ReceivedMessageContext context) {
@@ -123,9 +123,6 @@ public class OMSPushConsumer {
                 context.ack();
             }
         });
-        
     }
 }
 ```
-
-
