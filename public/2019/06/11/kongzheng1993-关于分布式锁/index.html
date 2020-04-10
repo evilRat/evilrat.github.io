@@ -6,24 +6,18 @@
   <meta name="keywords" content=" quartz , 锁 , 分布式 ">
   <meta name="description" content="关于分布式锁.md | Evil">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="chromebook再次折腾crouton学生时代的梦想大学那会儿就梦想有个chromebook，想象着带着这个满满黑科技的笔记本，出入校园，秒杀一众macbook。无奈家境贫寒，而且找不到靠谱的渠道。16年9月刚毕业不久，拿到第一笔工资，我就下单买了这个asus flip c100p chromebook。   无数次折腾拿到这个chromebook，小巧精美，略微使用了一下，就开始着手折腾装L">
-<meta name="keywords" content="other">
+<meta name="description" content="交易消息示例什么是交易消息可以将其视为两阶段提交消息实现，以确保分布式系统中的最终一致性。事务性消息可确保本地事务的执行和消息的发送能以原子方式执行。 使用限制 事务消息没有时间表和批处理支持。 为了避免对单个消息进行过多的检查并导致半个队列的消息堆积，我们默认将单个消息的检查数量限制为15次，但是用户可以通过更改transactionCheckMax来更改此限制。如果一条消息经过transact">
+<meta name="keywords" content="RocketMQ">
 <meta property="og:type" content="article">
-<meta property="og:title" content="chromebook再次折腾crouton">
-<meta property="og:url" content="https://kongzheng1993.github.io/2020/04/08/kongzheng1993-chromebook再次折腾crouton/index.html">
+<meta property="og:title" content="交易消息示例">
+<meta property="og:url" content="https://kongzheng1993.github.io/2020/04/10/kongzheng1993-OpenMessageing_Example/index.html">
 <meta property="og:site_name" content="Evil">
-<meta property="og:description" content="chromebook再次折腾crouton学生时代的梦想大学那会儿就梦想有个chromebook，想象着带着这个满满黑科技的笔记本，出入校园，秒杀一众macbook。无奈家境贫寒，而且找不到靠谱的渠道。16年9月刚毕业不久，拿到第一笔工资，我就下单买了这个asus flip c100p chromebook。   无数次折腾拿到这个chromebook，小巧精美，略微使用了一下，就开始着手折腾装L">
+<meta property="og:description" content="交易消息示例什么是交易消息可以将其视为两阶段提交消息实现，以确保分布式系统中的最终一致性。事务性消息可确保本地事务的执行和消息的发送能以原子方式执行。 使用限制 事务消息没有时间表和批处理支持。 为了避免对单个消息进行过多的检查并导致半个队列的消息堆积，我们默认将单个消息的检查数量限制为15次，但是用户可以通过更改transactionCheckMax来更改此限制。如果一条消息经过transact">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://kongzheng1993.github.io/2020/04/08/kongzheng1993-chromebook再次折腾crouton/taobao.jpg">
-<meta property="og:image" content="https://kongzheng1993.github.io/2020/04/08/kongzheng1993-chromebook再次折腾crouton/recovery.bmp">
-<meta property="og:image" content="https://kongzheng1993.github.io/2020/04/08/kongzheng1993-chromebook再次折腾crouton/finishInstall.jpg">
-<meta property="og:image" content="https://kongzheng1993.github.io/2020/04/08/kongzheng1993-chromebook再次折腾crouton/xfce4.jpg">
-<meta property="og:image" content="https://kongzheng1993.github.io/2020/04/08/kongzheng1993-chromebook再次折腾crouton/linuxRelease.jpg">
-<meta property="og:updated_time" content="2020-04-08T12:18:54.277Z">
+<meta property="og:updated_time" content="2020-04-10T10:03:56.075Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="chromebook再次折腾crouton">
-<meta name="twitter:description" content="chromebook再次折腾crouton学生时代的梦想大学那会儿就梦想有个chromebook，想象着带着这个满满黑科技的笔记本，出入校园，秒杀一众macbook。无奈家境贫寒，而且找不到靠谱的渠道。16年9月刚毕业不久，拿到第一笔工资，我就下单买了这个asus flip c100p chromebook。   无数次折腾拿到这个chromebook，小巧精美，略微使用了一下，就开始着手折腾装L">
-<meta name="twitter:image" content="https://kongzheng1993.github.io/2020/04/08/kongzheng1993-chromebook再次折腾crouton/taobao.jpg">
+<meta name="twitter:title" content="交易消息示例">
+<meta name="twitter:description" content="交易消息示例什么是交易消息可以将其视为两阶段提交消息实现，以确保分布式系统中的最终一致性。事务性消息可确保本地事务的执行和消息的发送能以原子方式执行。 使用限制 事务消息没有时间表和批处理支持。 为了避免对单个消息进行过多的检查并导致半个队列的消息堆积，我们默认将单个消息的检查数量限制为15次，但是用户可以通过更改transactionCheckMax来更改此限制。如果一条消息经过transact">
 
 
 <link rel="icon" href="/img/avatar.png">
@@ -126,34 +120,11 @@
 
 
 <ul>
-    <li><div class="all active">全部文章<small>(55)</small></div></li>
+    <li><div class="all active">全部文章<small>(56)</small></div></li>
     
         
             
             <li><div data-rel="resume">resume<small>(1)</small></div>
-                
-            </li>
-            
-        
-    
-        
-            
-            <li><div data-rel="blog"><i class="fold iconfont icon-right"></i>blog<small>(1)</small></div>
-                
-                    <ul class="sub hide">
-                        
-                        <li><div data-rel="github"><i class="fold iconfont icon-right"></i>github<small>(1)</small></div>
-                            
-                                <ul class="sub hide">
-                                    
-                                    <li><div data-rel="git">git<small>(1)</small></div>
-                                    </li>
-                                    
-                                </ul>
-                            
-                        </li>
-                            
-                    </ul>
                 
             </li>
             
@@ -170,6 +141,29 @@
                                 <ul class="sub hide">
                                     
                                     <li><div data-rel="FTP">FTP<small>(1)</small></div>
+                                    </li>
+                                    
+                                </ul>
+                            
+                        </li>
+                            
+                    </ul>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="blog"><i class="fold iconfont icon-right"></i>blog<small>(1)</small></div>
+                
+                    <ul class="sub hide">
+                        
+                        <li><div data-rel="github"><i class="fold iconfont icon-right"></i>github<small>(1)</small></div>
+                            
+                                <ul class="sub hide">
+                                    
+                                    <li><div data-rel="git">git<small>(1)</small></div>
                                     </li>
                                     
                                 </ul>
@@ -228,13 +222,13 @@
     
         
             
-            <li><div data-rel="编码">编码<small>(1)</small></div>
-                
-            </li>
-            
         
     
         
+            
+            <li><div data-rel="编码">编码<small>(1)</small></div>
+                
+            </li>
             
         
     
@@ -318,6 +312,10 @@
     
         
             
+        
+    
+        
+            
             <li><div data-rel="Java">Java<small>(7)</small></div>
                 
             </li>
@@ -329,10 +327,6 @@
             <li><div data-rel="Web">Web<small>(2)</small></div>
                 
             </li>
-            
-        
-    
-        
             
         
     
@@ -390,21 +384,21 @@
     
         
             
-            <li><div data-rel="RocketMQ">RocketMQ<small>(1)</small></div>
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+            <li><div data-rel="RocketMQ">RocketMQ<small>(2)</small></div>
                 
             </li>
-            
-        
-    
-        
-            
-        
-    
-        
-            
-        
-    
-        
             
         
     
@@ -418,8 +412,8 @@
     </div>
     <div></div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="55">
-<input type="hidden" id="yelog_site_word_count" value="50.9k">
+<input type="hidden" id="yelog_site_posts_number" value="56">
+<input type="hidden" id="yelog_site_word_count" value="51.8k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -459,11 +453,11 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color3">servlet</a>
+        <a class="color3">re</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color3">re</a>
+        <a class="color3">servlet</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -479,19 +473,19 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color2">String</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color4">new</a>
-    </li>
-    
-    <li class="article-tag-list-item">
         <a class="color2">resume</a>
     </li>
     
     <li class="article-tag-list-item">
         <a class="color3">简历</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color2">String</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">new</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -519,6 +513,10 @@
     </li>
     
     <li class="article-tag-list-item">
+        <a class="color5">catch，try</a>
+    </li>
+    
+    <li class="article-tag-list-item">
         <a class="color4">sys</a>
     </li>
     
@@ -543,18 +541,6 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color2">github</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color5">hexo</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color4">git</a>
-    </li>
-    
-    <li class="article-tag-list-item">
         <a class="color5">suse</a>
     </li>
     
@@ -564,6 +550,18 @@
     
     <li class="article-tag-list-item">
         <a class="color4">FTP</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color2">github</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">hexo</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">git</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -595,23 +593,19 @@
     </li>
     
     <li class="article-tag-list-item">
+        <a class="color3">mq</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">消息队列</a>
+    </li>
+    
+    <li class="article-tag-list-item">
         <a class="color3">编码</a>
     </li>
     
     <li class="article-tag-list-item">
         <a class="color1">Linux</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color2">quartz</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color2">锁</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color4">分布式</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -624,6 +618,18 @@
     
     <li class="article-tag-list-item">
         <a class="color3">学习</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color2">quartz</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color2">锁</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">分布式</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -686,18 +692,6 @@
         <a class="color4">RocketMQ</a>
     </li>
     
-    <li class="article-tag-list-item">
-        <a class="color5">catch，try</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">mq</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color5">消息队列</a>
-    </li>
-    
     <div class="clearfix"></div>
 </div>
 
@@ -745,7 +739,15 @@
         </a>
         
         <a  class="RocketMQ "
-           href="/2020/04/09/kongzheng1993-OpenMessageing_Example/"
+           href="/2020/04/10/kongzheng1993-OpenMessageing_Example/"
+           data-tag="RocketMQ"
+           data-author="" >
+            <span class="post-title" title="交易消息示例">交易消息示例</span>
+            <span class="post-date" title="2020-04-10 00:30:52">2020/04/10</span>
+        </a>
+        
+        <a  class="RocketMQ "
+           href="/2020/04/09/kongzheng1993-TransactionMessage/"
            data-tag="RocketMQ"
            data-author="" >
             <span class="post-title" title="RocketMQ OpenMessaging Example">RocketMQ OpenMessaging Example</span>
@@ -785,18 +787,18 @@
         </a>
         
         <a  class="Java "
-           href="/2020/03/19/kongzheng1993-Future/"
-           data-tag="Java"
-           data-author="" >
-            <span class="post-title" title="Future">Future</span>
-            <span class="post-date" title="2020-03-19 00:30:52">2020/03/19</span>
-        </a>
-        
-        <a  class="Java "
            href="/2020/03/19/kongzheng1993-Thread和Runnable/"
            data-tag="Java"
            data-author="" >
             <span class="post-title" title="Thread和Runnable">Thread和Runnable</span>
+            <span class="post-date" title="2020-03-19 00:30:52">2020/03/19</span>
+        </a>
+        
+        <a  class="Java "
+           href="/2020/03/19/kongzheng1993-Future/"
+           data-tag="Java"
+           data-author="" >
+            <span class="post-title" title="Future">Future</span>
             <span class="post-date" title="2020-03-19 00:30:52">2020/03/19</span>
         </a>
         
@@ -817,6 +819,14 @@
         </a>
         
         <a  class="jvm "
+           href="/2020/03/08/kongzheng1993-jhat/"
+           data-tag="jvm"
+           data-author="" >
+            <span class="post-title" title="jhat">jhat</span>
+            <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
+        </a>
+        
+        <a  class="jvm "
            href="/2020/03/08/kongzheng1993-jmap/"
            data-tag="jvm"
            data-author="" >
@@ -832,14 +842,6 @@
             <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
         </a>
         
-        <a  class="jvm "
-           href="/2020/03/08/kongzheng1993-jhat/"
-           data-tag="jvm"
-           data-author="" >
-            <span class="post-title" title="jhat">jhat</span>
-            <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
-        </a>
-        
         <a  class="Java "
            href="/2020/03/06/kongzheng1993-Guava/"
            data-tag="Guava"
@@ -848,19 +850,19 @@
             <span class="post-date" title="2020-03-06 00:30:52">2020/03/06</span>
         </a>
         
-        <a  class="NIO BIO IO "
-           href="/2019/09/11/kongzheng1993-NIO&BIO/"
-           data-tag="NIO BIO IO"
-           data-author="" >
-            <span class="post-title" title="NIO&amp;BIO">NIO&amp;BIO</span>
-            <span class="post-date" title="2019-09-11 18:30:52">2019/09/11</span>
-        </a>
-        
         <a  class="mysql "
            href="/2019/09/11/kongzheng1993-MySQL/"
            data-tag="mysql"
            data-author="" >
             <span class="post-title" title="MySQL">MySQL</span>
+            <span class="post-date" title="2019-09-11 18:30:52">2019/09/11</span>
+        </a>
+        
+        <a  class="NIO BIO IO "
+           href="/2019/09/11/kongzheng1993-NIO&BIO/"
+           data-tag="NIO BIO IO"
+           data-author="" >
+            <span class="post-title" title="NIO&amp;BIO">NIO&amp;BIO</span>
             <span class="post-date" title="2019-09-11 18:30:52">2019/09/11</span>
         </a>
         
@@ -968,19 +970,19 @@
             <span class="post-date" title="2018-05-02 00:00:00">2018/05/02</span>
         </a>
         
-        <a  class="blog github git "
-           href="/2018/02/01/kongzheng1993-hexo搭建githubPages/"
-           data-tag="github,hexo,git"
-           data-author="" >
-            <span class="post-title" title="Hexo+github搭建个人博客遇到的问题">Hexo+github搭建个人博客遇到的问题</span>
-            <span class="post-date" title="2018-02-01 00:00:00">2018/02/01</span>
-        </a>
-        
         <a  class="suse server FTP "
            href="/2018/02/01/kongzheng1993-suse_ftp服务配置/"
            data-tag="suse,server,FTP"
            data-author="" >
             <span class="post-title" title="SUSE server FTP配置">SUSE server FTP配置</span>
+            <span class="post-date" title="2018-02-01 00:00:00">2018/02/01</span>
+        </a>
+        
+        <a  class="blog github git "
+           href="/2018/02/01/kongzheng1993-hexo搭建githubPages/"
+           data-tag="github,hexo,git"
+           data-author="" >
+            <span class="post-title" title="Hexo+github搭建个人博客遇到的问题">Hexo+github搭建个人博客遇到的问题</span>
             <span class="post-date" title="2018-02-01 00:00:00">2018/02/01</span>
         </a>
         
@@ -1017,14 +1019,6 @@
         </a>
         
         <a  class=""
-           href="/2016/07/26/kongzheng1993-servlet/"
-           data-tag="servlet"
-           data-author="" >
-            <span class="post-title" title="Servlet">Servlet</span>
-            <span class="post-date" title="2016-07-26 00:00:00">2016/07/26</span>
-        </a>
-        
-        <a  class=""
            href="/2016/07/26/kongzheng1993-请求转发与重定向/"
            data-tag="re"
            data-author="" >
@@ -1033,10 +1027,10 @@
         </a>
         
         <a  class=""
-           href="/2016/07/26/kongzheng1993-centos7_mysql/"
-           data-tag="re"
+           href="/2016/07/26/kongzheng1993-servlet/"
+           data-tag="servlet"
            data-author="" >
-            <span class="post-title" title="centos 7 安装mysql遇到的问题">centos 7 安装mysql遇到的问题</span>
+            <span class="post-title" title="Servlet">Servlet</span>
             <span class="post-date" title="2016-07-26 00:00:00">2016/07/26</span>
         </a>
         
@@ -1045,6 +1039,14 @@
            data-tag="re"
            data-author="" >
             <span class="post-title" title="关于comparator和comparable">关于comparator和comparable</span>
+            <span class="post-date" title="2016-07-26 00:00:00">2016/07/26</span>
+        </a>
+        
+        <a  class=""
+           href="/2016/07/26/kongzheng1993-centos7_mysql/"
+           data-tag="re"
+           data-author="" >
+            <span class="post-title" title="centos 7 安装mysql遇到的问题">centos 7 安装mysql遇到的问题</span>
             <span class="post-date" title="2016-07-26 00:00:00">2016/07/26</span>
         </a>
         
@@ -1400,7 +1402,7 @@ select * from  ... for update;
     /*作者、标签的自动补全*/
     $(function () {
         $('.search').AutoComplete({
-            'data': ['#oop','#float','#servlet','#re','#sample post','#images','#test','#String','#new','#resume','#简历','#sql','#select','#distinct','#group by','#order by','#oracle','#sys','#sqlplus','#java','#reflect','#Class','#对象，Class对象','#github','#hexo','#git','#suse','#server','#FTP','#linux','#ss','#console','#多线程','#安全','#mysql','#备份','#编码','#Linux','#quartz','#锁','#分布式','#职业','#业务','#学习','#RSA','#SHA','#加密','#签名','#jdk','#NIO BIO IO','#Guava','#Java','#Web','#jvm','#other','#MQ','#node.js','#网络','#RocketMQ','#catch，try','#mq','#消息队列',],
+            'data': ['#oop','#float','#re','#servlet','#sample post','#images','#test','#resume','#简历','#String','#new','#sql','#select','#distinct','#group by','#order by','#oracle','#catch，try','#sys','#sqlplus','#java','#reflect','#Class','#对象，Class对象','#suse','#server','#FTP','#github','#hexo','#git','#linux','#ss','#console','#多线程','#安全','#mysql','#备份','#mq','#消息队列','#编码','#Linux','#职业','#业务','#学习','#quartz','#锁','#分布式','#RSA','#SHA','#加密','#签名','#jdk','#NIO BIO IO','#Guava','#Java','#Web','#jvm','#other','#MQ','#node.js','#网络','#RocketMQ',],
             'itemHeight': 20,
             'width': 418
         }).AutoComplete('show');

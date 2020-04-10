@@ -1,128 +1,120 @@
 ---
-title: RocketMQ OpenMessaging Example
+title: 交易消息示例
 excerpt: ''
 tags: [RocketMQ]
 categories: [RocketMQ]
 comments: true
-date: 2020-04-09 00:30:52
+date: 2020-04-10 00:30:52
 ---
 
-# OpenMessaging
+# 交易消息示例
 
-OpenMessaging，包括建立行业指南和消息传递，流式传输规范，从而为金融，电子商务，物联网和大数据领域提供通用框架。在分布式异构环境中，设计原则是面向云，简单，灵活且独立于语言。符合这些规范将使跨所有主要平台和操作系统开发异构消息应用程序成为可能。
+## 什么是交易消息
 
-RocketMQ提供了OpenMessaging 0.1.0-alpha的部分实现，以下示例演示了如何基于OpenMessaging访问RocketMQ。
+可以将其视为两阶段提交消息实现，以确保分布式系统中的最终一致性。事务性消息可确保本地事务的执行和消息的发送能以原子方式执行。
 
-**OMS生产者**
-以下示例显示了如何以同步，异步或单向传输将消息发送到RocketMQ代理。
+## 使用限制
 
-```java
-public class OMSProducer {
-    public static void main(String[] args) {
-        final MessagingAccessPoint messagingAccessPoint = MessagingAccessPointFactory
-            .getMessagingAccessPoint("openmessaging:rocketmq://IP1:9876,IP2:9876/namespace");
+1. 事务消息没有时间表和批处理支持。
+2. 为了避免对单个消息进行过多的检查并导致半个队列的消息堆积，我们默认将单个消息的检查数量限制为15次，但是用户可以通过更改`transactionCheckMax`来更改此限制。如果一条消息经过`transactionCheckMax`次检查，默认情况下，代理将丢弃此消息并同时打印错误日志。用户可以通过覆盖`AbstractTransactionCheckListener`类来更改此行为。
+3. 将`broker`配置中由参数`transactionTimeout`来确定一定时间后检查交易消息。用户还可以在发送事务消息时通过设置用户属性`CHECK_IMMUNITY_TIME_IN_SECONDS`来更改此限制，该参数优先于`transactionMsgTimeout`参数。
+4. 交易消息可能被检查或消耗了不止一次。
+5. 提交给用户目标主题的已提交消息可能会失败。目前，它取决于日志记录。RocketMQ本身的高可用性机制可确保高可用性。如果要确保事务消息不会丢失并且事务完整性得到保证，建议使用同步双写机制。
+6. 事务性消息的生产者ID不能与其他类型的消息的生产者ID共享。与其他类型的消息不同，事务性消息允许向后查询。MQ服务器通过生产者ID查询客户端。
 
-        final Producer producer = messagingAccessPoint.createProducer();
+## 应用
 
-        messagingAccessPoint.startup();
-        System.out.printf("MessagingAccessPoint startup OK%n");
+### 1，交易状态
 
-        producer.startup();
-        System.out.printf("Producer startup OK%n");
+事务消息有三种状态：
 
-        {
-            Message message = producer.createBytesMessageToTopic("OMS_HELLO_TOPIC", "OMS_HELLO_BODY".getBytes(Charset.forName("UTF-8")));
-            SendResult sendResult = producer.send(message);
-            System.out.printf("Send sync message OK, msgId: %s%n", sendResult.messageId());
-        }
+- TransactionStatus.CommitTransaction：提交事务，表示允许使用者使用此消息。
+- TransactionStatus.RollbackTransaction：回滚事务，表示该消息将被删除且不允许使用。
+- TransactionStatus.Unknown：中间状态，表示需要MQ进行回溯以确定状态。
 
-        {
-            final Promise<SendResult> result = producer.sendAsync(producer.createBytesMessageToTopic("OMS_HELLO_TOPIC", "OMS_HELLO_BODY".getBytes(Charset.forName("UTF-8"))));
-            result.addListener(new PromiseListener<SendResult>() {
-                @Override
-                public void operationCompleted(Promise<SendResult> promise) {
-                    System.out.printf("Send async message OK, msgId: %s%n", promise.get().messageId());
-                }
+### 2，发送交易信息
 
-                @Override
-                public void operationFailed(Promise<SendResult> promise) {
-                    System.out.printf("Send async message Failed, error: %s%n", promise.getThrowable().getMessage());
-                }
-            });
-        }
+#### 2，1 创建事务生产方
 
-        {
-            producer.sendOneway(producer.createBytesMessageToTopic("OMS_HELLO_TOPIC", "OMS_HELLO_BODY".getBytes(Charset.forName("UTF-8"))));
-            System.out.printf("Send oneway message OK%n");
-        }
-
-        producer.shutdown();
-        messagingAccessPoint.shutdown();
-    }
-}
-```
-
-**OMSPull消费者**
-使用OMS PullConsumer轮询来自指定队列的消息。
+使用`TransactionMQProducer`类创建生产方客户端，并指定唯一的`producerGroup`，然后可以设置自定义线程池来处理检查请求。执行本地事务后，需要根据执行结果对MQ进行回复，回复状态如上节所述。
 
 ```java
-public class OMSPullConsumer {
-    public static void main(String[] args) {
-        final MessagingAccessPoint messagingAccessPoint = MessagingAccessPointFactory
-            .getMessagingAccessPoint("openmessaging:rocketmq://IP1:9876,IP2:9876/namespace");
+import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
+import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
+import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
+import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
+import org.apache.rocketmq.common.message.MessageExt;
+import java.util.List;
 
-        final PullConsumer consumer = messagingAccessPoint.createPullConsumer("OMS_HELLO_TOPIC",
-            OMS.newKeyValue().put(NonStandardKeys.CONSUMER_GROUP, "OMS_CONSUMER"));
-
-        messagingAccessPoint.startup();
-        System.out.printf("MessagingAccessPoint startup OK%n");
-
-        consumer.startup();
-        System.out.printf("Consumer startup OK%n");
-
-        Message message = consumer.poll();
-        if (message != null) {
-            String msgId = message.headers().getString(MessageHeader.MESSAGE_ID);
-            System.out.printf("Received one message: %s%n", msgId);
-            consumer.ack(msgId);
-        }
-
-        consumer.shutdown();
-        messagingAccessPoint.shutdown();
-    }
-}
-```
-
-**OMSPushConsumer**
-将OMS PushConsumer附加到指定的队列，并通过MessageListener使用消息
-
-```java
-public class OMSPushConsumer {
-    public static void main(String[] args) {
-        final MessagingAccessPoint messagingAccessPoint = MessagingAccessPointFactory
-            .getMessagingAccessPoint("openmessaging:rocketmq://IP1:9876,IP2:9876/namespace");
-
-        final PushConsumer consumer = messagingAccessPoint.
-            createPushConsumer(OMS.newKeyValue().put(NonStandardKeys.CONSUMER_GROUP, "OMS_CONSUMER"));
-
-        messagingAccessPoint.startup();
-        System.out.printf("MessagingAccessPoint startup OK%n");
-
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+public class TransactionProducer {
+    public static void main(String[] args) throws MQClientException, InterruptedException {
+        TransactionListener transactionListener = new TransactionListenerImpl();
+        TransactionMQProducer producer = new TransactionMQProducer("please_rename_unique_group_name");
+        ExecutorService executorService = new ThreadPoolExecutor(2, 5, 100, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(2000), new ThreadFactory() {
             @Override
-            public void run() {
-                consumer.shutdown();
-                messagingAccessPoint.shutdown();
-            }
-        }));
-
-        consumer.attachQueue("OMS_HELLO_TOPIC", new MessageListener() {
-            @Override
-            public void onMessage(final Message message, final ReceivedMessageContext context) {
-                System.out.printf("Received one message: %s%n", message.headers().getString(MessageHeader.MESSAGE_ID));
-                context.ack();
+            public Thread newThread(Runnable r) {
+                Thread thread = new Thread(r);
+                thread.setName("client-transaction-msg-check-thread");
+                return thread;
             }
         });
+
+        producer.setExecutorService(executorService);
+        producer.setTransactionListener(transactionListener);
+        producer.start();
+
+        String[] tags = new String[] {"TagA", "TagB", "TagC", "TagD", "TagE"};
+        for (int i = 0; i < 10; i++) {
+            try {
+                Message msg =
+                    new Message("TopicTest1234", tags[i % tags.length], "KEY" + i,
+                        ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET));
+                SendResult sendResult = producer.sendMessageInTransaction(msg, null);
+                System.out.printf("%s%n", sendResult);
+
+                Thread.sleep(10);
+            } catch (MQClientException | UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+
+        for (int i = 0; i < 100000; i++) {
+            Thread.sleep(1000);
+        }
+        producer.shutdown();
     }
 }
+```
+
+#### 2，2实现TransactionListener接口
+
+当发送一半消息成功时，使用`executeLocalTransaction`方法执行本地事务。它返回上一部分中提到的三个事务状态之一。
+`checkLocalTransaction`方法用于检查本地事务状态并响应MQ检查请求。它还返回上一部分中提到的三个事务状态之一。
+
+```java
+public class TransactionListenerImpl implements TransactionListener {
+   private AtomicInteger transactionIndex = new AtomicInteger(0);
+      private ConcurrentHashMap<String, Integer> localTrans = new ConcurrentHashMap<>();
+      @Override
+   public LocalTransactionState executeLocalTransaction(Message msg, Object arg) {
+       int value = transactionIndex.getAndIncrement();
+       int status = value % 3;
+       localTrans.put(msg.getTransactionId(), status);
+       return LocalTransactionState.UNKNOW;
+   }
+      @Override
+   public LocalTransactionState checkLocalTransaction(MessageExt msg) {
+       Integer status = localTrans.get(msg.getTransactionId());
+       if (null != status) {
+           switch (status) {
+               case 0:
+                   return LocalTransactionState.UNKNOW;
+               case 1:
+                   return LocalTransactionState.COMMIT_MESSAGE;
+               case 2:
+                   return LocalTransactionState.ROLLBACK_MESSAGE;
+           }
+       }
+       return LocalTransactionState.COMMIT_MESSAGE;
+   }
 ```
