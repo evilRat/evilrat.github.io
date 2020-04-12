@@ -2,9 +2,9 @@
 <html>
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
-  <title>Session笔记 | Evil</title>
-  <meta name="keywords" content=" oop ">
-  <meta name="description" content="Session笔记 | Evil">
+  <title>序列化与反序列化 | Evil</title>
+  <meta name="keywords" content=" Java ">
+  <meta name="description" content="序列化与反序列化 | Evil">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="什么是序列化当两个进程远程通信时，彼此可以发送各种类型的数据。无论是何种类型的数据，都会以二进制序列的形式在网络上传送。比如，我们可以通过http协议发送字符串信息，我们也可以在网络上直接发送Java对象。发送方需要把这个Java对象转换为字节序列，才能在网络上传送，接收方则需要把字节序列再恢复为Java对象才能正常读取。  序列化： 对象序列化的最主要的用处就是在传递和保存对象的时候，保证对象的">
 <meta name="keywords" content="Java">
@@ -1166,30 +1166,36 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="post-kongzheng1993-Session" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-kongzheng1993-序列化与反序列化" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Session笔记</h1>
+        <h1 class="article-title">序列化与反序列化</h1>
     
     <div class="article-meta">
         
         
         
+        <span class="book">
+            
+                <a  data-rel="Java">Java</a>
+            
+        </span>
+        
         
         <span class="tag">
             
-            <a class="color4">oop</a>
+            <a class="color5">Java</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2020-04-04 17:10:43'>2016-07-27 00:00</time>
+        创建时间:<time class="date" title='更新时间: 2020-04-12 19:37:48'>2020-04-12 00:30</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:422</span>
+        <span>字数:1k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1219,7 +1225,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Session简介"><span class="toc-text">Session简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Session和Cookie的区别"><span class="toc-text">Session和Cookie的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Session实现原理"><span class="toc-text">Session实现原理</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是序列化"><span class="toc-text">什么是序列化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么要序列化"><span class="toc-text">为什么要序列化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#怎样来序列化"><span class="toc-text">怎样来序列化</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1235,37 +1241,31 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="Session简介"><a href="#Session简介" class="headerlink" title="Session简介"></a>Session简介</h3><p>在WEB开发中，服务器可以为每个用户浏览器创建一个会话对象（session对象），注意：一个浏览器独占一个session对象(默认情况下)。因此，在需要保存用户数据时，服务器程序可以把用户数据写到用户浏览器独占的session中，当用户使用浏览器访问其它程序时，其它程序可以从用户的session中取出该用户的数据，为用户服务。</p>
-<h3 id="Session和Cookie的区别"><a href="#Session和Cookie的区别" class="headerlink" title="Session和Cookie的区别"></a>Session和Cookie的区别</h3><ul>
-<li>Cookie是把用户的数据写给用户的浏览器。</li>
-<li>Session技术把用户的数据写到用户独占的session中。</li>
-<li>Session对象由服务器创建，开发人员可以调用request对象的getSession方法得到session对象。</li>
+        <h2 id="什么是序列化"><a href="#什么是序列化" class="headerlink" title="什么是序列化"></a>什么是序列化</h2><p>当两个进程远程通信时，彼此可以发送各种类型的数据。无论是何种类型的数据，都会以二进制序列的形式在网络上传送。比如，我们可以通过http协议发送字符串信息，我们也可以在网络上直接发送Java对象。发送方需要把这个Java对象转换为字节序列，才能在网络上传送，接收方则需要把字节序列再恢复为Java对象才能正常读取。</p>
+<ul>
+<li><strong>序列化：</strong> 对象序列化的最主要的用处就是在传递和保存对象的时候，保证对象的完整性和可传递性。序列化是把对象转换成有序字节流，以便在网络上传输或者保存在本地文件中。核心作用是对象状态的保存与重建。</li>
+<li><strong>反序列化：</strong> 客户端从文件中或网络上获得序列化后的对象字节流，根据字节流中所保存的对象状态及描述信息，通过反序列化重建对象。</li>
 </ul>
-<h3 id="Session实现原理"><a href="#Session实现原理" class="headerlink" title="Session实现原理"></a>Session实现原理</h3><p>servlet中：</p>
-<pre><code>
-response.sendRedirect(&quot;pages/login.jsp&quot;);
-String username=request.getParameter(&quot;usn&quot;);
-HttpSession session=request.getSession();
- session.setAttribute(&quot;username&quot;,username);
-</code></pre><p>通过<code>HttpSession session=request.getSession();</code>，如果此线程中已经存在一个session，就使用这个session，如果没有，就创建一个。这个getSession()方法可以添加boolean的参数，true表示如果没有就创建一个，如果有就使用存在的那一个，false表示，直接创建一个，默认是true。session.setAttribute()来创建一个属性，这样另一端就可以get了。</p>
-<p>Jsp中：</p>
-<pre><code>
- Object usn=session.getAttribute(&quot;username&quot;);
-</code></pre><p>直接使用servlet中创建的Session对象，调用getAttribute();得到servlet中set的属性。这里即便是使用getSession()方法再次得到session也是在servlet中设置的Session对象。</p>
-<html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-session/" data-title="session" data-url="http://kongzheng1993.github.io/kongzheng1993-session/"></div>
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"kongzheng1993"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-</html>
+<h2 id="为什么要序列化"><a href="#为什么要序列化" class="headerlink" title="为什么要序列化"></a>为什么要序列化</h2><ol>
+<li><p><strong>持久化：</strong> 把对象的字节序列永久地保存到硬盘上，通常存放在一个文件中，比如：休眠的实现。以后服务器session管理，hibernate将对象持久化实现。</p>
+</li>
+<li><p><strong>网络通信：</strong> 在网络上传送对象的字节序列。比如：服务器之间的数据通信、对象传递。</p>
+</li>
+</ol>
+<h2 id="怎样来序列化"><a href="#怎样来序列化" class="headerlink" title="怎样来序列化"></a>怎样来序列化</h2><p>在Java中，想实现序列化，有两种方法：</p>
+<ol>
+<li><p><strong>实现<code>Serializable</code>接口</strong><br>一个对象想要被序列化，那么它的类就要实现此接口或者它的子接口。这个对象的所有属性（包括private属性、包括其引用的对象）都可以被序列化和反序列化来保存、传递。不想序列化的字段可以使用<code>transient</code>修饰。由于Serializable对象完全以它存储的二进制位为基础来构造，因此并不会调用任何构造函数，因此Serializable类无需默认构造函数，但是当Serializable类的父类没有实现Serializable接口时，反序列化过程会调用父类的默认构造函数，因此该父类必须有默认构造函数，否则会抛异常。使用<code>transient</code>关键字阻止序列化虽然简单方便，但被它修饰的属性被完全隔离在序列化机制之外，导致了在反序列化时无法获取该属性的值，而通过在需要序列化的对象的Java类里加入<code>writeObject()</code>方法与<code>readObject()</code>方法可以控制如何序列化各属性，甚至完全不序列化某些属性或者加密序列化某些属性。</p>
+</li>
+<li><p><strong>实现<code>Externalizable</code>接口</strong><br> 它是Serializable接口的子类，用户要实现的<code>writeExternal()</code>和<code>readExternal()</code>方法，用来决定如何序列化和反序列化。因为序列化和反序列化方法需要自己实现，因此可以指定序列化哪些属性，而<code>transient</code>在这里无效。对Externalizable对象反序列化时，会先调用类的无参构造方法，这是有别于默认反序列方式的。如果把类的不带参数的构造方法删除，或者把该构造方法的访问权限设置为private、默认或protected级别，会抛出<code>java.io.InvalidException: no valid constructor</code>异常，因此Externalizable对象必须有默认构造函数，而且必须是public的。</p>
+</li>
+</ol>
+<p><strong>序列化版本：</strong></p>
+<p>序列化过程中可以控制序列化的版本，该字段为被序列化对象中的serialVersionUID字段。</p>
+<pre><code class="java">public class Test implements Serializable {
+    private static final long serialVersionUID = 1L;
+}</code></pre>
+<p>反序列化时会讲序列化串中的serialVersionUID与当前对象中的序列化版本比较，如果一致才能成功反序列化。</p>
+<p>如果没有显式的声明serialVersionUID，系统会自动生成一个，类名、类及其属性修饰符、接口及接口顺序、属性、静态初始化、构造器中任何一样发生变化，都会导致serialVersionUID改变。所以还是显式的声明比较好。</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 kongzheng1993@hotmail.com </span>
@@ -1279,12 +1279,12 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
 
 
 <div class="article_copyright">
-    <p><span class="copy-title">文章标题:</span>Session笔记</p>
-    <p><span class="copy-title">文章字数:</span><span class="post-count">422</span></p>
+    <p><span class="copy-title">文章标题:</span>序列化与反序列化</p>
+    <p><span class="copy-title">文章字数:</span><span class="post-count">1k</span></p>
     <p><span class="copy-title">本文作者:</span><a  title="evilRat">evilRat</a></p>
-    <p><span class="copy-title">发布时间:</span>2016-07-27, 00:00:00</p>
-    <p><span class="copy-title">最后更新:</span>2020-04-04, 17:10:43</p>
-    <span class="copy-title">原始链接:</span><a class="post-url" href="/2016/07/27/kongzheng1993-Session/" title="Session笔记">https://kongzheng1993.github.io/2016/07/27/kongzheng1993-Session/</a>
+    <p><span class="copy-title">发布时间:</span>2020-04-12, 00:30:52</p>
+    <p><span class="copy-title">最后更新:</span>2020-04-12, 19:37:48</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/04/12/kongzheng1993-序列化与反序列化/" title="序列化与反序列化">https://kongzheng1993.github.io/2020/04/12/kongzheng1993-序列化与反序列化/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
     </p>
