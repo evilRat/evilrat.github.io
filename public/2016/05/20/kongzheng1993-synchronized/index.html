@@ -3,7 +3,7 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   <title>synchronized浅析 | Evil</title>
-  <meta name="keywords" content=" oop ">
+  <meta name="keywords" content>
   <meta name="description" content="synchronized浅析 | Evil">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="什么是序列化当两个进程远程通信时，彼此可以发送各种类型的数据。无论是何种类型的数据，都会以二进制序列的形式在网络上传送。比如，我们可以通过http协议发送字符串信息，我们也可以在网络上直接发送Java对象。发送方需要把这个Java对象转换为字节序列，才能在网络上传送，接收方则需要把字节序列再恢复为Java对象才能正常读取。  序列化： 对象序列化的最主要的用处就是在传递和保存对象的时候，保证对象的">
@@ -261,6 +261,18 @@
     
         
             
+        
+    
+        
+            
+            <li><div data-rel="NIO BIO IO">NIO BIO IO<small>(1)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
             <li><div data-rel="RSA"><i class="fold iconfont icon-right"></i>RSA<small>(1)</small></div>
                 
                     <ul class="sub hide">
@@ -284,11 +296,7 @@
     
         
             
-        
-    
-        
-            
-            <li><div data-rel="NIO BIO IO">NIO BIO IO<small>(1)</small></div>
+            <li><div data-rel="jvm">jvm<small>(2)</small></div>
                 
             </li>
             
@@ -304,18 +312,6 @@
     
         
             
-            <li><div data-rel="jvm">jvm<small>(2)</small></div>
-                
-            </li>
-            
-        
-    
-        
-            
-        
-    
-        
-            
             <li><div data-rel="other">other<small>(2)</small></div>
                 
             </li>
@@ -324,7 +320,19 @@
     
         
             
+        
+    
+        
+            
             <li><div data-rel="MQ">MQ<small>(1)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="node.js">node.js<small>(1)</small></div>
                 
             </li>
             
@@ -339,14 +347,6 @@
         
     
         
-            
-        
-    
-        
-            
-            <li><div data-rel="node.js">node.js<small>(1)</small></div>
-                
-            </li>
             
         
     
@@ -413,7 +413,7 @@
     <div></div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="57">
-<input type="hidden" id="yelog_site_word_count" value="53.6k">
+<input type="hidden" id="yelog_site_word_count" value="53.4k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -517,6 +517,22 @@
     </li>
     
     <li class="article-tag-list-item">
+        <a class="color5">java</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">reflect</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">Class</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">对象，Class对象</a>
+    </li>
+    
+    <li class="article-tag-list-item">
         <a class="color2">github</a>
     </li>
     
@@ -553,10 +569,6 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color5">java</a>
-    </li>
-    
-    <li class="article-tag-list-item">
         <a class="color4">多线程</a>
     </li>
     
@@ -577,27 +589,27 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color1">Linux</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">reflect</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color1">Class</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color1">对象，Class对象</a>
-    </li>
-    
-    <li class="article-tag-list-item">
         <a class="color3">mq</a>
     </li>
     
     <li class="article-tag-list-item">
         <a class="color5">消息队列</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">Linux</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">职业</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">业务</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">学习</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -613,15 +625,7 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color3">职业</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">业务</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">学习</a>
+        <a class="color1">NIO BIO IO</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -641,11 +645,7 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color1">NIO BIO IO</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color5">Java</a>
+        <a class="color4">jvm</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -653,7 +653,7 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">jvm</a>
+        <a class="color5">Java</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -665,11 +665,11 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">Web</a>
+        <a class="color3">node.js</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color3">node.js</a>
+        <a class="color4">Web</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -810,6 +810,14 @@
             <span class="post-date" title="2020-03-19 00:30:52">2020/03/19</span>
         </a>
         
+        <a  class="jvm "
+           href="/2020/03/08/kongzheng1993-jhat/"
+           data-tag="jvm"
+           data-author="" >
+            <span class="post-title" title="jhat">jhat</span>
+            <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
+        </a>
+        
         <a  class="Web "
            href="/2020/03/08/kongzheng1993-URLEncode/"
            data-tag="Web"
@@ -826,27 +834,19 @@
             <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
         </a>
         
-        <a  class="jvm "
-           href="/2020/03/08/kongzheng1993-jmap/"
-           data-tag="jvm"
-           data-author="" >
-            <span class="post-title" title="jmap">jmap</span>
-            <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
-        </a>
-        
-        <a  class="jvm "
-           href="/2020/03/08/kongzheng1993-jhat/"
-           data-tag="jvm"
-           data-author="" >
-            <span class="post-title" title="jhat">jhat</span>
-            <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
-        </a>
-        
         <a  class="Java "
            href="/2020/03/08/kongzheng1993-Map遍历的几种方法/"
            data-tag="Java"
            data-author="" >
             <span class="post-title" title="关于Map遍历的几种方法总结">关于Map遍历的几种方法总结</span>
+            <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
+        </a>
+        
+        <a  class="jvm "
+           href="/2020/03/08/kongzheng1993-jmap/"
+           data-tag="jvm"
+           data-author="" >
+            <span class="post-title" title="jmap">jmap</span>
             <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
         </a>
         
@@ -1003,18 +1003,18 @@
         </a>
         
         <a  class=""
-           href="/2016/07/28/kongzheng1993-method_of_request&response/"
-           data-tag="oop"
-           data-author="" >
-            <span class="post-title" title="request&amp;response">request&amp;response</span>
-            <span class="post-date" title="2016-07-28 00:00:00">2016/07/28</span>
-        </a>
-        
-        <a  class=""
            href="/2016/07/28/kongzheng1993-Properties/"
            data-tag="oop"
            data-author="" >
             <span class="post-title" title="properties文件的使用">properties文件的使用</span>
+            <span class="post-date" title="2016-07-28 00:00:00">2016/07/28</span>
+        </a>
+        
+        <a  class=""
+           href="/2016/07/28/kongzheng1993-method_of_request&response/"
+           data-tag="oop"
+           data-author="" >
+            <span class="post-title" title="request&amp;response">request&amp;response</span>
             <span class="post-date" title="2016-07-28 00:00:00">2016/07/28</span>
         </a>
         
@@ -1035,6 +1035,14 @@
         </a>
         
         <a  class=""
+           href="/2016/07/26/kongzheng1993-centos7_mysql/"
+           data-tag="re"
+           data-author="" >
+            <span class="post-title" title="centos 7 安装mysql遇到的问题">centos 7 安装mysql遇到的问题</span>
+            <span class="post-date" title="2016-07-26 00:00:00">2016/07/26</span>
+        </a>
+        
+        <a  class=""
            href="/2016/07/26/kongzheng1993-servlet/"
            data-tag="servlet"
            data-author="" >
@@ -1047,14 +1055,6 @@
            data-tag="re"
            data-author="" >
             <span class="post-title" title="请求转发和重定向">请求转发和重定向</span>
-            <span class="post-date" title="2016-07-26 00:00:00">2016/07/26</span>
-        </a>
-        
-        <a  class=""
-           href="/2016/07/26/kongzheng1993-centos7_mysql/"
-           data-tag="re"
-           data-author="" >
-            <span class="post-title" title="centos 7 安装mysql遇到的问题">centos 7 安装mysql遇到的问题</span>
             <span class="post-date" title="2016-07-26 00:00:00">2016/07/26</span>
         </a>
         
@@ -1115,6 +1115,22 @@
         </a>
         
         <a  class=""
+           href="/2016/06/10/kongzheng1993-thewayofsort/"
+           data-tag="sample post,images,test"
+           data-author="" >
+            <span class="post-title" title="几种常见的内部排序">几种常见的内部排序</span>
+            <span class="post-date" title="2016-06-10 00:00:00">2016/06/10</span>
+        </a>
+        
+        <a  class=""
+           href="/2016/06/10/kongzheng1993-aboutFloat/"
+           data-tag="float"
+           data-author="" >
+            <span class="post-title" title="关于float">关于float</span>
+            <span class="post-date" title="2016-06-10 00:00:00">2016/06/10</span>
+        </a>
+        
+        <a  class=""
            href="/2016/06/10/kongzheng1993-oracle/"
            data-tag="sql,select,distinct,group by,order by"
            data-author="" >
@@ -1131,24 +1147,8 @@
         </a>
         
         <a  class=""
-           href="/2016/06/10/kongzheng1993-aboutFloat/"
-           data-tag="float"
-           data-author="" >
-            <span class="post-title" title="关于float">关于float</span>
-            <span class="post-date" title="2016-06-10 00:00:00">2016/06/10</span>
-        </a>
-        
-        <a  class=""
-           href="/2016/06/10/kongzheng1993-thewayofsort/"
-           data-tag="sample post,images,test"
-           data-author="" >
-            <span class="post-title" title="几种常见的内部排序">几种常见的内部排序</span>
-            <span class="post-date" title="2016-06-10 00:00:00">2016/06/10</span>
-        </a>
-        
-        <a  class=""
            href="/2016/05/20/kongzheng1993-synchronized/"
-           data-tag="oop"
+           data-tag=""
            data-author="" >
             <span class="post-title" title="synchronized浅析">synchronized浅析</span>
             <span class="post-date" title="2016-05-20 00:00:00">2016/05/20</span>
@@ -1175,21 +1175,15 @@
         
         
         
-        <span class="tag">
-            
-            <a class="color4">oop</a>
-            
-        </span>
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2020-04-14 21:22:56'>2016-05-20 00:00</time>
         
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2020-04-04 17:10:43'>2016-05-20 00:00</time>
-        
-    </div>
-    <div class="article-meta">
-        
-        <span>字数:1.5k</span>
+        <span>字数:1.3k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1219,7 +1213,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于synchronized"><span class="toc-text">关于synchronized</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一"><span class="toc-text">一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1、synchronized关键字的作用域有二种："><span class="toc-text">1、synchronized关键字的作用域有二种：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1）是某个对象实例内，synchronized-aMethod-可以防止多个线程同时访问这个对象的synchronized方法（如果一个对象有多个synchronized方法，只要一个线程访问了其中的一个synchronized方法，其它线程不能同时访问这个对象中任何一个synchronized方法）。这时，不同的对象实例的synchronized方法是不相干扰的。也就是说，其它线程照样可以同时访问相同类的另一个对象实例中的synchronized方法；"><span class="toc-text">1）是某个对象实例内，synchronized aMethod(){}可以防止多个线程同时访问这个对象的synchronized方法（如果一个对象有多个synchronized方法，只要一个线程访问了其中的一个synchronized方法，其它线程不能同时访问这个对象中任何一个synchronized方法）。这时，不同的对象实例的synchronized方法是不相干扰的。也就是说，其它线程照样可以同时访问相同类的另一个对象实例中的synchronized方法；</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2）是某个类的范围，synchronized-static-aStaticMethod-防止多个线程同时访问这个类中的synchronized-static-方法。它可以对类的所有对象实例起作用。"><span class="toc-text">2）是某个类的范围，synchronized static aStaticMethod{}防止多个线程同时访问这个类中的synchronized static 方法。它可以对类的所有对象实例起作用。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2、除了方法前用synchronized关键字，synchronized关键字还可以用于方法中的某个区块中，表示只对这个区块的资源实行互斥访问。用法是-synchronized-this-区块-，它的作用域是当前对象；"><span class="toc-text">2、除了方法前用synchronized关键字，synchronized关键字还可以用于方法中的某个区块中，表示只对这个区块的资源实行互斥访问。用法是: synchronized(this){/区块/}，它的作用域是当前对象；</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3、synchronized关键字是不能继承的，也就是说，基类的方法synchronized-f-在继承类中并不自动是synchronized-f-，而是变成了f-。继承类需要你显式的指定它的某个方法为synchronized方法；"><span class="toc-text">3、synchronized关键字是不能继承的，也就是说，基类的方法synchronized f(){} 在继承类中并不自动是synchronized f(){}，而是变成了f(){}。继承类需要你显式的指定它的某个方法为synchronized方法；</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二"><span class="toc-text">二</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronized是什么？"><span class="toc-text">synchronized是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原理"><span class="toc-text">原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronized的几种加锁方式以及基础说明"><span class="toc-text">synchronized的几种加锁方式以及基础说明</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#示例1-没有synchronized加锁"><span class="toc-text">示例1:没有synchronized加锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#示例2-同步方法块，锁是括号里面的对象"><span class="toc-text">示例2:同步方法块，锁是括号里面的对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#示例3-普通同步方法，锁是当前实例对象"><span class="toc-text">示例3:普通同步方法，锁是当前实例对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#示例4-静态同步方法，锁是当前类的class对象"><span class="toc-text">示例4:静态同步方法，锁是当前类的class对象</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1235,43 +1229,148 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="关于synchronized"><a href="#关于synchronized" class="headerlink" title="关于synchronized"></a>关于synchronized</h2><h3 id="一"><a href="#一" class="headerlink" title="一"></a>一</h3><h3 id="1、synchronized关键字的作用域有二种："><a href="#1、synchronized关键字的作用域有二种：" class="headerlink" title="1、synchronized关键字的作用域有二种："></a>1、synchronized关键字的作用域有二种：</h3><h4 id="1）是某个对象实例内，synchronized-aMethod-可以防止多个线程同时访问这个对象的synchronized方法（如果一个对象有多个synchronized方法，只要一个线程访问了其中的一个synchronized方法，其它线程不能同时访问这个对象中任何一个synchronized方法）。这时，不同的对象实例的synchronized方法是不相干扰的。也就是说，其它线程照样可以同时访问相同类的另一个对象实例中的synchronized方法；"><a href="#1）是某个对象实例内，synchronized-aMethod-可以防止多个线程同时访问这个对象的synchronized方法（如果一个对象有多个synchronized方法，只要一个线程访问了其中的一个synchronized方法，其它线程不能同时访问这个对象中任何一个synchronized方法）。这时，不同的对象实例的synchronized方法是不相干扰的。也就是说，其它线程照样可以同时访问相同类的另一个对象实例中的synchronized方法；" class="headerlink" title="1）是某个对象实例内，synchronized aMethod(){}可以防止多个线程同时访问这个对象的synchronized方法（如果一个对象有多个synchronized方法，只要一个线程访问了其中的一个synchronized方法，其它线程不能同时访问这个对象中任何一个synchronized方法）。这时，不同的对象实例的synchronized方法是不相干扰的。也就是说，其它线程照样可以同时访问相同类的另一个对象实例中的synchronized方法；"></a>1）是某个对象实例内，synchronized aMethod(){}可以防止多个线程同时访问这个对象的synchronized方法（如果一个对象有多个synchronized方法，只要一个线程访问了其中的一个synchronized方法，其它线程不能同时访问这个对象中任何一个synchronized方法）。这时，不同的对象实例的synchronized方法是不相干扰的。也就是说，其它线程照样可以同时访问相同类的另一个对象实例中的synchronized方法；</h4><h4 id="2）是某个类的范围，synchronized-static-aStaticMethod-防止多个线程同时访问这个类中的synchronized-static-方法。它可以对类的所有对象实例起作用。"><a href="#2）是某个类的范围，synchronized-static-aStaticMethod-防止多个线程同时访问这个类中的synchronized-static-方法。它可以对类的所有对象实例起作用。" class="headerlink" title="2）是某个类的范围，synchronized static aStaticMethod{}防止多个线程同时访问这个类中的synchronized static 方法。它可以对类的所有对象实例起作用。"></a>2）是某个类的范围，synchronized static aStaticMethod{}防止多个线程同时访问这个类中的synchronized static 方法。它可以对类的所有对象实例起作用。</h4><h3 id="2、除了方法前用synchronized关键字，synchronized关键字还可以用于方法中的某个区块中，表示只对这个区块的资源实行互斥访问。用法是-synchronized-this-区块-，它的作用域是当前对象；"><a href="#2、除了方法前用synchronized关键字，synchronized关键字还可以用于方法中的某个区块中，表示只对这个区块的资源实行互斥访问。用法是-synchronized-this-区块-，它的作用域是当前对象；" class="headerlink" title="2、除了方法前用synchronized关键字，synchronized关键字还可以用于方法中的某个区块中，表示只对这个区块的资源实行互斥访问。用法是: synchronized(this){/区块/}，它的作用域是当前对象；"></a>2、除了方法前用synchronized关键字，synchronized关键字还可以用于方法中的某个区块中，表示只对这个区块的资源实行互斥访问。用法是: synchronized(this){/<em>区块</em>/}，它的作用域是当前对象；</h3><h3 id="3、synchronized关键字是不能继承的，也就是说，基类的方法synchronized-f-在继承类中并不自动是synchronized-f-，而是变成了f-。继承类需要你显式的指定它的某个方法为synchronized方法；"><a href="#3、synchronized关键字是不能继承的，也就是说，基类的方法synchronized-f-在继承类中并不自动是synchronized-f-，而是变成了f-。继承类需要你显式的指定它的某个方法为synchronized方法；" class="headerlink" title="3、synchronized关键字是不能继承的，也就是说，基类的方法synchronized f(){} 在继承类中并不自动是synchronized f(){}，而是变成了f(){}。继承类需要你显式的指定它的某个方法为synchronized方法；"></a>3、synchronized关键字是不能继承的，也就是说，基类的方法synchronized f(){} 在继承类中并不自动是synchronized f(){}，而是变成了f(){}。继承类需要你显式的指定它的某个方法为synchronized方法；</h3><p>Java语言的关键字，当它用来修饰一个方法或者一个代码块的时候，能够保证在同一时刻最多只有一个线程执行该段代码。<br>     一、当两个并发线程访问同一个对象object中的这个synchronized(this)同步代码块时，一个时间内只能有一个线程得到执行。另一个线程必须等待当前线程执行完这个代码块以后才能执行该代码块。<br>     二、然而，当一个线程访问object的一个synchronized(this)同步代码块时，另一个线程仍然可以访问该object中的非synchronized(this)同步代码块。<br>     三、尤其关键的是，当一个线程访问object的一个synchronized(this)同步代码块时，其他线程对object中所有其它synchronized(this)同步代码块的访问将被阻塞。<br>     四、第三个例子同样适用其它同步代码块。也就是说，当一个线程访问object的一个synchronized(this)同步代码块时，它就获得了这个object的对象锁。结果，其它线程对该object对象所有同步代码部分的访问都被暂时阻塞。<br>     五、以上规则对其它对象锁同样适用.</p>
-<h3 id="二"><a href="#二" class="headerlink" title="二"></a>二</h3><p>synchronized 关键字，它包括两种用法：synchronized 方法和 synchronized 块。  </p>
-<ol>
-<li>synchronized 方法：通过在方法声明中加入 synchronized关键字来声明 synchronized 方法。如：<br>public synchronized void accessVal(int newVal);<br>synchronized 方法控制对类成员变量的访问：每个类实例对应一把锁，每个 synchronized 方法都必须获得调用该方法的类实例的锁方能</li>
-</ol>
-<p>执行，否则所属线程阻塞，方法一旦执行，就独占该锁，直到从该方法返回时才将锁释放，此后被阻塞的线程方能获得该锁，重新进入可执行</p>
-<p>状态。这种机制确保了同一时刻对于每一个类实例，其所有声明为 synchronized 的成员函数中至多只有一个处于可执行状态（因为至多只有</p>
-<p>一个能够获得该类实例对应的锁），从而有效避免了类成员变量的访问冲突（只要所有可能访问类成员变量的方法均被声明为 synchronized）</p>
-<p>。  
-在 Java 中，不光是类实例，每一个类也对应一把锁，这样我们也可将类的静态成员函数声明为 synchronized ，以控制其对类的静态成</p>
-<p>员变量的访问。<br>synchronized 方法的缺陷：若将一个大的方法声明为synchronized 将会大大影响效率，典型地，若将线程类的方法 run() 声明为</p>
-<p>synchronized ，由于在线程的整个生命期内它一直在运行，因此将导致它对本类任何 synchronized 方法的调用都永远不会成功。当然我们可</p>
-<p>以通过将访问类成员变量的代码放到专门的方法中，将其声明为 synchronized ，并在主方法中调用来解决这一问题，但是 Java 为我们提供</p>
-<p>了更好的解决办法，那就是 synchronized 块。  </p>
-<ol start="2">
-<li>synchronized 块：通过 synchronized关键字来声明synchronized 块。语法如下：<br>synchronized(syncObject) {<br>//允许访问控制的代码<br>}  
-synchronized 块是这样一个代码块，其中的代码必须获得对象 syncObject （如前所述，可以是类实例或类）的锁方能执行，具体机</li>
-</ol>
-<p>制同前所述。由于可以针对任意代码块，且可任意指定上锁的对象，故灵活性较高。<br>对synchronized(this)的一些理解<br>一、当两个并发线程访问同一个对象object中的这个synchronized(this)同步代码块时，一个时间内只能有一个线程得到执行。另一个线</p>
-<p>程必须等待当前线程执行完这个代码块以后才能执行该代码块。<br>二、然而，当一个线程访问object的一个synchronized(this)同步代码块时，另一个线程仍然可以访问该object中的非synchronized</p>
-<p>(this)同步代码块。<br>三、尤其关键的是，当一个线程访问object的一个synchronized(this)同步代码块时，其他线程对object中所有其它synchronized(this)</p>
-<p>同步代码块的访问将被阻塞。<br>四、第三个例子同样适用其它同步代码块。也就是说，当一个线程访问object的一个synchronized(this)同步代码块时，它就获得了这个</p>
-<p>object的对象锁。结果，其它线程对该object对象所有同步代码部分的访问都被暂时阻塞。<br>五、以上规则对其它对象锁同样适用</p>
-<html>
-<div class="ds-thread" data-thread-key="http://kongzheng1993.github.io/kongzheng1993-howManyTimes/" data-title="howManyTimes" data-url="http://kongzheng1993.github.io/kongzheng1993-howManyTimes/"></div>
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"kongzheng1993"};
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-</html>
+        <h2 id="synchronized是什么？"><a href="#synchronized是什么？" class="headerlink" title="synchronized是什么？"></a>synchronized是什么？</h2><p>synchronized是一个关键字，并不是一个“锁”，“加锁”这个操作更符合它的含义。</p>
+<p>字面意思它是同步的过去式。<br><img src="/2016/05/20/kongzheng1993-synchronized/fanyi.png"></p>
+<p>多线程环境：<br><img src="/2016/05/20/kongzheng1993-synchronized/1.png"></p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>synchronized的底层实现是使用操作系统的mutex lock实现的。JDK5之前被称为重量级锁，JDK6对synchronized内在机制进行了优化，加入了CAS、轻量级锁和偏向锁对功能，性能上已经跟ReentrantLock相差无几，而且在使用上更简单，不易出错。所以如果仅仅要实现互斥效果，不需要基于Lock的复杂操作（中断、条件等），推荐优先使用synchronized。</p>
+<p>synchronized用的锁是存在Java对象头里的。JVM基于<code>进入</code>和<code>退出</code>Monitor对象来实现方法同步和代码块同步。</p>
+<h2 id="synchronized的几种加锁方式以及基础说明"><a href="#synchronized的几种加锁方式以及基础说明" class="headerlink" title="synchronized的几种加锁方式以及基础说明"></a>synchronized的几种加锁方式以及基础说明</h2><table>
+<thead>
+<tr>
+<th>修饰内容</th>
+<th>锁类型</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>没加锁</td>
+<td>没加锁</td>
+<td>示例1</td>
+</tr>
+<tr>
+<td>修饰代码块</td>
+<td>任意对象锁</td>
+<td>示例2</td>
+</tr>
+<tr>
+<td>修饰普通方法</td>
+<td>this锁</td>
+<td>示例3</td>
+</tr>
+<tr>
+<td>修饰静态方法</td>
+<td>类锁</td>
+<td>示例4</td>
+</tr>
+</tbody></table>
+<h3 id="示例1-没有synchronized加锁"><a href="#示例1-没有synchronized加锁" class="headerlink" title="示例1:没有synchronized加锁"></a>示例1:没有synchronized加锁</h3><pre><code class="java">public class NoSynchronizedDemo {
+    public void method() {
+        System.out.println(&quot;Method 1 start&quot;);
+    }
+}</code></pre>
+<p>查看核心字节码</p>
+<pre><code class="java">  public void method();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=2, locals=1, args_size=1
+         0: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
+         3: ldc           #3                  // String Method 1 start
+         5: invokevirtual #4                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+         8: return
+      LineNumberTable:
+        line 5: 0
+        line 6: 8
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       9     0  this   Lcom/lhx/cloud/javathread/NoSynchronizedDemo;</code></pre>
+<h3 id="示例2-同步方法块，锁是括号里面的对象"><a href="#示例2-同步方法块，锁是括号里面的对象" class="headerlink" title="示例2:同步方法块，锁是括号里面的对象"></a>示例2:同步方法块，锁是括号里面的对象</h3><pre><code class="java">public class SynchronizedDemo {
+    public void method() {
+        synchronized (this) {
+            System.out.println(&quot;Method 1 start&quot;);
+        }
+    }
+}</code></pre>
+<p>查看字节码</p>
+<pre><code class="java">  public void method();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=2, locals=3, args_size=1
+         0: aload_0
+         1: dup
+         2: astore_1
+         3: monitorenter
+         4: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
+         7: ldc           #3                  // String Method 1 start
+         9: invokevirtual #4                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+        12: aload_1
+        13: monitorexit
+        14: goto          22
+        17: astore_2
+        18: aload_1
+        19: monitorexit
+        20: aload_2
+        21: athrow
+        22: return</code></pre>
+<p>可以看在加锁的代码块，多了个 <code>monitorenter</code> , <code>monitorexit</code></p>
+<p><strong>monitorenter</strong><br>每个对象有一个监视器锁（monitor）。当monitor被占用时就会处于锁定状态，线程执行monitorenter指令时尝试获取monitor的所有权，过程如下：</p>
+<ul>
+<li>如果monitor的进入数为0，则该线程进入monitor，然后将进入数设置为1，该线程即为monitor的所有者。</li>
+<li>如果线程已经占有该monitor，只是重新进入，则进入monitor的进入数加1.</li>
+<li>如果其他线程已经占用了monitor，则该线程进入阻塞状态，直到monitor的进入数为0，再重新尝试获取monitor的所有权</li>
+</ul>
+<p><em>总结：</em></p>
+<ul>
+<li>synchronized是可重入锁，即如果当前线程以获得锁对象，可再次获取该锁对象。即：该锁对象的监视器锁 monitor 具有可重入性，每进入一次，进入次数+1</li>
+<li>从synchronized使用的语法上，如果修饰代码块，<code>synchronize (object) {} object</code> 即为锁对象</li>
+<li>如果修饰方法，普通方法可认为是 this 锁，即<code>当前对象锁</code></li>
+<li>静态方法可认为是<code>类锁</code></li>
+</ul>
+<p><strong>monitorexit</strong></p>
+<ul>
+<li>执行monitorexit的线程必须是objectref所对应的monitor的所有者。</li>
+<li>指令执行时，monitor的进入数减1</li>
+<li>如果减1后进入数为0，那线程退出monitor，不再是这个monitor的所有者</li>
+<li>其他被这个monitor阻塞的线程可以尝试去获取这个monitor的所有权</li>
+</ul>
+<p><em>总结：</em><br>通过以上描述，应该能很清楚的看出Synchronized的实现原理，Synchronized的语义底层是通过一个<code>monitor</code>的对象来完成，其实wait/notify等方法也依赖于monitor对象，这就是为什么只有在同步的块或者方法中才能调用wait/notify等方法，否则会抛出java.lang.IllegalMonitorStateException的异常的原因。</p>
+<h3 id="示例3-普通同步方法，锁是当前实例对象"><a href="#示例3-普通同步方法，锁是当前实例对象" class="headerlink" title="示例3:普通同步方法，锁是当前实例对象"></a>示例3:普通同步方法，锁是当前实例对象</h3><pre><code class="java">public class SynchronizedDemo2 {
+    public synchronized void method() {
+        System.out.println(&quot;Method 1 start&quot;);
+    }
+}</code></pre>
+<p>查看字节码</p>
+<pre><code class="java">  public synchronized void method();
+    descriptor: ()V
+    flags: ACC_PUBLIC, ACC_SYNCHRONIZED
+    Code:
+      stack=2, locals=1, args_size=1
+         0: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
+         3: ldc           #3                  // String Method 1 start
+         5: invokevirtual #4                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+         8: return</code></pre>
+<p><strong>注意:</strong> 在flags上增加了ACC_SYNCHRONIZED</p>
+<h3 id="示例4-静态同步方法，锁是当前类的class对象"><a href="#示例4-静态同步方法，锁是当前类的class对象" class="headerlink" title="示例4:静态同步方法，锁是当前类的class对象"></a>示例4:静态同步方法，锁是当前类的class对象</h3><pre><code class="java">public class SynchronizedDemoStatic {
+    public static synchronized void method() {
+        System.out.println(&quot;Method 1 start&quot;);
+    }
+}</code></pre>
+<p>查看字节码</p>
+<pre><code class="java">  public static synchronized void method();
+    descriptor: ()V
+    flags: ACC_PUBLIC, ACC_STATIC, ACC_SYNCHRONIZED
+    Code:
+      stack=2, locals=0, args_size=0
+         0: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
+         3: ldc           #3                  // String Method 1 start
+         5: invokevirtual #4                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+         8: return</code></pre>
+<p><strong>注意：</strong> 在flags上增加了ACC_STATIC, ACC_SYNCHRONIZED</p>
+<p><em>总结：</em></p>
+<p>针对示例3、示例四，在flags上均增加了<code>ACC_SYNCHRONIZED</code></p>
+<p>从反编译的结果来看，方法的同步并没有通过指令<code>monitorenter</code>和<code>monitorexit</code>来完成（理论上其实也可以通过这两条指令来实现），不过相对于普通方法（没加synchronized的），其常量池中多了<code>ACC_SYNCHRONIZED</code>标示符。<strong>JVM就是根据该标示符来实现方法的同步的</strong>：当方法调用时，调用指令将会检查方法的<code>ACC_SYNCHRONIZED</code>访问标志是否被设置，如果设置了，执行线程将先获取<code>monitor</code>，获取成功之后才能执行方法体，方法执行完后再释放<code>monitor</code>。在方法执行期间，其他任何线程都无法再获得同一个<code>monitor</code>对象。 其实本质上没有区别，只是方法的同步是一种<strong>隐式</strong>的方式来实现，无需通过字节码来完成。</p>
+
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 kongzheng1993@hotmail.com </span>
     </div>
@@ -1285,10 +1384,10 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
 
 <div class="article_copyright">
     <p><span class="copy-title">文章标题:</span>synchronized浅析</p>
-    <p><span class="copy-title">文章字数:</span><span class="post-count">1.5k</span></p>
+    <p><span class="copy-title">文章字数:</span><span class="post-count">1.3k</span></p>
     <p><span class="copy-title">本文作者:</span><a  title="evilRat">evilRat</a></p>
     <p><span class="copy-title">发布时间:</span>2016-05-20, 00:00:00</p>
-    <p><span class="copy-title">最后更新:</span>2020-04-04, 17:10:43</p>
+    <p><span class="copy-title">最后更新:</span>2020-04-14, 21:22:56</p>
     <span class="copy-title">原始链接:</span><a class="post-url" href="/2016/05/20/kongzheng1993-synchronized/" title="synchronized浅析">https://kongzheng1993.github.io/2016/05/20/kongzheng1993-synchronized/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
@@ -1372,7 +1471,7 @@ var duoshuoQuery = {short_name:"kongzheng1993"};
     /*作者、标签的自动补全*/
     $(function () {
         $('.search').AutoComplete({
-            'data': ['#oop','#float','#servlet','#re','#sample post','#images','#test','#String','#new','#catch，try','#sql','#select','#distinct','#group by','#order by','#oracle','#sys','#sqlplus','#github','#hexo','#git','#suse','#server','#FTP','#linux','#ss','#console','#java','#多线程','#安全','#mysql','#备份','#编码','#Linux','#reflect','#Class','#对象，Class对象','#mq','#消息队列','#quartz','#锁','#分布式','#职业','#业务','#学习','#RSA','#SHA','#加密','#签名','#NIO BIO IO','#Java','#Guava','#jvm','#other','#MQ','#Web','#node.js','#RocketMQ','#resume','#简历','#jdk','#网络',],
+            'data': ['#oop','#float','#servlet','#re','#sample post','#images','#test','#String','#new','#catch，try','#sql','#select','#distinct','#group by','#order by','#oracle','#sys','#sqlplus','#java','#reflect','#Class','#对象，Class对象','#github','#hexo','#git','#suse','#server','#FTP','#linux','#ss','#console','#多线程','#安全','#mysql','#备份','#编码','#mq','#消息队列','#Linux','#职业','#业务','#学习','#quartz','#锁','#分布式','#NIO BIO IO','#RSA','#SHA','#加密','#签名','#jvm','#Guava','#Java','#other','#MQ','#node.js','#Web','#RocketMQ','#resume','#简历','#jdk','#网络',],
             'itemHeight': 20,
             'width': 418
         }).AutoComplete('show');
