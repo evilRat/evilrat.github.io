@@ -114,7 +114,7 @@ Builder模式的确也有不足，创建对象必须要先创建它的构造器�
 在Java 1.5之前有两种方法实现Singleton，这两种方法都要把构造器保持为私有的，并导出共有的静态变量，以便客户端能够访问该类的唯一实例。
 
 1. 第一种方法中，公有静态成员是个final域：
-   
+
 ```java
 //singleton with public final field
 public class Elvis {
@@ -148,7 +148,7 @@ public class Elvis {
 工厂方法的优势：
 
 - **提供了灵活性：** 在不改变api的前提下，可以改变该类是否应该为singleton的想法，因为客户都都是通过`getInstance`方法获取对象的。
-- **泛型** 
+- **泛型**
 
 上面两种方法要实现singleton类变成可序列化（Serializable），仅仅在生命中加上`implements Serializable`是不够的。**为了维护并保证Singleton，必须声明所有的实例域都是瞬时（transient）的，并提供一个`readResolve`方法，否则每次反序列化一个序列化的实例时，都会创建一个新的实例。**
 
@@ -183,4 +183,3 @@ public class Elvis {
     }
 }
 ```
-
