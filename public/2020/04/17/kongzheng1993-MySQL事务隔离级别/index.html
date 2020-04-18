@@ -6,21 +6,18 @@
   <meta name="keywords" content=" Java ">
   <meta name="description" content="MySQL事务隔离级别 | Evil">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="什么是MonitorMonitor可以理解为一种同步工具，也可理解为一种同步机制，常常被描述为一个Java对象，也叫管程。 管程（Monitor）是一种和信号量（Sophomore）等价的同步机制。它在Java并发编程中也非常重要，虽然程序员没有直接接触管程，但它确实是synchronized和wait()/notify()等线程同步和线程间协作工具的基石：当我们在使用这些工具时，其实是它在背后提">
+<meta name="description" content="什么是事务事务是应用程序中一系列操作，所有操作必须全部完成，若有一个操作失败，都会使所有的操作撤销。 ACID事务具有四个特性：原子性（ Atomicity ）、一致性（ Consistency ）、隔离性（ Isolation ）和持续性（ Durability ）。  原子性。事务是数据库的逻辑工作单位，事务中包含的各操作要么都做，要么都不做。 一致性。事务执行的结果必须是使数据库从一个一致性">
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java Monitor">
-<meta property="og:url" content="https://kongzheng1993.github.io/2020/04/17/kongzheng1993-Java_Monitor/index.html">
+<meta property="og:title" content="MySQL事务隔离级别">
+<meta property="og:url" content="https://kongzheng1993.github.io/2020/04/17/kongzheng1993-MySQL事务隔离级别/index.html">
 <meta property="og:site_name" content="Evil">
-<meta property="og:description" content="什么是MonitorMonitor可以理解为一种同步工具，也可理解为一种同步机制，常常被描述为一个Java对象，也叫管程。 管程（Monitor）是一种和信号量（Sophomore）等价的同步机制。它在Java并发编程中也非常重要，虽然程序员没有直接接触管程，但它确实是synchronized和wait()/notify()等线程同步和线程间协作工具的基石：当我们在使用这些工具时，其实是它在背后提">
+<meta property="og:description" content="什么是事务事务是应用程序中一系列操作，所有操作必须全部完成，若有一个操作失败，都会使所有的操作撤销。 ACID事务具有四个特性：原子性（ Atomicity ）、一致性（ Consistency ）、隔离性（ Isolation ）和持续性（ Durability ）。  原子性。事务是数据库的逻辑工作单位，事务中包含的各操作要么都做，要么都不做。 一致性。事务执行的结果必须是使数据库从一个一致性">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://kongzheng1993.github.io/2020/04/17/kongzheng1993-Java_Monitor/1.png">
-<meta property="og:image" content="https://kongzheng1993.github.io/2020/04/17/kongzheng1993-Java_Monitor/2.png">
-<meta property="og:updated_time" content="2020-04-17T15:34:13.871Z">
+<meta property="og:updated_time" content="2020-04-18T07:53:18.504Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java Monitor">
-<meta name="twitter:description" content="什么是MonitorMonitor可以理解为一种同步工具，也可理解为一种同步机制，常常被描述为一个Java对象，也叫管程。 管程（Monitor）是一种和信号量（Sophomore）等价的同步机制。它在Java并发编程中也非常重要，虽然程序员没有直接接触管程，但它确实是synchronized和wait()/notify()等线程同步和线程间协作工具的基石：当我们在使用这些工具时，其实是它在背后提">
-<meta name="twitter:image" content="https://kongzheng1993.github.io/2020/04/17/kongzheng1993-Java_Monitor/1.png">
+<meta name="twitter:title" content="MySQL事务隔离级别">
+<meta name="twitter:description" content="什么是事务事务是应用程序中一系列操作，所有操作必须全部完成，若有一个操作失败，都会使所有的操作撤销。 ACID事务具有四个特性：原子性（ Atomicity ）、一致性（ Consistency ）、隔离性（ Isolation ）和持续性（ Durability ）。  原子性。事务是数据库的逻辑工作单位，事务中包含的各操作要么都做，要么都不做。 一致性。事务执行的结果必须是使数据库从一个一致性">
 
 
 <link rel="icon" href="/img/avatar.png">
@@ -135,37 +132,6 @@
     
         
             
-            <li><div data-rel="blog"><i class="fold iconfont icon-right"></i>blog<small>(1)</small></div>
-                
-                    <ul class="sub hide">
-                        
-                        <li><div data-rel="github"><i class="fold iconfont icon-right"></i>github<small>(1)</small></div>
-                            
-                                <ul class="sub hide">
-                                    
-                                    <li><div data-rel="git">git<small>(1)</small></div>
-                                    </li>
-                                    
-                                </ul>
-                            
-                        </li>
-                            
-                    </ul>
-                
-            </li>
-            
-        
-    
-        
-            
-        
-    
-        
-            
-        
-    
-        
-            
             <li><div data-rel="suse"><i class="fold iconfont icon-right"></i>suse<small>(1)</small></div>
                 
                     <ul class="sub hide">
@@ -189,7 +155,38 @@
     
         
             
-            <li><div data-rel="java">java<small>(1)</small></div>
+            <li><div data-rel="blog"><i class="fold iconfont icon-right"></i>blog<small>(1)</small></div>
+                
+                    <ul class="sub hide">
+                        
+                        <li><div data-rel="github"><i class="fold iconfont icon-right"></i>github<small>(1)</small></div>
+                            
+                                <ul class="sub hide">
+                                    
+                                    <li><div data-rel="git">git<small>(1)</small></div>
+                                    </li>
+                                    
+                                </ul>
+                            
+                        </li>
+                            
+                    </ul>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="linux"><i class="fold iconfont icon-right"></i>linux<small>(1)</small></div>
+                
+                    <ul class="sub hide">
+                        
+                        <li><div data-rel="ss">ss<small>(1)</small></div>
+                            
+                        </li>
+                            
+                    </ul>
                 
             </li>
             
@@ -206,6 +203,38 @@
                         </li>
                             
                     </ul>
+                
+            </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+            <li><div data-rel="java">java<small>(1)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="编码">编码<small>(1)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+            <li><div data-rel="Linux">Linux<small>(1)</small></div>
                 
             </li>
             
@@ -263,23 +292,15 @@
     
         
             
-            <li><div data-rel="linux"><i class="fold iconfont icon-right"></i>linux<small>(1)</small></div>
-                
-                    <ul class="sub hide">
-                        
-                        <li><div data-rel="ss">ss<small>(1)</small></div>
-                            
-                        </li>
-                            
-                    </ul>
-                
-            </li>
+        
+    
+        
             
         
     
         
             
-            <li><div data-rel="编码">编码<small>(1)</small></div>
+            <li><div data-rel="jdk">jdk<small>(1)</small></div>
                 
             </li>
             
@@ -287,17 +308,25 @@
     
         
             
-        
-    
-        
-            
-            <li><div data-rel="Linux">Linux<small>(1)</small></div>
+            <li><div data-rel="NIO BIO IO">NIO BIO IO<small>(1)</small></div>
                 
             </li>
             
         
     
         
+            
+            <li><div data-rel="Java">Java<small>(12)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="Web">Web<small>(2)</small></div>
+                
+            </li>
             
         
     
@@ -315,25 +344,9 @@
     
         
             
-        
-    
-        
-            
-            <li><div data-rel="Web">Web<small>(2)</small></div>
+            <li><div data-rel="other">other<small>(2)</small></div>
                 
             </li>
-            
-        
-    
-        
-            
-            <li><div data-rel="Java">Java<small>(12)</small></div>
-                
-            </li>
-            
-        
-    
-        
             
         
     
@@ -347,18 +360,6 @@
     
         
             
-            <li><div data-rel="jdk">jdk<small>(1)</small></div>
-                
-            </li>
-            
-        
-    
-        
-            
-            <li><div data-rel="other">other<small>(2)</small></div>
-                
-            </li>
-            
         
     
         
@@ -366,6 +367,10 @@
             <li><div data-rel="node.js">node.js<small>(1)</small></div>
                 
             </li>
+            
+        
+    
+        
             
         
     
@@ -395,14 +400,6 @@
     
         
             
-            <li><div data-rel="NIO BIO IO">NIO BIO IO<small>(1)</small></div>
-                
-            </li>
-            
-        
-    
-        
-            
         
     
 </ul>
@@ -416,7 +413,7 @@
     <div></div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="61">
-<input type="hidden" id="yelog_site_word_count" value="56.2k">
+<input type="hidden" id="yelog_site_word_count" value="57.4k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -452,10 +449,6 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color1">float</a>
-    </li>
-    
-    <li class="article-tag-list-item">
         <a class="color3">servlet</a>
     </li>
     
@@ -468,15 +461,15 @@
     </li>
     
     <li class="article-tag-list-item">
+        <a class="color3">re</a>
+    </li>
+    
+    <li class="article-tag-list-item">
         <a class="color2">String</a>
     </li>
     
     <li class="article-tag-list-item">
         <a class="color4">new</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">re</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -489,6 +482,14 @@
     
     <li class="article-tag-list-item">
         <a class="color5">test</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">float</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">catch，try</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -516,31 +517,15 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">sys</a>
+        <a class="color5">suse</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color3">sqlplus</a>
+        <a class="color2">server</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color5">catch，try</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color5">java</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">reflect</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color1">Class</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color1">对象，Class对象</a>
+        <a class="color4">FTP</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -556,15 +541,27 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color5">suse</a>
+        <a class="color1">linux</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color2">server</a>
+        <a class="color3">ss</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">FTP</a>
+        <a class="color3">console</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">mysql</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">备份</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">java</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -576,11 +573,19 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color1">mysql</a>
+        <a class="color3">编码</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color3">备份</a>
+        <a class="color3">mq</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">消息队列</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">Linux</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -624,31 +629,15 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color1">linux</a>
+        <a class="color4">jdk</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color3">ss</a>
+        <a class="color1">NIO BIO IO</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color3">console</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">编码</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color1">Linux</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color4">jvm</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color4">Web</a>
+        <a class="color1">Guava</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -656,15 +645,19 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color3">MQ</a>
+        <a class="color4">Web</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">jdk</a>
+        <a class="color4">jvm</a>
     </li>
     
     <li class="article-tag-list-item">
         <a class="color1">other</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">MQ</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -680,19 +673,23 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color1">Guava</a>
+        <a class="color3">reflect</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color3">mq</a>
+        <a class="color1">Class</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color5">消息队列</a>
+        <a class="color1">对象，Class对象</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color1">NIO BIO IO</a>
+        <a class="color4">sys</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">sqlplus</a>
     </li>
     
     <div class="clearfix"></div>
@@ -845,11 +842,11 @@
             <span class="post-date" title="2020-03-19 00:30:52">2020/03/19</span>
         </a>
         
-        <a  class="jvm "
-           href="/2020/03/08/kongzheng1993-jmap/"
-           data-tag="jvm"
+        <a  class="Java "
+           href="/2020/03/08/kongzheng1993-Map遍历的几种方法/"
+           data-tag="Java"
            data-author="" >
-            <span class="post-title" title="jmap">jmap</span>
+            <span class="post-title" title="关于Map遍历的几种方法总结">关于Map遍历的几种方法总结</span>
             <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
         </a>
         
@@ -869,19 +866,19 @@
             <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
         </a>
         
+        <a  class="jvm "
+           href="/2020/03/08/kongzheng1993-jmap/"
+           data-tag="jvm"
+           data-author="" >
+            <span class="post-title" title="jmap">jmap</span>
+            <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
+        </a>
+        
         <a  class="other "
            href="/2020/03/08/kongzheng1993-带你撸一台免费云服务器/"
            data-tag="other"
            data-author="" >
             <span class="post-title" title="带你撸一台免费云服务器">带你撸一台免费云服务器</span>
-            <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
-        </a>
-        
-        <a  class="Java "
-           href="/2020/03/08/kongzheng1993-Map遍历的几种方法/"
-           data-tag="Java"
-           data-author="" >
-            <span class="post-title" title="关于Map遍历的几种方法总结">关于Map遍历的几种方法总结</span>
             <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
         </a>
         
@@ -919,7 +916,7 @@
         
         <a  class="mysql java "
            href="/2019/06/14/kongzheng1993-mysql超过最大连接数-一次生产问题定位/"
-           data-tag="java,mysql"
+           data-tag="mysql,java"
            data-author="" >
             <span class="post-title" title="mysql超过最大连接数一次生产问题定位.md">mysql超过最大连接数一次生产问题定位.md</span>
             <span class="post-date" title="2019-06-14 12:34:44">2019/06/14</span>
@@ -1013,19 +1010,19 @@
             <span class="post-date" title="2018-05-02 00:00:00">2018/05/02</span>
         </a>
         
-        <a  class="blog github git "
-           href="/2018/02/01/kongzheng1993-hexo搭建githubPages/"
-           data-tag="github,hexo,git"
-           data-author="" >
-            <span class="post-title" title="Hexo+github搭建个人博客遇到的问题">Hexo+github搭建个人博客遇到的问题</span>
-            <span class="post-date" title="2018-02-01 00:00:00">2018/02/01</span>
-        </a>
-        
         <a  class="suse server FTP "
            href="/2018/02/01/kongzheng1993-suse_ftp服务配置/"
            data-tag="suse,server,FTP"
            data-author="" >
             <span class="post-title" title="SUSE server FTP配置">SUSE server FTP配置</span>
+            <span class="post-date" title="2018-02-01 00:00:00">2018/02/01</span>
+        </a>
+        
+        <a  class="blog github git "
+           href="/2018/02/01/kongzheng1993-hexo搭建githubPages/"
+           data-tag="github,hexo,git"
+           data-author="" >
+            <span class="post-title" title="Hexo+github搭建个人博客遇到的问题">Hexo+github搭建个人博客遇到的问题</span>
             <span class="post-date" title="2018-02-01 00:00:00">2018/02/01</span>
         </a>
         
@@ -1150,18 +1147,18 @@
         </a>
         
         <a  class=""
-           href="/2016/06/10/kongzheng1993-aboutFloat/"
-           data-tag="float"
-           data-author="" >
-            <span class="post-title" title="关于float">关于float</span>
-            <span class="post-date" title="2016-06-10 00:00:00">2016/06/10</span>
-        </a>
-        
-        <a  class=""
            href="/2016/06/10/kongzheng1993-thewayofsort/"
            data-tag="sample post,images,test"
            data-author="" >
             <span class="post-title" title="几种常见的内部排序">几种常见的内部排序</span>
+            <span class="post-date" title="2016-06-10 00:00:00">2016/06/10</span>
+        </a>
+        
+        <a  class=""
+           href="/2016/06/10/kongzheng1993-aboutFloat/"
+           data-tag="float"
+           data-author="" >
+            <span class="post-title" title="关于float">关于float</span>
             <span class="post-date" title="2016-06-10 00:00:00">2016/06/10</span>
         </a>
         
@@ -1225,12 +1222,12 @@
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2020-04-17 23:39:57'>2020-04-17 00:30</time>
+        创建时间:<time class="date" title='更新时间: 2020-04-18 15:53:18'>2020-04-17 00:30</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:0</span>
+        <span>字数:1.3k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1260,7 +1257,7 @@
     
     <div class="toc-ref">
     
-        
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是事务"><span class="toc-text">什么是事务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ACID"><span class="toc-text">ACID</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL的四种隔离级别"><span class="toc-text">MySQL的四种隔离级别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Read-Uncommitted-（读取未提交内容）"><span class="toc-text">Read Uncommitted （读取未提交内容）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Read-Committed-（读取提交内容）"><span class="toc-text">Read Committed （读取提交内容）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Repeatable-Read-（可重读）"><span class="toc-text">Repeatable Read （可重读）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Serializable-（可串行化）"><span class="toc-text">Serializable （可串行化）</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1276,7 +1273,65 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h2 id="什么是事务"><a href="#什么是事务" class="headerlink" title="什么是事务"></a>什么是事务</h2><p>事务是应用程序中一系列操作，所有操作必须全部完成，若有一个操作失败，都会使所有的操作撤销。</p>
+<h2 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a>ACID</h2><p>事务具有四个特性：<strong>原子性（ Atomicity ）、一致性（ Consistency ）、隔离性（ Isolation ）和持续性（ Durability ）</strong>。</p>
+<ul>
+<li>原子性。事务是数据库的逻辑工作单位，事务中包含的各操作要么都做，要么都不做。</li>
+<li>一致性。事务执行的结果必须是使数据库从一个一致性状态变到另一个一致性状态。因此当数据库只包含成功事务提交的结果时，就说数据库处于一致性状态。如果数据库系统运行中发生故障，有些事务尚未完成就被迫中断，这些未完成事务对数据库所做的修改有一部分已写入物理数据库，这时数据库就处于一种不正确的状态，或者说是<strong>不一致的状态</strong>。</li>
+<li>隔离性。一个事务的执行不能其它事务干扰。即一个事务内部的操作及使用的数据对其它并发事务是隔离的，并发执行的各个事务之间不能互相干扰。</li>
+<li>持续性。也称永久性，指一个事务一旦提交，它对数据库中的数据的改变就应该是永久性的。接下来的其它操作或故障不应该对其执行结果有任何影响。</li>
+</ul>
+<h2 id="MySQL的四种隔离级别"><a href="#MySQL的四种隔离级别" class="headerlink" title="MySQL的四种隔离级别"></a>MySQL的四种隔离级别</h2><p>SQL标准定义了四种隔离级别，低级别的隔离一般支持更高的并发处理，并拥有更低的系统开销。</p>
+<h3 id="Read-Uncommitted-（读取未提交内容）"><a href="#Read-Uncommitted-（读取未提交内容）" class="headerlink" title="Read Uncommitted （读取未提交内容）"></a>Read Uncommitted （读取未提交内容）</h3><p>在这个隔离级别，所有事务都可以看到其他未提交事务的执行结果。本隔离级别很少用于实际应用，因为他的性能也不比其他隔离级别好多少。读取未提交的数据，也被称之为脏读（Dirty Read）。</p>
+<h3 id="Read-Committed-（读取提交内容）"><a href="#Read-Committed-（读取提交内容）" class="headerlink" title="Read Committed （读取提交内容）"></a>Read Committed （读取提交内容）</h3><p>这个隔离级别是大多数数据库默认隔离级别（不是MySQL默认的）。它满足了隔离的简单定义：一个事务只能看见已经提交事务所做的改变。</p>
+<p>这种隔离级别也支持所谓的<strong>不可重复读（Nonrepeatable Read）</strong>，因为同一事物的其他实例在该实例处理期间可能会有新的commit，所以同一select可能返回不同结果。</p>
+<h3 id="Repeatable-Read-（可重读）"><a href="#Repeatable-Read-（可重读）" class="headerlink" title="Repeatable Read （可重读）"></a>Repeatable Read （可重读）</h3><p>这个是MySQL的默认事务隔离级别，它确保同一事务的多个实例在并发读取数据时，会看到同样的数据行，不过理论上，这会导致<strong>幻读（Phantom Read）</strong></p>
+<p>幻读是指当用户读取某一范围的数据行时，另一个事务又在该范围内插入了新的数据行，当用户在读取该范围的数据行时，会发现有新的“幻影”行。InnoDB和Falcon存储引擎通过多版本并发控制（MVCC,Multiversion Concurrency Control）机制解决了该问题。</p>
+<h3 id="Serializable-（可串行化）"><a href="#Serializable-（可串行化）" class="headerlink" title="Serializable （可串行化）"></a>Serializable （可串行化）</h3><p>这是最高的隔离级别，它通过强制事务排序，使之不可能相互冲突，从而解决幻读问题。简言之，它是在每个读的数据行上加上共享锁。在这个级别，可能导致大量的超时现象和锁竞争。</p>
+<p><strong>备注：</strong></p>
+<p>这四种隔离级别采取不同的锁类型来实现，若读取的是同一个数据的话，就容易发生问题。例如：</p>
+<ul>
+<li>脏读指的是读到了其他事务未提交的数据，未提交意味着这些数据可能会回滚，也就是可能最终不会存到数据库中，也就是不存在的数据。读到了并一定最终存在的数据，这就是脏读。</li>
+<li>可重复读指的是在一个事务内，最开始读到的数据和事务结束前的任意时刻读到的同一批数据都是一致的。通常针对数据更新（UPDATE）操作。</li>
+<li>对比可重复读，不可重复读指的是在同一事务内，不同的时刻读到的同一批数据可能是不一样的，可能会受到其他事务的影响，比如其他事务改了这批数据并提交了。通常针对数据更新（UPDATE）操作。</li>
+<li>幻读是针对数据插入（INSERT）操作来说的。假设事务A对某些行的内容作了更改，但是还未提交，此时事务B插入了与事务A更改前的记录相同的记录行，并且在事务A提交之前先提交了，而这时，在事务A中查询，会发现好像刚刚的更改对于某些数据未起作用，但其实是事务B刚插入进来的，让用户感觉很魔幻，感觉出现了幻觉，这就叫幻读。</li>
+</ul>
+<p><strong>在MySQL中，四种隔离级别，分别有可能产生的问题：</strong></p>
+<table>
+<thead>
+<tr>
+<th>隔离级别</th>
+<th align="center">脏读</th>
+<th align="center">不可重复读</th>
+<th align="center">幻读</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Read uncommited</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td>Read commited</td>
+<td align="center">×</td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td>Repeatable read</td>
+<td align="center">×</td>
+<td align="center">×</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td>Serializable</td>
+<td align="center">×</td>
+<td align="center">×</td>
+<td align="center">×</td>
+</tr>
+</tbody></table>
+
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 kongzheng1993@hotmail.com </span>
     </div>
@@ -1290,10 +1345,10 @@
 
 <div class="article_copyright">
     <p><span class="copy-title">文章标题:</span>MySQL事务隔离级别</p>
-    <p><span class="copy-title">文章字数:</span><span class="post-count">0</span></p>
+    <p><span class="copy-title">文章字数:</span><span class="post-count">1.3k</span></p>
     <p><span class="copy-title">本文作者:</span><a  title="evilRat">evilRat</a></p>
     <p><span class="copy-title">发布时间:</span>2020-04-17, 00:30:52</p>
-    <p><span class="copy-title">最后更新:</span>2020-04-17, 23:39:57</p>
+    <p><span class="copy-title">最后更新:</span>2020-04-18, 15:53:18</p>
     <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/04/17/kongzheng1993-MySQL事务隔离级别/" title="MySQL事务隔离级别">https://kongzheng1993.github.io/2020/04/17/kongzheng1993-MySQL事务隔离级别/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
@@ -1377,7 +1432,7 @@
     /*作者、标签的自动补全*/
     $(function () {
         $('.search').AutoComplete({
-            'data': ['#oop','#float','#servlet','#resume','#简历','#String','#new','#re','#sample post','#images','#test','#sql','#select','#distinct','#group by','#order by','#oracle','#sys','#sqlplus','#catch，try','#java','#reflect','#Class','#对象，Class对象','#github','#hexo','#git','#suse','#server','#FTP','#多线程','#安全','#mysql','#备份','#职业','#业务','#学习','#quartz','#锁','#分布式','#RSA','#SHA','#加密','#签名','#linux','#ss','#console','#编码','#Linux','#jvm','#Web','#Java','#MQ','#jdk','#other','#node.js','#网络','#RocketMQ','#Guava','#mq','#消息队列','#NIO BIO IO',],
+            'data': ['#oop','#servlet','#resume','#简历','#re','#String','#new','#sample post','#images','#test','#float','#catch，try','#sql','#select','#distinct','#group by','#order by','#oracle','#suse','#server','#FTP','#github','#hexo','#git','#linux','#ss','#console','#mysql','#备份','#java','#多线程','#安全','#编码','#mq','#消息队列','#Linux','#职业','#业务','#学习','#quartz','#锁','#分布式','#RSA','#SHA','#加密','#签名','#jdk','#NIO BIO IO','#Guava','#Java','#Web','#jvm','#other','#MQ','#node.js','#网络','#RocketMQ','#reflect','#Class','#对象，Class对象','#sys','#sqlplus',],
             'itemHeight': 20,
             'width': 418
         }).AutoComplete('show');
