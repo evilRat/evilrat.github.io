@@ -1,8 +1,8 @@
 ---
 title: MySQL事务隔离级别
 excerpt: ''
-tags: [Java]
-categories: [Java]
+tags: [Mysql]
+categories: [Mysql]
 comments: true
 date: 2020-04-17 00:30:52
 ---
