@@ -6,21 +6,20 @@
   <meta name="keywords" content=" catch，try ">
   <meta name="description" content="关于try-catch | Evil">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="上周五边喝茶边吃瓜子在家办公，写一个接口，调用方请求过来之后，我需要在请求报文一个节点下加入两个字段，然后继续调用底层接口。随手就写下了下面的代码： Map params = inputObject.getParams(); Map reqInfoMap = params.get(&amp;quot;reqInfo&amp;quot;); reqInfoMap.put(&amp;quot;xxx&amp;quot;, &amp;quot">
+<meta name="description" content="JVM结构图  解析四大部分 Class Loader（类加载器） 就是将Class文件加载到内存，再说的详细一点就是，把描述类的数据从Class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型。  Run Data Area（运行时数据区） 就是我们常说的JVM管理的内存了，也是我们这里主要讨论的部分。运行数据区是整个JVM的重点。我们所有写的程序都">
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java是值传递的！">
-<meta property="og:url" content="https://kongzheng1993.github.io/2020/04/19/kongzheng1993-Java就是值传递的/index.html">
+<meta property="og:title" content="JVM结构">
+<meta property="og:url" content="https://kongzheng1993.github.io/2020/04/20/kongzheng1993-JVM/index.html">
 <meta property="og:site_name" content="Evil">
-<meta property="og:description" content="上周五边喝茶边吃瓜子在家办公，写一个接口，调用方请求过来之后，我需要在请求报文一个节点下加入两个字段，然后继续调用底层接口。随手就写下了下面的代码： Map params = inputObject.getParams(); Map reqInfoMap = params.get(&amp;quot;reqInfo&amp;quot;); reqInfoMap.put(&amp;quot;xxx&amp;quot;, &amp;quot">
+<meta property="og:description" content="JVM结构图  解析四大部分 Class Loader（类加载器） 就是将Class文件加载到内存，再说的详细一点就是，把描述类的数据从Class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型。  Run Data Area（运行时数据区） 就是我们常说的JVM管理的内存了，也是我们这里主要讨论的部分。运行数据区是整个JVM的重点。我们所有写的程序都">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://kongzheng1993.github.io/2020/04/19/kongzheng1993-Java就是值传递的/2.png">
-<meta property="og:image" content="https://kongzheng1993.github.io/2020/04/19/kongzheng1993-Java就是值传递的/1.jpg">
-<meta property="og:updated_time" content="2020-04-20T06:48:56.073Z">
+<meta property="og:image" content="https://kongzheng1993.github.io/2020/04/20/kongzheng1993-JVM/20170513134212845.png">
+<meta property="og:updated_time" content="2020-04-20T12:00:14.851Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java是值传递的！">
-<meta name="twitter:description" content="上周五边喝茶边吃瓜子在家办公，写一个接口，调用方请求过来之后，我需要在请求报文一个节点下加入两个字段，然后继续调用底层接口。随手就写下了下面的代码： Map params = inputObject.getParams(); Map reqInfoMap = params.get(&amp;quot;reqInfo&amp;quot;); reqInfoMap.put(&amp;quot;xxx&amp;quot;, &amp;quot">
-<meta name="twitter:image" content="https://kongzheng1993.github.io/2020/04/19/kongzheng1993-Java就是值传递的/2.png">
+<meta name="twitter:title" content="JVM结构">
+<meta name="twitter:description" content="JVM结构图  解析四大部分 Class Loader（类加载器） 就是将Class文件加载到内存，再说的详细一点就是，把描述类的数据从Class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型。  Run Data Area（运行时数据区） 就是我们常说的JVM管理的内存了，也是我们这里主要讨论的部分。运行数据区是整个JVM的重点。我们所有写的程序都">
+<meta name="twitter:image" content="https://kongzheng1993.github.io/2020/04/20/kongzheng1993-JVM/20170513134212845.png">
 
 
 <link rel="icon" href="/img/avatar.png">
