@@ -1,0 +1,133 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/nodejs',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   '-g',
+1 verbose cli   'install',
+1 verbose cli   'instant-markdown-d' ]
+2 info using npm@1.3.10
+3 info using node@v0.10.25
+4 verbose cache add [ 'instant-markdown-d', null ]
+5 verbose cache add name=undefined spec="instant-markdown-d" args=["instant-markdown-d",null]
+6 verbose parsed url { protocol: null,
+6 verbose parsed url   slashes: null,
+6 verbose parsed url   auth: null,
+6 verbose parsed url   host: null,
+6 verbose parsed url   port: null,
+6 verbose parsed url   hostname: null,
+6 verbose parsed url   hash: null,
+6 verbose parsed url   search: null,
+6 verbose parsed url   query: null,
+6 verbose parsed url   pathname: 'instant-markdown-d',
+6 verbose parsed url   path: 'instant-markdown-d',
+6 verbose parsed url   href: 'instant-markdown-d' }
+7 silly lockFile 41a51f08-instant-markdown-d instant-markdown-d
+8 verbose lock instant-markdown-d /home/kongzheng1993/.npm/41a51f08-instant-markdown-d.lock
+9 silly lockFile 41a51f08-instant-markdown-d instant-markdown-d
+10 silly lockFile 41a51f08-instant-markdown-d instant-markdown-d
+11 verbose addNamed [ 'instant-markdown-d', '' ]
+12 verbose addNamed [ null, '*' ]
+13 silly lockFile 40ec8289-instant-markdown-d instant-markdown-d@
+14 verbose lock instant-markdown-d@ /home/kongzheng1993/.npm/40ec8289-instant-markdown-d.lock
+15 silly addNameRange { name: 'instant-markdown-d', range: '*', hasData: false }
+16 verbose url raw instant-markdown-d
+17 verbose url resolving [ 'https://registry.npmjs.org/', './instant-markdown-d' ]
+18 verbose url resolved https://registry.npmjs.org/instant-markdown-d
+19 info trying registry request attempt 1 at 22:47:18
+20 verbose etag "a5841295cf0a94f6a1f3521bfbbb148e"
+21 http GET https://registry.npmjs.org/instant-markdown-d
+22 http 304 https://registry.npmjs.org/instant-markdown-d
+23 silly registry.get cb [ 304,
+23 silly registry.get   { date: 'Tue, 21 Apr 2020 14:47:18 GMT',
+23 silly registry.get     connection: 'keep-alive',
+23 silly registry.get     'set-cookie': [ '__cfduid=df3e6279f0d0ffc2cb0b4410fc555a2d71587480437; expires=Thu, 21-May-20 14:47:17 GMT; path=/; domain=.npmjs.org; HttpOnly; SameSite=Lax' ],
+23 silly registry.get     'cf-ray': '5877e63f6a3acc2c-SIN',
+23 silly registry.get     'cache-control': 'public, max-age=300',
+23 silly registry.get     etag: '"a5841295cf0a94f6a1f3521bfbbb148e"',
+23 silly registry.get     'last-modified': 'Tue, 15 Oct 2019 13:24:53 GMT',
+23 silly registry.get     vary: 'Accept-Encoding',
+23 silly registry.get     'cf-cache-status': 'REVALIDATED',
+23 silly registry.get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+23 silly registry.get     server: 'cloudflare',
+23 silly registry.get     'cf-request-id': '023ece3ba20000cc2ce2b99200000001' } ]
+24 verbose etag instant-markdown-d from cache
+25 silly addNameRange number 2 { name: 'instant-markdown-d', range: '*', hasData: true }
+26 silly addNameRange versions [ 'instant-markdown-d',
+26 silly addNameRange   [ '0.0.1',
+26 silly addNameRange     '0.0.2',
+26 silly addNameRange     '0.0.3',
+26 silly addNameRange     '0.0.4',
+26 silly addNameRange     '0.0.5',
+26 silly addNameRange     '0.0.6',
+26 silly addNameRange     '0.0.7',
+26 silly addNameRange     '0.0.8',
+26 silly addNameRange     '0.1.0',
+26 silly addNameRange     '0.1.1',
+26 silly addNameRange     '0.2.0-rc.1',
+26 silly addNameRange     '0.2.0-rc.2' ] ]
+27 verbose addNamed [ 'instant-markdown-d', '0.2.0-rc.2' ]
+28 verbose addNamed [ '0.2.0-rc.2', '0.2.0-rc.2' ]
+29 silly lockFile 827a936b-instant-markdown-d-0-2-0-rc-2 instant-markdown-d@0.2.0-rc.2
+30 verbose lock instant-markdown-d@0.2.0-rc.2 /home/kongzheng1993/.npm/827a936b-instant-markdown-d-0-2-0-rc-2.lock
+31 silly lockFile 827a936b-instant-markdown-d-0-2-0-rc-2 instant-markdown-d@0.2.0-rc.2
+32 silly lockFile 827a936b-instant-markdown-d-0-2-0-rc-2 instant-markdown-d@0.2.0-rc.2
+33 silly lockFile 40ec8289-instant-markdown-d instant-markdown-d@
+34 silly lockFile 40ec8289-instant-markdown-d instant-markdown-d@
+35 silly resolved [ { author: { name: 'Suan-Aik Yeo', email: 'yeosuanaik@gmail.com' },
+35 silly resolved     name: 'instant-markdown-d',
+35 silly resolved     repository:
+35 silly resolved      { type: 'git',
+35 silly resolved        url: 'git+https://github.com/suan/instant-markdown-d.git' },
+35 silly resolved     description: 'Instantly-updating Markdown Server',
+35 silly resolved     version: '0.2.0-rc.2',
+35 silly resolved     license: 'Apache-2.0',
+35 silly resolved     homepage: 'https://github.com/suan/instant-markdown-d',
+35 silly resolved     engines: { node: '>=8.0.0' },
+35 silly resolved     main: 'instant-markdown-d',
+35 silly resolved     preferGlobal: 'true',
+35 silly resolved     bin: { 'instant-markdown-d': './instant-markdown-d' },
+35 silly resolved     scripts:
+35 silly resolved      { start: 'instant-markdown-d',
+35 silly resolved        test: 'cd tests; cat test_math.md | instant-markdown-d --mathjax --debug',
+35 silly resolved        stop: 'curl -X DELETE -s -w \'status: %{http_code}\' -m 3 localhost:8090',
+35 silly resolved        prepare: 'genversion ./version.js; git clean -f;' },
+35 silly resolved     dependencies:
+35 silly resolved      { 'highlight.js': '^9.15.6',
+35 silly resolved        'markdown-it': '^8.4.2',
+35 silly resolved        'markdown-it-mathjax': '^2.0.0',
+35 silly resolved        'markdown-it-task-lists': '^2.1.1',
+35 silly resolved        mathjax: '^2.7.5',
+35 silly resolved        'mathjax-node-page': '^3.0.2',
+35 silly resolved        minimist: '^1.2.0',
+35 silly resolved        send: '~0.17.1',
+35 silly resolved        'socket.io': '^2.2.0' },
+35 silly resolved     devDependencies: { genversion: '^2.1.1' },
+35 silly resolved     readme: '!nstant-markdown-d\n================\ninstant-markdown-d is a small Node.js server that enables instant compilation and previewing of Markup files. A plugin can easily be written for any text editor to interface with it. One currently exists for VIm: https://github.com/suan/vim-instant-markdown\n\nInstallation\n------------\n\nInstall the mini-server by running either:\n\n- `[sudo] npm -g install instant-markdown-d`\n\nor pre-release version\n\n- `[sudo] npm -g install instant-markdown-d@next`\n\nsee [vim-instant-markdown](https://github.com/suan/vim-instant-markdown) for\nVim / Neovim integration.\n\nREST API\n--------\n| Action           | HTTP Method | Request URL               | Request Body |\n|---------------------|-------------|---------------------------|--------------------|\n| Refresh Markdown on page | PUT        | http://localhost:\\<port\\> | \\<New Markdown file contents\\> |\n| Close Webpage    | DELETE      | http://localhost:\\<port\\> | |\n\nBy default, `<port>` is 8090\n\nEnvironment variables\n---------------------\n\n* `INSTANT_MARKDOWN_OPEN_TO_THE_WORLD=1` - by default, the server only listens\n  on localhost. To make the server available to others in your network, set this\n  environment variable to a non-empty value. Only use this setting on trusted\n  networks!\n\n* `INSTANT_MARKDOWN_ALLOW_UNSAFE_CONTENT=1` - by default, scripts are blocked.\n  Use this preference to allow scripts.\n\n* `INSTANT_MARKDOWN_BLOCK_EXTERNAL=1` - by default, external resources such as\n  images, stylesheets, frames and plugins are *allowed*. Use this setting to\n  *block* such external content.\n\n* `INSTANT_MARKDOWN_MATHJAX_FONTS="/usr/share/mathjax/fonts/HTML-CSS/"` - to\n  serve fonts for Mathjax from a local directory.\n',
+35 silly resolved     readmeFilename: 'README.md',
+35 silly resolved     _id: 'instant-markdown-d@0.2.0-rc.2',
+35 silly resolved     _from: 'instant-markdown-d@' } ]
+36 info install instant-markdown-d@0.2.0-rc.2 into /usr/local/lib
+37 info installOne instant-markdown-d@0.2.0-rc.2
+38 warn engine instant-markdown-d@0.2.0-rc.2: wanted: {"node":">=8.0.0"} (current: {"node":"v0.10.25","npm":"1.3.10"})
+39 info /usr/local/lib/node_modules/instant-markdown-d unbuild
+40 info /usr/local/lib/node_modules/instant-markdown-d unbuild
+41 error error rolling back Error: EACCES, unlink '/usr/local/lib/node_modules/instant-markdown-d'
+41 error error rolling back  instant-markdown-d@0.2.0-rc.2 { [Error: EACCES, unlink '/usr/local/lib/node_modules/instant-markdown-d']
+41 error error rolling back   errno: 3,
+41 error error rolling back   code: 'EACCES',
+41 error error rolling back   path: '/usr/local/lib/node_modules/instant-markdown-d' }
+42 error Error: EACCES, unlink '/usr/local/lib/node_modules/instant-markdown-d'
+42 error  { [Error: EACCES, unlink '/usr/local/lib/node_modules/instant-markdown-d']
+42 error   errno: 3,
+42 error   code: 'EACCES',
+42 error   path: '/usr/local/lib/node_modules/instant-markdown-d' }
+43 error Please try running this command again as root/Administrator.
+44 error System Linux 4.19.87-07830-g9a5a6bd0ac19
+45 error command "/usr/bin/nodejs" "/usr/local/bin/npm" "-g" "install" "instant-markdown-d"
+46 error cwd /home/kongzheng1993/workspace/kongzheng1993.github.io/source/_posts
+47 error node -v v0.10.25
+48 error npm -v 1.3.10
+49 error path /usr/local/lib/node_modules/instant-markdown-d
+50 error code EACCES
+51 error errno 3
+52 error stack Error: EACCES, unlink '/usr/local/lib/node_modules/instant-markdown-d'
+53 verbose exit [ 3, true ]
