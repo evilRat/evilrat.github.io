@@ -156,3 +156,36 @@ Java对象的类数据保存在方法区。
 
 只有数组对象保存了这部分数据。
 该数据在32位和64位JVM中长度都是32bit。
+
+## 查看java对象头
+
+我们想要看Java对象的Mark Word，先要加载一个jar包，在pom.xml添加即可。
+
+```xml
+<dependency>
+    <groupId>org.openjdk.jol</groupId>
+    <artifactId>jol-core</artifactId>
+    <version>0.9</version>
+</dependency>
+```
+
+新建一个对象A，拥有初始值为666的变量x。
+
+```java
+public class A {
+    private int x=666;
+}
+```
+
+新建一个测试类test，这涉及到刚才加载的jar，我们打印Java对象。
+
+```java
+import org.openjdk.jol.info.ClassLayout;
+
+public class test {
+    public static void main(String[] args) {
+        A a=new A();
+        System.out.println( ClassLayout.parseInstance(a).toPrintable());
+    }
+}
+```
