@@ -2,9 +2,9 @@
 <html>
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
-  <title>Effectiv Java学习笔记（一） | Evil</title>
+  <title>SQL优化整理 | Evil</title>
   <meta name="keywords" content=" Java ">
-  <meta name="description" content="Effectiv Java学习笔记（一） | Evil">
+  <meta name="description" content="SQL优化整理 | Evil">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="本文整理自知乎 可见性使用synchronized的代码块或方法中使用变量，会发生以下：  获取同步锁 清空自己的工作内存的变量副本 从主存获取最新的值，并加载到工作内存中 对变量进行操作。  所以使用synchronized会从主存中取最新的值，从而保证可见性。 原子性最常见的例子，启动多个线程将一个静态变量执行++操作，最终结果并不是所有线程++次数之和。 使用synchronized会在操作">
 <meta name="keywords" content="Java">
@@ -1236,9 +1236,9 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="post-kongzheng1993-Effective_Java学习笔记1" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-kongzheng1993-SQL优化" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Effectiv Java学习笔记（一）</h1>
+        <h1 class="article-title">SQL优化整理</h1>
     
     <div class="article-meta">
         
@@ -1260,12 +1260,12 @@
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2020-04-18 16:25:09'>2020-04-07 00:30</time>
+        创建时间:<time class="date" title='更新时间: 2020-04-22 19:37:21'>2020-04-22 00:30</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:1.5k</span>
+        <span>字数:2k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1295,7 +1295,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#创建和销毁对象"><span class="toc-text">创建和销毁对象</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-考虑使用静态工厂方法代替构造器"><span class="toc-text">1.考虑使用静态工厂方法代替构造器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-遇到多个构造器参数时要考虑使用构造器"><span class="toc-text">2.遇到多个构造器参数时要考虑使用构造器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-用私有构造器或者枚举类型强化Singleton属性"><span class="toc-text">3.用私有构造器或者枚举类型强化Singleton属性</span></a></li></ol></li></ol>
+        
     
 <style>
     .left-col .switch-btn,
@@ -1311,149 +1311,111 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="创建和销毁对象"><a href="#创建和销毁对象" class="headerlink" title="创建和销毁对象"></a>创建和销毁对象</h1><h2 id="1-考虑使用静态工厂方法代替构造器"><a href="#1-考虑使用静态工厂方法代替构造器" class="headerlink" title="1.考虑使用静态工厂方法代替构造器"></a>1.考虑使用静态工厂方法代替构造器</h2><p>我们平时创建对象都是new一个，而new会调用类对应的构造器。但是还有一个方法，就是<strong>静态工厂方法</strong>。</p>
-<pre><code class="java">public static Boolean valueOf(boolean b) {
-    return b ? Boolean.TRUE : Boolean.FALSE;
-}</code></pre>
-<p>上面是一个典型的示例。</p>
-<p>优点：</p>
-<ul>
-<li><strong>静态工厂方法有方法名。</strong> 新建对象可以通过参数列表不同来调用不通的构造器，但是这样没有文字描述，调用者很难一下理解构造器做了哪些操作。</li>
-<li><strong>每次调用不必都创建一个新对象。</strong> 这使得不可变类可以使用预先构造好的示例，或者将构建好的示例缓存起来，重复利用，从而避免创建不必要的重复对象。像上面的例子，就没有创建对象。这样有利于提高性能。单例的对象也能在这样的方法里得以实现。</li>
-<li><strong>可以返回原返回类型的任何子类型。</strong> 可以返回对象，同时又不会使对象的类变成公有的。这种技术适用于基于接口的框架。</li>
-<li><strong>在创建参数化类型示例的时候，使代码变得更加简洁。</strong></li>
-</ul>
-<p>缺点：</p>
-<ul>
-<li><strong>类如果不含共有的或者受保护的构造器，就不能被子类化。</strong></li>
-<li><strong>静态工厂方法与其他静态方法实际上没有任何区别。</strong> 大家都知道用构造器实例化对象，却不能一眼看出这个静态方法是用来实例化对象的。</li>
-</ul>
-<p>静态工厂方法惯用名：</p>
-<ul>
-<li><strong>valueOf</strong>—-主要用于类型转换。</li>
-<li><strong>of</strong>—-valueOf的简洁方案。</li>
-<li><strong>getInstance</strong>—-返回的示例是通过参数来描述的，对于Singleton来说，该方法应该没有参数，直接返回唯一实例。</li>
-<li><strong>newInstance</strong>—-返回一个新的实例。</li>
-</ul>
-<h2 id="2-遇到多个构造器参数时要考虑使用构造器"><a href="#2-遇到多个构造器参数时要考虑使用构造器" class="headerlink" title="2.遇到多个构造器参数时要考虑使用构造器"></a>2.遇到多个构造器参数时要考虑使用构造器</h2><p>这里讲了把生活中一个对象抽象成类，我们实例化对象的三种设计思路：</p>
-<ul>
-<li><strong>重叠构造器模式</strong> 编写各种成员变量组合的构造器，实例化时选择我们需要的来。但是参数太多的话，构造器的数量就太多了，难以编写。</li>
-<li><strong>JavaBean模式</strong> 通过setter方法来设置参数，但是这样无法实现不可变对象，引发线程安全问题。</li>
-<li><strong>Builder模式</strong> 通过一个Builder内部类，实现setter赋值，然后再构造函数里将Builder的成员赋给我们实例化的对象。</li>
-</ul>
-<p><strong>Builder模式</strong>：</p>
-<pre><code class="java">
-/**
- * @Description:
- * @Author: kongz
- * @Date: 2020/4/7 18:55
- */
-public class People {
-
-    private String name;
-    private int age;
-    private String gender;
-
-    public People(Builder builder) {
-        name = builder.name;
-        age = builder.age;
-        gender = builder.gender;
-    }
-
-    public static class Builder {
-
-        private String name;
-        private int age;
-        private String gender;
-
-        public Builder(String name) {
-            this.name = name;
-        }
-
-        public Builder age(int age) {
-            this.age = age;
-            return this;
-        }
-
-        public Builder gender(String gender) {
-            this.gender = gender;
-            return this;
-        }
-
-        public People build() {
-            return new People(this);
-        }
-
-    }
-
-    @Override
-    public String toString() {
-        return this.name + &quot;--&quot; + this.age + &quot;--&quot; + this.gender;
-    }
-
-    public static void main(String[] args) {
-        People people = new Builder(&quot;kongz&quot;).age(20).gender(&quot;男&quot;).build();
-        System.out.println(people.toString());
-    }
-
-}</code></pre>
-<p>Builder模式的确也有不足，创建对象必须要先创建它的构造器，这也会浪费一些资源，虽然不是那么明显，但是比重叠构造器更加冗长。</p>
-<h2 id="3-用私有构造器或者枚举类型强化Singleton属性"><a href="#3-用私有构造器或者枚举类型强化Singleton属性" class="headerlink" title="3.用私有构造器或者枚举类型强化Singleton属性"></a>3.用私有构造器或者枚举类型强化Singleton属性</h2><p>在Java 1.5之前有两种方法实现Singleton，这两种方法都要把构造器保持为私有的，并导出共有的静态变量，以便客户端能够访问该类的唯一实例。</p>
+        <p><a href="https://blog.csdn.net/jie_liang/article/details/77340905" target="_blank" rel="noopener">本文整理自CSDN</a></p>
 <ol>
-<li>第一种方法中，公有静态成员是个final域：</li>
+<li><p>对查询进行优化，应尽量避免全表扫描，首先应考虑在 <code>where</code> 及 <code>order by</code> 涉及的列上建立索引。</p>
+</li>
+<li><p>应尽量避免在 <code>where</code> 子句中使用<code>!=</code>或<code>&lt;&gt;</code>操作符，否则将引擎放弃使用索引而进行全表扫描。</p>
+</li>
+<li><p>应尽量避免在 <code>where</code> 子句中对字段进行 <code>null</code> 值判断，否则将导致引擎放弃使用索引而进行全表扫描，如：</p>
+<pre><code class="sql">select id from t where num is null
+#可以在num上设置默认值0，确保表中num列没有null值，然后这样查询：
+select id from t where num=0</code></pre>
+</li>
+<li><p>应尽量避免在 <code>where</code> 子句中使用 <code>or</code> 来连接条件，否则将导致引擎放弃使用索引而进行全表扫描，如：</p>
+</li>
 </ol>
-<pre><code class="java">//singleton with public final field
-public class Elvis {
-    public static final Elvis INSTANCE = new Elvis();
-
-    private Elvis(){ ... }
-
-    public void leaveTheBuilding() {
-        ...
-    }
-}</code></pre>
-<p>私有构造器仅被调用一次，用来实例化公有的静态final域Elvis.INSTANCE。由于外界无法调用构造器，所以保证了Elvis的全局唯一。<strong>但是想有特权的客户端可以通过AccessibleObject.setAccessable方法，通过反射机制调用私有构造器。如果要抵御这种攻击，可以修改构造器，让它在被要求创建第二个实例的时候抛出异常。</strong></p>
-<ol start="2">
-<li>第二种方法中，公有的成员是个静态工厂方法。</li>
+<pre><code class="sql">select id from t where num=10 or num=20
+#可以这样查询：
+select id from t where num=10
+union all
+select id from t where num=20</code></pre>
+<ol start="5">
+<li>下面的查询也将导致全表扫描：</li>
 </ol>
-<pre><code class="java">//singleton with static factory
-public class Elvis {
-    private static final Elvis INSTANCE = new Elvis();
-    private Elvis(){ ... }
-    public static Elvis getInstance() { return INSTANCE; }
-
-    public void leaveTheBuilding() { ... }
-}</code></pre>
-<p>对于静态方法Elvis.getInstance方法每次调用都会返回同一个对象引用，所以永远不会创建其他的Elvis对象。</p>
-<p>工厂方法的优势：</p>
-<ul>
-<li><strong>提供了灵活性：</strong> 在不改变api的前提下，可以改变该类是否应该为singleton的想法，因为客户都都是通过<code>getInstance</code>方法获取对象的。</li>
-<li><strong>泛型</strong></li>
-</ul>
-<p>上面两种方法要实现singleton类变成可序列化（Serializable），仅仅在生命中加上<code>implements Serializable</code>是不够的。<strong>为了维护并保证Singleton，必须声明所有的实例域都是瞬时（transient）的，并提供一个<code>readResolve</code>方法，否则每次反序列化一个序列化的实例时，都会创建一个新的实例。</strong></p>
-<pre><code class="java">//readResolve method to preserve singleton property
-private Object readResolve() {
-    //Return the one true Elvis and let the garbage collector
-    //take care of the Elvis impersonator
-    return INSTANCE;
-}</code></pre>
-<pre><code>在jdk中ObjectInputStream的类中有readUnshared（）方法，上面详细解释了原因。
-我简单描述一下，那就是如果被反序列化的对象的类存在readResolve这个方法，
-他会调用这个方法来返回一个“array”（我也不明白），然后浅拷贝一份，作为返回值，
-并且无视掉反序列化的值，即使那个字节码已经被解析。
-————————————————
-版权声明：本文为CSDN博主「无始之名」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
-原文链接：https://blog.csdn.net/u011499747/java/article/details/50982956</code></pre><p>一个单例模式：</p>
-<pre><code class="java">public class Elvis {
-    private static final Elvis INSTANCE = new Elvis();
-    private Elvis(){ ... }
-    public static Elvis getInstance() { return INSTANCE; }
-
-    public void leaveTheBuilding() { ... }
-    private Object readResolve() {
-        return INSTANCE;
-    }
-}</code></pre>
+<pre><code class="sql">select id from t where name like &#39;%abc%&#39;
+#若要提高效率，可以考虑全文检索。</code></pre>
+<ol start="6">
+<li><code>in</code> 和 <code>not in</code> 也要慎用，否则会导致全表扫描，如：</li>
+</ol>
+<pre><code class="sql">select id from t where num in(1,2,3)
+#对于连续的数值，能用 between 就不要用 in 了：
+select id from t where num between 1 and 3</code></pre>
+<ol start="7">
+<li>如果在 <code>where</code> 子句中使用参数，也会导致全表扫描。因为SQL只有在运行时才会解析局部变量，但优化程序不能将访问计划的选择推迟到运行时；它必须在编译时进行选择。然而，如果在编译时建立访问计划，变量的值还是未知的，因而无法作为索引选择的输入项。如下面语句将进行全表扫描：</li>
+</ol>
+<pre><code class="sql">select id from t where num=@num
+#可以改为强制查询使用索引：
+select id from t with(index(索引名)) where num=@num</code></pre>
+<ol start="8">
+<li>应尽量避免在 <code>where</code> 子句中对字段进行表达式操作，这将导致引擎放弃使用索引而进行全表扫描。如：</li>
+</ol>
+<pre><code class="sql">select id from t where num/2=100
+#应改为:
+select id from t where num=100*2</code></pre>
+<ol start="9">
+<li>应尽量避免在 <code>where</code> 子句中对字段进行函数操作，这将导致引擎放弃使用索引而进行全表扫描。如：</li>
+</ol>
+<pre><code class="sql">select id from t where substring(name,1,3)=&#39;abc&#39;
+--name以abc开头的id
+select id from t where datediff(day,createdate,&#39;2005-11-30&#39;)=0
+--&#39;2005-11-30&#39;生成的id
+#应改为:
+select id from t where name like &#39;abc%&#39;
+select id from t where createdate&gt;=&#39;2005-11-30&#39; and createdate&lt;&#39;2005-12-1&#39;</code></pre>
+<ol start="10">
+<li><p>不要在 <code>where</code> 子句中的“=”左边进行函数、算术运算或其他表达式运算，否则系统将不能正确使用索引。</p>
+</li>
+<li><p>在使用索引字段作为条件时，如果该索引是复合索引，那么必须使用到该索引中的第一个字段作为条件时才能保证系统使用该索引，否则该索引将不会被使用，并且应尽可能的让字段顺序与索引顺序相一致。(<strong>最左原则</strong>)</p>
+</li>
+<li><p>不要写一些没有意义的查询，如需要生成一个空表结构：</p>
+</li>
+</ol>
+<pre><code class="sql">select col1,col2 into #t from t where 1=0
+#这类代码不会返回任何结果集，但是会消耗系统资源的，应改成这样：
+create table #t(...)</code></pre>
+<ol start="13">
+<li>很多时候用 <code>exists</code> 代替 <code>in</code> 是一个好的选择：</li>
+</ol>
+<pre><code class="sql">select num from a where num in(select num from b)
+#用下面的语句替换：
+select num from a where exists(select 1 from b where num=a.num)</code></pre>
+<ol start="14">
+<li><p>并不是所有索引对查询都有效，SQL是根据表中数据来进行查询优化的，当索引列有大量数据重复时，SQL查询可能不会去利用索引，如一表中有字段sex，male、female几乎各一半，那么即使在sex上建了索引也对查询效率起不了作用。</p>
+</li>
+<li><p>索引并不是越多越好，索引固然可以提高相应的 <code>select</code> 的效率，但同时也降低了 <code>insert</code> 及 <code>update</code> 的效率，因为 <code>insert</code> 或 <code>update</code> 时有可能会重建索引，所以怎样建索引需要慎重考虑，视具体情况而定。一个表的索引数最好不要超过<code>6</code>个，若太多则应考虑一些不常使用到的列上建的索引是否有必要。</p>
+</li>
+<li><p>应尽可能的避免更新 <code>clustered索引</code> 数据列，因为 <code>clustered索引</code> 数据列的顺序就是表记录的物理存储顺序，一旦该列值改变将导致整个表记录的顺序的调整，会耗费相当大的资源。若应用系统需要频繁更新 <code>clustered索引</code> 数据列，那么需要考虑是否应将该索引建为 <code>clustered索引</code>（聚合索引）。</p>
+</li>
+<li><p>尽量使用<code>数字型</code>字段，若只含数值信息的字段尽量不要设计为字符型，这会 <strong>降低查询和连接的性能，并会增加存储开销</strong> 。这是因为<strong>引擎在处理查询和连接时会逐个比较字符串中每一个字符，而对于数字型而言只需要比较一次就够了</strong>。</p>
+</li>
+<li><p>尽可能的使用 <code>varchar/nvarchar</code> 代替 <code>char/nchar</code> ，因为首先<code>变长字段</code>存储空间小，可以节省存储空间，其次对于查询来说，在一个相对较小的字段内搜索效率显然要高些。</p>
+</li>
+<li><p>任何地方都不要使用 <code>select * from t</code> ，用具体的<code>字段列</code>表代替“*”，不要返回用不到的任何字段。</p>
+</li>
+<li><p>尽量使用表变量来代替临时表。如果表变量包含大量数据，请注意索引非常有限（只有主键索引）。</p>
+</li>
+<li><p>避免频繁创建和删除临时表，以减少系统表资源的消耗。</p>
+</li>
+<li><p>临时表并不是不可使用，适当地使用它们可以使某些例程更有效，例如，当需要重复引用大型表或常用表中的某个数据集时。但是，对于一次性事件，最好使用导出表。</p>
+</li>
+<li><p>在新建临时表时，如果一次性插入数据量很大，那么可以使用 <code>select into</code> 代替 <code>create table</code>，避免造成大量 <code>log</code> ，以提高速度；如果数据量不大，为了缓和系统表的资源，应先<code>create table</code>，然后<code>insert</code>。</p>
+</li>
+<li><p>如果使用到了临时表，在存储过程的最后务必将所有的临时表显式删除，先 <code>truncate table</code> ，然后 <code>drop table</code> ，这样可以避免系统表的较长时间锁定。（先truncate可以释放表空间）。</p>
+</li>
+<li><p>尽量避免使用游标，因为游标的效率较差，如果游标操作的数据超过1万行，那么就应该考虑改写。</p>
+</li>
+<li><p>使用基于游标的方法或临时表方法之前，应先寻找基于集的解决方案来解决问题，基于集的方法通常更有效。</p>
+</li>
+<li><p>与临时表一样，游标并不是不可使用。对小型数据集使用 <code>FAST_FORWARD</code> 游标通常要优于其他逐行处理方法，尤其是在必须引用几个表才能获得所需的数据时。在结果集中包括“合计”的例程通常要比使用游标执行的速度快。如果开发时间允许，基于游标的方法和基于集的方法都可以尝试一下，看哪一种方法的效果更好。</p>
+</li>
+<li><p>在所有的存储过程和触发器的开始处设置 <code>SET NOCOUNT ON</code> ，在结束时设置 <code>SET NOCOUNT OFF</code> 。无需在执行存储过程和触发器的每个语句后向客户端发送 <code>DONE_IN_PROC</code> 消息。</p>
+</li>
+<li><p>尽量避免向客户端返回大数据量，若数据量过大，应该考虑相应需求是否合理。</p>
+</li>
+<li><p>尽量避免大事务操作，提高系统并发能力。</p>
+</li>
+</ol>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 kongzheng1993@hotmail.com </span>
@@ -1467,12 +1429,12 @@ private Object readResolve() {
 
 
 <div class="article_copyright">
-    <p><span class="copy-title">文章标题:</span>Effectiv Java学习笔记（一）</p>
-    <p><span class="copy-title">文章字数:</span><span class="post-count">1.5k</span></p>
+    <p><span class="copy-title">文章标题:</span>SQL优化整理</p>
+    <p><span class="copy-title">文章字数:</span><span class="post-count">2k</span></p>
     <p><span class="copy-title">本文作者:</span><a  title="evilRat">evilRat</a></p>
-    <p><span class="copy-title">发布时间:</span>2020-04-07, 00:30:52</p>
-    <p><span class="copy-title">最后更新:</span>2020-04-18, 16:25:09</p>
-    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/04/07/kongzheng1993-Effective_Java学习笔记1/" title="Effectiv Java学习笔记（一）">https://kongzheng1993.github.io/2020/04/07/kongzheng1993-Effective_Java学习笔记1/</a>
+    <p><span class="copy-title">发布时间:</span>2020-04-22, 00:30:52</p>
+    <p><span class="copy-title">最后更新:</span>2020-04-22, 19:37:21</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/04/22/kongzheng1993-SQL优化/" title="SQL优化整理">https://kongzheng1993.github.io/2020/04/22/kongzheng1993-SQL优化/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
     </p>
