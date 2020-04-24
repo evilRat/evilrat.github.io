@@ -6,18 +6,20 @@
   <meta name="keywords" content=" resume , 简历 ">
   <meta name="description" content="Resume | Evil">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="本文整理自CSDN  对查询进行优化，应尽量避免全表扫描，首先应考虑在 where 及 order by 涉及的列上建立索引。  应尽量避免在 where 子句中使用!=或&amp;lt;&amp;gt;操作符，否则将引擎放弃使用索引而进行全表扫描。  应尽量避免在 where 子句中对字段进行 null 值判断，否则将导致引擎放弃使用索引而进行全表扫描，如：   select id from t where n">
-<meta name="keywords" content="SQL">
+<meta name="description" content="什么是SPISPI（Service Provider Interface），是JDK内置的一种服务提供发现机制，可以用来启用框架扩展和替换组件，主要是被框架的开发人员使用，比如java.sql.Driver接口，其他不同厂商可以针对同一接口做出不同的实现，MySQL和PostgreSQL都有不同的实现提供给用户，而Java的SPI机制可以为某个接口寻找服务实现。Java中SPI机制主要思想是将装配">
+<meta name="keywords" content="Java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SQL优化整理">
-<meta property="og:url" content="https://kongzheng1993.github.io/2020/04/22/kongzheng1993-SQL优化/index.html">
+<meta property="og:title" content="SPI">
+<meta property="og:url" content="https://kongzheng1993.github.io/2020/04/24/kongzheng1993-SPI/index.html">
 <meta property="og:site_name" content="Evil">
-<meta property="og:description" content="本文整理自CSDN  对查询进行优化，应尽量避免全表扫描，首先应考虑在 where 及 order by 涉及的列上建立索引。  应尽量避免在 where 子句中使用!=或&amp;lt;&amp;gt;操作符，否则将引擎放弃使用索引而进行全表扫描。  应尽量避免在 where 子句中对字段进行 null 值判断，否则将导致引擎放弃使用索引而进行全表扫描，如：   select id from t where n">
+<meta property="og:description" content="什么是SPISPI（Service Provider Interface），是JDK内置的一种服务提供发现机制，可以用来启用框架扩展和替换组件，主要是被框架的开发人员使用，比如java.sql.Driver接口，其他不同厂商可以针对同一接口做出不同的实现，MySQL和PostgreSQL都有不同的实现提供给用户，而Java的SPI机制可以为某个接口寻找服务实现。Java中SPI机制主要思想是将装配">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-04-24T12:07:38.285Z">
+<meta property="og:image" content="https://kongzheng1993.github.io/2020/04/24/kongzheng1993-SPI/v2-a4598f8b9ab46951b190cc9ce059eee0_720w.jpg">
+<meta property="og:updated_time" content="2020-04-24T12:07:04.587Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SQL优化整理">
-<meta name="twitter:description" content="本文整理自CSDN  对查询进行优化，应尽量避免全表扫描，首先应考虑在 where 及 order by 涉及的列上建立索引。  应尽量避免在 where 子句中使用!=或&amp;lt;&amp;gt;操作符，否则将引擎放弃使用索引而进行全表扫描。  应尽量避免在 where 子句中对字段进行 null 值判断，否则将导致引擎放弃使用索引而进行全表扫描，如：   select id from t where n">
+<meta name="twitter:title" content="SPI">
+<meta name="twitter:description" content="什么是SPISPI（Service Provider Interface），是JDK内置的一种服务提供发现机制，可以用来启用框架扩展和替换组件，主要是被框架的开发人员使用，比如java.sql.Driver接口，其他不同厂商可以针对同一接口做出不同的实现，MySQL和PostgreSQL都有不同的实现提供给用户，而Java的SPI机制可以为某个接口寻找服务实现。Java中SPI机制主要思想是将装配">
+<meta name="twitter:image" content="https://kongzheng1993.github.io/2020/04/24/kongzheng1993-SPI/v2-a4598f8b9ab46951b190cc9ce059eee0_720w.jpg">
 
 
 <link rel="icon" href="/img/avatar.png">
@@ -147,22 +149,6 @@
     
         
             
-            <li><div data-rel="linux"><i class="fold iconfont icon-right"></i>linux<small>(1)</small></div>
-                
-                    <ul class="sub hide">
-                        
-                        <li><div data-rel="ss">ss<small>(1)</small></div>
-                            
-                        </li>
-                            
-                    </ul>
-                
-            </li>
-            
-        
-    
-        
-            
             <li><div data-rel="suse"><i class="fold iconfont icon-right"></i>suse<small>(1)</small></div>
                 
                     <ul class="sub hide">
@@ -175,6 +161,22 @@
                                     </li>
                                     
                                 </ul>
+                            
+                        </li>
+                            
+                    </ul>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="linux"><i class="fold iconfont icon-right"></i>linux<small>(1)</small></div>
+                
+                    <ul class="sub hide">
+                        
+                        <li><div data-rel="ss">ss<small>(1)</small></div>
                             
                         </li>
                             
@@ -308,6 +310,10 @@
     
         
             
+        
+    
+        
+            
             <li><div data-rel="other">other<small>(2)</small></div>
                 
             </li>
@@ -319,10 +325,6 @@
             <li><div data-rel="MQ">MQ<small>(1)</small></div>
                 
             </li>
-            
-        
-    
-        
             
         
     
@@ -485,15 +487,15 @@
     </li>
     
     <li class="article-tag-list-item">
+        <a class="color3">re</a>
+    </li>
+    
+    <li class="article-tag-list-item">
         <a class="color2">String</a>
     </li>
     
     <li class="article-tag-list-item">
         <a class="color4">new</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">re</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -561,18 +563,6 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color1">linux</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">ss</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">console</a>
-    </li>
-    
-    <li class="article-tag-list-item">
         <a class="color5">suse</a>
     </li>
     
@@ -582,6 +572,18 @@
     
     <li class="article-tag-list-item">
         <a class="color4">FTP</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">linux</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">ss</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">console</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -1066,19 +1068,19 @@
             <span class="post-date" title="2018-05-02 00:00:00">2018/05/02</span>
         </a>
         
-        <a  class="blog github git "
-           href="/2018/02/01/kongzheng1993-hexo搭建githubPages/"
-           data-tag="github,hexo,git"
-           data-author="" >
-            <span class="post-title" title="Hexo+github搭建个人博客遇到的问题">Hexo+github搭建个人博客遇到的问题</span>
-            <span class="post-date" title="2018-02-01 00:00:00">2018/02/01</span>
-        </a>
-        
         <a  class="suse server FTP "
            href="/2018/02/01/kongzheng1993-suse_ftp服务配置/"
            data-tag="suse,server,FTP"
            data-author="" >
             <span class="post-title" title="SUSE server FTP配置">SUSE server FTP配置</span>
+            <span class="post-date" title="2018-02-01 00:00:00">2018/02/01</span>
+        </a>
+        
+        <a  class="blog github git "
+           href="/2018/02/01/kongzheng1993-hexo搭建githubPages/"
+           data-tag="github,hexo,git"
+           data-author="" >
+            <span class="post-title" title="Hexo+github搭建个人博客遇到的问题">Hexo+github搭建个人博客遇到的问题</span>
             <span class="post-date" title="2018-02-01 00:00:00">2018/02/01</span>
         </a>
         
@@ -1115,18 +1117,18 @@
         </a>
         
         <a  class=""
-           href="/2016/07/26/kongzheng1993-about_comparator_and_comparable/"
+           href="/2016/07/26/kongzheng1993-centos7_mysql/"
            data-tag="re"
            data-author="" >
-            <span class="post-title" title="关于comparator和comparable">关于comparator和comparable</span>
+            <span class="post-title" title="centos 7 安装mysql遇到的问题">centos 7 安装mysql遇到的问题</span>
             <span class="post-date" title="2016-07-26 00:00:00">2016/07/26</span>
         </a>
         
         <a  class=""
-           href="/2016/07/26/kongzheng1993-请求转发与重定向/"
+           href="/2016/07/26/kongzheng1993-about_comparator_and_comparable/"
            data-tag="re"
            data-author="" >
-            <span class="post-title" title="请求转发和重定向">请求转发和重定向</span>
+            <span class="post-title" title="关于comparator和comparable">关于comparator和comparable</span>
             <span class="post-date" title="2016-07-26 00:00:00">2016/07/26</span>
         </a>
         
@@ -1139,10 +1141,10 @@
         </a>
         
         <a  class=""
-           href="/2016/07/26/kongzheng1993-centos7_mysql/"
+           href="/2016/07/26/kongzheng1993-请求转发与重定向/"
            data-tag="re"
            data-author="" >
-            <span class="post-title" title="centos 7 安装mysql遇到的问题">centos 7 安装mysql遇到的问题</span>
+            <span class="post-title" title="请求转发和重定向">请求转发和重定向</span>
             <span class="post-date" title="2016-07-26 00:00:00">2016/07/26</span>
         </a>
         
@@ -1211,18 +1213,18 @@
         </a>
         
         <a  class=""
-           href="/2016/06/10/kongzheng1993-oracle/"
-           data-tag="sql,select,distinct,group by,order by"
-           data-author="" >
-            <span class="post-title" title="sql学习笔记">sql学习笔记</span>
-            <span class="post-date" title="2016-06-10 00:00:00">2016/06/10</span>
-        </a>
-        
-        <a  class=""
            href="/2016/06/10/kongzheng1993-aboutFloat/"
            data-tag="float"
            data-author="" >
             <span class="post-title" title="关于float">关于float</span>
+            <span class="post-date" title="2016-06-10 00:00:00">2016/06/10</span>
+        </a>
+        
+        <a  class=""
+           href="/2016/06/10/kongzheng1993-oracle/"
+           data-tag="sql,select,distinct,group by,order by"
+           data-author="" >
+            <span class="post-title" title="sql学习笔记">sql学习笔记</span>
             <span class="post-date" title="2016-06-10 00:00:00">2016/06/10</span>
         </a>
         
@@ -1493,7 +1495,7 @@
     /*作者、标签的自动补全*/
     $(function () {
         $('.search').AutoComplete({
-            'data': ['#oop','#float','#servlet','#sample post','#images','#test','#String','#new','#re','#catch，try','#sql','#select','#distinct','#group by','#order by','#oracle','#sys','#sqlplus','#java','#reflect','#Class','#对象，Class对象','#github','#hexo','#git','#linux','#ss','#console','#suse','#server','#FTP','#mysql','#备份','#编码','#mq','#消息队列','#Linux','#职业','#业务','#学习','#quartz','#锁','#分布式','#RSA','#SHA','#加密','#签名','#NIO BIO IO','#Guava','#Java','#jvm','#other','#MQ','#node.js','#Web','#RocketMQ','#Mysql','#SQL','#resume','#简历','#jdk','#网络','#多线程','#安全',],
+            'data': ['#oop','#float','#servlet','#sample post','#images','#test','#re','#String','#new','#catch，try','#sql','#select','#distinct','#group by','#order by','#oracle','#sys','#sqlplus','#java','#reflect','#Class','#对象，Class对象','#github','#hexo','#git','#suse','#server','#FTP','#linux','#ss','#console','#mysql','#备份','#编码','#mq','#消息队列','#Linux','#职业','#业务','#学习','#quartz','#锁','#分布式','#RSA','#SHA','#加密','#签名','#NIO BIO IO','#Guava','#Java','#jvm','#other','#MQ','#node.js','#Web','#RocketMQ','#Mysql','#SQL','#resume','#简历','#jdk','#网络','#多线程','#安全',],
             'itemHeight': 20,
             'width': 418
         }).AutoComplete('show');
