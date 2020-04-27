@@ -6,20 +6,20 @@
   <meta name="keywords" content=" Java ">
   <meta name="description" content="synchronized锁升级 | Evil">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="什么是SPISPI（Service Provider Interface），是JDK内置的一种服务提供发现机制，可以用来启用框架扩展和替换组件，主要是被框架的开发人员使用，比如java.sql.Driver接口，其他不同厂商可以针对同一接口做出不同的实现，MySQL和PostgreSQL都有不同的实现提供给用户，而Java的SPI机制可以为某个接口寻找服务实现。Java中SPI机制主要思想是将装配">
-<meta name="keywords" content="Java">
+<meta name="description" content="什么是死锁  死锁的本质，举个例子如果此时有一个线程 A ，按照先获持有锁 a 再获取锁 b的顺序获得锁，同时另外一个线程 B，按照先获取锁 b 再获取锁 a 的顺序获取锁。它们都像申请对方的资源却不得，所以会相互等待，进入死锁状态。 条件产生死锁必须具备以下四个条件：  互斥条件：该资源同一时刻只能由一个线程占用。 请求与保持条件：一个进程因为请求资源而阻塞时，不会释放已经获得的资源。 不可剥夺">
+<meta name="keywords" content="多线程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SPI">
-<meta property="og:url" content="https://kongzheng1993.github.io/2020/04/24/kongzheng1993-SPI/index.html">
+<meta property="og:title" content="死锁">
+<meta property="og:url" content="https://kongzheng1993.github.io/2020/04/25/kongzheng1993-死锁/index.html">
 <meta property="og:site_name" content="Evil">
-<meta property="og:description" content="什么是SPISPI（Service Provider Interface），是JDK内置的一种服务提供发现机制，可以用来启用框架扩展和替换组件，主要是被框架的开发人员使用，比如java.sql.Driver接口，其他不同厂商可以针对同一接口做出不同的实现，MySQL和PostgreSQL都有不同的实现提供给用户，而Java的SPI机制可以为某个接口寻找服务实现。Java中SPI机制主要思想是将装配">
+<meta property="og:description" content="什么是死锁  死锁的本质，举个例子如果此时有一个线程 A ，按照先获持有锁 a 再获取锁 b的顺序获得锁，同时另外一个线程 B，按照先获取锁 b 再获取锁 a 的顺序获取锁。它们都像申请对方的资源却不得，所以会相互等待，进入死锁状态。 条件产生死锁必须具备以下四个条件：  互斥条件：该资源同一时刻只能由一个线程占用。 请求与保持条件：一个进程因为请求资源而阻塞时，不会释放已经获得的资源。 不可剥夺">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://kongzheng1993.github.io/2020/04/24/kongzheng1993-SPI/v2-a4598f8b9ab46951b190cc9ce059eee0_720w.jpg">
-<meta property="og:updated_time" content="2020-04-24T12:07:04.587Z">
+<meta property="og:image" content="https://kongzheng1993.github.io/2020/04/25/kongzheng1993-死锁/v2-fccd6ccc07c0caf2643f324cdb7856e7_b.jpg">
+<meta property="og:updated_time" content="2020-04-26T08:13:04.176Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SPI">
-<meta name="twitter:description" content="什么是SPISPI（Service Provider Interface），是JDK内置的一种服务提供发现机制，可以用来启用框架扩展和替换组件，主要是被框架的开发人员使用，比如java.sql.Driver接口，其他不同厂商可以针对同一接口做出不同的实现，MySQL和PostgreSQL都有不同的实现提供给用户，而Java的SPI机制可以为某个接口寻找服务实现。Java中SPI机制主要思想是将装配">
-<meta name="twitter:image" content="https://kongzheng1993.github.io/2020/04/24/kongzheng1993-SPI/v2-a4598f8b9ab46951b190cc9ce059eee0_720w.jpg">
+<meta name="twitter:title" content="死锁">
+<meta name="twitter:description" content="什么是死锁  死锁的本质，举个例子如果此时有一个线程 A ，按照先获持有锁 a 再获取锁 b的顺序获得锁，同时另外一个线程 B，按照先获取锁 b 再获取锁 a 的顺序获取锁。它们都像申请对方的资源却不得，所以会相互等待，进入死锁状态。 条件产生死锁必须具备以下四个条件：  互斥条件：该资源同一时刻只能由一个线程占用。 请求与保持条件：一个进程因为请求资源而阻塞时，不会释放已经获得的资源。 不可剥夺">
+<meta name="twitter:image" content="https://kongzheng1993.github.io/2020/04/25/kongzheng1993-死锁/v2-fccd6ccc07c0caf2643f324cdb7856e7_b.jpg">
 
 
 <link rel="icon" href="/img/avatar.png">
@@ -122,7 +122,7 @@
 
 
 <ul>
-    <li><div class="all active">全部文章<small>(66)</small></div></li>
+    <li><div class="all active">全部文章<small>(67)</small></div></li>
     
         
             
@@ -188,10 +188,6 @@
     
         
             
-        
-    
-        
-            
             <li><div data-rel="mysql"><i class="fold iconfont icon-right"></i>mysql<small>(3)</small></div>
                 
                     <ul class="sub hide">
@@ -203,6 +199,10 @@
                     </ul>
                 
             </li>
+            
+        
+    
+        
             
         
     
@@ -255,10 +255,6 @@
     
         
             
-        
-    
-        
-            
             <li><div data-rel="RSA"><i class="fold iconfont icon-right"></i>RSA<small>(1)</small></div>
                 
                     <ul class="sub hide">
@@ -282,9 +278,17 @@
     
         
             
+        
+    
+        
+            
             <li><div data-rel="NIO BIO IO">NIO BIO IO<small>(1)</small></div>
                 
             </li>
+            
+        
+    
+        
             
         
     
@@ -334,10 +338,6 @@
     
         
             
-        
-    
-        
-            
             <li><div data-rel="Web">Web<small>(2)</small></div>
                 
             </li>
@@ -346,13 +346,13 @@
     
         
             
-            <li><div data-rel="RocketMQ">RocketMQ<small>(2)</small></div>
-                
-            </li>
-            
         
     
         
+            
+            <li><div data-rel="RocketMQ">RocketMQ<small>(2)</small></div>
+                
+            </li>
             
         
     
@@ -378,7 +378,7 @@
     
         
             
-            <li><div data-rel="多线程">多线程<small>(1)</small></div>
+            <li><div data-rel="多线程">多线程<small>(2)</small></div>
                 
             </li>
             
@@ -438,8 +438,8 @@
     </div>
     <div></div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="66">
-<input type="hidden" id="yelog_site_word_count" value="79.5k">
+<input type="hidden" id="yelog_site_posts_number" value="67">
+<input type="hidden" id="yelog_site_word_count" value="80.9k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -511,6 +511,10 @@
     </li>
     
     <li class="article-tag-list-item">
+        <a class="color2">oracle</a>
+    </li>
+    
+    <li class="article-tag-list-item">
         <a class="color4">sql</a>
     </li>
     
@@ -531,7 +535,19 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color2">oracle</a>
+        <a class="color5">java</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">reflect</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">Class</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">对象，Class对象</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -552,22 +568,6 @@
     
     <li class="article-tag-list-item">
         <a class="color4">git</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color5">java</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">reflect</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color1">Class</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color1">对象，Class对象</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -615,10 +615,6 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color1">Linux</a>
-    </li>
-    
-    <li class="article-tag-list-item">
         <a class="color3">职业</a>
     </li>
     
@@ -628,6 +624,10 @@
     
     <li class="article-tag-list-item">
         <a class="color3">学习</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">Linux</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -667,11 +667,11 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color1">Guava</a>
+        <a class="color4">jvm</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">jvm</a>
+        <a class="color1">Guava</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -704,6 +704,10 @@
     
     <li class="article-tag-list-item">
         <a class="color4">多线程</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">算法</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -773,6 +777,14 @@
         </a>
         
         <a  class="多线程 "
+           href="/2020/04/25/kongzheng1993-银行家算法/"
+           data-tag="多线程,算法"
+           data-author="" >
+            <span class="post-title" title="银行家算法">银行家算法</span>
+            <span class="post-date" title="2020-04-25 00:30:52">2020/04/25</span>
+        </a>
+        
+        <a  class="多线程 "
            href="/2020/04/25/kongzheng1993-死锁/"
            data-tag="多线程"
            data-author="" >
@@ -820,19 +832,19 @@
             <span class="post-date" title="2020-04-19 00:30:52">2020/04/19</span>
         </a>
         
-        <a  class="Mysql "
-           href="/2020/04/17/kongzheng1993-MySQL事务隔离级别/"
-           data-tag="Mysql"
-           data-author="" >
-            <span class="post-title" title="MySQL事务隔离级别">MySQL事务隔离级别</span>
-            <span class="post-date" title="2020-04-17 00:30:52">2020/04/17</span>
-        </a>
-        
         <a  class="Java "
            href="/2020/04/17/kongzheng1993-Java_Monitor/"
            data-tag="Java"
            data-author="" >
             <span class="post-title" title="Java Monitor">Java Monitor</span>
+            <span class="post-date" title="2020-04-17 00:30:52">2020/04/17</span>
+        </a>
+        
+        <a  class="Mysql "
+           href="/2020/04/17/kongzheng1993-MySQL事务隔离级别/"
+           data-tag="Mysql"
+           data-author="" >
+            <span class="post-title" title="MySQL事务隔离级别">MySQL事务隔离级别</span>
             <span class="post-date" title="2020-04-17 00:30:52">2020/04/17</span>
         </a>
         
@@ -909,6 +921,14 @@
         </a>
         
         <a  class="Java "
+           href="/2020/03/19/kongzheng1993-Thread和Runnable/"
+           data-tag="Java"
+           data-author="" >
+            <span class="post-title" title="Thread和Runnable">Thread和Runnable</span>
+            <span class="post-date" title="2020-03-19 00:30:52">2020/03/19</span>
+        </a>
+        
+        <a  class="Java "
            href="/2020/03/19/kongzheng1993-Future/"
            data-tag="Java"
            data-author="" >
@@ -916,12 +936,12 @@
             <span class="post-date" title="2020-03-19 00:30:52">2020/03/19</span>
         </a>
         
-        <a  class="Java "
-           href="/2020/03/19/kongzheng1993-Thread和Runnable/"
-           data-tag="Java"
+        <a  class="jvm "
+           href="/2020/03/08/kongzheng1993-jmap/"
+           data-tag="jvm"
            data-author="" >
-            <span class="post-title" title="Thread和Runnable">Thread和Runnable</span>
-            <span class="post-date" title="2020-03-19 00:30:52">2020/03/19</span>
+            <span class="post-title" title="jmap">jmap</span>
+            <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
         </a>
         
         <a  class="other "
@@ -937,14 +957,6 @@
            data-tag="Web"
            data-author="" >
             <span class="post-title" title="URLEncoder">URLEncoder</span>
-            <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
-        </a>
-        
-        <a  class="jvm "
-           href="/2020/03/08/kongzheng1993-jmap/"
-           data-tag="jvm"
-           data-author="" >
-            <span class="post-title" title="jmap">jmap</span>
             <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
         </a>
         
@@ -1133,6 +1145,14 @@
         </a>
         
         <a  class=""
+           href="/2016/07/26/kongzheng1993-servlet/"
+           data-tag="servlet"
+           data-author="" >
+            <span class="post-title" title="Servlet">Servlet</span>
+            <span class="post-date" title="2016-07-26 00:00:00">2016/07/26</span>
+        </a>
+        
+        <a  class=""
            href="/2016/07/26/kongzheng1993-about_comparator_and_comparable/"
            data-tag="re"
            data-author="" >
@@ -1145,14 +1165,6 @@
            data-tag="re"
            data-author="" >
             <span class="post-title" title="请求转发和重定向">请求转发和重定向</span>
-            <span class="post-date" title="2016-07-26 00:00:00">2016/07/26</span>
-        </a>
-        
-        <a  class=""
-           href="/2016/07/26/kongzheng1993-servlet/"
-           data-tag="servlet"
-           data-author="" >
-            <span class="post-title" title="Servlet">Servlet</span>
             <span class="post-date" title="2016-07-26 00:00:00">2016/07/26</span>
         </a>
         
@@ -1181,18 +1193,18 @@
         </a>
         
         <a  class=""
-           href="/2016/07/11/kongzheng1993-ablout_try_catch/"
-           data-tag="catch，try"
-           data-author="" >
-            <span class="post-title" title="关于try-catch">关于try-catch</span>
-            <span class="post-date" title="2016-07-11 00:00:00">2016/07/11</span>
-        </a>
-        
-        <a  class=""
            href="/2016/07/11/kongzheng1993-String_Original/"
            data-tag="String,new"
            data-author="" >
             <span class="post-title" title="String str">String str</span>
+            <span class="post-date" title="2016-07-11 00:00:00">2016/07/11</span>
+        </a>
+        
+        <a  class=""
+           href="/2016/07/11/kongzheng1993-ablout_try_catch/"
+           data-tag="catch，try"
+           data-author="" >
+            <span class="post-title" title="关于try-catch">关于try-catch</span>
             <span class="post-date" title="2016-07-11 00:00:00">2016/07/11</span>
         </a>
         
@@ -1518,7 +1530,7 @@
     /*作者、标签的自动补全*/
     $(function () {
         $('.search').AutoComplete({
-            'data': ['#oop','#float','#servlet','#re','#sample post','#images','#test','#String','#new','#catch，try','#sql','#select','#distinct','#group by','#order by','#oracle','#sys','#sqlplus','#github','#hexo','#git','#java','#reflect','#Class','#对象，Class对象','#suse','#server','#FTP','#linux','#ss','#console','#mysql','#备份','#编码','#mq','#消息队列','#Linux','#职业','#业务','#学习','#quartz','#锁','#分布式','#RSA','#SHA','#加密','#签名','#NIO BIO IO','#Java','#Guava','#jvm','#other','#MQ','#node.js','#Web','#RocketMQ','#Mysql','#SQL','#多线程','#resume','#简历','#jdk','#网络','#安全',],
+            'data': ['#oop','#float','#servlet','#re','#sample post','#images','#test','#String','#new','#catch，try','#oracle','#sql','#select','#distinct','#group by','#order by','#java','#reflect','#Class','#对象，Class对象','#sys','#sqlplus','#github','#hexo','#git','#suse','#server','#FTP','#linux','#ss','#console','#mysql','#备份','#编码','#mq','#消息队列','#职业','#业务','#学习','#Linux','#quartz','#锁','#分布式','#RSA','#SHA','#加密','#签名','#NIO BIO IO','#Java','#jvm','#Guava','#other','#MQ','#node.js','#Web','#RocketMQ','#Mysql','#SQL','#多线程','#算法','#resume','#简历','#jdk','#网络','#安全',],
             'itemHeight': 20,
             'width': 418
         }).AutoComplete('show');

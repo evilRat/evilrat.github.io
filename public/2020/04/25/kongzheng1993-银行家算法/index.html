@@ -2,9 +2,9 @@
 <html>
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
-  <title>带你撸一台免费云服务器 | Evil</title>
-  <meta name="keywords" content=" other ">
-  <meta name="description" content="带你撸一台免费云服务器 | Evil">
+  <title>银行家算法 | Evil</title>
+  <meta name="keywords" content=" 多线程 , 算法 ">
+  <meta name="description" content="银行家算法 | Evil">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="什么是死锁  死锁的本质，举个例子如果此时有一个线程 A ，按照先获持有锁 a 再获取锁 b的顺序获得锁，同时另外一个线程 B，按照先获取锁 b 再获取锁 a 的顺序获取锁。它们都像申请对方的资源却不得，所以会相互等待，进入死锁状态。 条件产生死锁必须具备以下四个条件：  互斥条件：该资源同一时刻只能由一个线程占用。 请求与保持条件：一个进程因为请求资源而阻塞时，不会释放已经获得的资源。 不可剥夺">
 <meta name="keywords" content="多线程">
@@ -1284,9 +1284,9 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="post-kongzheng1993-带你撸一台免费云服务器" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-kongzheng1993-银行家算法" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">带你撸一台免费云服务器</h1>
+        <h1 class="article-title">银行家算法</h1>
     
     <div class="article-meta">
         
@@ -1294,26 +1294,28 @@
         
         <span class="book">
             
-                <a  data-rel="other">other</a>
+                <a  data-rel="多线程">多线程</a>
             
         </span>
         
         
         <span class="tag">
             
-            <a class="color1">other</a>
+            <a class="color4">多线程</a>
+            
+            <a class="color3">算法</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2020-04-06 17:34:16'>2020-03-08 00:30</time>
+        创建时间:<time class="date" title='更新时间: 2020-04-26 18:19:39'>2020-04-25 00:30</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:205</span>
+        <span>字数:1.4k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1343,7 +1345,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#申请亚马逊AWS账户"><span class="toc-text">申请亚马逊AWS账户</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#银行家算法"><span class="toc-text">银行家算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#来源"><span class="toc-text">来源</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安全状态"><span class="toc-text">安全状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#不安全状态"><span class="toc-text">不安全状态</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据结构"><span class="toc-text">数据结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原理"><span class="toc-text">原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#算法描述"><span class="toc-text">算法描述</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1359,42 +1361,33 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="申请亚马逊AWS账户"><a href="#申请亚马逊AWS账户" class="headerlink" title="申请亚马逊AWS账户"></a>申请亚马逊AWS账户</h1><p>访问aws.amazon.com，注册账户</p>
-<img src="/2020/03/08/kongzheng1993-带你撸一台免费云服务器/1.png">
-
-<p>登陆成功后，进入AWS管理控制台</p>
-<p>如果没有梯子，可能会有点慢</p>
-<p>点击启动虚拟机，新建ec2</p>
-<img src="/2020/03/08/kongzheng1993-带你撸一台免费云服务器/2.png">
-
-
-<p>选择系统，我熟悉ubuntu，选择了ubuntu，注意符合条件的免费套餐</p>
-<img src="/2020/03/08/kongzheng1993-带你撸一台免费云服务器/3.png">
-
-
-<p>选择实例类型，注意符合条件的免费套餐，点击<code>审核和启动</code><br><img src="/2020/03/08/kongzheng1993-带你撸一台免费云服务器/5.png"></p>
-<p>点击<code>启动</code></p>
-<img src="/2020/03/08/kongzheng1993-带你撸一台免费云服务器/6.png">
-
-
-<p>选择创建新的密码对，输入一个密码对名称</p>
-<img src="/2020/03/08/kongzheng1993-带你撸一台免费云服务器/10.png">
-
-
-<p>点击下载密钥对，保存好，这是连接服务器需要的密钥文件。点击启动实例</p>
-<img src="/2020/03/08/kongzheng1993-带你撸一台免费云服务器/9.png">
-
-<p>启动成功，可以创建账单警报，以免费用超过免费套餐，点击<code>查看实例</code></p>
-<img src="/2020/03/08/kongzheng1993-带你撸一台免费云服务器/11.png">
-
-<p>可以看到我们的实例状态时running</p>
-<img src="/2020/03/08/kongzheng1993-带你撸一台免费云服务器/12.png">
-
-
-<p>点击连接</p>
-<img src="/2020/03/08/kongzheng1993-带你撸一台免费云服务器/13.png">
-
-<p>复制命令本地执行即可</p>
+        <h2 id="银行家算法"><a href="#银行家算法" class="headerlink" title="银行家算法"></a>银行家算法</h2><p><strong>银行家算法</strong>（Banker’s Algorithm）是一个避免死锁（Deadlock）的著名算法，是由艾兹格·迪杰斯特拉在1965年为T.H.E系统设计的一种避免死锁产生的算法。它以银行借贷系统的分配策略为基础，判断并保证系统的安全运行。</p>
+<h2 id="来源"><a href="#来源" class="headerlink" title="来源"></a>来源</h2><p>在银行中，客户申请贷款的数量是有限的，每个客户在第一次申请贷款时要声明完成该项目所需的最大资金量，在满足所有贷款要求时，客户应及时归还。银行家在客户申请的贷款数量不超过自己拥有的最大值时，都应尽量满足客户的需要。在这样的描述中，银行家就好比操作系统，资金就是资源，客户就相当于要申请资源的进程。<br>银行家算法是一种最有代表性的避免死锁的算法。在避免死锁方法中允许进程动态地申请资源，但系统在进行资源分配之前，应先计算此次分配资源的安全性，若分配不会导致系统进入不安全状态，则分配，否则等待。为实现银行家算法，系统必须设置若干数据结构。<br>要解释银行家算法，必须先解释<strong>操作系统安全状态</strong>和不安全状态。<br>安全序列是指一个进程序列{P1，…，Pn}是安全的，即对于每一个进程Pi(1≤i≤n），它以后尚需要的资源量不超过系统当前剩余资源量与所有进程Pj (j &lt; i )当前占有资源量之和。</p>
+<h3 id="安全状态"><a href="#安全状态" class="headerlink" title="安全状态"></a>安全状态</h3><p>如果存在一个由系统中所有进程构成的安全序列P1，…，Pn，则系统处于安全状态。安全状态一定是没有死锁发生。</p>
+<h3 id="不安全状态"><a href="#不安全状态" class="headerlink" title="不安全状态"></a>不安全状态</h3><p>不存在一个安全序列。不安全状态不一定导致死锁。</p>
+<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><ul>
+<li><strong>可利用资源向量Available</strong> 是个含有m个元素的数组，其中的每一个元素代表一类可利用的资源数目。如果Available[j]=K，则表示系统中现有Rj类资源K个。</li>
+<li><strong>最大需求矩阵Max</strong> 这是一个n*m的矩阵，它定义了系统中n个进程中的每一个进程对m类资源的最大需求。如果Max[i,j]=K，则表示进程i需要Rj类资源的最大数目为K。</li>
+<li><strong>分配矩阵Allocation</strong> 这也是一个n*m的矩阵，它定义了系统中每一类资源当前已分配给每一进程的资源数。如果Allocation[i,j]=K，则表示进程i当前已分得Rj类资源的 数目为K。</li>
+<li><strong>需求矩阵Need</strong> 这也是一个n*m的矩阵，用以表示每一个进程尚需的各类资源数。如果Need[i,j]=K，则表示进程i还需要Rj类资源K个，方能完成其任务。<code>Need[i,j]=Max[i,j]-Allocation[i,j]</code></li>
+</ul>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>我们可以把操作系统看作是银行家，操作系统管理的资源相当于银行家管理的资金，进程向操作系统请求分配资源相当于用户向银行家贷款。<br>为保证资金的安全，银行家规定：</p>
+<ol>
+<li>当一个顾客对资金的最大需求量不超过银行家现有的资金时就可接纳该顾客；</li>
+<li>顾客可以分期贷款，但贷款的总数不能超过最大需求量；</li>
+<li>当银行家现有的资金不能满足顾客尚需的贷款数额时，对顾客的贷款可推迟支付，但总能使顾客在有限的时间里得到贷款；</li>
+<li>当顾客得到所需的全部资金后，一定能在有限的时间里归还所有的资金.</li>
+</ol>
+<p>操作系统按照银行家制定的规则为进程分配资源，当进程首次申请资源时，要测试该进程对资源的最大需求量，如果系统现存的资源可以满足它的最大需求量则按当前的申请量分配资源，否则就<strong>推迟分配</strong>。当进程在执行中继续申请资源时，先测试该进程本次申请的资源数是否超过了该资源所剩余的总量，若能满足则按当前的申请量分配资源，否则也要<strong>推迟分配</strong>。</p>
+<h2 id="算法描述"><a href="#算法描述" class="headerlink" title="算法描述"></a>算法描述</h2><p>设Request是进程Pi的请求向量，如果 Requesti[j] = K，表示进程Pi需要K个Rj类型的资源。当Pi发出资源请求后，系统按下述步骤进行检査:</p>
+<ol>
+<li>如果 Requesti[j] ≤ Need[i,j]便转向步骤(2)；否则认为出错，因为它所需要的资源数已超过它所宣布的最大值。</li>
+<li>如果 Requesti[j] ≤ Available[j]，便转向步骤(3)；否则，表示尚无足够资源，Pi须等待。</li>
+<li>系统试探着把资源分配给进程Pi，并修改下面数据结构中的数值<pre><code> Available[j] = Available[j] - Requesti[j];
+ Allocation[i,j] = Allocation[i,j] + Requesti[j];
+ Need[i,j] = Need[i,j] - Requesti[j];</code></pre></li>
+<li>系统执行安全性算法，检查此次资源分配后系统是否处于安全状态。若安全，才正式将资源分配给进程Pi，以完成本次分配；否则，将本次的试探分配作废，恢复原来的资源分配状态，让进程Pi等待。</li>
+</ol>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 kongzheng1993@hotmail.com </span>
@@ -1408,12 +1401,12 @@
 
 
 <div class="article_copyright">
-    <p><span class="copy-title">文章标题:</span>带你撸一台免费云服务器</p>
-    <p><span class="copy-title">文章字数:</span><span class="post-count">205</span></p>
+    <p><span class="copy-title">文章标题:</span>银行家算法</p>
+    <p><span class="copy-title">文章字数:</span><span class="post-count">1.4k</span></p>
     <p><span class="copy-title">本文作者:</span><a  title="evilRat">evilRat</a></p>
-    <p><span class="copy-title">发布时间:</span>2020-03-08, 00:30:52</p>
-    <p><span class="copy-title">最后更新:</span>2020-04-06, 17:34:16</p>
-    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/03/08/kongzheng1993-带你撸一台免费云服务器/" title="带你撸一台免费云服务器">https://kongzheng1993.github.io/2020/03/08/kongzheng1993-带你撸一台免费云服务器/</a>
+    <p><span class="copy-title">发布时间:</span>2020-04-25, 00:30:52</p>
+    <p><span class="copy-title">最后更新:</span>2020-04-26, 18:19:39</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/04/25/kongzheng1993-银行家算法/" title="银行家算法">https://kongzheng1993.github.io/2020/04/25/kongzheng1993-银行家算法/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
     </p>
