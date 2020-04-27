@@ -6,20 +6,18 @@
   <meta name="keywords" content=" Java ">
   <meta name="description" content="记一次老代码优化 | Evil">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="什么是死锁  死锁的本质，举个例子如果此时有一个线程 A ，按照先获持有锁 a 再获取锁 b的顺序获得锁，同时另外一个线程 B，按照先获取锁 b 再获取锁 a 的顺序获取锁。它们都像申请对方的资源却不得，所以会相互等待，进入死锁状态。 条件产生死锁必须具备以下四个条件：  互斥条件：该资源同一时刻只能由一个线程占用。 请求与保持条件：一个进程因为请求资源而阻塞时，不会释放已经获得的资源。 不可剥夺">
-<meta name="keywords" content="多线程">
+<meta name="description" content="银行家算法银行家算法（Banker’s Algorithm）是一个避免死锁（Deadlock）的著名算法，是由艾兹格·迪杰斯特拉在1965年为T.H.E系统设计的一种避免死锁产生的算法。它以银行借贷系统的分配策略为基础，判断并保证系统的安全运行。 来源在银行中，客户申请贷款的数量是有限的，每个客户在第一次申请贷款时要声明完成该项目所需的最大资金量，在满足所有贷款要求时，客户应及时归还。银行家在客户">
+<meta name="keywords" content="多线程,算法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="死锁">
-<meta property="og:url" content="https://kongzheng1993.github.io/2020/04/25/kongzheng1993-死锁/index.html">
+<meta property="og:title" content="银行家算法">
+<meta property="og:url" content="https://kongzheng1993.github.io/2020/04/25/kongzheng1993-银行家算法/index.html">
 <meta property="og:site_name" content="Evil">
-<meta property="og:description" content="什么是死锁  死锁的本质，举个例子如果此时有一个线程 A ，按照先获持有锁 a 再获取锁 b的顺序获得锁，同时另外一个线程 B，按照先获取锁 b 再获取锁 a 的顺序获取锁。它们都像申请对方的资源却不得，所以会相互等待，进入死锁状态。 条件产生死锁必须具备以下四个条件：  互斥条件：该资源同一时刻只能由一个线程占用。 请求与保持条件：一个进程因为请求资源而阻塞时，不会释放已经获得的资源。 不可剥夺">
+<meta property="og:description" content="银行家算法银行家算法（Banker’s Algorithm）是一个避免死锁（Deadlock）的著名算法，是由艾兹格·迪杰斯特拉在1965年为T.H.E系统设计的一种避免死锁产生的算法。它以银行借贷系统的分配策略为基础，判断并保证系统的安全运行。 来源在银行中，客户申请贷款的数量是有限的，每个客户在第一次申请贷款时要声明完成该项目所需的最大资金量，在满足所有贷款要求时，客户应及时归还。银行家在客户">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://kongzheng1993.github.io/2020/04/25/kongzheng1993-死锁/v2-fccd6ccc07c0caf2643f324cdb7856e7_b.jpg">
-<meta property="og:updated_time" content="2020-04-26T08:13:04.176Z">
+<meta property="og:updated_time" content="2020-04-26T10:19:39.259Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="死锁">
-<meta name="twitter:description" content="什么是死锁  死锁的本质，举个例子如果此时有一个线程 A ，按照先获持有锁 a 再获取锁 b的顺序获得锁，同时另外一个线程 B，按照先获取锁 b 再获取锁 a 的顺序获取锁。它们都像申请对方的资源却不得，所以会相互等待，进入死锁状态。 条件产生死锁必须具备以下四个条件：  互斥条件：该资源同一时刻只能由一个线程占用。 请求与保持条件：一个进程因为请求资源而阻塞时，不会释放已经获得的资源。 不可剥夺">
-<meta name="twitter:image" content="https://kongzheng1993.github.io/2020/04/25/kongzheng1993-死锁/v2-fccd6ccc07c0caf2643f324cdb7856e7_b.jpg">
+<meta name="twitter:title" content="银行家算法">
+<meta name="twitter:description" content="银行家算法银行家算法（Banker’s Algorithm）是一个避免死锁（Deadlock）的著名算法，是由艾兹格·迪杰斯特拉在1965年为T.H.E系统设计的一种避免死锁产生的算法。它以银行借贷系统的分配策略为基础，判断并保证系统的安全运行。 来源在银行中，客户申请贷款的数量是有限的，每个客户在第一次申请贷款时要声明完成该项目所需的最大资金量，在满足所有贷款要求时，客户应及时归还。银行家在客户">
 
 
 <link rel="icon" href="/img/avatar.png">
@@ -122,7 +120,7 @@
 
 
 <ul>
-    <li><div class="all active">全部文章<small>(67)</small></div></li>
+    <li><div class="all active">全部文章<small>(68)</small></div></li>
     
         
             
@@ -216,13 +214,13 @@
     
         
             
-        
-    
-        
-            
             <li><div data-rel="Linux">Linux<small>(1)</small></div>
                 
             </li>
+            
+        
+    
+        
             
         
     
@@ -294,7 +292,7 @@
     
         
             
-            <li><div data-rel="Java">Java<small>(15)</small></div>
+            <li><div data-rel="Java">Java<small>(16)</small></div>
                 
             </li>
             
@@ -305,10 +303,6 @@
             <li><div data-rel="jvm">jvm<small>(2)</small></div>
                 
             </li>
-            
-        
-    
-        
             
         
     
@@ -325,6 +319,10 @@
             <li><div data-rel="MQ">MQ<small>(1)</small></div>
                 
             </li>
+            
+        
+    
+        
             
         
     
@@ -438,8 +436,8 @@
     </div>
     <div></div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="67">
-<input type="hidden" id="yelog_site_word_count" value="80.9k">
+<input type="hidden" id="yelog_site_posts_number" value="68">
+<input type="hidden" id="yelog_site_word_count" value="82.1k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -483,10 +481,6 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color3">re</a>
-    </li>
-    
-    <li class="article-tag-list-item">
         <a class="color2">sample post</a>
     </li>
     
@@ -499,6 +493,10 @@
     </li>
     
     <li class="article-tag-list-item">
+        <a class="color3">re</a>
+    </li>
+    
+    <li class="article-tag-list-item">
         <a class="color2">String</a>
     </li>
     
@@ -508,10 +506,6 @@
     
     <li class="article-tag-list-item">
         <a class="color5">catch，try</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color2">oracle</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -535,6 +529,18 @@
     </li>
     
     <li class="article-tag-list-item">
+        <a class="color4">sys</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">sqlplus</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color2">oracle</a>
+    </li>
+    
+    <li class="article-tag-list-item">
         <a class="color5">java</a>
     </li>
     
@@ -548,14 +554,6 @@
     
     <li class="article-tag-list-item">
         <a class="color1">对象，Class对象</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color4">sys</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">sqlplus</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -607,6 +605,10 @@
     </li>
     
     <li class="article-tag-list-item">
+        <a class="color1">Linux</a>
+    </li>
+    
+    <li class="article-tag-list-item">
         <a class="color3">mq</a>
     </li>
     
@@ -624,10 +626,6 @@
     
     <li class="article-tag-list-item">
         <a class="color3">学习</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color1">Linux</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -663,15 +661,15 @@
     </li>
     
     <li class="article-tag-list-item">
+        <a class="color1">Guava</a>
+    </li>
+    
+    <li class="article-tag-list-item">
         <a class="color5">Java</a>
     </li>
     
     <li class="article-tag-list-item">
         <a class="color4">jvm</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color1">Guava</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -776,6 +774,14 @@
             <span class="post-date" title="2020-03-25 00:30:52">2020/03/25</span>
         </a>
         
+        <a  class="Java "
+           href="/2020/04/27/kongzheng1993-java.lang.IllegalMonitorStateException/"
+           data-tag="Java,多线程"
+           data-author="" >
+            <span class="post-title" title="java.lang.IllegalMonitorStateException">java.lang.IllegalMonitorStateException</span>
+            <span class="post-date" title="2020-04-27 00:30:52">2020/04/27</span>
+        </a>
+        
         <a  class="多线程 "
            href="/2020/04/25/kongzheng1993-银行家算法/"
            data-tag="多线程,算法"
@@ -832,19 +838,19 @@
             <span class="post-date" title="2020-04-19 00:30:52">2020/04/19</span>
         </a>
         
-        <a  class="Java "
-           href="/2020/04/17/kongzheng1993-Java_Monitor/"
-           data-tag="Java"
-           data-author="" >
-            <span class="post-title" title="Java Monitor">Java Monitor</span>
-            <span class="post-date" title="2020-04-17 00:30:52">2020/04/17</span>
-        </a>
-        
         <a  class="Mysql "
            href="/2020/04/17/kongzheng1993-MySQL事务隔离级别/"
            data-tag="Mysql"
            data-author="" >
             <span class="post-title" title="MySQL事务隔离级别">MySQL事务隔离级别</span>
+            <span class="post-date" title="2020-04-17 00:30:52">2020/04/17</span>
+        </a>
+        
+        <a  class="Java "
+           href="/2020/04/17/kongzheng1993-Java_Monitor/"
+           data-tag="Java"
+           data-author="" >
+            <span class="post-title" title="Java Monitor">Java Monitor</span>
             <span class="post-date" title="2020-04-17 00:30:52">2020/04/17</span>
         </a>
         
@@ -936,19 +942,19 @@
             <span class="post-date" title="2020-03-19 00:30:52">2020/03/19</span>
         </a>
         
-        <a  class="jvm "
-           href="/2020/03/08/kongzheng1993-jmap/"
-           data-tag="jvm"
-           data-author="" >
-            <span class="post-title" title="jmap">jmap</span>
-            <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
-        </a>
-        
         <a  class="other "
            href="/2020/03/08/kongzheng1993-带你撸一台免费云服务器/"
            data-tag="other"
            data-author="" >
             <span class="post-title" title="带你撸一台免费云服务器">带你撸一台免费云服务器</span>
+            <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
+        </a>
+        
+        <a  class="jvm "
+           href="/2020/03/08/kongzheng1993-jmap/"
+           data-tag="jvm"
+           data-author="" >
+            <span class="post-title" title="jmap">jmap</span>
             <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
         </a>
         
@@ -1193,18 +1199,18 @@
         </a>
         
         <a  class=""
-           href="/2016/07/11/kongzheng1993-String_Original/"
-           data-tag="String,new"
-           data-author="" >
-            <span class="post-title" title="String str">String str</span>
-            <span class="post-date" title="2016-07-11 00:00:00">2016/07/11</span>
-        </a>
-        
-        <a  class=""
            href="/2016/07/11/kongzheng1993-ablout_try_catch/"
            data-tag="catch，try"
            data-author="" >
             <span class="post-title" title="关于try-catch">关于try-catch</span>
+            <span class="post-date" title="2016-07-11 00:00:00">2016/07/11</span>
+        </a>
+        
+        <a  class=""
+           href="/2016/07/11/kongzheng1993-String_Original/"
+           data-tag="String,new"
+           data-author="" >
+            <span class="post-title" title="String str">String str</span>
             <span class="post-date" title="2016-07-11 00:00:00">2016/07/11</span>
         </a>
         
@@ -1249,18 +1255,18 @@
         </a>
         
         <a  class=""
-           href="/2016/06/10/kongzheng1993-aboutFloat/"
-           data-tag="float"
-           data-author="" >
-            <span class="post-title" title="关于float">关于float</span>
-            <span class="post-date" title="2016-06-10 00:00:00">2016/06/10</span>
-        </a>
-        
-        <a  class=""
            href="/2016/06/10/kongzheng1993-about_sqlplus_sys/"
            data-tag="sql,sys,sqlplus"
            data-author="" >
             <span class="post-title" title="使用sys登陆sqlplus的问题">使用sys登陆sqlplus的问题</span>
+            <span class="post-date" title="2016-06-10 00:00:00">2016/06/10</span>
+        </a>
+        
+        <a  class=""
+           href="/2016/06/10/kongzheng1993-aboutFloat/"
+           data-tag="float"
+           data-author="" >
+            <span class="post-title" title="关于float">关于float</span>
             <span class="post-date" title="2016-06-10 00:00:00">2016/06/10</span>
         </a>
         
@@ -1644,7 +1650,7 @@ public void test3() {
     /*作者、标签的自动补全*/
     $(function () {
         $('.search').AutoComplete({
-            'data': ['#oop','#float','#servlet','#re','#sample post','#images','#test','#String','#new','#catch，try','#oracle','#sql','#select','#distinct','#group by','#order by','#java','#reflect','#Class','#对象，Class对象','#sys','#sqlplus','#github','#hexo','#git','#suse','#server','#FTP','#linux','#ss','#console','#mysql','#备份','#编码','#mq','#消息队列','#职业','#业务','#学习','#Linux','#quartz','#锁','#分布式','#RSA','#SHA','#加密','#签名','#NIO BIO IO','#Java','#jvm','#Guava','#other','#MQ','#node.js','#Web','#RocketMQ','#Mysql','#SQL','#多线程','#算法','#resume','#简历','#jdk','#网络','#安全',],
+            'data': ['#oop','#float','#servlet','#sample post','#images','#test','#re','#String','#new','#catch，try','#sql','#select','#distinct','#group by','#order by','#sys','#sqlplus','#oracle','#java','#reflect','#Class','#对象，Class对象','#github','#hexo','#git','#suse','#server','#FTP','#linux','#ss','#console','#mysql','#备份','#编码','#Linux','#mq','#消息队列','#职业','#业务','#学习','#quartz','#锁','#分布式','#RSA','#SHA','#加密','#签名','#NIO BIO IO','#Guava','#Java','#jvm','#other','#MQ','#node.js','#Web','#RocketMQ','#Mysql','#SQL','#多线程','#算法','#resume','#简历','#jdk','#网络','#安全',],
             'itemHeight': 20,
             'width': 418
         }).AutoComplete('show');
