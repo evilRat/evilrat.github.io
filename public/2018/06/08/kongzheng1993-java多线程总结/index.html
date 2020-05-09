@@ -6,22 +6,18 @@
   <meta name="keywords" content=" java , 多线程 , 安全 ">
   <meta name="description" content="java多线程总结 | Evil">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="各种索引？总有面试官问，来说说索引种类？ 索引种类？根据什么分类的？？？ “您说的是单列索引和组合索引？”“回去等消息吧。。” 摸不透他在想什么。。 您倒是说个分类依据嘛。。 索引是什么？索引类似大学图书馆建书目索引，可以提高数据检索的效率，降低数据库的IO成本。MySQL在300万条记录左右性能开始逐渐下降，虽然官方文档说500~800w记录，所以大数据量建立索引是非常有必要的。MySQL提供了">
-<meta name="keywords" content="MySQL">
+<meta name="description" content="一次服务器告警的处理今天客户在群里一阵@我，说是收到服务器告警短信了。 Usage disk is more than 90% on volume /home...磁盘空间告急啊。 分析这台机器上部署了应用和MySQL，日志文件和数据库文件应该是存储的大头，所以立即锁定目标。 为了不泄漏公司机密，以下数据都是我本地的，有内味就行了 我迅速连上公司vpn，ssh到目标主机。 test@Evil:~$">
+<meta name="keywords" content="Ohters">
 <meta property="og:type" content="article">
-<meta property="og:title" content="各种索引？">
-<meta property="og:url" content="https://kongzheng1993.github.io/2020/04/29/kongzheng1993-各种索引/index.html">
+<meta property="og:title" content="一次服务器告警的处理">
+<meta property="og:url" content="https://kongzheng1993.github.io/2020/04/30/kongzheng1993-一次服务器告警的处理/index.html">
 <meta property="og:site_name" content="Evil">
-<meta property="og:description" content="各种索引？总有面试官问，来说说索引种类？ 索引种类？根据什么分类的？？？ “您说的是单列索引和组合索引？”“回去等消息吧。。” 摸不透他在想什么。。 您倒是说个分类依据嘛。。 索引是什么？索引类似大学图书馆建书目索引，可以提高数据检索的效率，降低数据库的IO成本。MySQL在300万条记录左右性能开始逐渐下降，虽然官方文档说500~800w记录，所以大数据量建立索引是非常有必要的。MySQL提供了">
+<meta property="og:description" content="一次服务器告警的处理今天客户在群里一阵@我，说是收到服务器告警短信了。 Usage disk is more than 90% on volume /home...磁盘空间告急啊。 分析这台机器上部署了应用和MySQL，日志文件和数据库文件应该是存储的大头，所以立即锁定目标。 为了不泄漏公司机密，以下数据都是我本地的，有内味就行了 我迅速连上公司vpn，ssh到目标主机。 test@Evil:~$">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://kongzheng1993.github.io/2020/04/29/kongzheng1993-各种索引/1216484-20190825001255129-2032384167.png">
-<meta property="og:image" content="https://kongzheng1993.github.io/2020/04/29/kongzheng1993-各种索引/v2-2c2264cc1c6c603dfeca4f84a2575901_r.jpg">
-<meta property="og:image" content="https://kongzheng1993.github.io/2020/04/29/kongzheng1993-各种索引/v2-5f069fd820637db1b877fdd6799a2b67_r.jpg">
-<meta property="og:updated_time" content="2020-04-29T11:37:53.852Z">
+<meta property="og:updated_time" content="2020-04-30T10:04:01.763Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="各种索引？">
-<meta name="twitter:description" content="各种索引？总有面试官问，来说说索引种类？ 索引种类？根据什么分类的？？？ “您说的是单列索引和组合索引？”“回去等消息吧。。” 摸不透他在想什么。。 您倒是说个分类依据嘛。。 索引是什么？索引类似大学图书馆建书目索引，可以提高数据检索的效率，降低数据库的IO成本。MySQL在300万条记录左右性能开始逐渐下降，虽然官方文档说500~800w记录，所以大数据量建立索引是非常有必要的。MySQL提供了">
-<meta name="twitter:image" content="https://kongzheng1993.github.io/2020/04/29/kongzheng1993-各种索引/1216484-20190825001255129-2032384167.png">
+<meta name="twitter:title" content="一次服务器告警的处理">
+<meta name="twitter:description" content="一次服务器告警的处理今天客户在群里一阵@我，说是收到服务器告警短信了。 Usage disk is more than 90% on volume /home...磁盘空间告急啊。 分析这台机器上部署了应用和MySQL，日志文件和数据库文件应该是存储的大头，所以立即锁定目标。 为了不泄漏公司机密，以下数据都是我本地的，有内味就行了 我迅速连上公司vpn，ssh到目标主机。 test@Evil:~$">
 
 
 <link rel="icon" href="/img/avatar.png">
@@ -124,7 +120,7 @@
 
 
 <ul>
-    <li><div class="all active">全部文章<small>(71)</small></div></li>
+    <li><div class="all active">全部文章<small>(72)</small></div></li>
     
         
             
@@ -257,10 +253,6 @@
     
         
             
-        
-    
-        
-            
             <li><div data-rel="RSA"><i class="fold iconfont icon-right"></i>RSA<small>(1)</small></div>
                 
                     <ul class="sub hide">
@@ -284,6 +276,10 @@
     
         
             
+        
+    
+        
+            
             <li><div data-rel="NIO BIO IO">NIO BIO IO<small>(1)</small></div>
                 
             </li>
@@ -296,7 +292,7 @@
     
         
             
-            <li><div data-rel="jvm">jvm<small>(2)</small></div>
+            <li><div data-rel="Java">Java<small>(17)</small></div>
                 
             </li>
             
@@ -304,7 +300,7 @@
     
         
             
-            <li><div data-rel="Java">Java<small>(17)</small></div>
+            <li><div data-rel="jvm">jvm<small>(2)</small></div>
                 
             </li>
             
@@ -332,7 +328,7 @@
     
         
             
-            <li><div data-rel="node.js">node.js<small>(1)</small></div>
+            <li><div data-rel="Web">Web<small>(2)</small></div>
                 
             </li>
             
@@ -340,7 +336,7 @@
     
         
             
-            <li><div data-rel="Web">Web<small>(2)</small></div>
+            <li><div data-rel="node.js">node.js<small>(1)</small></div>
                 
             </li>
             
@@ -372,7 +368,7 @@
     
         
             
-            <li><div data-rel="SQL">SQL<small>(1)</small></div>
+            <li><div data-rel="SQL">SQL<small>(2)</small></div>
                 
             </li>
             
@@ -389,6 +385,14 @@
         
             
             <li><div data-rel="MySQL">MySQL<small>(1)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="Ohters">Ohters<small>(1)</small></div>
                 
             </li>
             
@@ -438,14 +442,6 @@
             
         
     
-        
-            
-            <li><div data-rel="Ohters">Ohters<small>(1)</small></div>
-                
-            </li>
-            
-        
-    
 </ul>
 <div class="left-bottom">
     <div class="menus">
@@ -456,8 +452,8 @@
     </div>
     <div></div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="71">
-<input type="hidden" id="yelog_site_word_count" value="85.7k">
+<input type="hidden" id="yelog_site_posts_number" value="72">
+<input type="hidden" id="yelog_site_word_count" value="86.1k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -681,15 +677,15 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">jvm</a>
-    </li>
-    
-    <li class="article-tag-list-item">
         <a class="color1">Guava</a>
     </li>
     
     <li class="article-tag-list-item">
         <a class="color5">Java</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">jvm</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -701,11 +697,11 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color3">node.js</a>
+        <a class="color4">Web</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">Web</a>
+        <a class="color3">node.js</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -737,6 +733,10 @@
     </li>
     
     <li class="article-tag-list-item">
+        <a class="color2">Ohters</a>
+    </li>
+    
+    <li class="article-tag-list-item">
         <a class="color2">resume</a>
     </li>
     
@@ -754,10 +754,6 @@
     
     <li class="article-tag-list-item">
         <a class="color3">安全</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color2">Ohters</a>
     </li>
     
     <div class="clearfix"></div>
@@ -806,6 +802,14 @@
             <span class="post-date" title="2020-03-25 00:30:52">2020/03/25</span>
         </a>
         
+        <a  class="SQL "
+           href="/2020/05/09/kongzheng1993-数据库设计范式/"
+           data-tag="SQL"
+           data-author="" >
+            <span class="post-title" title="数据库设计范式">数据库设计范式</span>
+            <span class="post-date" title="2020-05-09 00:30:52">2020/05/09</span>
+        </a>
+        
         <a  class="Ohters "
            href="/2020/04/30/kongzheng1993-一次服务器告警的处理/"
            data-tag="Ohters"
@@ -839,18 +843,18 @@
         </a>
         
         <a  class="多线程 "
-           href="/2020/04/25/kongzheng1993-死锁/"
-           data-tag="多线程"
-           data-author="" >
-            <span class="post-title" title="死锁">死锁</span>
-            <span class="post-date" title="2020-04-25 00:30:52">2020/04/25</span>
-        </a>
-        
-        <a  class="多线程 "
            href="/2020/04/25/kongzheng1993-银行家算法/"
            data-tag="多线程,算法"
            data-author="" >
             <span class="post-title" title="银行家算法">银行家算法</span>
+            <span class="post-date" title="2020-04-25 00:30:52">2020/04/25</span>
+        </a>
+        
+        <a  class="多线程 "
+           href="/2020/04/25/kongzheng1993-死锁/"
+           data-tag="多线程"
+           data-author="" >
+            <span class="post-title" title="死锁">死锁</span>
             <span class="post-date" title="2020-04-25 00:30:52">2020/04/25</span>
         </a>
         
@@ -1006,14 +1010,6 @@
             <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
         </a>
         
-        <a  class="Java "
-           href="/2020/03/08/kongzheng1993-Map遍历的几种方法/"
-           data-tag="Java"
-           data-author="" >
-            <span class="post-title" title="关于Map遍历的几种方法总结">关于Map遍历的几种方法总结</span>
-            <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
-        </a>
-        
         <a  class="other "
            href="/2020/03/08/kongzheng1993-带你撸一台免费云服务器/"
            data-tag="other"
@@ -1035,6 +1031,14 @@
            data-tag="jvm"
            data-author="" >
             <span class="post-title" title="jmap">jmap</span>
+            <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
+        </a>
+        
+        <a  class="Java "
+           href="/2020/03/08/kongzheng1993-Map遍历的几种方法/"
+           data-tag="Java"
+           data-author="" >
+            <span class="post-title" title="关于Map遍历的几种方法总结">关于Map遍历的几种方法总结</span>
             <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
         </a>
         
@@ -1158,19 +1162,19 @@
             <span class="post-date" title="2018-05-02 00:00:00">2018/05/02</span>
         </a>
         
-        <a  class="suse server FTP "
-           href="/2018/02/01/kongzheng1993-suse_ftp服务配置/"
-           data-tag="suse,server,FTP"
-           data-author="" >
-            <span class="post-title" title="SUSE server FTP配置">SUSE server FTP配置</span>
-            <span class="post-date" title="2018-02-01 00:00:00">2018/02/01</span>
-        </a>
-        
         <a  class="blog github git "
            href="/2018/02/01/kongzheng1993-hexo搭建githubPages/"
            data-tag="github,hexo,git"
            data-author="" >
             <span class="post-title" title="Hexo+github搭建个人博客遇到的问题">Hexo+github搭建个人博客遇到的问题</span>
+            <span class="post-date" title="2018-02-01 00:00:00">2018/02/01</span>
+        </a>
+        
+        <a  class="suse server FTP "
+           href="/2018/02/01/kongzheng1993-suse_ftp服务配置/"
+           data-tag="suse,server,FTP"
+           data-author="" >
+            <span class="post-title" title="SUSE server FTP配置">SUSE server FTP配置</span>
             <span class="post-date" title="2018-02-01 00:00:00">2018/02/01</span>
         </a>
         
@@ -1183,18 +1187,18 @@
         </a>
         
         <a  class=""
-           href="/2016/07/28/kongzheng1993-method_of_request&response/"
-           data-tag="oop"
-           data-author="" >
-            <span class="post-title" title="request&amp;response">request&amp;response</span>
-            <span class="post-date" title="2016-07-28 00:00:00">2016/07/28</span>
-        </a>
-        
-        <a  class=""
            href="/2016/07/28/kongzheng1993-Properties/"
            data-tag="oop"
            data-author="" >
             <span class="post-title" title="properties文件的使用">properties文件的使用</span>
+            <span class="post-date" title="2016-07-28 00:00:00">2016/07/28</span>
+        </a>
+        
+        <a  class=""
+           href="/2016/07/28/kongzheng1993-method_of_request&response/"
+           data-tag="oop"
+           data-author="" >
+            <span class="post-title" title="request&amp;response">request&amp;response</span>
             <span class="post-date" title="2016-07-28 00:00:00">2016/07/28</span>
         </a>
         
@@ -1207,22 +1211,6 @@
         </a>
         
         <a  class=""
-           href="/2016/07/26/kongzheng1993-centos7_mysql/"
-           data-tag="re"
-           data-author="" >
-            <span class="post-title" title="centos 7 安装mysql遇到的问题">centos 7 安装mysql遇到的问题</span>
-            <span class="post-date" title="2016-07-26 00:00:00">2016/07/26</span>
-        </a>
-        
-        <a  class=""
-           href="/2016/07/26/kongzheng1993-about_comparator_and_comparable/"
-           data-tag="re"
-           data-author="" >
-            <span class="post-title" title="关于comparator和comparable">关于comparator和comparable</span>
-            <span class="post-date" title="2016-07-26 00:00:00">2016/07/26</span>
-        </a>
-        
-        <a  class=""
            href="/2016/07/26/kongzheng1993-请求转发与重定向/"
            data-tag="re"
            data-author="" >
@@ -1231,10 +1219,26 @@
         </a>
         
         <a  class=""
+           href="/2016/07/26/kongzheng1993-centos7_mysql/"
+           data-tag="re"
+           data-author="" >
+            <span class="post-title" title="centos 7 安装mysql遇到的问题">centos 7 安装mysql遇到的问题</span>
+            <span class="post-date" title="2016-07-26 00:00:00">2016/07/26</span>
+        </a>
+        
+        <a  class=""
            href="/2016/07/26/kongzheng1993-servlet/"
            data-tag="servlet"
            data-author="" >
             <span class="post-title" title="Servlet">Servlet</span>
+            <span class="post-date" title="2016-07-26 00:00:00">2016/07/26</span>
+        </a>
+        
+        <a  class=""
+           href="/2016/07/26/kongzheng1993-about_comparator_and_comparable/"
+           data-tag="re"
+           data-author="" >
+            <span class="post-title" title="关于comparator和comparable">关于comparator和comparable</span>
             <span class="post-date" title="2016-07-26 00:00:00">2016/07/26</span>
         </a>
         
@@ -1295,10 +1299,10 @@
         </a>
         
         <a  class=""
-           href="/2016/06/10/kongzheng1993-about_sqlplus_sys/"
-           data-tag="sql,sys,sqlplus"
+           href="/2016/06/10/kongzheng1993-thewayofsort/"
+           data-tag="sample post,images,test"
            data-author="" >
-            <span class="post-title" title="使用sys登陆sqlplus的问题">使用sys登陆sqlplus的问题</span>
+            <span class="post-title" title="几种常见的内部排序">几种常见的内部排序</span>
             <span class="post-date" title="2016-06-10 00:00:00">2016/06/10</span>
         </a>
         
@@ -1311,18 +1315,18 @@
         </a>
         
         <a  class=""
-           href="/2016/06/10/kongzheng1993-thewayofsort/"
-           data-tag="sample post,images,test"
-           data-author="" >
-            <span class="post-title" title="几种常见的内部排序">几种常见的内部排序</span>
-            <span class="post-date" title="2016-06-10 00:00:00">2016/06/10</span>
-        </a>
-        
-        <a  class=""
            href="/2016/06/10/kongzheng1993-aboutFloat/"
            data-tag="float"
            data-author="" >
             <span class="post-title" title="关于float">关于float</span>
+            <span class="post-date" title="2016-06-10 00:00:00">2016/06/10</span>
+        </a>
+        
+        <a  class=""
+           href="/2016/06/10/kongzheng1993-about_sqlplus_sys/"
+           data-tag="sql,sys,sqlplus"
+           data-author="" >
+            <span class="post-title" title="使用sys登陆sqlplus的问题">使用sys登陆sqlplus的问题</span>
             <span class="post-date" title="2016-06-10 00:00:00">2016/06/10</span>
         </a>
         
@@ -2408,7 +2412,7 @@ tryReleaseShared(int)//共享方式。尝试释放资源，成功则返回true�
     /*作者、标签的自动补全*/
     $(function () {
         $('.search').AutoComplete({
-            'data': ['#oop','#float','#servlet','#re','#sample post','#images','#test','#String','#new','#catch，try','#sql','#select','#distinct','#group by','#order by','#oracle','#sys','#sqlplus','#java','#reflect','#Class','#对象，Class对象','#github','#hexo','#git','#suse','#server','#FTP','#linux','#ss','#console','#mysql','#备份','#编码','#mq','#消息队列','#Linux','#职业','#业务','#学习','#quartz','#锁','#分布式','#RSA','#SHA','#加密','#签名','#NIO BIO IO','#jvm','#Guava','#Java','#other','#MQ','#node.js','#Web','#RocketMQ','#Mysql','#SQL','#多线程','#算法','#tools','#MySQL','#resume','#简历','#jdk','#网络','#安全','#Ohters',],
+            'data': ['#oop','#float','#servlet','#re','#sample post','#images','#test','#String','#new','#catch，try','#sql','#select','#distinct','#group by','#order by','#oracle','#sys','#sqlplus','#java','#reflect','#Class','#对象，Class对象','#github','#hexo','#git','#suse','#server','#FTP','#linux','#ss','#console','#mysql','#备份','#编码','#mq','#消息队列','#Linux','#职业','#业务','#学习','#quartz','#锁','#分布式','#RSA','#SHA','#加密','#签名','#NIO BIO IO','#Guava','#Java','#jvm','#other','#MQ','#Web','#node.js','#RocketMQ','#Mysql','#SQL','#多线程','#算法','#tools','#MySQL','#Ohters','#resume','#简历','#jdk','#网络','#安全',],
             'itemHeight': 20,
             'width': 418
         }).AutoComplete('show');
