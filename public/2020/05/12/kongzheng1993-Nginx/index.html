@@ -6,18 +6,20 @@
   <meta name="keywords" content=" Nginx ">
   <meta name="description" content="Nginx | Evil">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="什么是文件句柄在文件I/O中，要从一个文件读取数据，应用程序首先要调用操作系统函数并传送文件名，并选一个到该文件的路径来打开文件。该函数取回一个顺序号，即文件句柄（file handle）。文件句柄，也叫文件描述符。文件描述符（File Descriptor） 是内核为了高效管理已被打开的文件所创建的索引，它是一个非负整数（通常是小整数），用于指代被打开的文件。所有的IO系统调用，包括socket">
-<meta name="keywords" content="others">
+<meta name="description" content="线程池线程池就是一个线程的集合，它帮我们来管理线程。  管理线程，避免创建和销毁线程的资源开销。创建一个对象要类加载，销毁一个对象要GC，都是需要占用资源的。 提高响应速度，不需要创建线程，直接将任务交给线程池运行。 重复利用，线程执行完毕，放回线程池，重复利用。  创建线程池public ThreadPoolExecutor(int corePoolSize, int maximumPoolSi">
+<meta name="keywords" content="Java,并发">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux文件句柄">
-<meta property="og:url" content="https://kongzheng1993.github.io/2020/05/12/kongzheng1993-Linux文件句柄/index.html">
+<meta property="og:title" content="ThreadPool总结">
+<meta property="og:url" content="https://kongzheng1993.github.io/2020/05/18/kongzheng1993-ThreadPool总结/index.html">
 <meta property="og:site_name" content="Evil">
-<meta property="og:description" content="什么是文件句柄在文件I/O中，要从一个文件读取数据，应用程序首先要调用操作系统函数并传送文件名，并选一个到该文件的路径来打开文件。该函数取回一个顺序号，即文件句柄（file handle）。文件句柄，也叫文件描述符。文件描述符（File Descriptor） 是内核为了高效管理已被打开的文件所创建的索引，它是一个非负整数（通常是小整数），用于指代被打开的文件。所有的IO系统调用，包括socket">
+<meta property="og:description" content="线程池线程池就是一个线程的集合，它帮我们来管理线程。  管理线程，避免创建和销毁线程的资源开销。创建一个对象要类加载，销毁一个对象要GC，都是需要占用资源的。 提高响应速度，不需要创建线程，直接将任务交给线程池运行。 重复利用，线程执行完毕，放回线程池，重复利用。  创建线程池public ThreadPoolExecutor(int corePoolSize, int maximumPoolSi">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-05-15T10:37:52.903Z">
+<meta property="og:image" content="https://kongzheng1993.github.io/2020/05/18/kongzheng1993-ThreadPool总结/2020-05-18%2012-50-13屏幕截图.png">
+<meta property="og:updated_time" content="2020-05-18T08:09:06.358Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux文件句柄">
-<meta name="twitter:description" content="什么是文件句柄在文件I/O中，要从一个文件读取数据，应用程序首先要调用操作系统函数并传送文件名，并选一个到该文件的路径来打开文件。该函数取回一个顺序号，即文件句柄（file handle）。文件句柄，也叫文件描述符。文件描述符（File Descriptor） 是内核为了高效管理已被打开的文件所创建的索引，它是一个非负整数（通常是小整数），用于指代被打开的文件。所有的IO系统调用，包括socket">
+<meta name="twitter:title" content="ThreadPool总结">
+<meta name="twitter:description" content="线程池线程池就是一个线程的集合，它帮我们来管理线程。  管理线程，避免创建和销毁线程的资源开销。创建一个对象要类加载，销毁一个对象要GC，都是需要占用资源的。 提高响应速度，不需要创建线程，直接将任务交给线程池运行。 重复利用，线程执行完毕，放回线程池，重复利用。  创建线程池public ThreadPoolExecutor(int corePoolSize, int maximumPoolSi">
+<meta name="twitter:image" content="https://kongzheng1993.github.io/2020/05/18/kongzheng1993-ThreadPool总结/2020-05-18%2012-50-13屏幕截图.png">
 
 
 <link rel="icon" href="/img/avatar.png">
@@ -120,7 +122,7 @@
 
 
 <ul>
-    <li><div class="all active">全部文章<small>(74)</small></div></li>
+    <li><div class="all active">全部文章<small>(75)</small></div></li>
     
         
             
@@ -292,7 +294,15 @@
     
         
             
-            <li><div data-rel="Java">Java<small>(17)</small></div>
+            <li><div data-rel="Java"><i class="fold iconfont icon-right"></i>Java<small>(18)</small></div>
+                
+                    <ul class="sub hide">
+                        
+                        <li><div data-rel="并发">并发<small>(1)</small></div>
+                            
+                        </li>
+                            
+                    </ul>
                 
             </li>
             
@@ -444,7 +454,7 @@
     
         
             
-            <li><div data-rel="java">java<small>(1)</small></div>
+            <li><div data-rel="Nginx">Nginx<small>(1)</small></div>
                 
             </li>
             
@@ -452,7 +462,11 @@
     
         
             
-            <li><div data-rel="Nginx">Nginx<small>(1)</small></div>
+        
+    
+        
+            
+            <li><div data-rel="java">java<small>(1)</small></div>
                 
             </li>
             
@@ -468,8 +482,8 @@
     </div>
     <div></div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="74">
-<input type="hidden" id="yelog_site_word_count" value="87.2k">
+<input type="hidden" id="yelog_site_posts_number" value="75">
+<input type="hidden" id="yelog_site_word_count" value="91k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -773,11 +787,15 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color3">安全</a>
+        <a class="color1">Nginx</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color1">Nginx</a>
+        <a class="color3">并发</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">安全</a>
     </li>
     
     <div class="clearfix"></div>
@@ -826,12 +844,12 @@
             <span class="post-date" title="2020-03-25 00:30:52">2020/03/25</span>
         </a>
         
-        <a  class="Nginx "
-           href="/2020/05/12/kongzheng1993-Nginx/"
-           data-tag="Nginx"
+        <a  class="Java 并发 "
+           href="/2020/05/18/kongzheng1993-ThreadPool总结/"
+           data-tag="Java,并发"
            data-author="" >
-            <span class="post-title" title="Nginx">Nginx</span>
-            <span class="post-date" title="2020-05-12 00:30:52">2020/05/12</span>
+            <span class="post-title" title="ThreadPool总结">ThreadPool总结</span>
+            <span class="post-date" title="2020-05-18 00:30:52">2020/05/18</span>
         </a>
         
         <a  class="others "
@@ -839,6 +857,14 @@
            data-tag="others"
            data-author="" >
             <span class="post-title" title="Linux文件句柄">Linux文件句柄</span>
+            <span class="post-date" title="2020-05-12 00:30:52">2020/05/12</span>
+        </a>
+        
+        <a  class="Nginx "
+           href="/2020/05/12/kongzheng1993-Nginx/"
+           data-tag="Nginx"
+           data-author="" >
+            <span class="post-title" title="Nginx">Nginx</span>
             <span class="post-date" title="2020-05-12 00:30:52">2020/05/12</span>
         </a>
         
@@ -1042,19 +1068,19 @@
             <span class="post-date" title="2020-03-19 00:30:52">2020/03/19</span>
         </a>
         
+        <a  class="jvm "
+           href="/2020/03/08/kongzheng1993-jmap/"
+           data-tag="jvm"
+           data-author="" >
+            <span class="post-title" title="jmap">jmap</span>
+            <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
+        </a>
+        
         <a  class="Java "
            href="/2020/03/08/kongzheng1993-Map遍历的几种方法/"
            data-tag="Java"
            data-author="" >
             <span class="post-title" title="关于Map遍历的几种方法总结">关于Map遍历的几种方法总结</span>
-            <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
-        </a>
-        
-        <a  class="other "
-           href="/2020/03/08/kongzheng1993-带你撸一台免费云服务器/"
-           data-tag="other"
-           data-author="" >
-            <span class="post-title" title="带你撸一台免费云服务器">带你撸一台免费云服务器</span>
             <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
         </a>
         
@@ -1074,11 +1100,11 @@
             <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
         </a>
         
-        <a  class="jvm "
-           href="/2020/03/08/kongzheng1993-jmap/"
-           data-tag="jvm"
+        <a  class="other "
+           href="/2020/03/08/kongzheng1993-带你撸一台免费云服务器/"
+           data-tag="other"
            data-author="" >
-            <span class="post-title" title="jmap">jmap</span>
+            <span class="post-title" title="带你撸一台免费云服务器">带你撸一台免费云服务器</span>
             <span class="post-date" title="2020-03-08 00:30:52">2020/03/08</span>
         </a>
         
@@ -1227,18 +1253,18 @@
         </a>
         
         <a  class=""
-           href="/2016/07/28/kongzheng1993-method_of_request&response/"
-           data-tag="oop"
-           data-author="" >
-            <span class="post-title" title="request&amp;response">request&amp;response</span>
-            <span class="post-date" title="2016-07-28 00:00:00">2016/07/28</span>
-        </a>
-        
-        <a  class=""
            href="/2016/07/28/kongzheng1993-Properties/"
            data-tag="oop"
            data-author="" >
             <span class="post-title" title="properties文件的使用">properties文件的使用</span>
+            <span class="post-date" title="2016-07-28 00:00:00">2016/07/28</span>
+        </a>
+        
+        <a  class=""
+           href="/2016/07/28/kongzheng1993-method_of_request&response/"
+           data-tag="oop"
+           data-author="" >
+            <span class="post-title" title="request&amp;response">request&amp;response</span>
             <span class="post-date" title="2016-07-28 00:00:00">2016/07/28</span>
         </a>
         
@@ -1251,10 +1277,10 @@
         </a>
         
         <a  class=""
-           href="/2016/07/26/kongzheng1993-centos7_mysql/"
+           href="/2016/07/26/kongzheng1993-请求转发与重定向/"
            data-tag="re"
            data-author="" >
-            <span class="post-title" title="centos 7 安装mysql遇到的问题">centos 7 安装mysql遇到的问题</span>
+            <span class="post-title" title="请求转发和重定向">请求转发和重定向</span>
             <span class="post-date" title="2016-07-26 00:00:00">2016/07/26</span>
         </a>
         
@@ -1267,18 +1293,18 @@
         </a>
         
         <a  class=""
-           href="/2016/07/26/kongzheng1993-请求转发与重定向/"
-           data-tag="re"
-           data-author="" >
-            <span class="post-title" title="请求转发和重定向">请求转发和重定向</span>
-            <span class="post-date" title="2016-07-26 00:00:00">2016/07/26</span>
-        </a>
-        
-        <a  class=""
            href="/2016/07/26/kongzheng1993-servlet/"
            data-tag="servlet"
            data-author="" >
             <span class="post-title" title="Servlet">Servlet</span>
+            <span class="post-date" title="2016-07-26 00:00:00">2016/07/26</span>
+        </a>
+        
+        <a  class=""
+           href="/2016/07/26/kongzheng1993-centos7_mysql/"
+           data-tag="re"
+           data-author="" >
+            <span class="post-title" title="centos 7 安装mysql遇到的问题">centos 7 安装mysql遇到的问题</span>
             <span class="post-date" title="2016-07-26 00:00:00">2016/07/26</span>
         </a>
         
@@ -1339,10 +1365,10 @@
         </a>
         
         <a  class=""
-           href="/2016/06/10/kongzheng1993-about_sqlplus_sys/"
-           data-tag="sql,sys,sqlplus"
+           href="/2016/06/10/kongzheng1993-thewayofsort/"
+           data-tag="sample post,images,test"
            data-author="" >
-            <span class="post-title" title="使用sys登陆sqlplus的问题">使用sys登陆sqlplus的问题</span>
+            <span class="post-title" title="几种常见的内部排序">几种常见的内部排序</span>
             <span class="post-date" title="2016-06-10 00:00:00">2016/06/10</span>
         </a>
         
@@ -1355,18 +1381,18 @@
         </a>
         
         <a  class=""
-           href="/2016/06/10/kongzheng1993-thewayofsort/"
-           data-tag="sample post,images,test"
-           data-author="" >
-            <span class="post-title" title="几种常见的内部排序">几种常见的内部排序</span>
-            <span class="post-date" title="2016-06-10 00:00:00">2016/06/10</span>
-        </a>
-        
-        <a  class=""
            href="/2016/06/10/kongzheng1993-aboutFloat/"
            data-tag="float"
            data-author="" >
             <span class="post-title" title="关于float">关于float</span>
+            <span class="post-date" title="2016-06-10 00:00:00">2016/06/10</span>
+        </a>
+        
+        <a  class=""
+           href="/2016/06/10/kongzheng1993-about_sqlplus_sys/"
+           data-tag="sql,sys,sqlplus"
+           data-author="" >
+            <span class="post-title" title="使用sys登陆sqlplus的问题">使用sys登陆sqlplus的问题</span>
             <span class="post-date" title="2016-06-10 00:00:00">2016/06/10</span>
         </a>
         
@@ -1414,12 +1440,12 @@
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2020-05-15 18:49:30'>2020-05-12 00:30</time>
+        创建时间:<time class="date" title='更新时间: 2020-05-18 10:16:35'>2020-05-12 00:30</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:71</span>
+        <span>字数:2.1k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1449,7 +1475,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是Nginx"><span class="toc-text">什么是Nginx</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是Nginx"><span class="toc-text">什么是Nginx</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Nginx"><span class="toc-text">安装Nginx</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#运行中的nginx"><span class="toc-text">运行中的nginx</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nginx的热部署"><span class="toc-text">nginx的热部署</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nginx的高并发"><span class="toc-text">nginx的高并发</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nginx高可用"><span class="toc-text">nginx高可用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nginx-conf"><span class="toc-text">nginx.conf</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nginx缓存"><span class="toc-text">nginx缓存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#均衡负载"><span class="toc-text">均衡负载</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1465,12 +1491,200 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="什么是Nginx"><a href="#什么是Nginx" class="headerlink" title="什么是Nginx"></a>什么是Nginx</h2><p>Nginx是一款轻量级的Web服务器、反向代理服务器，由于它的内存占用少，启动极快，高并发能力强，在互联网项目中广泛应用。</p>
+        <p>前两天客户那边说检测出我们的nginx有漏洞，让我们搞一下，其实就是nginx出新版本了，老版本有个重大bug，跟着我们也应该升级。但是一来二去不知道为啥落我头上了，我是开发啊。。不过也无所谓，正好趁着这个机会好好了解一下。</p>
+<h2 id="什么是Nginx"><a href="#什么是Nginx" class="headerlink" title="什么是Nginx"></a>什么是Nginx</h2><p>Nginx是一款轻量级的Web服务器、反向代理服务器，由于它的内存占用少，启动极快，高并发能力强，在互联网项目中广泛应用。除了http它还支持IMAP/POP3等协议。</p>
+<p>目前比较常见的系统架构中，nginx一般都是在入口处，作为反向代理。</p>
+<img src="/2020/05/12/kongzheng1993-Nginx/v2-e1826bab1d07df8e97d61aa809b94a10_r.jpg">
+
 <p>提到Nginx就不能不提反向代理。。</p>
 <ul>
-<li><strong>正向代理：</strong>  </li>
-<li><strong>反向代理：</strong> </li>
+<li><strong>正向代理：</strong>  代理客户端去请求服务器，然后将服务器的响应返回给客户端。我们平常科学上网用的代理服务器起到的作用就是正向代理。<em>正向代理代理的是客户端</em>。</li>
+<li><strong>反向代理：</strong> 代理服务器来接受客户端的请求，然后将客户端的请求转发到内部网络，并将服务器上得到的结果返回给客户端。<em>反向代理代理的是服务端</em>。</li>
 </ul>
+<h2 id="安装Nginx"><a href="#安装Nginx" class="headerlink" title="安装Nginx"></a>安装Nginx</h2><p>安装Nignx和一般软件一样，也是一顿configure、make、make install。。</p>
+<ol>
+<li>首先是安装依赖</li>
+</ol>
+<pre><code class="shell">yum -y install gcc openssl-devel pcre-devel zlib-devel</code></pre>
+<p>已经有了的就不用装了，pcre库是用来支持正则表达式的，也就是我们想在nginx的配置文件里用正则，还是老老实实把pcre编译进nginx。zlib是对于http包的内容做gzip格式的压缩，如果我们在nginx.conf中配置了<code>gzip on</code>，并指定对于某些类型（content-type）的http响应使用gzip来进行压缩以减少网络传输量，就需要把zlib编译进nginx。openssl是用来支持ssl协议，也包含MD5、SHA1等散列函数。</p>
+<ol start="2">
+<li>下载解压nginx</li>
+</ol>
+<pre><code class="shell">wget -o XX/nginx-X.X.X.tar.gz
+tar -zxvf nginx-X.X.X.tar.gz</code></pre>
+<ol start="3">
+<li>configure配置</li>
+</ol>
+<p>进入源码根目录，执行：</p>
+<pre><code class="shell">./configure --prefix=/**/**/**</code></pre>
+<p>通过<code>--prefix</code>来指定软件安装位置。</p>
+<ol start="4">
+<li>编译安装</li>
+</ol>
+<pre><code class="shell">make &amp;&amp; make install</code></pre>
+<p>在安装完后，就会在你制定的目录出现nginx目录了，一些可执行文件在<code>sbin</code>目录下。执行<code>./nginx</code>就可以启动nginx了。</p>
+<p>使用<code>nginx -s $sign</code>可以来控制启动的nginx进程。</p>
+<p>$sign有：</p>
+<ul>
+<li>stop  快速关闭</li>
+<li>quit  优雅的关闭</li>
+<li>reload  重新加载配置文件</li>
+<li>reopen  重新打开日志文件</li>
+</ul>
+<h2 id="运行中的nginx"><a href="#运行中的nginx" class="headerlink" title="运行中的nginx"></a>运行中的nginx</h2><p>nginx在启动后，在unix系统中会以daemon的方式在后台运行，后台进程包含一个master进程和多个worker进程。所以，nginx是以多进程的方式来工作的，当然nginx也是支持多线程的方式的，只是我们主流的方式还是多进程的方式，也是nginx的默认方式。我们也可以手动关掉后台模式，让nginx在前台运行，并且也可以通过配置取消master进程，也就是让nginx以单进程运行。这样可以让我们更方便debug。</p>
+<p>master进程主要是来管理worker进程的，包含：</p>
+<ul>
+<li>读取并验证nginx.conf</li>
+<li>接受外来的信号</li>
+<li>向各worker进程发送信号</li>
+<li>监控worker的运行状态，当worker进程退出后，master会启动新的worker</li>
+</ul>
+<p>worker进程处理的是基本的网络事件，多个worker之间是平等的，他们同等竞争来自客户端的请求，各进程之间是独立的。一个请求只会在一个worker中处理。worker的数量是可以设置的，一般会和cpu核心数一致。worker默认是单线程的，这样可以避免线程切换。</p>
+<h2 id="nginx的热部署"><a href="#nginx的热部署" class="headerlink" title="nginx的热部署"></a>nginx的热部署</h2><p>我们在使用nginx一般修改的都是nginx.conf配置文件。每次我们修改nginx.conf后都不需要重启nginx，而是直接执行<code>nginx -s reload</code>，让nginx重新加载一下配置就好。</p>
+<p>nginx在重新加载配置文件后，会新建新建worker来处理新的请求，旧的请求还是走之前的worker，等老worker处理完请求后，就会被kill掉。</p>
+<h2 id="nginx的高并发"><a href="#nginx的高并发" class="headerlink" title="nginx的高并发"></a>nginx的高并发</h2><p>前面的配置worker个数和cpu核心数一致，worker单线程来防止线程切换浪费资源，都是nginx高并发的原因。</p>
+<p>还有就是nginx使用的是epoll模型的IO，我理解的就是和redis一样的IO多路复用，通过一个选择器来监听成千上万的连接。（之前在看一本书，用netty、redis、zk做高并发实战，上面讲了文件句柄，nginx是不是也修改了？）</p>
+<h2 id="nginx高可用"><a href="#nginx高可用" class="headerlink" title="nginx高可用"></a>nginx高可用</h2><p>请求不要直接打在nginx上，应该先通过虚拟IP（VIP）。<br>然后就是通过keepalived来监控nginx的状态，通过执行脚本来检查nginx进程状态。</p>
+<p>keepalived是一种高性能的服务器高可用或热备解决方案，Keepalived可以用来防止服务器单点故障的发生，通过配合 Nginx 可以实现 web 前端服务的高可用。Keepalived以VRRP协议为实现基础，用 VRRP协议来实现高可用性(HA)。VRRP(Virtual Router Redundancy Protocol)协议是用于实现路由器冗余的协议，VRRP 协议将两台或多台路由器设备虚拟成一个设备，对外提供虚拟路由器IP(一个或多个)，而在路由器组内部，如果实际拥有这个对外IP的路由器如果工作正常的话就是MASTER，或者是通过算法选举产生，MASTER 实现针对虚拟路由器 IP 的各种网络功能，如 ARP 请求，ICMP，以及数据的转发等；其他设备不拥有该虚拟 IP，状态是 BACKUP，除了接收 MASTER 的VRRP 状态通告信息外，不执行对外的网络功能。当主机失效时，BACKUP 将接管原先 MASTER 的网络功能。VRRP 协议使用多播数据来传输 VRRP 数据， VRRP 数据使用特殊的虚拟源 MAC 地址发送数据而不是自身网卡的 MAC 地址，VRRP 运行时只有 MASTER 路由器定时发送 VRRP 通告信息，表示 MASTER 工作正常以及虚拟路由器 IP(组)，BACKUP 只接收 VRRP 数据，不发送数据，如果一定时间内没有接收到 MASTER 的通告信息，各 BACKUP 将宣告自己成为 MASTER，发送通告信息，重新进行 MASTER 选举状态。</p>
+<h2 id="nginx-conf"><a href="#nginx-conf" class="headerlink" title="nginx.conf"></a>nginx.conf</h2><p>我们一般修改的都是nginx.conf文件。</p>
+<p>下面是nginx官方给的完整例子：</p>
+<pre><code class="shell">#!nginx
+: # 使用的用户和组
+: user  www www;
+: # 指定工作衍生进程数
+: worker_processes  2;
+: # 指定 pid 存放的路径
+: pid /var/run/nginx.pid;
+
+: # [ debug | info | notice | warn | error | crit ] 
+: # 可以在下方直接使用 [ debug | info | notice | warn | error | crit ]  参数
+: error_log  /var/log/nginx.error_log  info;
+
+: events {
+: # 允许的连接数
+: connections   2000;
+: # use [ kqueue | rtsig | epoll | /dev/poll | select | poll ] ;
+: # 具体内容查看 http://wiki.codemongers.com/事件模型
+: use kqueue;
+: }
+
+: http {
+: include       conf/mime.types;
+: default_type  application/octet-stream;
+
+: log_format main      &#39;$remote_addr - $remote_user [$time_local]  &#39;
+: &#39;&quot;$request&quot; $status $bytes_sent &#39;
+: &#39;&quot;$http_referer&quot; &quot;$http_user_agent&quot; &#39;
+: &#39;&quot;$gzip_ratio&quot;&#39;;
+
+: log_format download  &#39;$remote_addr - $remote_user [$time_local]  &#39;
+: &#39;&quot;$request&quot; $status $bytes_sent &#39;
+: &#39;&quot;$http_referer&quot; &quot;$http_user_agent&quot; &#39;
+: &#39;&quot;$http_range&quot; &quot;$sent_http_content_range&quot;&#39;;
+
+: client_header_timeout  3m;
+: client_body_timeout    3m;
+: send_timeout           3m;
+
+: client_header_buffer_size    1k;
+: large_client_header_buffers  4 4k;
+
+: gzip on;
+: gzip_min_length  1100;
+: gzip_buffers     4 8k;
+: gzip_types       text/plain;
+
+: output_buffers   1 32k;
+: postpone_output  1460;
+
+: sendfile         on;
+: tcp_nopush       on;
+: tcp_nodelay      on;
+: send_lowat       12000;
+
+: keepalive_timeout  75 20;
+
+: #lingering_time     30;
+: #lingering_timeout  10;
+: #reset_timedout_connection  on;
+
+
+: server {
+: listen        one.example.com;
+: server_name   one.example.com  www.one.example.com;
+
+: access_log   /var/log/nginx.access_log  main;
+
+: location / {
+: proxy_pass         http://127.0.0.1/;
+: proxy_redirect     off;
+
+: proxy_set_header   Host             $host;
+: proxy_set_header   X-Real-IP        $remote_addr;
+: #proxy_set_header  X-Forwarded-For  $proxy_add_x_forwarded_for;
+
+: client_max_body_size       10m;
+: client_body_buffer_size    128k;
+
+: client_body_temp_path      /var/nginx/client_body_temp;
+
+: proxy_connect_timeout      90;
+: proxy_send_timeout         90;
+: proxy_read_timeout         90;
+: proxy_send_lowat           12000;
+
+: proxy_buffer_size          4k;
+: proxy_buffers              4 32k;
+: proxy_busy_buffers_size    64k;
+: proxy_temp_file_write_size 64k;
+
+: proxy_temp_path            /var/nginx/proxy_temp;
+
+: charset  koi8-r;
+: }
+
+: error_page  404  /404.html;
+
+: location /404.html {
+: root  /spool/www;
+
+: charset         on;
+: source_charset  koi8-r;
+: }
+
+: location /old_stuff/ {
+: rewrite   ^/old_stuff/(.*)$  /new_stuff/$1  permanent;
+: }
+
+: location /download/ {
+
+: valid_referers  none  blocked  server_names  *.example.com;
+
+: if ($invalid_referer) {
+: #rewrite   ^/   http://www.example.com/;
+: return   403;
+: }
+
+: #rewrite_log  on;
+
+: # rewrite /download/*/mp3/*.any_ext to /download/*/mp3/*.mp3
+: rewrite ^/(download/.*)/mp3/(.*)\..*$
+: /$1/mp3/$2.mp3                   break;
+
+: root         /spool/www;
+: #autoindex    on;
+: access_log   /var/log/nginx-download.access_log  download;
+: }
+
+: location ~* ^.+\.(jpg|jpeg|gif)$ {
+: root         /spool/www;
+: access_log   off;
+: expires      30d;
+: }
+: }
+: }</code></pre>
+<h2 id="nginx缓存"><a href="#nginx缓存" class="headerlink" title="nginx缓存"></a>nginx缓存</h2><p>nginx支持缓存，这个缓存是将URL及相关组合当作key，用md5编码哈希后保存在硬盘上。</p>
+<h2 id="均衡负载"><a href="#均衡负载" class="headerlink" title="均衡负载"></a>均衡负载</h2><p>在upstream中配置，有权重、轮询、ip_hash、least_conn四种方式。</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 kongzheng1993@hotmail.com </span>
@@ -1485,10 +1699,10 @@
 
 <div class="article_copyright">
     <p><span class="copy-title">文章标题:</span>Nginx</p>
-    <p><span class="copy-title">文章字数:</span><span class="post-count">71</span></p>
+    <p><span class="copy-title">文章字数:</span><span class="post-count">2.1k</span></p>
     <p><span class="copy-title">本文作者:</span><a  title="evilRat">evilRat</a></p>
     <p><span class="copy-title">发布时间:</span>2020-05-12, 00:30:52</p>
-    <p><span class="copy-title">最后更新:</span>2020-05-15, 18:49:30</p>
+    <p><span class="copy-title">最后更新:</span>2020-05-18, 10:16:35</p>
     <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/05/12/kongzheng1993-Nginx/" title="Nginx">https://kongzheng1993.github.io/2020/05/12/kongzheng1993-Nginx/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
@@ -1572,7 +1786,7 @@
     /*作者、标签的自动补全*/
     $(function () {
         $('.search').AutoComplete({
-            'data': ['#oop','#float','#servlet','#re','#sample post','#images','#test','#String','#new','#catch，try','#sql','#select','#distinct','#group by','#order by','#oracle','#sys','#sqlplus','#java','#reflect','#Class','#对象，Class对象','#github','#hexo','#git','#suse','#server','#FTP','#linux','#ss','#console','#mysql','#备份','#编码','#mq','#消息队列','#Linux','#职业','#业务','#学习','#quartz','#锁','#分布式','#RSA','#SHA','#加密','#签名','#NIO BIO IO','#Guava','#Java','#jvm','#other','#MQ','#node.js','#Web','#RocketMQ','#Mysql','#SQL','#多线程','#算法','#tools','#MySQL','#Ohters','#others','#resume','#简历','#jdk','#网络','#安全','#Nginx',],
+            'data': ['#oop','#float','#servlet','#re','#sample post','#images','#test','#String','#new','#catch，try','#sql','#select','#distinct','#group by','#order by','#oracle','#sys','#sqlplus','#java','#reflect','#Class','#对象，Class对象','#github','#hexo','#git','#suse','#server','#FTP','#linux','#ss','#console','#mysql','#备份','#编码','#mq','#消息队列','#Linux','#职业','#业务','#学习','#quartz','#锁','#分布式','#RSA','#SHA','#加密','#签名','#NIO BIO IO','#Guava','#Java','#jvm','#other','#MQ','#node.js','#Web','#RocketMQ','#Mysql','#SQL','#多线程','#算法','#tools','#MySQL','#Ohters','#others','#resume','#简历','#jdk','#网络','#Nginx','#并发','#安全',],
             'itemHeight': 20,
             'width': 418
         }).AutoComplete('show');
