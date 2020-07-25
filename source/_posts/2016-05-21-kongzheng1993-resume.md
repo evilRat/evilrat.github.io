@@ -35,9 +35,13 @@ comments: true
 
 中国移动在线服务公司北京分公司10086&12580呼叫中心开发运维工作。
 
-## 亚信科技（中国）有限公司 （2018年10月至今）
+## 亚信科技（中国）有限公司 （2018年10月-2020年6月12日）
 
 北京移动客服项目、中移在线北京分公司统一接口平台、营业厅一体机等项目开发。
+
+## 北京宇信科技集团股份有限公司 （2020年6月15日至今）
+
+渠道产品研发部，贷后产品研发工作。
 
 ---
 
@@ -45,19 +49,25 @@ comments: true
 
 1. 熟悉Java，了解Python、Shell
 2. 熟练使用SSM等开源框架
-3. 熟练使用Dubbo分布式服务框架，了解zookeeper
-4. 熟练使用RocketMQ
-5. 熟练使用Redis
-6. 了解微信小程序的开发
-7. 熟练使用MySQL、Oracle数据库
-8. 熟悉Jsp、JavaScrip、Ajax、HTML、CSS等WEB技术
-9. 熟练使用Git、SVN、Maven
-10. 熟练使用IDEA、Eclipse等开发工具
-11. 了解Docker
+3. 熟悉Dubbo分布式服务框架
+4. 熟悉SpringCloud
+5. 了解zookeeper
+6. 熟练使用RocketMQ
+7. 熟练使用Redis·
+8. 了解微信小程序的开发
+9.  熟练使用MySQL、Oracle数据库
+10. 熟悉Jsp、JavaScrip、Ajax、HTML、CSS等WEB技术
+11. 熟练使用Git、SVN
+12. 熟练使用Maven、Gradle
+13. 了解Docker
 
 ---
 
 # 项目经验
+
+## 智能贷后系统
+
+### todo
 
 ## NGTASK任务调度系统（2019年11月-2020年1月）
 
@@ -99,7 +109,7 @@ iBet彩票微信小程序。父母经营一个福利彩票投注站，因为规�
 
 前端使用微信小程序，开发较快，学习成本较低。后台使用ssm框架，redis作缓存，mysql数据库。另有一个供投注站使用对管理系统，使用ssm框架，投注站管理员登陆后可以配置本投注站数据（上架玩法等），并在此系统完成彩民管理、订单查看和充值提现等操作。redis主要用来保存投注站配置信息等热数据。
 
-## 中移在线北京统一接口平台 （2018年10月至今）
+## 中移在线北京统一接口平台 （2018年10月）
 
 ### 项目介绍
 
@@ -125,23 +135,20 @@ iBet彩票微信小程序。父母经营一个福利彩票投注站，因为规�
 
 在原有基础上新增、修改功能。完成黑灰名单自动填充失效时间、工单流转信息查询功能、向crm提供工单流转信息查询功能接口等需求。认真了解了公司框架，熟练完成前后端开发。
 
-## testIVR配置文件生成工具 （2017年10月-2017年10月）
-
-### 项目介绍
-
-来到项目后发现大家使用的调试接口的工具testIVR(模拟ivr流程调用socket和http接口工具) 总是需要手动配置，而且错误率特别高，经常因为一个小问题找半天。在熟悉了testIVR之后，我使用python-tkinter写了一个自动生成testIVR配置文件的工具，目前在项目组内广泛应用，并得到了领导和客户的好评。
-
-### 实现方式
-
-使用python的tkinter库编写gui。通过获取用户在输入控件(Entry)中输入的ivr_id、dtproxy_ip、dtproxy_id和参数配置。编写 cleanparam()函数清洗找出入参，和出参个数。编写dogenerate()函数生成ivr和dtproxy的配置，并循环生成入参、出参配置。使用python的 pyinstaller工具生成exe可执行文件。详情请查看我的[github:GuiGenerateTestIVRConfig](https://github.com/kongzheng1993/GuiGenerateTestIVRConfig)
 
 ---
 
-# 轮子
+# 开源作品
 
 ## ftp文件下载工具
 
 帮运维同事写的小工具，他手头有个任务，每天一早到工位就要去8台sftp下载录音文件（任务调度平台故障，恢复之前只能手动搞），所以用python帮他做了个小工具。使用paramiko连接sftp、json模块解析配置文件、logging记录日志、zipfile模块压缩文件、threading模拟多线程。最后我还用pyinstaller打包成exe，他写好配置文件，双击就能执行，并且日志会持久化到文件。代码已经分享到[github:downloadFiles](https://github.com/kongzheng1993/downloadFiles)。
+
+## testIVR配置文件生成工具
+
+来到项目后发现大家使用的调试接口的工具testIVR(模拟ivr流程调用socket和http接口工具) 总是需要手动配置，而且错误率特别高，经常因为一个小问题找半天。在熟悉了testIVR之后，我使用python-tkinter写了一个自动生成testIVR配置文件的工具，在项目组内广泛应用，并得到了领导和客户的好评。
+
+使用python的tkinter库编写gui。通过获取用户在输入控件(Entry)中输入的ivr_id、dtproxy_ip、dtproxy_id和参数配置。编写 cleanparam()函数清洗找出入参，和出参个数。编写dogenerate()函数生成ivr和dtproxy的配置，并循环生成入参、出参配置。使用python的 pyinstaller工具生成exe可执行文件。详情请查看我的[github:GuiGenerateTestIVRConfig](https://github.com/kongzheng1993/GuiGenerateTestIVRConfig)
 
 # 自我评价
 
