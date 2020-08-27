@@ -53,7 +53,7 @@ comments: true
 4. 熟悉SpringCloud
 5. 了解zookeeper
 6. 熟练使用RocketMQ
-7. 熟练使用Redis·
+7. 熟练使用Redis
 8. 了解微信小程序的开发
 9.  熟练使用MySQL、Oracle数据库
 10. 熟悉Jsp、JavaScrip、Ajax、HTML、CSS等WEB技术
