@@ -100,3 +100,5 @@ mysql -u root -S /tmp/mysql.sock
 ```
 
 # InnoDB存储引擎
+
+InnoDB存储引擎是第一个完整支持ACID事务的MySQL存储引擎，其特点是行锁设计、支持MVCC、支持外键、提供一致性非锁定读，同时被设计用来最有效地利用以及使用内存和CPU。
