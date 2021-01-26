@@ -70,7 +70,7 @@ show engines\G;
 
 ### 1. TCP/IP
 
-```shell
+```bash
 
 mysql -h 192.168.0.101 -u root -p
 
@@ -93,7 +93,7 @@ select host, user, password from user;
 
 在Linux/UNIX环境下，可以使用UNIX域套接字。UNIX域套接字并不是一个网络协议，所以只能在MySQL客户端和数据库实例在一台服务器上时使用。用户可以在配置文件中执行套接字文件的路径。如`--socket=/tmp/mysql.sock`。可以通过命令`show variables like 'socket';`来查找套接字文件。知道了套接字文件的路径后，就可以通过下面的命令连接了：
 
-```shell
+```bash
 
 mysql -u root -S /tmp/mysql.sock
 
@@ -118,58 +118,82 @@ InnoDB存储引擎是多线程的模型，后台有多个不同的线程，负�
 1. Master Thread： 这是一个非常核心的后台线程，主要负责将缓冲池中的数据异步刷新到磁盘，保证数据一致性，包括脏页的刷新、合并插入缓存（INSERT BUFFER）、UNDO页的回收等。
 2. IO Thread： 在InnoDB存储引擎中大量的使用了AIO（Async IO）来处理写IO请求，这样极大地提高了数据库的性能。IO Thread主要负责这些IO请求的回调（call back）处理。InnoDB 1.0之前共有4个IO Thread，分别是write、read、insert buffer和log IO Thread。在Linux平台下，IO Thread的数量不能进行调整，但是在Windows平台下，可以通过参数`innodb_file_io_threads`来增大IO Thread。从InnoDB 1.0.x开始，read thread和write thread分别增大到4个，并且不再使用`innodb_file_io_threads`参数，而是分别使用`innodb_read_io_threads`和`innodb_write_io_threads`参数进行设置。
 
-    ```sql
+```sql
 
-    #查看innodb引擎版本
-    show variables like 'innodb_version'\G;
+#查看innodb引擎版本
+show variables like 'innodb_version'\G;
 
-    #output
-    *************************** 1. row ***************************
-    Variable_name: innodb_version
-            Value: 8.0.22
-    1 row in set (1.18 sec)
-
-
-    #查看innodb读写IO线程
-    show variables like 'innodb_%io_threads'\G;
-
-    #output
-    *************************** 1. row ***************************
-    Variable_name: innodb_read_io_threads
-            Value: 4
-    *************************** 2. row ***************************
-    Variable_name: innodb_write_io_threads
-            Value: 4
-    2 rows in set (0.00 sec)
+#output
+*************************** 1. row ***************************
+Variable_name: innodb_version
+        Value: 8.0.22
+1 row in set (1.18 sec)
 
 
-    #查看InnoDB中的IO Threads
-    show engine innodb status\G;
+#查看innodb读写IO线程
+show variables like 'innodb_%io_threads'\G;
 
-    #output
-    ...
-    --------
-    FILE I/O
-    --------
-    I/O thread 0 state: waiting for completed aio requests (insert buffer thread)
-    I/O thread 1 state: waiting for completed aio requests (log thread)
-    I/O thread 2 state: waiting for completed aio requests (read thread)
-    I/O thread 3 state: waiting for completed aio requests (read thread)
-    I/O thread 4 state: waiting for completed aio requests (read thread)
-    I/O thread 5 state: waiting for completed aio requests (read thread)
-    I/O thread 6 state: waiting for completed aio requests (write thread)
-    I/O thread 7 state: waiting for completed aio requests (write thread)
-    I/O thread 8 state: waiting for completed aio requests (write thread)
-    I/O thread 9 state: waiting for completed aio requests (write thread)
-    ...
+#output
+*************************** 1. row ***************************
+Variable_name: innodb_read_io_threads
+        Value: 4
+*************************** 2. row ***************************
+Variable_name: innodb_write_io_threads
+        Value: 4
+2 rows in set (0.00 sec)
 
-    ```
 
-3. Purge Thread: 事务被提交后，其所使用的undolog可能不再需要，因此需要Purge Thread来回收已经使用并分配的undo页。在InnoDB1.1之前，purge操作仅在Master Thread中完成。而从InnoDB1.1版本开始，purge操作可以独立到单独的线程中进行，以此来减轻Master Thread的工作，从而提高CPU的使用率以及提升存储引擎的性能。用户可以在配置文件中添加配置来启用独立的Purge Thread：
-    ```conf
+#查看InnoDB中的IO Threads
+show engine innodb status\G;
 
-    [mysqld]
-    innodb_purge_threads=1
+#output
+...
+--------
+FILE I/O
+--------
+I/O thread 0 state: waiting for completed aio requests (insert buffer thread)
+I/O thread 1 state: waiting for completed aio requests (log thread)
+I/O thread 2 state: waiting for completed aio requests (read thread)
+I/O thread 3 state: waiting for completed aio requests (read thread)
+I/O thread 4 state: waiting for completed aio requests (read thread)
+I/O thread 5 state: waiting for completed aio requests (read thread)
+I/O thread 6 state: waiting for completed aio requests (write thread)
+I/O thread 7 state: waiting for completed aio requests (write thread)
+I/O thread 8 state: waiting for completed aio requests (write thread)
+I/O thread 9 state: waiting for completed aio requests (write thread)
+...
 
-    ```
-    在InnoDB1.1中，即使将purge线程数设置大于1，启动时也会将其设置为1，从1.2版本开始，InnoDB开始支持多个Purge Thread，这样可以加快undo页的回收，由于Purge Thread需要离散的随机读取undo页，这样也能
+```
+
+3. Purge Thread: 事务被提交后，其所使用的undolog可能不再需要，因此需要Purge Thread来回收已经使用并分配的undo页。在InnoDB1.1之前，purge操作仅在Master Thread中完成。而从InnoDB1.1版本开始，purge操作可以独立到单独的线程中进行，以此来减轻Master Thread的工作，从而提高CPU的使用率以及提升存储引擎的性能。用户可以在配置文件中添加配置来启用独立的Purge Thread（见下面的代码），在InnoDB1.1中，即使将purge线程数设置大于1，启动时也会将其设置为1，从1.2版本开始，InnoDB开始支持多个Purge Thread，这样可以加快undo页的回收，由于Purge Thread需要离散的随机读取undo页，这样也能进一步利用磁盘的随机读取性能。
+
+```conf
+
+[mysqld]
+innodb_purge_threads=1
+
+```
+
+4. Page Cleaner Thread: InnoDB 1.2.x引入，作用是将之前版本中的脏页的刷新操作都放入到单独的线程中来完成。目的是减轻Master Thread的工作，以及用户查询线程的阻塞，进一步提高InnoDB存储引擎的性能。
+
+### 2. 内存
+
+#### 1. 缓冲池
+
+InnoDB存储引擎是基于磁盘存储的，并将其中的记录按照页的方式进行管理。因此可以将其视为基于磁盘的数据库系统（Disk-base Database）。CPU速度与磁盘速度差距很大，基于磁盘的数据库系统通常采用缓冲池技术来提高数据库的整体性能。
+
+缓冲池就是一块内存区域，通过内存的速度来弥补磁盘速度对数据库性能的影响。
+
+1. 数据库操作时，缓冲池的使用
+   - 当数据库进行读取页当操作当时候，首先将从磁盘读到当页缓存在缓冲池中，这个过程称为将页“FIX”在缓冲池中。下一次读取相同的页的时候，首先判断改页是否在缓冲池中，如果在，称该页在缓冲池中被命中，直接读取该页，否则读取磁盘上的页。
+   - 对于数据库中页的修改操作，首先修改在缓冲池中的页，然后再以一定的频率刷新到磁盘上，这里要注意，页从缓冲池刷新回磁盘的操作并不是在每次页发生更新时触发，而是通过一种成为`Checkpoint`的机制刷新回磁盘。这样也提高了数据库的整体性能。
+
+2. 缓冲池的大小： 缓冲池的大小直接影响着数据库的整体性能
+   1. 系统限制：32位操作系统的限制，最多将该值设置为3G。用户可以打开操作系统的PAE选项来获得32位系统下最大64GB内存的支持。
+   2. 强烈建议采用64位操作系统，让数据库使用更多的内存。
+   3. 对于InnoDB来说，缓冲池配置通过参数`innodb_buffer_pool_size`来设置
+
+3. 缓冲池的类型： 索引页、数据页、undo页、插入缓冲（insert buffer）、自适应哈希索引（adaptive hash index）、InnoDB存储的锁信息（lock info）、数据字典信息（data dictionary）等。从InnoDB 1.0.x开始，允许有多个缓冲池实例。每个页根据哈希值平均分配到不同到缓冲池实例中，增加了数据库的并发处理能力。可以通过参数`innodb_buffer_pool_instances`来进行配置，默认为1。
+
+#### 2. LRU List、Free List和Flush List
+
