@@ -48,7 +48,7 @@ date: 2021-01-22 10:30:52
 5. MySQL5.0之前MyISAM默认支持的表大小是4G，如果需要更大的MyISAM表的话，就要制定MAX_ROWS和AVG_ROW_LENGTH属性。从5.0版本开始，MyISAM默认支持256TB的单表数据，这足够一般应用的需求。
 6. MyISAM存储引擎表，Mysql数据库只缓存其索引文件，数据文件的缓存交给操作系统本身完成，这与LRU算法缓存数据的大部分数据库都不同。MySQL 5.1.23之前，缓存索引的缓冲区最大只能设置为4GB，在之后的版本中，64位系统可以支持大于4GB的索引缓冲区。
 
-### 其他存储引擎
+### 3. 其他存储引擎
 
 1. NDB： 一个集群存储引擎。数据全部放在内存中（从MySQL 5.1之后，可以将非索引数据放在磁盘上），所以主键查找速度极快，通过添加NDB数据存储节点，可以线性的提高数据库性能，是高可用、高性能的集群系统。复杂的连接操作网络开销很大，因为NDB的连接操作（JOIN）是在数据库层完成的，而不是在存储引擎层完成的。
 2. Memory: 之前被称为HEAP存储引擎。将表中的数据存放在内存中，如果数据库重启或发生崩溃，表中的数据全部消失。非常适合非常适合存储临时数据。默认使用hash哈希索引，而不是B+树索引。只支持表锁，并法性能差，不支持TEXT、BLOB列类型。存储变长字段varchar是按照定长char方式存储的，因此会浪费空间。MySQL数据库使用Memory存储引擎作为临时表来存放查询的中间结果集，如果中间结果集大于Memory存储引擎表的容量设置，又或者中间结果含有TEXT或BLOB字段，则MySQL会把其转换成MyISAM存储引擎表存放到磁盘中，因为MyISAM不缓存数据文件，所以这时产生的临时表的性能对于查询会有损失。
@@ -57,7 +57,7 @@ date: 2021-01-22 10:30:52
 5. Maria存储引擎： Maria当初是为了取代原有的MyISAM而设计的，从而成为MySQL默认存储引擎。支持缓存数据和索引文件，应用了行锁设计，提供了MVCC功能，支持事务和非事务安全的选项，以及更好的BLOB字符类型的处理性能。
 
 
-#### 其它
+### 4. 其它
 1. 查看当前使用MySQL版本支持的引擎：
 
 ```sql
@@ -66,7 +66,7 @@ show engines\G;
 
 ```
 
-## 连接MySQL
+## 3. 连接MySQL
 
 ### 1. TCP/IP
 
@@ -99,6 +99,77 @@ mysql -u root -S /tmp/mysql.sock
 
 ```
 
-# InnoDB存储引擎
+# 第二章 InnoDB存储引擎
+
+## 1. InnoDB存储引擎概述
 
 InnoDB存储引擎是第一个完整支持ACID事务的MySQL存储引擎，其特点是行锁设计、支持MVCC、支持外键、提供一致性非锁定读，同时被设计用来最有效地利用以及使用内存和CPU。
+
+## 2. InnoDB存储引擎的版本
+
+早期InnoDB随MySQL数据库的更新而更新，从MySQL5.1开始，MySQL允许存储引擎开发商以动态方式加载引擎，这样存储引擎可以不受MySQL数据库版本的限制。
+
+## 3. InnoDB体系架构
+
+### 1. 后台线程
+
+InnoDB存储引擎是多线程的模型，后台有多个不同的线程，负责处理不同的任务。
+
+1. Master Thread： 这是一个非常核心的后台线程，主要负责将缓冲池中的数据异步刷新到磁盘，保证数据一致性，包括脏页的刷新、合并插入缓存（INSERT BUFFER）、UNDO页的回收等。
+2. IO Thread： 在InnoDB存储引擎中大量的使用了AIO（Async IO）来处理写IO请求，这样极大地提高了数据库的性能。IO Thread主要负责这些IO请求的回调（call back）处理。InnoDB 1.0之前共有4个IO Thread，分别是write、read、insert buffer和log IO Thread。在Linux平台下，IO Thread的数量不能进行调整，但是在Windows平台下，可以通过参数`innodb_file_io_threads`来增大IO Thread。从InnoDB 1.0.x开始，read thread和write thread分别增大到4个，并且不再使用`innodb_file_io_threads`参数，而是分别使用`innodb_read_io_threads`和`innodb_write_io_threads`参数进行设置。
+
+    ```sql
+
+    #查看innodb引擎版本
+    show variables like 'innodb_version'\G;
+
+    #output
+    *************************** 1. row ***************************
+    Variable_name: innodb_version
+            Value: 8.0.22
+    1 row in set (1.18 sec)
+
+
+    #查看innodb读写IO线程
+    show variables like 'innodb_%io_threads'\G;
+
+    #output
+    *************************** 1. row ***************************
+    Variable_name: innodb_read_io_threads
+            Value: 4
+    *************************** 2. row ***************************
+    Variable_name: innodb_write_io_threads
+            Value: 4
+    2 rows in set (0.00 sec)
+
+
+    #查看InnoDB中的IO Threads
+    show engine innodb status\G;
+
+    #output
+    ...
+    --------
+    FILE I/O
+    --------
+    I/O thread 0 state: waiting for completed aio requests (insert buffer thread)
+    I/O thread 1 state: waiting for completed aio requests (log thread)
+    I/O thread 2 state: waiting for completed aio requests (read thread)
+    I/O thread 3 state: waiting for completed aio requests (read thread)
+    I/O thread 4 state: waiting for completed aio requests (read thread)
+    I/O thread 5 state: waiting for completed aio requests (read thread)
+    I/O thread 6 state: waiting for completed aio requests (write thread)
+    I/O thread 7 state: waiting for completed aio requests (write thread)
+    I/O thread 8 state: waiting for completed aio requests (write thread)
+    I/O thread 9 state: waiting for completed aio requests (write thread)
+    ...
+
+    ```
+
+3. Purge Thread: 事务被提交后，其所使用的undolog可能不再需要，因此需要Purge Thread来回收已经使用并分配的undo页。在InnoDB1.1之前，purge操作仅在Master Thread中完成。而从InnoDB1.1版本开始，purge操作可以独立到单独的线程中进行，以此来减轻Master Thread的工作，从而提高CPU的使用率以及提升存储引擎的性能。用户可以在配置文件中添加配置来启用独立的Purge Thread：
+    ```conf
+
+    [mysqld]
+    innodb_purge_threads=1
+
+    ```
+    在InnoDB1.1中，即使将purge线程数设置大于1，启动时也会将其设置为1，从1.2版本开始，InnoDB开始支持多个Purge Thread，这样可以加快undo页的回收，由于Purge Thread需要离散的随机读取undo页，这样也能
