@@ -197,3 +197,7 @@ InnoDB存储引擎是基于磁盘存储的，并将其中的记录按照页的�
 
 #### 2. LRU List、Free List和Flush List
 
+1. 数据库中的缓冲池是通过LRU（Last Recent Used，最近最少使用）算法来进行管理的。即最频繁使用的页在LRU列表的前端，而最少使用的页在LRU列表的尾端。当缓冲池不能存放新读取到的页时，将首先释放LRU列表中尾端的页。
+2. InnoDB对LRU算法做了一些优化，在LRU列表中加入了midpoint位置。新读取到到页，虽然是最新访问到数据，但是也不会直接放到LRU列表到首部，而是放到midpoint的位置。这个算法在InnoDB存储引擎下称为`midpoint insertion strategy`。在默认配置下，midpoint在LRU列表长度的5/8处，也就是LRU列表尾端的3/8（37%）的位置。midpoint位置可以又参数`innodb_old_blocks_pct`控制。在InnoDB中，把midpoint之后的列表称为old列表，之前的列表称为new列表。可以简单的理解为new列表中的页都是做活跃的热点数据。
+3. 为什么不用最常见的LRU算法（新数据直接放到首部）？这是因为某些SQL结果集可能超大，可能回将整个LRU列表中的数据刷出，导致真正的热点数据也被清除。加入midpoint可以保护热点数据。
+4. InnoDB还有另一个参数`innodb_old_blocks_time`（以毫秒为单位）用于表示页读到mid位置的后需要等待多久才会被加入到LRU列表的热端。页插入到mid位置后的`innodb_old_blocks_time`时间内，可以通过LRU列表访问页，但是无论多少次查询都不会将其移动到new列表，`innodb_old_blocks_time`时间后，如果再次被访问，就会被移动到new列表。
