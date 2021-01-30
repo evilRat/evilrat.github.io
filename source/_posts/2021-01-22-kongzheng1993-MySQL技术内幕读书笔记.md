@@ -197,7 +197,55 @@ InnoDB存储引擎是基于磁盘存储的，并将其中的记录按照页的�
 
 #### 2. LRU List、Free List和Flush List
 
-1. 数据库中的缓冲池是通过LRU（Last Recent Used，最近最少使用）算法来进行管理的。即最频繁使用的页在LRU列表的前端，而最少使用的页在LRU列表的尾端。当缓冲池不能存放新读取到的页时，将首先释放LRU列表中尾端的页。
-2. InnoDB对LRU算法做了一些优化，在LRU列表中加入了midpoint位置。新读取到到页，虽然是最新访问到数据，但是也不会直接放到LRU列表到首部，而是放到midpoint的位置。这个算法在InnoDB存储引擎下称为`midpoint insertion strategy`。在默认配置下，midpoint在LRU列表长度的5/8处，也就是LRU列表尾端的3/8（37%）的位置。midpoint位置可以由参数`innodb_old_blocks_pct`控制。在InnoDB中，把midpoint之后的列表称为old列表，之前的列表称为new列表。可以简单的理解为new列表中的页都是做活跃的热点数据。
-3. 为什么不用最常见的LRU算法（新数据直接放到首部）？这是因为某些SQL结果集可能超大，可能回将整个LRU列表中的数据刷出，导致真正的热点数据也被清除。加入midpoint可以保护热点数据。
-4. InnoDB还有另一个参数`innodb_old_blocks_time`（以毫秒为单位）用于表示页读到mid位置的后需要等待多久才会被加入到LRU列表的热端。页插入到mid位置后的`innodb_old_blocks_time`时间内，可以通过LRU列表访问页，但是无论多少次查询都不会将其移动到new列表，`innodb_old_blocks_time`时间后，如果再次被访问，就会被移动到new列表。
+1. LRU List
+   - 数据库中的缓冲池是通过LRU（Last Recent Used，最近最少使用）算法来进行管理的。即最频繁使用的页在LRU列表的前端，而最少使用的页在LRU列表的尾端。当缓冲池不能存放新读取到的页时，将首先释放LRU列表中尾端的页。
+   - InnoDB对LRU算法做了一些优化，在LRU列表中加入了midpoint位置。新读取到到页，虽然是最新访问到数据，但是也不会直接放到LRU列表到首部，而是放到midpoint的位置。这个算法在InnoDB存储引擎下称为`midpoint insertion strategy`。在默认配置下，midpoint在LRU列表长度的5/8处，也就是LRU列表尾端的3/8（37%）的位置。midpoint位置可以由参数`innodb_old_blocks_pct`控制。在InnoDB中，把midpoint之后的列表称为old列表，之前的列表称为new列表。可以简单的理解为new列表中的页都是做活跃的热点数据。
+   - 为什么不用最常见的LRU算法（新数据直接放到首部）？这是因为某些SQL结果集可能超大，可能回将整个LRU列表中的数据刷出，导致真正的热点数据也被清除。加入midpoint可以保护热点数据。
+   - InnoDB还有另一个参数`innodb_old_blocks_time`（以毫秒为单位）用于表示页读到mid位置的后需要等待多久才会被加入到LRU列表的热端。页插入到mid位置后的`innodb_old_blocks_time`时间内，可以通过LRU列表访问页，但是无论多少次查询都不会将其移动到new列表，`innodb_old_blocks_time`时间后，如果再次被访问，就会被移动到new列表。
+
+```sql
+
+#为了LRU列表中的热点数据不被刷出啊，可以先设置innodb_old_blocks_time
+
+mysql> SET GLOBAL innodb_old_blocks_time=1000;
+Query OK, 0 rows affected.
+
+# data or index scan operation
+......
+
+mysql> SET GLOBAL innodb_old_blocks_time=0;
+Query OK, 0 rows affected.
+
+```
+
+如果用户预估自己活跃的热点数据不止63%，那么再执行SQL语句前可以通过下面的语句来减少热点页被刷出的概率。
+
+```sql
+
+mysql> SET GLOBAL innodb_old_blocks_pct=20;
+Query OK, 0 rows affected.
+
+```
+
+
+2. Free List
+
+LRU列表是用来管理管理已经读取到的页的，但是当数据库刚启动时，LRU列表是空的，即没有任何的页，这时页都存放于Free列表中。当需要从缓冲池中分页时，首先从Free列表中查找到是否可用的空闲页，若有则将该页从Free列表中删除，放入到LRU列表中。否则，根据LRU算法，淘汰LRU列表末尾的页，将该内存空间分配给新的页。
+
+        这里感觉有点难理解，数据库刚启动的时候，缓冲池里是没有缓存数据的，但是相应的内存空间已经开辟了，当我们查询数据后，磁盘返回数据，这时候，缓冲池要缓存数据，LRU列表是空的，要去Free List里取出空闲页，这里的空闲页其实是一个没有存储数据的页的描述（或者说地址），然后将磁盘返回的数据缓存到这个页，并将这个页交由LRU列表管理。也就是FreeList就是记录空闲页描述的双向列表，当LRU列表需要一个新的页的时候，就来找Free列表要，然后新的数据就被缓存了。
+
+1. 这里感觉上LRU列表管理已经读取到的页，Free列表管理未使用的页，他们的size的和就应该是缓冲池里所有页的数量了。但是通过`SHOW ENGINE INNODB STATUS`可以看到，free buffers（Free列表页数量）和Database pages（LRU列表中页的数量）之和并不是缓冲池页的总数（Buffer pool size）。这是因为缓冲池中的页可能会被分配给自适应哈希索引、Lock信息、Insert Buffer等页，而这部分页不需要LRU算法进行维护，因此不在LRU列表中。
+2. 从InnoDB1.2版本开始，还可以通过`INNODB_BUFFER_POOL_STATUS`来观察缓冲池的运行状态。
+   ```sql
+
+        select pool_id, hit_rate, pages_made_young, pages_not_made_young from information_schema.INNODB_BUFFER_POOL_STATUS;
+  
+   ```
+3. 可以通过`INNODB_BUFFER_PAGE_LRU`来观察每个LRU列表中每个页的具体信息，例如通过下面的语句可以看到缓冲池LRU列表中SPACE为1的表的页类型：
+    ```sql
+
+        select table_name, space, page_number, page_type from innodb_buffer_page_lru where space = 1;
+
+    ```
+4. InnoDB存储引擎从1.0.x版本开始支持压缩页的功能，即将原本16k的页压缩为1kb、2kb、4kb和8kb。而由于页的大小发生了变化，LRU列表也有了些许的改动。对于非16kb的页，是通过unzip_LRU列表来进行管理的。通过命令`SHOW ENGINE INNODB STATUS\G;`可以看到LRU列表和unzip_LRU列表的页的数量。LRU中的页包含了unzip_LRU列表中的页。
+5. 对于压缩页的表，每个表的压缩率可能各不相同。可能存在有的表页大小为8kb，有的表页大小为2kb的情况。unzip_LRU列表如何从缓冲池中分配内存的：
