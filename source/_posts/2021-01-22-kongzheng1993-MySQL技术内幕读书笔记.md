@@ -221,10 +221,8 @@ Query OK, 0 rows affected.
 如果用户预估自己活跃的热点数据不止63%，那么再执行SQL语句前可以通过下面的语句来减少热点页被刷出的概率。
 
 ```sql
-
 mysql> SET GLOBAL innodb_old_blocks_pct=20;
 Query OK, 0 rows affected.
-
 ```
 
 
@@ -234,22 +232,18 @@ LRU列表是用来管理管理已经读取到的页的，但是当数据库刚�
 
         这里感觉有点难理解，数据库刚启动的时候，缓冲池里是没有缓存数据的，但是相应的内存空间已经开辟了，当我们查询数据后，磁盘返回数据，这时候，缓冲池要缓存数据，LRU列表是空的，要去Free List里取出空闲页，这里的空闲页其实是一个没有存储数据的页的描述（或者说地址），然后将磁盘返回的数据缓存到这个页，并将这个页交由LRU列表管理。也就是FreeList就是记录空闲页描述的双向列表，当LRU列表需要一个新的页的时候，就来找Free列表要，然后新的数据就被缓存了。
 
-1. 这里感觉上LRU列表管理已经读取到的页，Free列表管理未使用的页，他们的size的和就应该是缓冲池里所有页的数量了。但是通过`SHOW ENGINE INNODB STATUS`可以看到，free buffers（Free列表页数量）和Database pages（LRU列表中页的数量）之和并不是缓冲池页的总数（Buffer pool size）。这是因为缓冲池中的页可能会被分配给自适应哈希索引、Lock信息、Insert Buffer等页，而这部分页不需要LRU算法进行维护，因此不在LRU列表中。
-2. 从InnoDB1.2版本开始，还可以通过`INNODB_BUFFER_POOL_STATUS`来观察缓冲池的运行状态。
+- 这里感觉上LRU列表管理已经读取到的页，Free列表管理未使用的页，他们的size的和就应该是缓冲池里所有页的数量了。但是通过`SHOW ENGINE INNODB STATUS`可以看到，free buffers（Free列表页数量）和Database pages（LRU列表中页的数量）之和并不是缓冲池页的总数（Buffer pool size）。这是因为缓冲池中的页可能会被分配给自适应哈希索引、Lock信息、Insert Buffer等页，而这部分页不需要LRU算法进行维护，因此不在LRU列表中。
+- 从InnoDB1.2版本开始，还可以通过`INNODB_BUFFER_POOL_STATUS`来观察缓冲池的运行状态。
    ```sql
-
         select pool_id, hit_rate, pages_made_young, pages_not_made_young from information_schema.INNODB_BUFFER_POOL_STATUS;
-  
    ```
-3. 可以通过`INNODB_BUFFER_PAGE_LRU`来观察每个LRU列表中每个页的具体信息，例如通过下面的语句可以看到缓冲池LRU列表中SPACE为1的表的页类型：
+- 可以通过`INNODB_BUFFER_PAGE_LRU`来观察每个LRU列表中每个页的具体信息，例如通过下面的语句可以看到缓冲池LRU列表中SPACE为1的表的页类型：
     ```sql
-
         select table_name, space, page_number, page_type from innodb_buffer_page_lru where space = 1;
-
     ```
-4. InnoDB存储引擎从1.0.x版本开始支持压缩页的功能，即将原本16k的页压缩为1kb、2kb、4kb和8kb。而由于页的大小发生了变化，LRU列表也有了些许的改动。对于非16kb的页，是通过unzip_LRU列表来进行管理的。通过命令`SHOW ENGINE INNODB STATUS\G;`可以看到LRU列表和unzip_LRU列表的页的数量。LRU中的页包含了unzip_LRU列表中的页。
-5. unzip_LRU列表中对不同压缩页大小的页进行分别管理，并通过`伙伴算法`进行内存的分配。以需要从缓冲池中申请页为4kb的大小为例，其过程如下：
-   
+- InnoDB存储引擎从1.0.x版本开始支持压缩页的功能，即将原本16k的页压缩为1kb、2kb、4kb和8kb。而由于页的大小发生了变化，LRU列表也有了些许的改动。对于非16kb的页，是通过unzip_LRU列表来进行管理的。通过命令`SHOW ENGINE INNODB STATUS\G;`可以看到LRU列表和unzip_LRU列表的页的数量。LRU中的页包含了unzip_LRU列表中的页。
+- unzip_LRU列表中对不同压缩页大小的页进行分别管理，并通过`伙伴算法`进行内存的分配。以需要从缓冲池中申请页为4kb的大小为例，其过程如下：
+  
    1. 检查4kb的unzip_LRU列表，检查是否有可用的空闲页；
    2. 如果有，则直接使用；
    3. 否则，检查8kb的unzip_LRU列表；
@@ -259,20 +253,42 @@ LRU列表是用来管理管理已经读取到的页的，但是当数据库刚�
    可以通过information_schema架构下的表INNODB_BUFFER_PAGE_LRU来观察unzip_LRU列表中的页
 
    ```sql
-
       select table_name, space, page_number, compressed_size from innodb_buffer_page_lru where compressed_size <> 0;
-
    ```
 
    ```
    伙伴算法，简而言之，就是将内存分成若干块，然后尽可能以最适合的方式满足程序内存需求的一种内存管理算法，伙伴算法的一大优势是它能够完全避免外部碎片的产生。什么是外部碎片以及内部碎片，前面博文slab分配器后面已有介绍。申请时，伙伴算法会给程序分配一个较大的内存空间，即保证所有大块内存都能得到满足。很明显分配比需求还大的内存空间，会产生内部碎片。所以伙伴算法虽然能够完全避免外部碎片的产生，但这恰恰是以产生内部碎片为代价的。
    ```
-
-6. 在LRU列表中的页被修改后，称该页为脏页（dirty page），即缓冲池中的页和磁盘上的页的数据产生了不一致。这时数据库会通过`checkpoint`机制将脏页刷新回磁盘，而Flush列表中的页即为`脏页列表`。需要注意的是，脏页既存在于LRU列表，也存在于Flush列表中。LRU列表用于来管理缓冲池中也的可用性，Flush列表用来管理将页刷回磁盘，二者互不影响。
-7. 同LRU列表一样，Flush列表也能通过`SHOW ENGINE INNODB STATUS`来查看，`Modified db pages 24673`就显示了脏页的数量。
-8. 查看脏页的数量和类型：
+3. Flush List
+- 在LRU列表中的页被修改后，称该页为脏页（dirty page），即缓冲池中的页和磁盘上的页的数据产生了不一致。这时数据库会通过`checkpoint`机制将脏页刷新回磁盘，而Flush列表中的页即为`脏页列表`。需要注意的是，脏页既存在于LRU列表，也存在于Flush列表中。LRU列表用于来管理缓冲池中也的可用性，Flush列表用来管理将页刷回磁盘，二者互不影响。
+- 同LRU列表一样，Flush列表也能通过`SHOW ENGINE INNODB STATUS`来查看，`Modified db pages 24673`就显示了脏页的数量。
+- 查看脏页的数量和类型（table_name为null说明该页属于系统表空间）：
    ```sql
       select table_name, space, page_number, page_type 
       from innodb_buffer_page_lru where oldest_modification > 0;
    ```
-9. 
+
+### 3. 重做日志缓冲
+
+重做日志缓冲（redo log buffer）。InnoDB存储引擎首先将重做日志信息放入到这个缓冲区，然后按照一定频率将其刷新到重做日志文件。重做日志缓冲不一定要设置的很大，因为一般情况下每一秒会将重做日志缓存刷新到日志文件，因此只需要保证每秒产生的事务量在在这个缓存大小之内即可。该值由配置参数`innodb_log_buffer_size`控制，默认为8M：
+
+```sql
+mysql> show variables like 'innodb_log_buffer_size'\G;
+*************************** 1. row ***************************
+Variable_name: innodb_log_buffer_size
+        Value: 16777216
+1 row in set (0.00 sec)
+```
+
+重做日志在下面三种情况下会将重做日志缓冲中的内容刷新到外部磁盘的重做日志文件中：
+
+- Master Thread每一秒将重做日志缓冲刷新到重做日志文件；
+- 每个事务提交时会将重做日志缓存刷新到重做日志文件；
+- 当重做日志缓冲池剩余空间小于1/2时，重做日志缓冲会刷新到缓存日志文件。
+
+### 4. 额外的内存池
+
+在InnoDB中，对内存的管理是通过一种称为内存堆（heap）的方式进行的。在对一些数据结构本身的内存进行分配时，需要从额外的内存池中进行申请，当该区域的内存不够时，会从缓冲池中进行申请。这里的数据结构本身是指每个缓冲池中的帧缓存（frame buffer）和对应的缓冲控制对象（buffer control block），这些对象记录了一些诸如LRU、锁、等待等信息，而这些对象的内存需要从额外的内存池中申请。<strong>因此在申请了很大的InnoDB缓冲池时，应该考虑相应的增加这个值</strong>。
+
+## 4. Checkpoint技术
+
