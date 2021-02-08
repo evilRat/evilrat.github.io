@@ -292,3 +292,81 @@ Variable_name: innodb_log_buffer_size
 
 ## 4. Checkpoint技术
 
+Mysql缓冲池的设计就是为了跨越cpu速度与磁盘速度之间鸿沟，也就是页的操作都是首先在缓冲池中完成，操作完成时，缓冲池的数据版本比磁盘新，数据库需要将新版本的页刷新到磁盘。但是刷新到磁盘，瓶颈依然在磁盘IO，而且如果在缓存刷新到磁盘的过程中宕机，缓存中的数据时不能恢复的。所以当前事务数据库都普遍采用了`Write Ahead Log`策略，即当事务提交时，先写重做日志，在修改页。当由于宕机而导致数据丢失时，可以通过重做日志来完成数据的恢复。这也是事务ACID中D（Durability持久性）的要求。
+
+思考一下，缓冲池可以让我们读写数据更快速，重做日志可以保证数据库数据不丢失。有了缓冲池和重做日志，是不是就可以不用将缓冲池中的页刷新到磁盘了？好家伙，直接内存数据库了？毕竟mysql是要持久化的，是要存大量数据的。你一直不落磁盘，先不说内存够不够大，就是重新启动时重新应用重做日志的时间也够受的。所以mysql有个Checkpoint（检查点）技术。
+
+### 1. Checkout技术用于解决以下问题：
+
+- 缩短数据库的恢复时间
+- 缓冲池不够用时，将脏页刷新到磁盘
+- 重做日志不可用时，刷新脏页。
+
+1. 当数据库发生宕机时，数据库不需要重做所有日志，因为Checkpoint之前的页都已经刷新回磁盘了，所以只需要对Checkpoint后的重做日志进行恢复。这样就大大缩短了恢复的时间。
+2. 当缓冲池不够用时，根据LRU算法会溢出最近使用最少的页，若此页为脏页，那么需要强制执行Checkpoint，将脏页刷新到磁盘。
+3. 重做日志出现不可用的情况时因为当前事务数据库系统对重做日志的设计都是循环使用的，并不是无限增大的。重做日志可以被重用的部分是指这些重做日志已经不再需要，即当数据库发生宕机时，数据库恢复操作不需要这部分重做日志。因此这部分就可以被覆盖重用。若此时重做日志还需要使用，那么必须强制产生Checkpoint，将缓冲区中的页至少刷新到当前重做日志的位置。
+
+### 2. LSN（Log Sequece Number）
+
+InnoDB存储引擎是通过LSN来标记版本的。LSN是8字节的数字，单位是字节。每个页有LSN，重做日志中也有LSN，Checkpoint也有LSN。可以通过`SHOW ENGINE INNODB STATUS`来观察：
+
+```sql
+mysql> SHOW ENGINE INNODB STATUS\G;
+
+......
+---
+LOG
+---
+Log sequence number 92561351052
+Log flushed up to 92561351052
+Last checkpoint at 92561351052
+```
+
+### 3. InnoDB中有两种Checkpoint
+
+#### 1. Sharp Checkpoint
+
+Sharp Checkpoint发生在数据库关闭时将所有的脏页刷新回磁盘，这是默认的工作方式，即参数`innodb_fast_shutdown=1`。因为它时将所有的脏页都刷回磁盘，所以不可能在数据库运行时来执行，太影响性能。
+
+#### 2. Fuzzy Checkpoint
+
+InnoDB存储引擎内部使用Fuzzy Checkpoint进行页的刷新，即只刷新一部分脏页，而不是刷新所有的脏页到磁盘。
+
+在InnoDB中可能发生如下几种情况的Fuzzy Checkpoint：
+
+1. Master Thread Checkpoint
+
+   Master Thread Checkpoint以每秒或每十秒的速度从缓冲池的脏页列表中刷新一定比例的页回磁盘，这个过程是异步的，不会阻塞用户查询线程。
+
+2. FLUSH_LRU_LIST Checkporint
+
+   InnoDB存储引擎需要保证LRU列表中需要有差不多100个空闲页可供使用。InnoDB1.1.x版本之前，需要检查LRU是否有足够的可用空间操作发生在用户查询线程，这就会阻塞用户的查询操作。如果没有100个可用的空闲页，那么InnoDB存储引擎会将LRU列表尾端的页移除。如果这些页有脏页，那么就要进行Checkpoint。从MySQL5.6版本，也就是InnoDB1.2.x开始，这个检查被放在了一个单独的Page Cleaner线程中进行，并且用户可以通过参数innodb_lru_scan_depth控制LRU列表中可用页的数量，该值默认为1024。
+
+3. Async/Sync Flush Checkpoint
+
+   这里是在重做日志文件不可用时，需要强制将一些页刷回磁盘，而此时脏页是从脏页列表中选取的。若已经写入到重做日志的LSN极为redo_lsn，将已经刷新回磁盘最新页的LSN记为checkpoint_lsn，则可定义:
+
+   `checkpoint_age = redo_lsn - checkpoint_lsn`
+
+   再定义一下变量：
+
+   `async_water_mark = 75% * total_redo_log_file_size`
+
+   `sync_water_mark = 90% * total_redo_log_file_size`
+
+   如果每个重做日志文件大小为1GB，并且定义了两个重做日志文件，则重做日志文件的总大小为2GB，那么`async_water_mark`=1.5GB，`sync_water_mark`=1.8GB。
+
+   那么：
+
+   - 当checkpoint_age < async_water_mark时，不需要刷新任何脏页到磁盘。
+   - 当async_water_mark < checkpoint_age < sync_water_mark时，触发Async Flush，从Flush列表中刷新足够的脏页回磁盘，是的刷新后满足checkpoint_age<async_water_mark。
+   - checkpoint_age > sync_water_mark这种情况很少发生，除非设置的重做日志文件太小，并且在进行类似LOAD DATA的BULK INSERT操作。此时出发Sync Flush操作，从Flush列表中刷新足够的脏页回磁盘，使得刷新后满足checkpoint_age < async_water_mark。
+
+   可见Async/Sync Flush Checkpoint是为了保证重做日志的循环使用的可用性。InnoDB 1.2.x之前，Async会阻塞发现问题的用户查询线程，而Sync会阻塞所有用户的查询线程。但是后来，这部分的刷新操作同样放入了单独的Page Clener Thread中，不会阻塞用户查询线程。
+
+4. Dirty Page too much Checkpoint
+
+   这种情况就是脏页数量太多，导致InnoDB存储引擎强制进行Checkpoint。目的还是保证缓冲池中有足够可用的页。其可由参数`innodb_max_dirty_pages_pct`来控制。百分比，默认时75（老版本InnoDB是90），表示当缓冲池中脏页的数量占据75%时，强制进行checkpoint，刷新一部分的页到磁盘。
+
+
+## 5. Master Thread工作方式
