@@ -370,3 +370,10 @@ InnoDB存储引擎内部使用Fuzzy Checkpoint进行页的刷新，即只刷新�
 
 
 ## 5. Master Thread工作方式
+
+InnoDB存储引擎的主要工作都是在一个单独的后台线程Master Thread中完成的。
+
+### 1. InnoDB1.0.x版本之前的Master Thread
+
+Master Thread具有最高的线程优先级别。其内部由多个循环（loop）组成：主循环（loop）、后台循环（background loop）、刷新循环（flush loop）、暂停循环（suspend loop）。Master Thread会根据数据库运行的状态在loop、background loop、flush loop和suspend loop中进行切换。
+
