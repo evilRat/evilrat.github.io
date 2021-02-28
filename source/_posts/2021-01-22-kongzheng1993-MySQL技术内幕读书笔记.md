@@ -373,7 +373,106 @@ InnoDB存储引擎内部使用Fuzzy Checkpoint进行页的刷新，即只刷新�
 
 InnoDB存储引擎的主要工作都是在一个单独的后台线程Master Thread中完成的。
 
-### 1. InnoDB1.0.x版本之前的Master Thread
+### 1. InnoDB 1.0.x版本之前的Master Thread
 
 Master Thread具有最高的线程优先级别。其内部由多个循环（loop）组成：主循环（loop）、后台循环（background loop）、刷新循环（flush loop）、暂停循环（suspend loop）。Master Thread会根据数据库运行的状态在loop、background loop、flush loop和suspend loop中进行切换。
 
+绝大多数操作是在这个循环中，其中分为两大部分的操作---每秒钟的操作和每10秒的操作。loop循环是通过thread sleep来实现的，所以所谓的每一秒或者没十秒只是个大概频率，负载很大的情况下可能会有延迟。
+
+每一秒的操作包括：
+
+- 日志缓冲刷新到磁盘，即使这个事务还没有提交（总是）：所以再大的事务提交（commit）的时间也是很短。
+- 合并插入缓冲（可能）：并不是每秒都发生，InnoDB会判断前一秒内发生的IO次数是否小于5次，小于5次，认为压力很小，可以执行合并插入缓冲操作。
+- 至多刷新100个InnoDB的缓冲池中的脏页到磁盘（可能）：InnoDB判断当前缓冲池中脏页的比例（buf_get_modified_ratio_pct）是否超过了配置文件中innodb_max_dirty_pages_pct参数（默认90，代表90%），如果超过了，就要作磁盘同步操作，将100个脏页写入磁盘中。
+- 如果当前没有用户活动，则切换到background loop（可能）
+
+每十秒的操作：
+
+- 刷新100个脏页到磁盘（可能）：InnoDB判断过去10秒内磁盘IO操作是否小于200次，如果是，认为当前有足够的磁盘IO操作能力，则将100个脏页刷新到磁盘
+
+- 合并至多5个插入缓冲（总是）
+
+- 将日志缓冲刷新到磁盘（总是）
+
+- 删除无用的Undo页（总是）：执行full purge操作，删除无用的Undo页，对表进行的update、delete操作，原先的行被标记为删除，但是因为一致性读（consistent read）的关系，要保留这些版本的信息，在full purge过程中，InnoDB会判断当前事务系统中已被删除的行是否可以删除（有时候可能还有查询操作需要读取之前版本的undo信息），如果可以删除，则删除。full purge操作，每次最多尝试回收20个undo页。
+
+- 刷新100个或者10个脏页到磁盘（总是）：InnoDB判断缓冲池中脏页的比例（buf_get_modified_ratio_pct），如果有超过70%的脏页，则刷新100个脏页到磁盘，如果脏页的比例小于70%，则只刷新10%的脏页到磁盘。
+
+  
+
+background loop的操作：
+
+- 删除无用的Undo页（总是）
+- 合并20个插入缓冲（总是）
+- 跳回到主循环（总是）
+- 不断刷新100个页直到符合条件（可能，跳转到flush loop中完成）
+
+如果flush loop中也没有什么事情可以作了，InnoDB存储引擎会切换到suspend loop，将Master Thread挂起，等待事件的发生。如果用户启用（enable）了InnoDB存储引擎，却没有使用任何InnoDB存储引擎的表，那么Master Thread总是处于挂起的状态。
+
+Master Thread伪代码如下：
+
+```c
+void master_thread() {
+	goto loop;
+    loop:
+    	for(int i = 0; i < 10; i++) {
+            thread_sleep(1) // sleep 1 second
+            do log buffer flush to disk
+            if (last_one_second_ios < 5) {
+                do merge at most 5 insert buffer
+            }
+            if (buf_get_mondified_ratio_pct > innodb_max_dirty_pages_pct) {
+                do buffer pool flush 100 dirty page
+            }
+            if (no user activity) {
+                goto background loop
+            }
+        }
+    if (last_ten_second_ios < 200) {
+        do buffer pool flush 100 dirty page
+    }
+    do merge at most 5 insert buffer
+    do log buffer flush to disk
+    do full purge
+    if (buf_get_modified_ratio_pct > 70%) {
+        do buffer pool flush 100 dirty page
+    } else {
+        buffer pool flush 10 dirty page
+    }
+    goto loop
+    background loop:
+    	do full purge
+        do merge 20 insert buffer
+        if not idle:
+    		goto loop
+        else
+            goto flush loop
+    flush loop:
+    	do buffer pool flush 100 dirty page
+        if (buf_get_modified_radio_pct > innodb_max_dirty_pages_pct) {
+            goto flush loop
+        }
+    goto suspend loop
+    suspend loop:
+    	suspend_thread()
+        waiting event
+        	goto loop
+}
+```
+
+
+
+### 2. InnoDB 1.2.x版本之前的Master Thread
+
+几个修改：
+
+1. 1.0.x之前的版本其实对IO是有限制的（很多硬编码，比如刷新100个脏页到磁盘），在磁盘技术飞速发展的今天，当固态磁盘（SSD）出现时，这种规定在很大程度上限制了InnoDB存储引擎对磁盘IO的性能，尤其是写入性能。
+
+   
+
+   从InnoDB1.0.x，InnoDB Plugin提供了参数innodb_io_capacity，用来表示磁盘IO的吞吐量，默认值为200，当用户使用了ssd或者磁盘做了RAID，存储设备拥有了更高的IO速度，就可以将innodb_io_capacity调高，直到符合磁盘IO吞吐量。规则如下：
+
+   - 在合并插入缓存时，合并插入缓存的数量为innodb_io_capacity值的5%
+- 在从缓冲区刷新脏页时，刷新脏页的数量为innodb_io_capacity
+
+2. 
