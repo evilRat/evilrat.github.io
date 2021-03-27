@@ -14,9 +14,7 @@ date: 2021-03-27 19:30:52
 启动参数中增加：
 
 ```
-
 -Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=5000,suspend=n,onthrow=java.io.IOExpection,launch=/sbin/echo
-
 ```
 
 -Xdebug 启动调试
@@ -36,9 +34,7 @@ date: 2021-03-27 19:30:52
 1. JDK自带了JDB：
 
 ```console
-
 jdb -connect com.sun.jdi.SocketAttach:port=5000,hostname=192.168.100.100
-
 ```
 
 上面的命令就是通过socket连接到`192.168.100.100:5000`进行远程调试，连接后就可以通过jdb的命令来进行断点，调试了。
