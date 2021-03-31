@@ -3,6 +3,8 @@
   <title><% if (page.title){ %><%= page.title %> | <% } %><%= config.title %></title>
   <meta name="keywords" content="<% if (page.tags && page.tags.length){ page.tags.forEach(function(tag, i){%> <%=tag.name%> <% if (i+1<page.tags.length){%>,<%} })}%>">
   <meta name="description" content="<% if (page.title){ %><%= page.title %> | <% } %><%= config.title %>">
+  <script data-ad-client="ca-pub-8990321486053761" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <meta name="baidu_union_verify" content="3b2f522004782a6f88e3aa9bb4df0854">
     <%- fragment_cache('meta', function(){
       return partial('_partial/meta');
     }) %>
