@@ -460,19 +460,92 @@ void master_thread() {
 }
 ```
 
-
-
 ### 2. InnoDB 1.2.x版本之前的Master Thread
 
 几个修改：
 
 1. 1.0.x之前的版本其实对IO是有限制的（很多硬编码，比如刷新100个脏页到磁盘），在磁盘技术飞速发展的今天，当固态磁盘（SSD）出现时，这种规定在很大程度上限制了InnoDB存储引擎对磁盘IO的性能，尤其是写入性能。
-
-   
-
-   从InnoDB1.0.x，InnoDB Plugin提供了参数innodb_io_capacity，用来表示磁盘IO的吞吐量，默认值为200，当用户使用了ssd或者磁盘做了RAID，存储设备拥有了更高的IO速度，就可以将innodb_io_capacity调高，直到符合磁盘IO吞吐量。规则如下：
+从InnoDB1.0.x，InnoDB Plugin提供了参数innodb_io_capacity，用来表示磁盘IO的吞吐量，默认值为200，当用户使用了ssd或者磁盘做了RAID，存储设备拥有了更高的IO速度，就可以将innodb_io_capacity调高，直到符合磁盘IO吞吐量。规则如下：
 
    - 在合并插入缓存时，合并插入缓存的数量为innodb_io_capacity值的5%
-- 在从缓冲区刷新脏页时，刷新脏页的数量为innodb_io_capacity
+   - 在从缓冲区刷新脏页时，刷新脏页的数量为innodb_io_capacity
 
-2. 
+2. `innodb_max_dirty_pages_pct`默认值的问题，在1.0.x版本之前，该值的默认为90，意味着脏页占缓冲池的90%。因为InnoDB存储引擎在每秒刷新缓冲池和flush loop时会判断这个值，如果该值大于`innodb_max_dirty_pages_pct`才刷新100个脏页，如果有很大的内存，或者数据库服务的压力很大，这时刷新脏页的速度反而会降低，同样，数据库在恢复阶段可能需要更多的时间。1.0.x后`innodb_max_diry_pages_pct`默认值变为了75，这样既可以加快刷新脏页的频率，又能保证磁盘IO的负载。
+3. 新增参数`innodb_adaptive_flushing`，自适应刷新，该值影响每秒刷新脏页的数量。原来的规则时：脏页在缓冲池所占比例小于`innodb_max_diry_pages_pct`时，不刷新脏页；大于`innodb_max_diry_pages_pct`时，刷新100个脏页。随着`innodb_adaptive_flushing`的引入，InnoDB存储引擎会通过一个名为`buf_flush_get_desired_flush_rate`的函数来判断需要刷新脏页的最合适的数量。`buf_flush_get_desired_flush_rate`通过判断产生重做日志（redo log）的速度来决定最合适的刷新脏页的数量。因此当脏页的比例小于`innodb_max_diry_pages_pct`时，也会刷新一定数量的脏页。
+4. 之前每次进行full purge操作时，最多回收20个Undo页，从InnoDB1.0.x开始引入了参数`innodb_purge_batch_size`，该参数可以控制每次full purge回收的undu页的数量。该参数的默认值为20，并可以动态的对其进行修改。
+   ```
+      mysql> show variables like 'innodb_purge_batch_size'\G;
+      Variable_name: innodb_purge_batch_size
+      Value: 20
+      mysql> set global innodb_purge_batch_size=50;
+      Query OK, 0 rows affected (0.00 sec)
+   ```
+
+综上，1.0.x版本开始，Master Thread伪代码如下：
+
+```c
+void master_thread() {
+   goto loop;
+loop:
+for(int i=0; i<10; i++) {
+   thread_sleep(1) //sleep 1 second
+   do log buffer flush to disk
+   if(last_one_second_ios < 5% innodb_io_capacity)
+      do merge 5% innodb_io_capacity insert buffer
+   if(buf_get_modified_ratio_pct > innodb_max_dirty_pages_pct) {
+      do buffer pool flush 100% innodb_io_capacity dirty page
+   } else if enable adaptive flush {
+      do buffer pool flush desired amount dirty page
+   }
+   if(no user activity)
+      goto background loop
+}
+if (last_ten_second_ios < innodb_io_capacity)
+   do buffer pool flush 100% innodb_io_capacity dirty page
+do merge 5% innodb_io_capacity insert buffer
+do log buffer flush to disk
+do full purge
+if(buf_get_modified_ratio_pct > 70%)
+   do buffer pool flush 100% innodb_io_capacity dirty page
+else
+   do buffer pool flush 10% innodb_io_capacity dirty page
+goto loop
+background loop:
+do full purge
+do merge 100% innodb_io_capacity insert buffer
+if not idle:
+goto loop:
+else:
+   goto flush loop
+flush loop:
+do buffer pool flush 100% innodb_io_capacity dirty page
+if(buf_get_modified_ratio_pct > innodb_max_dirty_pages_pct)
+   go to flush loop
+   goto suspend loop
+suspend loop:
+suspend_thread()
+waiting event
+goto loop;
+}
+```
+
+### 3. InnoDB 1.2.x版本的Master Thread
+
+在InnoDB1.2.x版本中再次对Master Thread进行了优化，由此可以看出Master Thread对性能所起到的关键作用。在1.2.x版本中，Master Thread的伪代码如下：
+```c
+if InnoDB is idle
+   srv_master_do_idle_tasks();
+else
+   srv_master_do_active_tasks();
+```
+
+其中`srv_master_do_idle_tasks()`就是之前版本中的每10秒的操作，`srv_master_do_active_tasks()`处理的是之前每秒中的操作。同时对于刷新脏页的操作，从Master Thread线程分离到一个单独的Page Cleaner Thread，从而减轻了Master Thread的工作，同时进一步提高了系统的并发性。
+
+## 6. InnoDB关键特性
+
+InnoDB的关键特性包括：
+- 插入缓冲（Insert Buffer）
+- 两次写（Double Write）
+- 自适应哈希索引（Adaptive Hash Index）
+- 异步IO（Async IO）
+- 刷新邻接页（Flush Neighbor Page）
