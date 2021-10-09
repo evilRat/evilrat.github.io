@@ -19,6 +19,7 @@ date: 2021-10-09 00:30:52
 BeanFactory，顾名思义Bean工厂，用于实例化和保存对象。
 FactoryBean，是一个Bean，用于实例化创建过程比较复杂的对象。使用工厂方法模式，由一个特定的工厂来生产特定的java类的实例化对象。
 ObjectFactory，是某个特定的工厂，用于在项目启动时，延迟实例化对象，解决循环依赖的问题。
+```java
 public interface FactoryBean<T> { 
     //返回的对象实例 
     T getObject() throws Exception; 
@@ -27,6 +28,7 @@ public interface FactoryBean<T> {
     //true是单例，false是非单例 在Spring5.0中此方法利用了JDK1.8的新特性变成了default方法，返回true 
     boolean isSingleton(); 
 }
+```
 
 FactoryBean的好处：正常情况下，Spring在实例化对象的时候，都是由BeanFactory从上下文获取BeanDefinition信息，然后通过反射，调用java类的构造方法进行实例化，而通过FactoryBean的形式，相当于将实例化的功能交给了这个类对应的FactoryBean来实现，可以更加灵活的去做一些解析、判断和逻辑处理。
 Spring中由两种Bean，一种是普通的Bean，另一种是实现了FactoryBean的工厂Bean。如果共BeanFactory中getBean的时候，获取到的Bean是工厂Bean，会自动调用这个工厂Bean的getObject方法返回真实的实例化对象。如果就是要获取工厂Bean对象，需要在getBean的时候加上前缀'&'。
