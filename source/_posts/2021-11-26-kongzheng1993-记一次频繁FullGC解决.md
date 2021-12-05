@@ -18,4 +18,6 @@ date: 2021-11-26 16:30:10
 
 吃完晚饭，做完核酸，组长回来了，于是请大佬帮忙分析一下。大佬只一个`jmap -histo:live ${pid} | grep ${我们的业务标识}`。也就是看看现在存活的业务对象，然后一眼发现权限对象存在超多示例，实例数冠绝全场。然后让我们打开项目，看了下权限相关的代码，发现TMD权限根本就没存在redis……每次客户端来鉴权，都会查数据库，然后生成一个崭新的权限数据对象……
 
+Spring Session是通过来管理session的，将session保存再redis，而Spring Session的是重写了HttpServletRequest的getSession方法。由于Spring Session没有引用进来，导致这块并没能调用`SessionRepositoryRequestWrapper`的getSession方法，我们有多个实例，只要相邻的两次请求没能落到同一个实例上，也就是每一个请求过来，getSession都无法根据id找到session，也就每次都会鉴权然后build一个新的session……所以随着时间的推移，堆中的session相关的对象越来越多……
+
 修复后Full GC次数明显减少，并且保持在一个合理的值。
