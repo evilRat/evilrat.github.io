@@ -24,7 +24,7 @@ comments: true
 - 毕业时间：2016年7月
 - 技术博客：[https://kongzheng1993.github.io](https://kongzheng1993.github.io)
 - Github: [https://github.com/kongzheng1993](https://github.com/kongzheng1993)
-<!-- - 微信公众号：evilRat -->
+- 微信公众号：evilRat
 
 ---
 
@@ -59,6 +59,10 @@ comments: true
 ……
 
 ## 整车交付系统
+
+……
+
+## 交付准备系统
 
 ……
 
