@@ -1,5 +1,5 @@
 ---
-title: MySQL
+title: MySQL基础
 excerpt: 'mysql'
 tags: [mysql]
 categories: [mysql]

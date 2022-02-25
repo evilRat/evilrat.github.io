@@ -1,5 +1,5 @@
 ---
-title: MySQL
+title: MySQL性能优化
 excerpt: 'mysql'
 tags: [mysql]
 categories: [mysql]
