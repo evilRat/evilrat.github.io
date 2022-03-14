@@ -238,6 +238,7 @@ gitalk:
   distractionFreeMode: true
   language: zh-CN
   perPage: 10
+  proxy: https://netnr-proxy.cloudno.de/https://github.com/login/oauth/access_token
 # gitalk：利用github issue制作的第三方聊天插件
 # https://github.com/gitalk/gitalk
 # 参数介绍：
