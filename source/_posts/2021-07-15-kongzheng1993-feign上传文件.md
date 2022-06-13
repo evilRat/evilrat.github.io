@@ -131,3 +131,6 @@ feignClient的PostMapping注解增加属性：`consumes = MediaType.MULTIPART_FO
 
 至此，上传文件成功！
 
+
+2022年5月注：
+最近给下游服务提供了一个上传文件的接口，除了上传文件还需要带一些参数，本来随手就写出了一个@RequestPart的参数、一个@RequestBody的对象参数，存在问题。因为MultipartFile本来就是一个form表单的一部分，占用的是http的body，而@RequestBody则是要用一个json来占用http的body，二者是有冲突的，body只能是二者之一。既然文件必须在body，那么其他参数就只能在Url中携带了，所以这里要用@RequestParam，在url中传参数
