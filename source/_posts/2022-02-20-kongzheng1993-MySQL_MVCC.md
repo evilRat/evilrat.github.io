@@ -1,5 +1,5 @@
 ---
-title: MySQL性能优化
+title: MySQL MVCC
 excerpt: 'mysql'
 tags: [mysql]
 categories: [mysql]
