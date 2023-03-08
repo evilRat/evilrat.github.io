@@ -1,7 +1,7 @@
 # Evil
 
 ## 关于Evil
-**Evil** 是evilRat(kongzheng1993)的个人站。
+**Evil** 是evilRat(kongzheng)的个人站。
 
 到目前为止已经写了<code class="article_number"></code>篇文章， 共<code class="site_word_count"></code>字。
 
