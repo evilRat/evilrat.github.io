@@ -12,7 +12,7 @@ link:
   theme: color # 链接样式，color: 彩色图标  white: 黑白图标
   items:
     #rss: /atom.xml
-    github: https://github.com/kongzheng1993
+    github: https://github.com/evilrat
     #facebook: https://www.facebook.com/faker.tops
     #twitter:
     linkedin: https://www.linkedin.com/in/zheng-kong-942411106/
@@ -20,7 +20,7 @@ link:
     #reddit: https://www.reddit.com/user/yelog/
     #weibo: http://weibo.com/u/2307534817
     #jianshu: https://www.jianshu.com/u/ff56736de7cf
-    zhihu: https://www.zhihu.com/people/kong-zheng-31-41
+    # zhihu: https://www.zhihu.com/people/kong-zheng-31-41
     #csdn:
     #oschina: https://my.oschina.net/yelog
     #juejin:
