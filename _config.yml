@@ -13,9 +13,7 @@ timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-#url: https://kongzheng1993.github.io/blog
-#root: /kongzheng1993.github.io/
-url: https://kongzheng1993.github.io/
+url: https://evilrat.github.io/
 root: /
 
 permalink: :year/:month/:day/:title/
@@ -88,5 +86,5 @@ theme: 3-hexo
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/kongzheng1993/kongzheng1993.github.io.git
+  repo: git@github.com:evilRat/evilrat.github.io.git
   branch: master
